@@ -1,10 +1,11 @@
 import "./App.scss";
 
-import { Viewer } from "@bentley/itwin-viewer-react";
+import { Redirect, Router } from "@reach/router";
 import React, { useEffect, useState } from "react";
 
 import AuthorizationClient from "./AuthorizationClient";
 import { Header } from "./Header";
+import { ViewRoute } from "./routes/ViewRoute";
 
 const App: React.FC = () => {
   const [isAuthorized, setIsAuthorized] = useState(
@@ -62,7 +63,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="viewer-container">
+    <div>
       <Header
         handleLogin={onLoginClick}
         loggedIn={isAuthorized}
@@ -72,11 +73,10 @@ const App: React.FC = () => {
         <span>"Logging in...."</span>
       ) : (
         isAuthorized && (
-          <Viewer
-            contextId={process.env.IMJS_CONTEXT_ID ?? ""}
-            iModelId={process.env.IMJS_IMODEL_ID ?? ""}
-            authConfig={{ oidcClient: AuthorizationClient.oidcClient }}
-          />
+          <Router>
+            <ViewRoute path="view/*" />
+            <Redirect noThrow={true} from="/" to="view" default={true} />
+          </Router>
         )
       )}
     </div>
