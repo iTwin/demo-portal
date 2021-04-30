@@ -1,0 +1,10 @@
+.scrolling-tab-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.scrolling-tab-content {
+  overflow: auto;
+  flex-basis: 100%;
+}

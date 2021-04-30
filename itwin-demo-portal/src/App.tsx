@@ -1,5 +1,6 @@
 import "./App.scss";
 
+import { IncludePrefix } from "@bentley/itwin-client";
 import { Redirect, Router } from "@reach/router";
 import React, { useEffect, useState } from "react";
 
@@ -14,11 +15,17 @@ const App: React.FC = () => {
       : false
   );
   const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [accessToken, setAccessToken] = useState("");
 
   useEffect(() => {
     const initOidc = async () => {
       if (!AuthorizationClient.oidcClient) {
         await AuthorizationClient.initializeOidc();
+        AuthorizationClient.apimClient.onUserStateChanged.addListener(
+          (accessToken) => {
+            setAccessToken(accessToken?.toTokenString(IncludePrefix.Yes) ?? "");
+          }
+        );
       }
 
       try {
@@ -30,19 +37,6 @@ const App: React.FC = () => {
       }
     };
     initOidc().catch((error) => console.error(error));
-  }, []);
-
-  useEffect(() => {
-    if (!process.env.IMJS_CONTEXT_ID) {
-      throw new Error(
-        "Please add a valid context ID in the .env file and restart the application"
-      );
-    }
-    if (!process.env.IMJS_IMODEL_ID) {
-      throw new Error(
-        "Please add a valid iModel ID in the .env file and restart the application"
-      );
-    }
   }, []);
 
   useEffect(() => {
@@ -74,7 +68,7 @@ const App: React.FC = () => {
       ) : (
         isAuthorized && (
           <Router>
-            <ViewRoute path="view/*" />
+            <ViewRoute accessToken={accessToken} path="view/*" />
             <Redirect noThrow={true} from="/" to="view" default={true} />
           </Router>
         )
