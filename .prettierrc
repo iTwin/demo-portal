@@ -18,4 +18,3 @@ semi: true
 arrowParens: "always"
 # Enforce Linux style line endings.
 endOfLine: "lf"
-printWidth: 120
