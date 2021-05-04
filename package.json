@@ -1,0 +1,65 @@
+{
+  "name": "@itwin/demo-portal-repo",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "packages/**"
+    ],
+    "nohoist": [
+      "**"
+    ]
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.1.1",
+    "@typescript-eslint/parser": "^4.1.1",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb": "^17.1.1",
+    "eslint-config-prettier": "^6.9.0",
+    "eslint-config-react-app": "^5.2.1",
+    "eslint-plugin-flowtype": "^5.2.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-react": "^7.14.3",
+    "eslint-plugin-react-hooks": "^2.3.0",
+    "eslint-plugin-simple-import-sort": "^4.0.0",
+    "husky": "^6.0.0",
+    "lint-staged": "^10.2.0",
+    "prettier": "1.19.1",
+    "stylelint": "^12.0.0",
+    "stylelint-config-prettier": "^6.0.0",
+    "stylelint-config-sass-guidelines": "^6.1.0",
+    "stylelint-prettier": "^1.1.1",
+    "stylelint-scss": "^3.12.1",
+    "typescript": "^3.8.0",
+    "yarn": "^1.22.10"
+  },
+  "scripts": {
+    "build": "",
+    "start": "",
+    "test": "",
+    "lint": "lint-staged --verbose",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "node --max_old_space_size=4096 ./node_modules/eslint/bin/eslint.js --config ./.eslintrc.ts.autofix.json --ignore-path ./.eslintignore --fix",
+      "node --max_old_space_size=4096 ./node_modules/eslint/bin/eslint.js --config ./.eslintrc.ts.json --ignore-path ./.eslintignore --color",
+      "node ./scripts/copyright-linter.js --"
+    ],
+    "*.{md,json}": [
+      "prettier --write --config .prettierrc --ignore-path .prettierignore"
+    ],
+    "*.{scss,css}": [
+      "stylelint --fix --config --allow-empty-input .stylelintrc",
+      "node ./scripts/copyright-linter.js --"
+    ]
+  },
+  "resolutions": {
+    "faye-websocket": "^0.11.0",
+    "ua-parser-js": "^0.7.22",
+    "dompurify": "^2.1.0",
+    "object-path": "^0.11.5",
+    "axios": "0.21.1"
+  }
+}

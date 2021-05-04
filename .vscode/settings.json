@@ -1,0 +1,13 @@
+{
+  "stylelint.autoFixOnSave": true,
+  "eslint.validate": [
+    "typescript",
+    "typescriptreact",
+    "javascript",
+    "javascriptreact"
+  ],
+  "files.exclude": {
+    "obj": true,
+    "bin": true
+  }
+}
