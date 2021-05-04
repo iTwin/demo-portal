@@ -5,17 +5,16 @@
 import { Viewer } from "@bentley/itwin-viewer-react";
 import { RouteComponentProps, Router } from "@reach/router";
 import React from "react";
-import { PropsWithChildren } from "react";
 
 import AuthorizationClient from "../AuthorizationClient";
 import { SelectIModel } from "./SelectIModel";
 import { SelectProject } from "./SelectProject";
 
-export interface ViewRouteProps extends PropsWithChildren<RouteComponentProps> {
+export interface ViewProps extends RouteComponentProps {
   projectId?: string;
   iModelId?: string;
 }
-const View = (props: ViewRouteProps) => {
+const View = (props: ViewProps) => {
   (window as any).ITWIN_VIEWER_HOME = window.location.origin;
   return (
     <Viewer
@@ -26,11 +25,15 @@ const View = (props: ViewRouteProps) => {
   );
 };
 
-export const ViewRoute = (props: RouteComponentProps) => {
+export interface ViewRouteProps extends RouteComponentProps {
+  accessToken: string;
+}
+
+export const ViewRoute = ({ accessToken }: ViewRouteProps) => {
   return (
     <Router className="viewer-container">
-      <SelectProject path="/" />
-      <SelectIModel path="project/:projectId" />
+      <SelectProject accessToken={accessToken} path="/" />
+      <SelectIModel accessToken={accessToken} path="project/:projectId" />
       <View path="project/:projectId/imodel/:iModelId" />
     </Router>
   );
