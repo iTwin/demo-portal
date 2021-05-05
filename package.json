@@ -37,7 +37,7 @@
   "scripts": {
     "build": "yarn --cwd packages/app build",
     "start": "yarn --cwd packages/app start",
-    "test": "",
+    "test": "yarn --cwd packages/app test",
     "lint": "lint-staged --verbose",
     "prepare": "husky install"
   },

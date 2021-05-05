@@ -2,6 +2,7 @@
 * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
 * See LICENSE.md in the project root for license terms and full copyright notice.
 *--------------------------------------------------------------------------------------------*/
+
 import { IncludePrefix } from "@bentley/itwin-client";
 import { Redirect, Router } from "@reach/router";
 import React, { useEffect, useState } from "react";
@@ -40,6 +41,14 @@ const App: React.FC = () => {
       }
     };
     initOidc().catch((error) => console.error(error));
+  }, []);
+
+  useEffect(() => {
+    if (!process.env.IMJS_AUTH_CLIENT_CLIENT_ID) {
+      throw new Error(
+        "Please add a valid client ID in the .env.local file and restart the application"
+      );
+    }
   }, []);
 
   useEffect(() => {
