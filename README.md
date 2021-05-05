@@ -12,7 +12,7 @@ Prior to running the app, add a valid clientId in `packages/app/.env.local` file
 IMJS_AUTH_CLIENT_CLIENT_ID="spa-xxxx"
 ```
 
-This client Id can be created by going to [developer.bentley.com/register](https://developer.bentley.com/register/), the application should have the Visualization, Data Management and Administration API associations and at least have `http://localhost:3000/signin-callback` redirect url.
+This client Id can be created by going to [developer.bentley.com/register](https://developer.bentley.com/register/). The application should have the Visualization, Data Management and Administration API associations and at least have `http://localhost:3000/signin-callback` as a redirect url.
 
 ## Available Scripts
 
