@@ -35,9 +35,9 @@
     "yarn": "^1.22.10"
   },
   "scripts": {
-    "build": "",
-    "start": "",
-    "test": "",
+    "build": "yarn --cwd packages/app build",
+    "start": "yarn --cwd packages/app start",
+    "test": "yarn --cwd packages/app test",
     "lint": "lint-staged --verbose",
     "prepare": "husky install"
   },
