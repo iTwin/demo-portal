@@ -51,7 +51,7 @@
       "prettier --write --config .prettierrc --ignore-path .prettierignore"
     ],
     "*.{scss,css}": [
-      "stylelint --fix --config --allow-empty-input .stylelintrc",
+      "stylelint --fix --config .stagedstylelintrc --allow-empty-input",
       "node ./scripts/copyright-linter.js --"
     ]
   },
