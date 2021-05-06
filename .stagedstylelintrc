@@ -1,8 +1,0 @@
-{
-  "extends": [
-    "./.stylelintrc"
-  ],
-  "rules": {
-    "prettier/prettier": true,
-  }
-}
