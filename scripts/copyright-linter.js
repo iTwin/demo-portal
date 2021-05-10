@@ -1,3 +1,7 @@
+/*---------------------------------------------------------------------------------------------
+ * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
+ * See LICENSE.md in the project root for license terms and full copyright notice.
+ *--------------------------------------------------------------------------------------------*/
 const fs = require("fs");
 
 //get all arguments after the positional argument indicator, "--"
@@ -10,10 +14,10 @@ const filePaths = process.argv.reduce((acc, cur) => {
   }
 }, false);
 
-const copyrightBanner = `/*---------------------------------------------------------------------------------------------\n* Copyright (c) Bentley Systems, Incorporated. All rights reserved.\n* See LICENSE.md in the project root for license terms and full copyright notice.\n*--------------------------------------------------------------------------------------------*/`;
+const copyrightBanner = `/*---------------------------------------------------------------------------------------------\n * Copyright (c) Bentley Systems, Incorporated. All rights reserved.\n * See LICENSE.md in the project root for license terms and full copyright notice.\n *--------------------------------------------------------------------------------------------*/`;
 
-const longCopyright = "/?/[*](.|\n)*?Copyright(.|\n)*?[*]/";
-const shortCopyright = "//\\s*Copyright.*\n";
+const longCopyright = "/?/[*](.|\r?\n)*?Copyright(.|\r?\n)*?[*]/\r?\n";
+const shortCopyright = "//\\s*Copyright.*\r?\n";
 const oldCopyrightBanner = RegExp(
   `^(${longCopyright})|(${shortCopyright})`,
   "m"
