@@ -1,13 +1,13 @@
 /*---------------------------------------------------------------------------------------------
-* Copyright (c) Bentley Systems, Incorporated. All rights reserved.
-* See LICENSE.md in the project root for license terms and full copyright notice.
-*--------------------------------------------------------------------------------------------*/
+ * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
+ * See LICENSE.md in the project root for license terms and full copyright notice.
+ *--------------------------------------------------------------------------------------------*/
 import { Viewer } from "@bentley/itwin-viewer-react";
 import { RouteComponentProps, Router } from "@reach/router";
 import React from "react";
 
 import AuthorizationClient from "../AuthorizationClient";
-import { SelectIModel } from "./SelectIModel";
+import { SelectIModel } from "../components/SelectIModel/SelectIModel";
 import { SelectProject } from "./SelectProject";
 
 export interface ViewProps extends RouteComponentProps {
