@@ -1767,10 +1767,10 @@
     "@itwin/itwinui-icons-react" "^0.1.0"
     "@itwin/itwinui-react" "^1.0.0"
 
-"@itwin/imodel-browser@^0.9.0":
-  version "0.9.0"
-  resolved "https://pkgs.dev.azure.com/bentleycs/_packaging/Packages/npm/registry/@itwin/imodel-browser/-/imodel-browser-0.9.0.tgz#cba26e6e48c608aa23070a72b74e951728037806"
-  integrity sha1-y6JubkjGCKojBwpyt06VFygDeAY=
+"@itwin/imodel-browser@^0.10.0":
+  version "0.10.0"
+  resolved "https://pkgs.dev.azure.com/bentleycs/_packaging/Packages/npm/registry/@itwin/imodel-browser/-/imodel-browser-0.10.0.tgz#1ae557e054d5cc6ee5c4ddd5495412729064e7e6"
+  integrity sha1-GuVX4FTVzG7lxN3VSVQScpBk5+Y=
   dependencies:
     "@bentley/icons-generic-webfont" "^1.0.34"
     "@itwin/itwinui-react" "^1.0.0"

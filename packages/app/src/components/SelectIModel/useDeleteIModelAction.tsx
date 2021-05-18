@@ -7,11 +7,20 @@ import { IModelFull } from "@itwin/imodel-browser";
 import { SvgDelete } from "@itwin/itwinui-icons-react";
 import React from "react";
 
-export type Options = {
+export type DeleteIModelActionOptions = {
   accessToken: string;
   onSuccess: () => void;
 };
-export const useDeleteImodelOption = ({ accessToken, onSuccess }: Options) => {
+
+/**
+ * Generate delete IModel action and modal rendering.
+ * @param options
+ * @returns {deleteAction: Put in iModelActions, deleteDialog: Put anywhere, render modal delete dialog with proper options if needed}
+ */
+export const useDeleteIModelAction = ({
+  accessToken,
+  onSuccess,
+}: DeleteIModelActionOptions) => {
   const [iModelToDelete, setIModelToDelete] = React.useState<
     IModelFull | undefined
   >();
@@ -22,7 +31,7 @@ export const useDeleteImodelOption = ({ accessToken, onSuccess }: Options) => {
   }, [onSuccess]);
 
   return {
-    deleteOption: React.useMemo(
+    deleteAction: React.useMemo(
       () => ({
         key: "delete",
         icon: <SvgDelete />,
