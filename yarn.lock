@@ -1758,10 +1758,19 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
-"@itwin/imodel-browser@^0.9.0":
-  version "0.9.0"
-  resolved "https://pkgs.dev.azure.com/bentleycs/_packaging/Packages/npm/registry/@itwin/imodel-browser/-/imodel-browser-0.9.0.tgz#cba26e6e48c608aa23070a72b74e951728037806"
-  integrity sha1-y6JubkjGCKojBwpyt06VFygDeAY=
+"@itwin/delete-imodel@^0.2.0":
+  version "0.2.0"
+  resolved "https://pkgs.dev.azure.com/bentleycs/_packaging/Packages/npm/registry/@itwin/delete-imodel/-/delete-imodel-0.2.0.tgz#29908fefea2765c6f014a6bc92320cbf0f7213dd"
+  integrity sha1-KZCP7+onZcbwFKa8kjIMvw9yE90=
+  dependencies:
+    "@itwin/itwinui-css" "^0.9.0"
+    "@itwin/itwinui-icons-react" "^0.1.0"
+    "@itwin/itwinui-react" "^1.0.0"
+
+"@itwin/imodel-browser@^0.10.0":
+  version "0.10.0"
+  resolved "https://pkgs.dev.azure.com/bentleycs/_packaging/Packages/npm/registry/@itwin/imodel-browser/-/imodel-browser-0.10.0.tgz#1ae557e054d5cc6ee5c4ddd5495412729064e7e6"
+  integrity sha1-GuVX4FTVzG7lxN3VSVQScpBk5+Y=
   dependencies:
     "@bentley/icons-generic-webfont" "^1.0.34"
     "@itwin/itwinui-react" "^1.0.0"
@@ -1773,10 +1782,20 @@
   resolved "https://pkgs.dev.azure.com/bentleycs/_packaging/Packages/npm/registry/@itwin/itwinui-css/-/itwinui-css-0.11.0.tgz#fef1c8357186c17749a36d8e28c1b19c5a222887"
   integrity sha1-/vHINXGGwXdJo22OKMGxnFoiKIc=
 
+"@itwin/itwinui-css@^0.9.0":
+  version "0.9.0"
+  resolved "https://pkgs.dev.azure.com/bentleycs/_packaging/Packages/npm/registry/@itwin/itwinui-css/-/itwinui-css-0.9.0.tgz#eb5bec4a6d45927591401cc2d528076f999c857a"
+  integrity sha1-61vsSm1FknWRQBzC1SgHb5mchXo=
+
 "@itwin/itwinui-icons-react@^0.1.0":
   version "0.1.0"
   resolved "https://pkgs.dev.azure.com/bentleycs/_packaging/Packages/npm/registry/@itwin/itwinui-icons-react/-/itwinui-icons-react-0.1.0.tgz#812bf14c090d7c5a412e9a678781b5a793966ca9"
   integrity sha1-gSvxTAkNfFpBLppnh4G1p5OWbKk=
+
+"@itwin/itwinui-icons-react@^1.1.2":
+  version "1.1.2"
+  resolved "https://pkgs.dev.azure.com/bentleycs/_packaging/Packages/npm/registry/@itwin/itwinui-icons-react/-/itwinui-icons-react-1.1.2.tgz#9fec9411a83cfd957233a61b6979366cdb5acede"
+  integrity sha1-n+yUEag8/ZVyM6YbaXk2bNtazt4=
 
 "@itwin/itwinui-illustrations-react@^0.1.0":
   version "0.1.0"
