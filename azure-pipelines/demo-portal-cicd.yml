@@ -1,0 +1,74 @@
+# Node.js with React
+# Build a Node.js project that uses React.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '12.x'
+    displayName: 'Install Node.js'
+
+  - task: npmAuthenticate@0
+    inputs:
+      workingFile: '.npmrc'
+      customEndpoint: 'Bentley internal npm server'
+
+  - task: Npm@1
+    displayName: 'npm install --package-lock-only'
+    inputs:
+      command: custom
+      workingDir: ./
+      verbose: false
+      customCommand: 'install --package-lock-only'
+            
+  - task: CmdLine@2
+    inputs:
+      workingDirectory: ./
+      script: 'npx npm-force-resolutions'
+                
+  - task: Npm@1
+    displayName: 'npm audit (required by scorecard)'
+    inputs:
+      command: custom
+      workingDir: ./
+      verbose: false
+      customCommand: 'audit --audit-level=high --registry=https://registry.npmjs.org/'
+                
+  - script: |
+      yarn install
+      yarn build
+    displayName: 'yarn install and build'
+
+  - task: OctopusPack@4
+    inputs:
+      PackageId: 'iTwinDemoPortal'
+      PackageFormat: 'NuPkg'
+      PackageVersion: '$(Build.BuildNumber)'
+      SourcePath: 'packages/app/build'
+      OutputPath: '$(Build.ArtifactStagingDirectory)'
+      NuGetAuthor: 'iTwin Demo Portal Author'
+      NuGetTitle: 'iTwin Demo Portal CDN Pkg'
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)/iTwinDemoPortal.$(Build.BuildNumber).nupkg'
+      ArtifactName: OctopusPackage
+
+  - task: CredScan@2
+    inputs:
+      toolMajorVersion: 'V1'
+  
+  - task: CredScanUploadPss@0
+    inputs:
+      GprId: '3233'
+      ShortCode: 'ITPDP'
+      SecurityMicrosoftFlowService: 'MS Flow: Upload Scan Report To PSS'
+
