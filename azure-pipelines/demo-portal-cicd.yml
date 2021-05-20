@@ -24,7 +24,7 @@ steps:
     displayName: 'npm install --package-lock-only'
     inputs:
       command: custom
-      workingDir: packages/apps/iTwinViewer
+      workingDir: ./
       verbose: false
       customCommand: 'install --package-lock-only'
             
