@@ -30,14 +30,14 @@ steps:
             
   - task: CmdLine@2
     inputs:
-      workingDirectory: packages/apps/iTwinViewer
+      workingDirectory: ./
       script: 'npx npm-force-resolutions'
                 
   - task: Npm@1
     displayName: 'npm audit (required by scorecard)'
     inputs:
       command: custom
-      workingDir: packages/apps/iTwinViewer
+      workingDir: ./
       verbose: false
       customCommand: 'audit --audit-level=high --registry=https://registry.npmjs.org/'
                 
