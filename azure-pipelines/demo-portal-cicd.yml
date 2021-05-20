@@ -12,10 +12,51 @@ pool:
 steps:
 - task: NodeTool@0
   inputs:
-    versionSpec: '10.x'
+    versionSpec: '12.x'
   displayName: 'Install Node.js'
 
+- task: npmAuthenticate@0
+  inputs:
+    workingFile: '.npmrc'
+    customEndpoint: 'Bentley internal npm server'
+
+- task: Npm@1
+  displayName: 'npm install --package-lock-only'
+  inputs:
+    command: custom
+    workingDir: packages/apps/iTwinViewer
+    verbose: false
+    customCommand: 'install --package-lock-only'
+          
+- task: CmdLine@2
+  inputs:
+    workingDirectory: packages/apps/iTwinViewer
+    script: 'npx npm-force-resolutions'
+              
+- task: Npm@1
+  displayName: 'npm audit (required by scorecard)'
+  inputs:
+    command: custom
+    workingDir: packages/apps/iTwinViewer
+    verbose: false
+    customCommand: 'audit --audit-level=high --registry=https://registry.npmjs.org/'
+              
 - script: |
-    npm install
-    npm run build
-  displayName: 'npm install and build'
+    yarn install
+    yarn build
+  displayName: 'yarn install and build'
+
+- task: OctopusPack@4
+  inputs:
+    PackageId: 'iTwinDemoPortal'
+    PackageFormat: 'NuPkg'
+    PackageVersion: '$(Build.BuildNumber)'
+    SourcePath: 'packages/app/build'
+    OutputPath: '$(Build.ArtifactStagingDirectory)'
+    NuGetAuthor: 'iTwin Demo Portal Author'
+    NuGetTitle: 'iTwin Demo Portal CDN Pkg'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/iTwinDemoPortal.$(Build.BuildNumber).nupkg'
+    ArtifactName: OctopusPackage
