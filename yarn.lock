@@ -1758,6 +1758,14 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
+"@itwin/create-imodel@^0.1.0":
+  version "0.1.0"
+  resolved "https://pkgs.dev.azure.com/bentleycs/_packaging/Packages/npm/registry/@itwin/create-imodel/-/create-imodel-0.1.0.tgz#cc301f91d3c5b0f19185b58f279b714a7ae13602"
+  integrity sha1-zDAfkdPFsPGRhbWPJ5txSnrhNgI=
+  dependencies:
+    "@itwin/itwinui-css" "^0.9.0"
+    "@itwin/itwinui-react" "^1.0.0"
+
 "@itwin/delete-imodel@^0.2.0":
   version "0.2.0"
   resolved "https://pkgs.dev.azure.com/bentleycs/_packaging/Packages/npm/registry/@itwin/delete-imodel/-/delete-imodel-0.2.0.tgz#29908fefea2765c6f014a6bc92320cbf0f7213dd"
@@ -1767,10 +1775,10 @@
     "@itwin/itwinui-icons-react" "^0.1.0"
     "@itwin/itwinui-react" "^1.0.0"
 
-"@itwin/imodel-browser@^0.10.0":
-  version "0.10.0"
-  resolved "https://pkgs.dev.azure.com/bentleycs/_packaging/Packages/npm/registry/@itwin/imodel-browser/-/imodel-browser-0.10.0.tgz#1ae557e054d5cc6ee5c4ddd5495412729064e7e6"
-  integrity sha1-GuVX4FTVzG7lxN3VSVQScpBk5+Y=
+"@itwin/imodel-browser@^0.10.1":
+  version "0.10.1"
+  resolved "https://pkgs.dev.azure.com/bentleycs/_packaging/Packages/npm/registry/@itwin/imodel-browser/-/imodel-browser-0.10.1.tgz#9f652314b3132000b5c9ad86a1f38686c4143f7e"
+  integrity sha1-n2UjFLMTIAC1ya2GofOGhsQUP34=
   dependencies:
     "@bentley/icons-generic-webfont" "^1.0.34"
     "@itwin/itwinui-react" "^1.0.0"
