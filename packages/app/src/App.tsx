@@ -1,16 +1,15 @@
 /*---------------------------------------------------------------------------------------------
-* Copyright (c) Bentley Systems, Incorporated. All rights reserved.
-* See LICENSE.md in the project root for license terms and full copyright notice.
-*--------------------------------------------------------------------------------------------*/
-
+ * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
+ * See LICENSE.md in the project root for license terms and full copyright notice.
+ *--------------------------------------------------------------------------------------------*/
 import { IncludePrefix } from "@bentley/itwin-client";
 import { Redirect, Router } from "@reach/router";
 import React, { useEffect, useState } from "react";
 
 import "./App.scss";
 import AuthorizationClient from "./AuthorizationClient";
+import { ViewRouter } from "./components/ViewRouter/ViewRouter";
 import { Header } from "./Header";
-import { ViewRoute } from "./routes/ViewRoute";
 
 const App: React.FC = () => {
   const [isAuthorized, setIsAuthorized] = useState(
@@ -80,7 +79,7 @@ const App: React.FC = () => {
       ) : (
         isAuthorized && (
           <Router>
-            <ViewRoute accessToken={accessToken} path="view/*" />
+            <ViewRouter accessToken={accessToken} path="/view/*" />
             <Redirect noThrow={true} from="/" to="view" default={true} />
           </Router>
         )

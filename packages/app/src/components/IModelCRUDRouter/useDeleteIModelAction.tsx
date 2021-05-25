@@ -9,26 +9,24 @@ import React from "react";
 
 export type DeleteIModelActionOptions = {
   accessToken: string;
-  onSuccess: () => void;
 };
 
 /**
  * Generate delete IModel action and modal rendering.
- * @param options
- * @returns {deleteAction: Put in iModelActions, deleteDialog: Put anywhere, render modal delete dialog with proper options if needed}
  */
 export const useDeleteIModelAction = ({
   accessToken,
-  onSuccess,
 }: DeleteIModelActionOptions) => {
+  const [refreshKey, setRefreshKey] = React.useState(0);
+
   const [iModelToDelete, setIModelToDelete] = React.useState<
     IModelFull | undefined
   >();
   const clearIModelToDelete = () => setIModelToDelete(undefined);
-  const clearIModelToDeleteAndCallback = React.useCallback(() => {
+  const clearIModelToDeleteAndCallback = () => {
     clearIModelToDelete();
-    onSuccess?.();
-  }, [onSuccess]);
+    setRefreshKey((key) => (key + 1) % 3);
+  };
 
   return {
     deleteAction: React.useMemo(
@@ -49,5 +47,6 @@ export const useDeleteIModelAction = ({
         onSuccess={clearIModelToDeleteAndCallback}
       />
     ),
+    refreshKey,
   };
 };

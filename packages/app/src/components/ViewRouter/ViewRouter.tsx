@@ -6,9 +6,8 @@ import { Viewer } from "@bentley/itwin-viewer-react";
 import { RouteComponentProps, Router } from "@reach/router";
 import React from "react";
 
-import AuthorizationClient from "../AuthorizationClient";
-import { SelectIModel } from "../components/SelectIModel/SelectIModel";
-import { SelectProject } from "./SelectProject";
+import AuthorizationClient from "../../AuthorizationClient";
+import { SelectionRouter } from "../SelectionRouter/SelectionRouter";
 
 export interface ViewProps extends RouteComponentProps {
   projectId?: string;
@@ -25,15 +24,14 @@ const View = (props: ViewProps) => {
   );
 };
 
-export interface ViewRouteProps extends RouteComponentProps {
+interface ViewRouterProps extends RouteComponentProps {
   accessToken: string;
 }
 
-export const ViewRoute = ({ accessToken }: ViewRouteProps) => {
+export const ViewRouter = ({ accessToken }: ViewRouterProps) => {
   return (
     <Router className="viewer-container">
-      <SelectProject accessToken={accessToken} path="/" />
-      <SelectIModel accessToken={accessToken} path="project/:projectId" />
+      <SelectionRouter accessToken={accessToken} path="*" />
       <View path="project/:projectId/imodel/:iModelId" />
     </Router>
   );
