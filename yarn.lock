@@ -1775,13 +1775,13 @@
     "@itwin/itwinui-icons-react" "^0.1.0"
     "@itwin/itwinui-react" "^1.0.0"
 
-"@itwin/imodel-browser@^0.10.1":
-  version "0.10.1"
-  resolved "https://pkgs.dev.azure.com/bentleycs/_packaging/Packages/npm/registry/@itwin/imodel-browser/-/imodel-browser-0.10.1.tgz#9f652314b3132000b5c9ad86a1f38686c4143f7e"
-  integrity sha1-n2UjFLMTIAC1ya2GofOGhsQUP34=
+"@itwin/imodel-browser@^0.10.2":
+  version "0.10.2"
+  resolved "https://pkgs.dev.azure.com/bentleycs/_packaging/Packages/npm/registry/@itwin/imodel-browser/-/imodel-browser-0.10.2.tgz#2298d774b05447ff58e56a8e7c06d9c9c0f6801e"
+  integrity sha1-IpjXdLBUR/9Y5WqOfAbZycD2gB4=
   dependencies:
     "@bentley/icons-generic-webfont" "^1.0.34"
-    "@itwin/itwinui-react" "^1.0.0"
+    "@itwin/itwinui-react" "^1.5.0"
     classnames "^2.2.6"
     react-intersection-observer "^8.31.1"
 
@@ -1789,6 +1789,11 @@
   version "0.11.0"
   resolved "https://pkgs.dev.azure.com/bentleycs/_packaging/Packages/npm/registry/@itwin/itwinui-css/-/itwinui-css-0.11.0.tgz#fef1c8357186c17749a36d8e28c1b19c5a222887"
   integrity sha1-/vHINXGGwXdJo22OKMGxnFoiKIc=
+
+"@itwin/itwinui-css@^0.16.0":
+  version "0.16.0"
+  resolved "https://pkgs.dev.azure.com/bentleycs/_packaging/Packages/npm/registry/@itwin/itwinui-css/-/itwinui-css-0.16.0.tgz#b05c316185fc0504a457e3b80733deb6efec9f68"
+  integrity sha1-sFwxYYX8BQSkV+O4BzPetu/sn2g=
 
 "@itwin/itwinui-css@^0.9.0":
   version "0.9.0"
@@ -1800,6 +1805,11 @@
   resolved "https://pkgs.dev.azure.com/bentleycs/_packaging/Packages/npm/registry/@itwin/itwinui-icons-react/-/itwinui-icons-react-0.1.0.tgz#812bf14c090d7c5a412e9a678781b5a793966ca9"
   integrity sha1-gSvxTAkNfFpBLppnh4G1p5OWbKk=
 
+"@itwin/itwinui-icons-react@^1.1.1":
+  version "1.1.3"
+  resolved "https://pkgs.dev.azure.com/bentleycs/_packaging/Packages/npm/registry/@itwin/itwinui-icons-react/-/itwinui-icons-react-1.1.3.tgz#11cab736a37b66d9e0cec89de9593b55da9de5d2"
+  integrity sha1-Ecq3NqN7Ztngzsid6Vk7Vdqd5dI=
+
 "@itwin/itwinui-icons-react@^1.1.2":
   version "1.1.2"
   resolved "https://pkgs.dev.azure.com/bentleycs/_packaging/Packages/npm/registry/@itwin/itwinui-icons-react/-/itwinui-icons-react-1.1.2.tgz#9fec9411a83cfd957233a61b6979366cdb5acede"
@@ -1810,6 +1820,11 @@
   resolved "https://pkgs.dev.azure.com/bentleycs/_packaging/Packages/npm/registry/@itwin/itwinui-illustrations-react/-/itwinui-illustrations-react-0.1.0.tgz#f440c70ae83d22a67b47d209ddf8c5695d07563d"
   integrity sha1-9EDHCug9IqZ7R9IJ3fjFaV0HVj0=
 
+"@itwin/itwinui-illustrations-react@^1.0.1":
+  version "1.0.2"
+  resolved "https://pkgs.dev.azure.com/bentleycs/_packaging/Packages/npm/registry/@itwin/itwinui-illustrations-react/-/itwinui-illustrations-react-1.0.2.tgz#4b1f04a1c331937ec501dde3a25275bb2d995cec"
+  integrity sha1-Sx8EocMxk37FAd3jolJ1uy2ZXOw=
+
 "@itwin/itwinui-react@^1.0.0":
   version "1.2.0"
   resolved "https://pkgs.dev.azure.com/bentleycs/_packaging/Packages/npm/registry/@itwin/itwinui-react/-/itwinui-react-1.2.0.tgz#43f063ed3ffc0a1afb8e9025ae6e178453bc5d09"
@@ -1818,6 +1833,20 @@
     "@itwin/itwinui-css" "^0.11.0"
     "@itwin/itwinui-icons-react" "^0.1.0"
     "@itwin/itwinui-illustrations-react" "^0.1.0"
+    "@tippyjs/react" "^4.2.5"
+    "@types/react-table" "^7.0.18"
+    classnames "^2.2.6"
+    react-table "^7.1.0"
+    react-transition-group "^4.1.1"
+
+"@itwin/itwinui-react@^1.5.0":
+  version "1.5.0"
+  resolved "https://pkgs.dev.azure.com/bentleycs/_packaging/Packages/npm/registry/@itwin/itwinui-react/-/itwinui-react-1.5.0.tgz#ee1ab1ac98827452d0b742b4dcca069056d32a68"
+  integrity sha1-7hqxrJiCdFLQt0K03MoGkFbTKmg=
+  dependencies:
+    "@itwin/itwinui-css" "^0.16.0"
+    "@itwin/itwinui-icons-react" "^1.1.1"
+    "@itwin/itwinui-illustrations-react" "^1.0.1"
     "@tippyjs/react" "^4.2.5"
     "@types/react-table" "^7.0.18"
     classnames "^2.2.6"

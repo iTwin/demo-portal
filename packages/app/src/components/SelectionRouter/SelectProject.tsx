@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { ProjectGrid, ProjectGridProps } from "@itwin/imodel-browser";
-import { HorizontalTabs } from "@itwin/itwinui-react";
+import { HorizontalTabs, Title } from "@itwin/itwinui-react";
 import { RouteComponentProps, useLocation } from "@reach/router";
 import React, { useState } from "react";
 
@@ -40,11 +40,16 @@ export const SelectProject = ({
 
   return (
     <div className="scrolling-tab-container">
+      <div className={"title-section"}>
+        <Title>Projects</Title>
+      </div>
+
       <HorizontalTabs
         labels={["Favorite projects", "Recents projects", "My projects"]}
         onTabSelected={setProjectType}
         activeIndex={projectType}
-        contentClassName="scrolling-tab-content"
+        contentClassName="scrolling-tab-content grid-holding-tab"
+        tabsClassName="grid-holding-tabs"
       >
         <ProjectGrid
           accessToken={accessToken}

@@ -14,11 +14,13 @@ export const IModelCreate = ({ accessToken, projectId = "" }: CreateProps) => {
   const navigate = useNavigate();
   const goBack = () => navigate?.(-1);
   return (
-    <CreateIModel
-      accessToken={accessToken}
-      projectId={projectId}
-      onClose={goBack}
-      onSuccess={goBack}
-    />
+    <div>
+      <CreateIModel
+        accessToken={accessToken}
+        projectId={projectId}
+        onClose={goBack}
+        onSuccess={goBack}
+      />
+    </div>
   );
 };
