@@ -103,14 +103,23 @@ const RoutedHeader = ({
         </IconButton>,
       ]}
       userIcon={
-        <HeaderUserIcon
-          accessTokenObject={accessTokenObject}
-          handleLogout={handleLogout}
-        />
+        loggedIn && (
+          <HeaderUserIcon
+            accessTokenObject={accessTokenObject}
+            handleLogout={handleLogout}
+          />
+        )
       }
     >
       {!loggedIn && (
-        <Button onClick={handleLogin} styleType={"cta"} disabled={loggedIn}>
+        <Button
+          onClick={handleLogin}
+          styleType={"cta"}
+          disabled={loggedIn}
+          style={{
+            height: 38,
+          }}
+        >
           {"Sign In"}
         </Button>
       )}
