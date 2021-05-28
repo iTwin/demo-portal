@@ -50,6 +50,7 @@ const RoutedHeader = ({
   handleLogin,
   handleLogout,
   accessTokenObject,
+  navigate,
 }: RouteComponentProps<HeaderProps>) => {
   const [theme, setTheme] = React.useState<ThemeType>("light");
   useTheme(theme);
@@ -61,7 +62,11 @@ const RoutedHeader = ({
 
   return (
     <IuiHeader
-      appLogo={<HeaderLogo logo={<SvgImodelHollow />}>iTwin Demo</HeaderLogo>}
+      appLogo={
+        <HeaderLogo logo={<SvgImodelHollow />} onClick={() => navigate?.("/")}>
+          iTwin Demo
+        </HeaderLogo>
+      }
       isSlim={!!slimMatch}
       breadcrumbs={
         <HeaderBreadcrumbs

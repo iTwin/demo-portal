@@ -34,7 +34,7 @@ export const ProjectHeaderButton = ({
     results: { projects },
   } = useApiData<{ projects: ProjectFull[] }>({
     accessToken,
-    url: `https://api.bentley.com/projects/favorites?$top=5`,
+    url: `https://api.bentley.com/projects/recents?$top=5`,
   });
   return (
     <HeaderButton
