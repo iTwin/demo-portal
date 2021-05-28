@@ -67,7 +67,7 @@ const RoutedHeader = ({
         <HeaderBreadcrumbs
           items={[
             ...spreadIf(
-              projectId && (
+              loggedIn && projectId && (
                 <ProjectHeaderButton
                   key="project"
                   projectId={projectId}
@@ -78,7 +78,7 @@ const RoutedHeader = ({
               )
             ),
             ...spreadIf(
-              iModelId && (
+              loggedIn && iModelId && (
                 <IModelHeaderButton
                   key="iModel"
                   iModelId={iModelId}
@@ -118,6 +118,7 @@ const RoutedHeader = ({
           disabled={loggedIn}
           style={{
             height: 38,
+            maxHeight: "calc(100% - 4px)",
           }}
         >
           {"Sign In"}
