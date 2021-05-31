@@ -38,7 +38,7 @@ export const SelectIModel = ({
   const { createIconButton } = useCreateIModelAction({ navigate });
   const { editAction } = useEditIModelAction({ navigate });
   return (
-    <>
+    <div className="scrolling-tab-container">
       <div className={"title-section"}>
         <Title>
           {results?.project
@@ -47,15 +47,17 @@ export const SelectIModel = ({
         </Title>
         <ButtonGroup>{createIconButton}</ButtonGroup>
       </div>
-      <IModelGrid
-        key={refreshKey}
-        accessToken={accessToken}
-        projectId={projectId}
-        onThumbnailClick={(imodel) => navigate?.(`imodel/${imodel.id}`)}
-        iModelActions={[editAction, deleteAction]}
-        {...rest}
-      />
-      {deleteDialog}
-    </>
+      <div className="scrolling-tab-content">
+        <IModelGrid
+          key={refreshKey}
+          accessToken={accessToken}
+          projectId={projectId}
+          onThumbnailClick={(imodel) => navigate?.(`imodel/${imodel.id}`)}
+          iModelActions={[editAction, deleteAction]}
+          {...rest}
+        />
+        {deleteDialog}
+      </div>
+    </div>
   );
 };

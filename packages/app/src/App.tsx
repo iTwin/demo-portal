@@ -2,14 +2,17 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { IncludePrefix } from "@bentley/itwin-client";
+import { AccessToken } from "@bentley/itwin-client";
 import { Redirect, Router } from "@reach/router";
 import React, { useEffect, useState } from "react";
 
 import "./App.scss";
 import AuthorizationClient from "./AuthorizationClient";
+import { Header } from "./components/Header/Header";
+import MainContainer from "./components/MainLayout/MainContainer";
+import { Sidebar } from "./components/MainLayout/Sidebar";
+import { StayTunedRouter } from "./components/StayTunedRouter/StayTunedRouter";
 import { ViewRouter } from "./components/ViewRouter/ViewRouter";
-import { Header } from "./Header";
 
 const App: React.FC = () => {
   const [isAuthorized, setIsAuthorized] = useState(
@@ -18,16 +21,14 @@ const App: React.FC = () => {
       : false
   );
   const [isLoggingIn, setIsLoggingIn] = useState(false);
-  const [accessToken, setAccessToken] = useState("");
+  const [accessTokenObject, setAccessTokenObject] = useState<AccessToken>();
 
   useEffect(() => {
     const initOidc = async () => {
       if (!AuthorizationClient.oidcClient) {
         await AuthorizationClient.initializeOidc();
         AuthorizationClient.apimClient.onUserStateChanged.addListener(
-          (accessToken) => {
-            setAccessToken(accessToken?.toTokenString(IncludePrefix.Yes) ?? "");
-          }
+          setAccessTokenObject
         );
       }
 
@@ -68,23 +69,42 @@ const App: React.FC = () => {
   };
 
   return (
-    <div>
-      <Header
-        handleLogin={onLoginClick}
-        loggedIn={isAuthorized}
-        handleLogout={onLogoutClick}
-      />
+    <MainContainer
+      header={
+        <Header
+          handleLogin={onLoginClick}
+          loggedIn={isAuthorized}
+          handleLogout={onLogoutClick}
+          accessTokenObject={accessTokenObject}
+        />
+      }
+      sidebar={<Sidebar />}
+    >
       {isLoggingIn ? (
         <span>"Logging in...."</span>
       ) : (
         isAuthorized && (
-          <Router>
-            <ViewRouter accessToken={accessToken} path="/view/*" />
+          <Router className={"router"}>
+            <ViewRouter
+              accessToken={accessTokenObject?.toTokenString() ?? ""}
+              path="view/*"
+            />
+            <StayTunedRouter
+              path="validate/*"
+              featureName={"Validate iModel"}
+            />
+            <StayTunedRouter path="compare/*" featureName={"Version Compare"} />
+            <StayTunedRouter path="query/*" featureName={"Query"} />
+            <StayTunedRouter path="report/*" featureName={"Report"} />
+            <StayTunedRouter
+              path="ai-ml/*"
+              featureName={"Artifical Intelligence - Machine Learning"}
+            />
             <Redirect noThrow={true} from="/" to="view" default={true} />
           </Router>
         )
       )}
-    </div>
+    </MainContainer>
   );
 };
 

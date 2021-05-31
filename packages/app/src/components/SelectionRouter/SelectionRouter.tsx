@@ -16,7 +16,7 @@ interface SelectionRouterProps extends RouteComponentProps {
 
 export const SelectionRouter = ({ accessToken }: SelectionRouterProps) => {
   return (
-    <Router>
+    <Router className={"router"}>
       <SelectProject accessToken={accessToken} path="/" />
       <Redirect from={"project"} to={"../"} noThrow={true} />
       <SelectIModel accessToken={accessToken} path="project/:projectId" />

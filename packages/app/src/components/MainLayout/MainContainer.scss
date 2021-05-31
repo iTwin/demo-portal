@@ -2,22 +2,29 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-.scrolling-tab-container {
+
+.full-page-container {
+  display: block;
+  height: 100%;
+  min-height: 100vh;
+}
+
+.full-height-column {
+  height: 100vh;
   display: flex;
   flex-direction: column;
+}
+
+.full-height-row {
   height: 100%;
-}
-
-.scrolling-tab-content {
   overflow: auto;
-  flex-basis: 100%;
+  display: flex;
+  flex-direction: row;
 }
 
-.grid-holding-tab {
-  padding-right: 0;
-  padding-left: 0;
-}
-
-.grid-holding-tabs {
-  padding-left: calc(var(--responsive-grid-margin, 64px) - 3px);
+.full-page-content {
+  display: grid;
+  height: 100%;
+  overflow: auto;
+  width: 100%;
 }
