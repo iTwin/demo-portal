@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { AccessToken } from "@bentley/itwin-client";
 import { Redirect, Router } from "@reach/router";
+import { withLDProvider } from "launchdarkly-react-client-sdk";
 import React, { useEffect, useState } from "react";
 
 import "./App.scss";
@@ -130,4 +131,6 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default withLDProvider({
+  clientSideID: process.env.IMJS_LD_CLIENT_ID as string,
+})(App);
