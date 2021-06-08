@@ -54,7 +54,11 @@ interface ViewRouterProps extends RouteComponentProps {
 export const ViewRouter = ({ accessToken }: ViewRouterProps) => {
   return (
     <Router className="viewer-container router">
-      <SelectionRouter accessToken={accessToken} path="*" />
+      <SelectionRouter
+        accessToken={accessToken}
+        path="*"
+        hideIModelActions={["view"]}
+      />
       <View path="project/:projectId/imodel/:iModelId" />
     </Router>
   );

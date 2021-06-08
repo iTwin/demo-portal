@@ -16,6 +16,7 @@ import {
 import { RouteComponentProps, Router, useMatch } from "@reach/router";
 import React from "react";
 
+import { spreadIf } from "../../utils";
 import { useCommonPathPattern } from "../MainLayout/useCommonPathPattern";
 import { HeaderUserIcon } from "./HeaderUserIcon";
 import { IModelHeaderButton } from "./IModelHeaderButton";
@@ -33,17 +34,6 @@ export const Header = (props: HeaderProps) => (
     <RoutedHeader {...props} default={true} />
   </Router>
 );
-
-type Falsy = false | 0 | "" | null | undefined;
-/**
- * Spread the result to add `addIfTrue` to an array based on input "Truthiness",
- * will not create empty element in the array if `addIfTrue` is falsy.
- * @example [...spreadIf(shouldAdd && {thingTo: 'add'})]
- * @param addIfTrue Should be a shorthand that returns Falsy or something.
- * @returns Array with object in it if "Truthy", an empty array otherwise
- */
-const spreadIf: <T>(addIfTrue: T | Falsy) => [T] | [] = (addIfTrue) =>
-  addIfTrue ? [addIfTrue] : [];
 
 const RoutedHeader = ({
   loggedIn,

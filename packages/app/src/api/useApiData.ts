@@ -2,9 +2,36 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+import { ProjectFull } from "@itwin/imodel-browser";
 import React from "react";
 
+export type ApiLink = {
+  href: string;
+};
+
+export type ApiLinks = {
+  self: ApiLink;
+  next: ApiLink;
+  prev: ApiLink;
+};
+
+export interface ProjectWithLinks extends ProjectFull {
+  _links: {
+    asset: ApiLink;
+    storage: ApiLink;
+    imodels: ApiLink;
+    clashDetectionTests: ApiLink;
+    clashDetectionRuns: ApiLink;
+    propertyValueTests: ApiLink;
+    propertyValueRuns: ApiLink;
+  };
+}
+
 interface ApiDataHookOptions {
+  /**
+   * Do not automatically fetch data on initial run, wait for "refreshData" to be run.
+   */
+  noAutoFetch?: boolean;
   /**
    * The access token will be put as Authorization header value
    */
@@ -19,16 +46,21 @@ interface ApiDataHookOptions {
   headers?: { [key: string]: string };
 }
 
+const localCache: { [request: string]: { exp: number; data: any } } = {};
+
 /**
  * Generic hook to get json data results, expects request to http://developer.bentley.com/...
  */
-export const useApiData: <T>(options: ApiDataHookOptions) => { results: T } = ({
+export const useApiData: <T>(
+  options: ApiDataHookOptions
+) => { results: T; refreshData(): (() => void) | undefined } = ({
+  noAutoFetch,
   accessToken,
   url,
   headers,
 }) => {
   const [results, setResults] = React.useState<any>({});
-  React.useEffect(() => {
+  const refreshData = React.useCallback(() => {
     if (!accessToken || !url) {
       setResults({});
       return;
@@ -53,6 +85,13 @@ export const useApiData: <T>(options: ApiDataHookOptions) => { results: T } = ({
         }
       })
       .then((result) => {
+        if (url) {
+          const FIVE_MIN_IN_MILLISECONDS = 5 * 60 * 1000;
+          localCache[url] = {
+            exp: Date.now() + FIVE_MIN_IN_MILLISECONDS,
+            data: result,
+          };
+        }
         setResults(result);
       })
       .catch((e) => {
@@ -67,5 +106,14 @@ export const useApiData: <T>(options: ApiDataHookOptions) => { results: T } = ({
       abortController.abort();
     };
   }, [accessToken, headers, url]);
-  return { results };
+  React.useEffect(() => {
+    if (!noAutoFetch) {
+      if (url && localCache[url]?.exp > Date.now()) {
+        setResults(localCache[url].data);
+        return;
+      }
+      return refreshData();
+    }
+  }, [noAutoFetch, refreshData, url]);
+  return { results, refreshData };
 };
