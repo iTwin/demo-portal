@@ -102,7 +102,7 @@ export const Synchronize = ({
   const [hideStatus, setHideStatus] = React.useState(true);
   const uploadAndRefresh = React.useCallback(
     (fileList: FileList | null) => {
-      if (!fileList) {
+      if (!fileList || fileList.length === 0) {
         return;
       }
       setHideStatus(false);

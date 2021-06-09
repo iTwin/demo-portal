@@ -55,6 +55,9 @@ export const useSynchronizeFileUploader = ({
 
   const uploadFiles = React.useCallback(
     async (fileList: FileList, onSuccess?: () => void) => {
+      if (!fileList || fileList.length === 0) {
+        return;
+      }
       setProgress(0);
       setStep(1);
       setState("Working");
