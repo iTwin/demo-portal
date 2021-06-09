@@ -1775,13 +1775,13 @@
     "@itwin/itwinui-icons-react" "^0.1.0"
     "@itwin/itwinui-react" "^1.0.0"
 
-"@itwin/imodel-browser@^0.10.2":
-  version "0.10.2"
-  resolved "https://pkgs.dev.azure.com/bentleycs/_packaging/Packages/npm/registry/@itwin/imodel-browser/-/imodel-browser-0.10.2.tgz#2298d774b05447ff58e56a8e7c06d9c9c0f6801e"
-  integrity sha1-IpjXdLBUR/9Y5WqOfAbZycD2gB4=
+"@itwin/imodel-browser@^0.10.3":
+  version "0.10.3"
+  resolved "https://pkgs.dev.azure.com/bentleycs/_packaging/Packages/npm/registry/@itwin/imodel-browser/-/imodel-browser-0.10.3.tgz#53635e4823a130f1f4e6bfaad7f6b7565452d16b"
+  integrity sha1-U2NeSCOhMPH05r+q1/a3VlRS0Ws=
   dependencies:
     "@bentley/icons-generic-webfont" "^1.0.34"
-    "@itwin/itwinui-react" "^1.5.0"
+    "@itwin/itwinui-react" "^1.6.0"
     classnames "^2.2.6"
     react-intersection-observer "^8.31.1"
 
@@ -1794,6 +1794,11 @@
   version "0.16.0"
   resolved "https://pkgs.dev.azure.com/bentleycs/_packaging/Packages/npm/registry/@itwin/itwinui-css/-/itwinui-css-0.16.0.tgz#b05c316185fc0504a457e3b80733deb6efec9f68"
   integrity sha1-sFwxYYX8BQSkV+O4BzPetu/sn2g=
+
+"@itwin/itwinui-css@^0.18.1":
+  version "0.18.1"
+  resolved "https://pkgs.dev.azure.com/bentleycs/_packaging/Packages/npm/registry/@itwin/itwinui-css/-/itwinui-css-0.18.1.tgz#df9fd3e9b47e4515ad105fd172f9607582f1d617"
+  integrity sha1-35/T6bR+RRWtEF/RcvlgdYLx1hc=
 
 "@itwin/itwinui-css@^0.9.0":
   version "0.9.0"
@@ -1845,6 +1850,20 @@
   integrity sha1-7hqxrJiCdFLQt0K03MoGkFbTKmg=
   dependencies:
     "@itwin/itwinui-css" "^0.16.0"
+    "@itwin/itwinui-icons-react" "^1.1.1"
+    "@itwin/itwinui-illustrations-react" "^1.0.1"
+    "@tippyjs/react" "^4.2.5"
+    "@types/react-table" "^7.0.18"
+    classnames "^2.2.6"
+    react-table "^7.1.0"
+    react-transition-group "^4.1.1"
+
+"@itwin/itwinui-react@^1.6.0":
+  version "1.7.1"
+  resolved "https://pkgs.dev.azure.com/bentleycs/_packaging/Packages/npm/registry/@itwin/itwinui-react/-/itwinui-react-1.7.1.tgz#0ad63d720440724ed284f8628b92a4ac25f358a9"
+  integrity sha1-CtY9cgRAck7ShPhii5KkrCXzWKk=
+  dependencies:
+    "@itwin/itwinui-css" "^0.18.1"
     "@itwin/itwinui-icons-react" "^1.1.1"
     "@itwin/itwinui-illustrations-react" "^1.0.1"
     "@tippyjs/react" "^4.2.5"
