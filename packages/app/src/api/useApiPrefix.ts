@@ -30,7 +30,7 @@ export const useApiPrefix = () => {
 export const usePrefixedUrl = (baseUrl?: string) => {
   const prefix = useApiPrefix();
   if (prefix && baseUrl) {
-    return baseUrl.replace("api.bentley.com", `${prefix}-api.bebntley.com`);
+    return baseUrl.replace("api.bentley.com", `${prefix}-api.bentley.com`);
   }
   return baseUrl;
 };
