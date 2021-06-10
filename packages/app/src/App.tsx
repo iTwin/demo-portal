@@ -13,6 +13,8 @@ import MainContainer from "./components/MainLayout/MainContainer";
 import { Sidebar } from "./components/MainLayout/Sidebar";
 import { StayTunedRouter } from "./components/StayTunedRouter/StayTunedRouter";
 import { ViewRouter } from "./components/ViewRouter/ViewRouter";
+import { DemoPortalConfig, getConfig } from "./config";
+import { ConfigProvider } from "./config/ConfigProvider";
 
 const App: React.FC = () => {
   const [isAuthorized, setIsAuthorized] = useState(
@@ -22,11 +24,21 @@ const App: React.FC = () => {
   );
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [accessTokenObject, setAccessTokenObject] = useState<AccessToken>();
+  const [appConfig, setAppConfig] = useState<DemoPortalConfig>();
 
   useEffect(() => {
     const initOidc = async () => {
-      if (!AuthorizationClient.oidcClient) {
-        await AuthorizationClient.initializeOidc();
+      if (!AuthorizationClient.oidcClient && appConfig?.auth) {
+        if (!appConfig.auth.clientId) {
+          throw new Error(
+            "Please add a valid client ID in the .env.local file and restart the application"
+          );
+        }
+        await AuthorizationClient.initializeOidc(
+          appConfig.auth.clientId,
+          appConfig.auth.authority,
+          appConfig.auth.apimAuthority
+        );
         AuthorizationClient.apimClient.onUserStateChanged.addListener(
           setAccessTokenObject
         );
@@ -41,14 +53,12 @@ const App: React.FC = () => {
       }
     };
     initOidc().catch((error) => console.error(error));
-  }, []);
+  }, [appConfig]);
 
   useEffect(() => {
-    if (!process.env.IMJS_AUTH_CLIENT_CLIENT_ID) {
-      throw new Error(
-        "Please add a valid client ID in the .env.local file and restart the application"
-      );
-    }
+    void getConfig().then((config) => {
+      setAppConfig(config);
+    });
   }, []);
 
   useEffect(() => {
@@ -69,42 +79,47 @@ const App: React.FC = () => {
   };
 
   return (
-    <MainContainer
-      header={
-        <Header
-          handleLogin={onLoginClick}
-          loggedIn={isAuthorized}
-          handleLogout={onLogoutClick}
-          accessTokenObject={accessTokenObject}
-        />
-      }
-      sidebar={<Sidebar />}
-    >
-      {isLoggingIn ? (
-        <span>"Logging in...."</span>
-      ) : (
-        isAuthorized && (
-          <Router className={"router"}>
-            <ViewRouter
-              accessToken={accessTokenObject?.toTokenString() ?? ""}
-              path="view/*"
-            />
-            <StayTunedRouter
-              path="validate/*"
-              featureName={"Validate iModel"}
-            />
-            <StayTunedRouter path="compare/*" featureName={"Version Compare"} />
-            <StayTunedRouter path="query/*" featureName={"Query"} />
-            <StayTunedRouter path="report/*" featureName={"Report"} />
-            <StayTunedRouter
-              path="ai-ml/*"
-              featureName={"Artifical Intelligence - Machine Learning"}
-            />
-            <Redirect noThrow={true} from="/" to="view" default={true} />
-          </Router>
-        )
-      )}
-    </MainContainer>
+    <ConfigProvider {...appConfig}>
+      <MainContainer
+        header={
+          <Header
+            handleLogin={onLoginClick}
+            loggedIn={isAuthorized}
+            handleLogout={onLogoutClick}
+            accessTokenObject={accessTokenObject}
+          />
+        }
+        sidebar={<Sidebar />}
+      >
+        {isLoggingIn ? (
+          <span>"Logging in...."</span>
+        ) : (
+          isAuthorized && (
+            <Router className={"router"}>
+              <ViewRouter
+                accessToken={accessTokenObject?.toTokenString() ?? ""}
+                path="view/*"
+              />
+              <StayTunedRouter
+                path="validate/*"
+                featureName={"Validate iModel"}
+              />
+              <StayTunedRouter
+                path="compare/*"
+                featureName={"Version Compare"}
+              />
+              <StayTunedRouter path="query/*" featureName={"Query"} />
+              <StayTunedRouter path="report/*" featureName={"Report"} />
+              <StayTunedRouter
+                path="ai-ml/*"
+                featureName={"Artifical Intelligence - Machine Learning"}
+              />
+              <Redirect noThrow={true} from="/" to="view" default={true} />
+            </Router>
+          )
+        )}
+      </MainContainer>
+    </ConfigProvider>
   );
 };
 

@@ -7,6 +7,7 @@ import { RouteComponentProps, useNavigate } from "@reach/router";
 import React from "react";
 
 import { useApiData } from "../../api/useApiData";
+import { useApiPrefix } from "../../api/useApiPrefix";
 
 interface GetIModelResult {
   iModel?: IModelFull;
@@ -43,6 +44,7 @@ export const IModelEdit = ({ accessToken, iModelId = "" }: EditProps) => {
   const navigate = useNavigate();
   const goBack = () => navigate?.(-1);
   const { ref } = useUpdateIModelLoadingStyler(!iModel);
+  const serverEnvironmentPrefix = useApiPrefix();
   return (
     <div ref={ref}>
       <UpdateIModel
@@ -55,6 +57,7 @@ export const IModelEdit = ({ accessToken, iModelId = "" }: EditProps) => {
         }}
         onClose={goBack}
         onSuccess={goBack}
+        apiOverrides={{ serverEnvironmentPrefix }}
       />
     </div>
   );

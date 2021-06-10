@@ -7,6 +7,7 @@ import { RouteComponentProps, Router } from "@reach/router";
 import React from "react";
 
 import AuthorizationClient from "../../AuthorizationClient";
+import { useConfig } from "../../config/ConfigProvider";
 import { SelectionRouter } from "../SelectionRouter/SelectionRouter";
 
 const useThemeWatcher = () => {
@@ -37,12 +38,17 @@ export interface ViewProps extends RouteComponentProps {
 }
 const View = (props: ViewProps) => {
   (window as any).ITWIN_VIEWER_HOME = window.location.origin;
+  const config = useConfig();
+  const buddiRegion = config.buddi?.region
+    ? parseInt(config.buddi.region)
+    : undefined;
   return (
     <Viewer
       contextId={props.projectId ?? ""}
       iModelId={props.iModelId ?? ""}
       authConfig={{ oidcClient: AuthorizationClient.oidcClient }}
       theme={useThemeWatcher()}
+      backend={{ buddiRegion }}
     />
   );
 };

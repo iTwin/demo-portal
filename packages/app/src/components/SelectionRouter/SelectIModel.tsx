@@ -12,6 +12,7 @@ import { RouteComponentProps } from "@reach/router";
 import React from "react";
 
 import { useApiData } from "../../api/useApiData";
+import { useApiPrefix } from "../../api/useApiPrefix";
 import { useCreateIModelAction } from "../IModelCRUDRouter/useCreateIModelAction";
 import { useDeleteIModelAction } from "../IModelCRUDRouter/useDeleteIModelAction";
 import { useEditIModelAction } from "../IModelCRUDRouter/useEditIModelAction";
@@ -37,6 +38,7 @@ export const SelectIModel = ({
   });
   const { createIconButton } = useCreateIModelAction({ navigate });
   const { editAction } = useEditIModelAction({ navigate });
+  const serverEnvironmentPrefix = useApiPrefix();
   return (
     <div className="scrolling-tab-container">
       <div className={"title-section"}>
@@ -54,6 +56,7 @@ export const SelectIModel = ({
           projectId={projectId}
           onThumbnailClick={(imodel) => navigate?.(`imodel/${imodel.id}`)}
           iModelActions={[editAction, deleteAction]}
+          apiOverrides={{ serverEnvironmentPrefix }}
           {...rest}
         />
         {deleteDialog}

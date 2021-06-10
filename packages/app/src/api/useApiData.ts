@@ -4,6 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 import React from "react";
 
+import { usePrefixedUrl } from "./useApiPrefix";
+
 interface ApiDataHookOptions {
   /**
    * The access token will be put as Authorization header value
@@ -28,8 +30,10 @@ export const useApiData: <T>(options: ApiDataHookOptions) => { results: T } = ({
   headers,
 }) => {
   const [results, setResults] = React.useState<any>({});
+  const prefixedUrl = usePrefixedUrl(url);
+
   React.useEffect(() => {
-    if (!accessToken || !url) {
+    if (!accessToken || !prefixedUrl) {
       setResults({});
       return;
     }
@@ -42,7 +46,7 @@ export const useApiData: <T>(options: ApiDataHookOptions) => { results: T } = ({
         ...headers,
       },
     };
-    fetch(url, options)
+    fetch(prefixedUrl, options)
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -66,6 +70,6 @@ export const useApiData: <T>(options: ApiDataHookOptions) => { results: T } = ({
     return () => {
       abortController.abort();
     };
-  }, [accessToken, headers, url]);
+  }, [accessToken, headers, prefixedUrl]);
   return { results };
 };
