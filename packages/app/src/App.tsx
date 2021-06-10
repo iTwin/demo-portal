@@ -12,6 +12,7 @@ import { Header } from "./components/Header/Header";
 import MainContainer from "./components/MainLayout/MainContainer";
 import { Sidebar } from "./components/MainLayout/Sidebar";
 import { StayTunedRouter } from "./components/StayTunedRouter/StayTunedRouter";
+import { SynchronizationRouter } from "./components/SynchronizationRouter/SynchronizationRouter";
 import { ViewRouter } from "./components/ViewRouter/ViewRouter";
 import { DemoPortalConfig, getConfig } from "./config";
 import { ConfigProvider } from "./config/ConfigProvider";
@@ -24,6 +25,7 @@ const App: React.FC = () => {
   );
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [accessTokenObject, setAccessTokenObject] = useState<AccessToken>();
+  const [accessToken, setAccessToken] = useState("");
   const [appConfig, setAppConfig] = useState<DemoPortalConfig>();
 
   useEffect(() => {
@@ -40,7 +42,10 @@ const App: React.FC = () => {
           appConfig.auth.apimAuthority
         );
         AuthorizationClient.apimClient.onUserStateChanged.addListener(
-          setAccessTokenObject
+          (token) => {
+            setAccessTokenObject(token);
+            setAccessToken(token?.toTokenString() ?? "");
+          }
         );
       }
 
@@ -96,9 +101,11 @@ const App: React.FC = () => {
         ) : (
           isAuthorized && (
             <Router className={"router"}>
-              <ViewRouter
-                accessToken={accessTokenObject?.toTokenString() ?? ""}
-                path="view/*"
+              <ViewRouter accessToken={accessToken} path="view/*" />
+              <SynchronizationRouter
+                path="synchronize/*"
+                accessToken={accessToken}
+                email={accessTokenObject?.getUserInfo()?.email?.id ?? ""}
               />
               <StayTunedRouter
                 path="validate/*"

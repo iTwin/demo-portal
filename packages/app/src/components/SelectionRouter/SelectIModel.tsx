@@ -16,17 +16,24 @@ import { useApiPrefix } from "../../api/useApiPrefix";
 import { useCreateIModelAction } from "../IModelCRUDRouter/useCreateIModelAction";
 import { useDeleteIModelAction } from "../IModelCRUDRouter/useDeleteIModelAction";
 import { useEditIModelAction } from "../IModelCRUDRouter/useEditIModelAction";
+import { useSynchronizeIModelAction } from "../SynchronizationRouter/useSynchronizeIModelAction";
+import { useViewIModelAction } from "../ViewRouter/useViewIModelAction";
 import "./SelectIModel.scss";
 
 interface GetProjectResult {
   project?: ProjectFull;
 }
 
-type IModelRouteProps = RouteComponentProps<IModelGridProps>;
+type IModelRouteProps = RouteComponentProps<
+  IModelGridProps & {
+    hideActions?: ("view" | "synchronize" | "edit" | "delete")[];
+  }
+>;
 export const SelectIModel = ({
   accessToken = "",
   projectId,
   navigate,
+  hideActions,
   ...rest
 }: IModelRouteProps) => {
   const { results } = useApiData<GetProjectResult>({
@@ -37,7 +44,9 @@ export const SelectIModel = ({
     accessToken,
   });
   const { createIconButton } = useCreateIModelAction({ navigate });
+  const { synchronizeAction } = useSynchronizeIModelAction();
   const { editAction } = useEditIModelAction({ navigate });
+  const { viewAction } = useViewIModelAction();
   const serverEnvironmentPrefix = useApiPrefix();
   return (
     <div className="scrolling-tab-container">
@@ -55,7 +64,12 @@ export const SelectIModel = ({
           accessToken={accessToken}
           projectId={projectId}
           onThumbnailClick={(imodel) => navigate?.(`imodel/${imodel.id}`)}
-          iModelActions={[editAction, deleteAction]}
+          iModelActions={[
+            viewAction,
+            editAction,
+            synchronizeAction,
+            deleteAction,
+          ].filter((action) => !hideActions?.includes(action.key as any))}
           apiOverrides={{ serverEnvironmentPrefix }}
           {...rest}
         />

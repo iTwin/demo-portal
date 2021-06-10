@@ -3,26 +3,22 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { IModelFull } from "@itwin/create-imodel";
-import { SvgEdit } from "@itwin/itwinui-icons-react";
-import { NavigateFn } from "@reach/router";
+import { SvgSync } from "@itwin/itwinui-icons-react";
+import { useNavigate } from "@reach/router";
 import React from "react";
 
-type EditIModelActionOptions = {
-  /**
-   * Must be the "relative" navigate function, coming from route props.
-   */
-  navigate: NavigateFn | undefined;
-};
-
-export const useEditIModelAction = ({ navigate }: EditIModelActionOptions) => {
+export const useSynchronizeIModelAction = () => {
+  const navigate = useNavigate();
   return {
-    editAction: React.useMemo(
+    synchronizeAction: React.useMemo(
       () => ({
-        key: "edit",
-        icon: <SvgEdit />,
+        key: "synchronize",
+        icon: <SvgSync />,
         onClick: (iModel: IModelFull) =>
-          void navigate?.(`imodel/${iModel.id}/edit-imodel`),
-        children: "Edit iModel",
+          void navigate(
+            `/synchronize/project/${iModel.projectId}/imodel/${iModel.id}`
+          ),
+        children: "Synchronize",
       }),
       [navigate]
     ),

@@ -3,7 +3,12 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { ProjectGrid, ProjectGridProps } from "@itwin/imodel-browser";
-import { HorizontalTabs, Title } from "@itwin/itwinui-react";
+import {
+  SvgCalendar,
+  SvgList,
+  SvgStarHollow,
+} from "@itwin/itwinui-icons-react";
+import { HorizontalTabs } from "@itwin/itwinui-react";
 import { RouteComponentProps, useLocation } from "@reach/router";
 import React, { useState } from "react";
 
@@ -41,14 +46,24 @@ export const SelectProject = ({
   const serverEnvironmentPrefix = useApiPrefix();
   return (
     <div className="scrolling-tab-container">
-      <div className={"title-section"}>
-        <Title>Projects</Title>
-      </div>
-
       <HorizontalTabs
-        labels={["Favorite projects", "Recents projects", "My projects"]}
+        labels={[
+          <span className={"tab-with-icon"} key="favorite">
+            <SvgStarHollow />
+            <p>Favorite projects</p>
+          </span>,
+          <span className={"tab-with-icon"} key={"recents"}>
+            <SvgCalendar />
+            <p>Recent projects</p>
+          </span>,
+          <span className={"tab-with-icon"} key={"all"}>
+            <SvgList />
+            <p>My projects</p>
+          </span>,
+        ]}
         onTabSelected={setProjectType}
         activeIndex={projectType}
+        type={"borderless"}
         contentClassName="scrolling-tab-content grid-holding-tab"
         tabsClassName="grid-holding-tabs"
       >

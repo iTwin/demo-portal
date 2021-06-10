@@ -58,7 +58,7 @@ export const ProjectHeaderButton = ({
                 </MenuItem>
               )) ?? []),
               <MenuItem
-                key={"others"}
+                key={"favorites"}
                 onClick={() => {
                   close();
                   void navigate(`/${section}`);
@@ -68,7 +68,7 @@ export const ProjectHeaderButton = ({
                 All favorite projects...
               </MenuItem>,
               <MenuItem
-                key={"others"}
+                key={"recents"}
                 onClick={() => {
                   close();
                   void navigate(`/${section}?recents`);

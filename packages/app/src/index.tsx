@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------------------------
-* Copyright (c) Bentley Systems, Incorporated. All rights reserved.
-* See LICENSE.md in the project root for license terms and full copyright notice.
-*--------------------------------------------------------------------------------------------*/
+ * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
+ * See LICENSE.md in the project root for license terms and full copyright notice.
+ *--------------------------------------------------------------------------------------------*/
 import { BrowserAuthorizationCallbackHandler } from "@bentley/frontend-authorization-client";
 import React from "react";
 import ReactDOM from "react-dom";
@@ -11,7 +11,7 @@ import "./index.scss";
 import * as serviceWorker from "./serviceWorker";
 
 // Do not render full application if we are handling OIDC callback
-const redirectUrl = new URL(process.env.IMJS_AUTH_CLIENT_REDIRECT_URI ?? "");
+const redirectUrl = new URL(`${window.location.origin}/signin-callback`);
 if (redirectUrl.pathname === window.location.pathname) {
   BrowserAuthorizationCallbackHandler.handleSigninCallback(
     redirectUrl.toString()

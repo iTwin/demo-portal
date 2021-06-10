@@ -8,6 +8,7 @@ import {
   SvgCompare,
   SvgDatabase,
   SvgReports,
+  SvgSync,
   SvgValidate,
 } from "@itwin/itwinui-icons-react";
 import { SidenavButton, SideNavigation } from "@itwin/itwinui-react";
@@ -33,6 +34,7 @@ export const RoutedSidebar = ({ navigate }: RouteComponentProps) => {
 
   return (
     <SideNavigation
+      expanderPlacement={"bottom"}
       items={[
         <SidenavButton
           key="view"
@@ -41,6 +43,14 @@ export const RoutedSidebar = ({ navigate }: RouteComponentProps) => {
           isActive={section === "view"}
         >
           View iModel
+        </SidenavButton>,
+        <SidenavButton
+          key="synchronize"
+          startIcon={<SvgSync />}
+          onClick={() => navigate?.(`/synchronize${selectionPath}`)}
+          isActive={section === "synchronize"}
+        >
+          Synchronize
         </SidenavButton>,
         <SidenavButton
           key="validate"
