@@ -5,6 +5,8 @@
 import { ProjectFull } from "@itwin/imodel-browser";
 import React from "react";
 
+import { usePrefixedUrl } from "./useApiPrefix";
+
 export type ApiLink = {
   href: string;
 };
@@ -26,7 +28,6 @@ export interface ProjectWithLinks extends ProjectFull {
     propertyValueRuns: ApiLink;
   };
 }
-
 interface ApiDataHookOptions {
   /**
    * Do not automatically fetch data on initial run, wait for "refreshData" to be run.
@@ -60,8 +61,9 @@ export const useApiData: <T>(
   headers,
 }) => {
   const [results, setResults] = React.useState<any>({});
+  const prefixedUrl = usePrefixedUrl(url);
   const refreshData = React.useCallback(() => {
-    if (!accessToken || !url) {
+    if (!accessToken || !prefixedUrl) {
       setResults({});
       return;
     }
@@ -74,7 +76,7 @@ export const useApiData: <T>(
         ...headers,
       },
     };
-    fetch(url, options)
+    fetch(prefixedUrl, options)
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -85,9 +87,9 @@ export const useApiData: <T>(
         }
       })
       .then((result) => {
-        if (url) {
+        if (prefixedUrl) {
           const FIVE_MIN_IN_MILLISECONDS = 5 * 60 * 1000;
-          localCache[url] = {
+          localCache[prefixedUrl] = {
             exp: Date.now() + FIVE_MIN_IN_MILLISECONDS,
             data: result,
           };
@@ -105,15 +107,15 @@ export const useApiData: <T>(
     return () => {
       abortController.abort();
     };
-  }, [accessToken, headers, url]);
+  }, [accessToken, headers, prefixedUrl]);
   React.useEffect(() => {
     if (!noAutoFetch) {
-      if (url && localCache[url]?.exp > Date.now()) {
-        setResults(localCache[url].data);
+      if (prefixedUrl && localCache[prefixedUrl]?.exp > Date.now()) {
+        setResults(localCache[prefixedUrl].data);
         return;
       }
       return refreshData();
     }
-  }, [noAutoFetch, refreshData, url]);
+  }, [noAutoFetch, refreshData, prefixedUrl]);
   return { results, refreshData };
 };

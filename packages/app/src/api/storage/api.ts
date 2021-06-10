@@ -22,8 +22,10 @@ import * as url from "url";
 
 import { Configuration } from "./configuration";
 
-
-const BASE_PATH = "https://api.bentley.com/storage/v1".replace(/\/+$/, "");
+export const BASE_PATH = "https://api.bentley.com/storage/v1".replace(
+  /\/+$/,
+  ""
+);
 
 /**
  *

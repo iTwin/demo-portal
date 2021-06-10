@@ -6,6 +6,8 @@ import { CreateIModel } from "@itwin/create-imodel";
 import { RouteComponentProps, useNavigate } from "@reach/router";
 import React from "react";
 
+import { useApiPrefix } from "../../api/useApiPrefix";
+
 interface CreateProps extends RouteComponentProps {
   accessToken: string;
   projectId?: string;
@@ -13,6 +15,7 @@ interface CreateProps extends RouteComponentProps {
 export const IModelCreate = ({ accessToken, projectId = "" }: CreateProps) => {
   const navigate = useNavigate();
   const goBack = () => navigate?.(-1);
+  const serverEnvironmentPrefix = useApiPrefix();
   return (
     <div>
       <CreateIModel
@@ -20,6 +23,7 @@ export const IModelCreate = ({ accessToken, projectId = "" }: CreateProps) => {
         projectId={projectId}
         onClose={goBack}
         onSuccess={goBack}
+        apiOverrides={{ serverEnvironmentPrefix }}
       />
     </div>
   );

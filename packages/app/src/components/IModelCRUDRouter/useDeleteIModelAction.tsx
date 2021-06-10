@@ -7,6 +7,8 @@ import { IModelFull } from "@itwin/imodel-browser";
 import { SvgDelete } from "@itwin/itwinui-icons-react";
 import React from "react";
 
+import { useApiPrefix } from "../../api/useApiPrefix";
+
 export type DeleteIModelActionOptions = {
   accessToken: string;
 };
@@ -27,7 +29,7 @@ export const useDeleteIModelAction = ({
     clearIModelToDelete();
     setRefreshKey((key) => (key + 1) % 3);
   };
-
+  const serverEnvironmentPrefix = useApiPrefix();
   return {
     deleteAction: React.useMemo(
       () => ({
@@ -45,6 +47,7 @@ export const useDeleteIModelAction = ({
         onClose={clearIModelToDelete}
         onError={clearIModelToDelete}
         onSuccess={clearIModelToDeleteAndCallback}
+        apiOverrides={{ serverEnvironmentPrefix }}
       />
     ),
     refreshKey,

@@ -27,11 +27,13 @@ import { RouteComponentProps } from "@reach/router";
 import React, { ComponentPropsWithoutRef } from "react";
 
 import {
+  BASE_PATH as SYNCH_BASE,
   Connection,
   DefaultApi as SynchronizationApi,
   ExecutionResult,
   ExecutionState,
 } from "../../api/synchronization";
+import { useApiPrefix, usePrefixedUrl } from "../../api/useApiPrefix";
 import "./Synchronize.scss";
 import { useSynchronizeFileUploader } from "./useSynchronizeFileUploader";
 
@@ -66,9 +68,12 @@ export const Synchronize = ({
   accessToken,
   email,
 }: SynchronizeProps) => {
+  const synchronizationBaseUrl = usePrefixedUrl(SYNCH_BASE);
+  const urlPrefix = useApiPrefix();
+
   const [connections, setConnections] = React.useState<any[]>([]);
   const fetchConnections = React.useCallback(async () => {
-    const api = new SynchronizationApi();
+    const api = new SynchronizationApi(undefined, synchronizationBaseUrl);
     const connections = await api.getConnections(
       iModelId,
       accessToken,
@@ -82,7 +87,7 @@ export const Synchronize = ({
       }
     );
     setConnections(connections.connections ?? []);
-  }, [accessToken, iModelId]);
+  }, [accessToken, iModelId, synchronizationBaseUrl]);
 
   React.useEffect(() => void fetchConnections(), [fetchConnections]);
 
@@ -127,7 +132,9 @@ export const Synchronize = ({
               styleType={"borderless"}
               onClick={() => {
                 window.open(
-                  `https://connect-itwinbridgeportal.bentley.com/${projectId}/${iModelId}`,
+                  `https://${
+                    urlPrefix ? urlPrefix + "-" : ""
+                  }connect-itwinbridgeportal.bentley.com/${projectId}/${iModelId}`,
                   "bridgeportal"
                 );
               }}
@@ -144,7 +151,9 @@ export const Synchronize = ({
               styleType={"borderless"}
               onClick={() => {
                 window.open(
-                  `https://connect-projectshareweb.bentley.com/${projectId}`,
+                  `https://${
+                    urlPrefix ? urlPrefix + "-" : ""
+                  }connect-projectshareweb.bentley.com/${projectId}`,
                   "shareportal"
                 );
               }}
@@ -245,7 +254,10 @@ export const Synchronize = ({
                           setStatus("Never ran");
                           return;
                         }
-                        const api = new SynchronizationApi();
+                        const api = new SynchronizationApi(
+                          undefined,
+                          synchronizationBaseUrl
+                        );
                         api
                           .getConnectionRun(
                             connectionId,
@@ -300,7 +312,10 @@ export const Synchronize = ({
                     id: "btns",
                     accessor: "id",
                     Cell: (props) => {
-                      const api = new SynchronizationApi();
+                      const api = new SynchronizationApi(
+                        undefined,
+                        synchronizationBaseUrl
+                      );
                       const deleteConnection = async () => {
                         if (window.confirm("Confirm delete")) {
                           await api.deleteConnection(
@@ -348,7 +363,7 @@ export const Synchronize = ({
                 ],
               },
             ],
-            [accessToken, fetchConnections, iModelId]
+            [accessToken, fetchConnections, iModelId, synchronizationBaseUrl]
           )}
           emptyTableContent={
             "No existing connections, drop file above to create new connections"

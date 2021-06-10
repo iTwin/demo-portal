@@ -16,12 +16,19 @@ After Exporting the OpenAPI v2 (json) file "xxx.json" (if the API changes),
 docker run --rm -v "${PWD}/packages/app/src/api:/local" swaggerapi/swagger-codegen-cli generate -i /local/xxxOpenAPI.json -l typescript-fetch -o /local/xxx --additional-properties=supportsES6=true,modelPropertyNaming=original
 ```
 
-5. After the command ran successfully, update the file `packages/app/src/api/xxx/api.ts` with these 2 additional lines on top of the file
+5. After the command ran successfully, update the file `packages/app/src/api/xxx/api.ts` with these 2 additional lines on top of the file:
 
 ```diff
-+/* eslint-disable */
-+//@ts-nocheck
-/// <reference path="./custom.d.ts" />
++ /* eslint-disable */
++ //@ts-nocheck
+  /// <reference path="./custom.d.ts" />
+```
+
+and `export` the `BASE_PATH` in it (Required for environment awareness):
+
+```diff
+- const BASE_PATH = "https://api.bentley.com/xxx/v1".replace(
++ export const BASE_PATH = "https://api.bentley.com/xxx/v1".replace(
 ```
 
 6. Fix existing code from whatever have changed in the API as they are not guaranteed to be compatible in any way.

@@ -4,9 +4,18 @@
  *--------------------------------------------------------------------------------------------*/
 import React from "react";
 
-import { FilesApi, FoldersApi } from "../../api/storage";
-import { DefaultApi, IModelBridgeType } from "../../api/synchronization";
+import {
+  BASE_PATH as STORAGE_BASE,
+  FilesApi,
+  FoldersApi,
+} from "../../api/storage";
+import {
+  BASE_PATH as SYNCH_BASE,
+  DefaultApi as SynchronizationApi,
+  IModelBridgeType,
+} from "../../api/synchronization";
 import { ProjectWithLinks, useApiData } from "../../api/useApiData";
+import { usePrefixedUrl } from "../../api/useApiPrefix";
 import {
   completeFileCreation,
   extractFolderIdFromStorageHref,
@@ -39,6 +48,8 @@ export const useSynchronizeFileUploader = ({
   accessToken = "",
   email = "",
 }: ConnectionFileUploaderOptions) => {
+  const synchronizationBaseUrl = usePrefixedUrl(SYNCH_BASE);
+  const StorageBaseUrl = usePrefixedUrl(STORAGE_BASE);
   const { results } = useApiData<{ project: ProjectWithLinks }>({
     url: projectId
       ? `https://api.bentley.com/projects/${projectId}`
@@ -88,7 +99,10 @@ export const useSynchronizeFileUploader = ({
         }
 
         setStatus("Validating new connection");
-        const synchronizeApi = new DefaultApi();
+        const synchronizeApi = new SynchronizationApi(
+          undefined,
+          synchronizationBaseUrl
+        );
         const connections = await synchronizeApi.getConnections(
           iModelId,
           accessToken
@@ -104,7 +118,7 @@ export const useSynchronizeFileUploader = ({
 
         setStep(2);
         setStatus("Validating demo portal file share");
-        const folderApi = new FoldersApi();
+        const folderApi = new FoldersApi(undefined, StorageBaseUrl);
         const demoFolderId = await getDemoFolderId(
           projectFolderId,
           accessToken,
@@ -121,7 +135,7 @@ export const useSynchronizeFileUploader = ({
         );
 
         setStep(3);
-        const fileApi = new FilesApi();
+        const fileApi = new FilesApi(undefined, StorageBaseUrl);
         setStatus("Creating file target");
         const fileUpload = await fileApi.createFile(
           iModelFolderId,
@@ -206,7 +220,15 @@ export const useSynchronizeFileUploader = ({
         setState("Error");
       }
     },
-    [accessToken, email, iModelId, projectId, storageLinkHref]
+    [
+      StorageBaseUrl,
+      synchronizationBaseUrl,
+      accessToken,
+      email,
+      iModelId,
+      projectId,
+      storageLinkHref,
+    ]
   );
   return { uploadFiles, status, progress, state, step };
 };

@@ -9,6 +9,7 @@ import classNames from "classnames";
 import React from "react";
 
 import { useApiData } from "../../api/useApiData";
+import { useApiPrefix } from "../../api/useApiPrefix";
 import "./IModelHeaderButton.scss";
 
 interface IModelHeaderButtonProps {
@@ -30,6 +31,7 @@ export const IModelHeaderButton = ({
     accessToken,
     url: `https://api.bentley.com/imodels/${iModelId}`,
   });
+  const serverEnvironmentPrefix = useApiPrefix();
   return (
     <HeaderButton
       key="iModel"
@@ -44,6 +46,7 @@ export const IModelHeaderButton = ({
             className={"imodel-header-icon"}
             iModelId={iModelId ?? ""}
             accessToken={accessToken}
+            apiOverrides={{ serverEnvironmentPrefix }}
           />
         ) : (
           undefined

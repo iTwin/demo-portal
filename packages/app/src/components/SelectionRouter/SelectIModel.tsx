@@ -12,6 +12,7 @@ import { RouteComponentProps } from "@reach/router";
 import React from "react";
 
 import { useApiData } from "../../api/useApiData";
+import { useApiPrefix } from "../../api/useApiPrefix";
 import { useCreateIModelAction } from "../IModelCRUDRouter/useCreateIModelAction";
 import { useDeleteIModelAction } from "../IModelCRUDRouter/useDeleteIModelAction";
 import { useEditIModelAction } from "../IModelCRUDRouter/useEditIModelAction";
@@ -46,6 +47,7 @@ export const SelectIModel = ({
   const { synchronizeAction } = useSynchronizeIModelAction();
   const { editAction } = useEditIModelAction({ navigate });
   const { viewAction } = useViewIModelAction();
+  const serverEnvironmentPrefix = useApiPrefix();
   return (
     <div className="scrolling-tab-container">
       <div className={"title-section"}>
@@ -68,6 +70,7 @@ export const SelectIModel = ({
             synchronizeAction,
             deleteAction,
           ].filter((action) => !hideActions?.includes(action.key as any))}
+          apiOverrides={{ serverEnvironmentPrefix }}
           {...rest}
         />
         {deleteDialog}

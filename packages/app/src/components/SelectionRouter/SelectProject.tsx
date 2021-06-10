@@ -12,6 +12,7 @@ import { HorizontalTabs } from "@itwin/itwinui-react";
 import { RouteComponentProps, useLocation } from "@reach/router";
 import React, { useState } from "react";
 
+import { useApiPrefix } from "../../api/useApiPrefix";
 import { useCreateIModelAction } from "../IModelCRUDRouter/useCreateIModelAction";
 import "./SelectProject.scss";
 
@@ -42,7 +43,7 @@ export const SelectProject = ({
     }
   }, [location.search, navigate, projectType]);
   const { createAction } = useCreateIModelAction({ navigate });
-
+  const serverEnvironmentPrefix = useApiPrefix();
   return (
     <div className="scrolling-tab-container">
       <HorizontalTabs
@@ -73,6 +74,7 @@ export const SelectProject = ({
           }
           onThumbnailClick={(project) => navigate?.(`project/${project.id}`)}
           projectActions={[createAction]}
+          apiOverrides={{ serverEnvironmentPrefix }}
           {...gridProps}
         />
       </HorizontalTabs>
