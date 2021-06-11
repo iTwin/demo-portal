@@ -6,7 +6,7 @@ import {
   IModelGrid,
   IModelGridProps,
   ProjectFull,
-} from "@itwin/imodel-browser";
+} from "@itwin/imodel-browser-react";
 import { ButtonGroup, Title } from "@itwin/itwinui-react";
 import { RouteComponentProps } from "@reach/router";
 import React from "react";

@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { ProjectFull } from "@itwin/imodel-browser";
+import { ProjectFull } from "@itwin/imodel-browser-react";
 import { HeaderButton, MenuItem } from "@itwin/itwinui-react";
 import { useNavigate } from "@reach/router";
 import classNames from "classnames";

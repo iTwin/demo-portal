@@ -2,8 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { DeleteIModel } from "@itwin/delete-imodel";
-import { IModelFull } from "@itwin/imodel-browser";
+import { DeleteIModel } from "@itwin/delete-imodel-react";
+import { IModelFull } from "@itwin/imodel-browser-react";
 import { SvgDelete } from "@itwin/itwinui-icons-react";
 import React from "react";
 

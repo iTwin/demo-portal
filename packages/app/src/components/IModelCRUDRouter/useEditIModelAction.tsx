@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { IModelFull } from "@itwin/create-imodel";
+import { IModelFull } from "@itwin/create-imodel-react";
 import { SvgEdit } from "@itwin/itwinui-icons-react";
 import { NavigateFn } from "@reach/router";
 import React from "react";
