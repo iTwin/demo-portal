@@ -2,6 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+import { useLDClient } from "launchdarkly-react-client-sdk";
 import React from "react";
 
 import { DemoPortalConfig } from ".";
@@ -14,6 +15,9 @@ const ConfigContext = React.createContext<DemoPortalConfig>({});
 
 export const ConfigProvider = (props: ConfigProviderProps) => {
   const { children, ...rest } = props;
+  const ldClient = useLDClient();
+  ldClient?.identify({ key: props.auth?.clientId });
+
   return (
     <ConfigContext.Provider value={rest}>{children}</ConfigContext.Provider>
   );

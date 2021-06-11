@@ -4,7 +4,6 @@
  *--------------------------------------------------------------------------------------------*/
 import { AccessToken } from "@bentley/itwin-client";
 import { Redirect, Router } from "@reach/router";
-import { withLDProvider } from "launchdarkly-react-client-sdk";
 import React, { useEffect, useState } from "react";
 
 import "./App.scss";
@@ -17,6 +16,7 @@ import { SynchronizationRouter } from "./components/SynchronizationRouter/Synchr
 import { ViewRouter } from "./components/ViewRouter/ViewRouter";
 import { DemoPortalConfig, getConfig } from "./config";
 import { ConfigProvider } from "./config/ConfigProvider";
+import { LaunchDarklyLauncher } from "./LaunchDarklyLauncher";
 
 const App: React.FC = () => {
   const [isAuthorized, setIsAuthorized] = useState(
@@ -131,6 +131,4 @@ const App: React.FC = () => {
   );
 };
 
-export default withLDProvider({
-  clientSideID: process.env.IMJS_LD_CLIENT_ID as string,
-})(App);
+export default LaunchDarklyLauncher(App);
