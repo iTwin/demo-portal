@@ -46,6 +46,7 @@ const App: React.FC = () => {
           (token) => {
             setAccessTokenObject(token);
             setAccessToken(token?.toTokenString() ?? "");
+            appConfig.userInfo = token?.getUserInfo();
           }
         );
       }

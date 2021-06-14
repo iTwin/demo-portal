@@ -1,3 +1,5 @@
+import { UserInfo } from "@bentley/itwin-client";
+
 /*---------------------------------------------------------------------------------------------
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
@@ -15,6 +17,7 @@ interface DemoPortalBuddiConfig {
 export interface DemoPortalConfig {
   auth?: DemoPortalAuthConfig;
   buddi?: DemoPortalBuddiConfig;
+  userInfo?: UserInfo;
 }
 
 interface EnvConfig {

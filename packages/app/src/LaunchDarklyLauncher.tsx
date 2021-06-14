@@ -6,7 +6,7 @@ import { withLDProvider } from "launchdarkly-react-client-sdk";
 
 export const LaunchDarklyLauncher = (app: any) => {
   const clientID = process.env.IMJS_LD_CLIENT_ID;
-  const deferInitialization = true;
+  const deferInitialization = false;
 
   return withLDProvider({
     clientSideID: clientID as string,

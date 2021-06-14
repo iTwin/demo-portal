@@ -15,8 +15,14 @@ const ConfigContext = React.createContext<DemoPortalConfig>({});
 
 export const ConfigProvider = (props: ConfigProviderProps) => {
   const { children, ...rest } = props;
+
   const ldClient = useLDClient();
-  ldClient?.identify({ key: props.auth?.clientId });
+  if (props.userInfo !== undefined && ldClient !== undefined) {
+    void ldClient.identify({
+      key: props.userInfo.id.toUpperCase(),
+      name: props.userInfo.email?.id,
+    });
+  }
 
   return (
     <ConfigContext.Provider value={rest}>{children}</ConfigContext.Provider>
