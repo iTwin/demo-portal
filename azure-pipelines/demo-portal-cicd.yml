@@ -7,10 +7,10 @@
 trigger:
 - master
 
-pool:
-  demands:
-        - Agent.OS -equals Windows_NT
-        - npm
+# pool:
+#   demands:
+#     - Agent.OS -equals Windows_NT
+#     - npm
 
 steps:
   - task: NodeTool@0
@@ -59,13 +59,13 @@ steps:
       PathtoPublish: '$(Build.ArtifactStagingDirectory)/iTwinDemoPortal.$(Build.BuildNumber).nupkg'
       ArtifactName: OctopusPackage
 
-  - task: CredScan@2
-    inputs:
-      toolMajorVersion: 'V2'
+  # - task: CredScan@2
+  #   inputs:
+  #     toolMajorVersion: 'V2'
   
-  - task: CredScanUploadPss@0
-    inputs:
-      GprId: '3233'
-      ShortCode: 'ITPDP'
-      SecurityMicrosoftFlowService: 'MS Flow: Upload Scan Report To PSS'
+  # - task: CredScanUploadPss@0
+  #   inputs:
+  #     GprId: '3233'
+  #     ShortCode: 'ITPDP'
+  #     SecurityMicrosoftFlowService: 'MS Flow: Upload Scan Report To PSS'
 
