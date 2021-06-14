@@ -7,8 +7,10 @@
 trigger:
 - master
 
-# pool:
-#   vmImage: ubuntu-latest
+pool:
+  demands:
+        - Agent.OS -equals Windows_NT
+        - npm
 
 steps:
   - task: NodeTool@0
