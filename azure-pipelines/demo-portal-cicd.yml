@@ -58,7 +58,7 @@ jobs:
       PathtoPublish: '$(Build.ArtifactStagingDirectory)/iTwinDemoPortal.$(Build.BuildNumber).nupkg'
       ArtifactName: OctopusPackage
 
-- job:
+- job: credScan
   pool: PRG
   steps:
     - task: CredScan@2
