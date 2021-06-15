@@ -17,26 +17,32 @@ export interface DemoPortalConfig {
   buddi?: DemoPortalBuddiConfig;
 }
 
+interface EnvConfig {
+  envConfig: DemoPortalConfig;
+}
+
 export const getConfig = async (): Promise<DemoPortalConfig> => {
   const fetchedConfig = (await (
     await fetch(`${process.env.PUBLIC_URL}/env-config.json`)
-  ).json()) as DemoPortalConfig;
+  ).json()) as EnvConfig;
   return {
     buddi: {
       region:
-        fetchedConfig?.buddi?.region ?? process.env.IMJS_BUDDI_REGION ?? "",
+        fetchedConfig?.envConfig?.buddi?.region ??
+        process.env.IMJS_BUDDI_REGION ??
+        "",
     },
     auth: {
       authority:
-        fetchedConfig?.auth?.authority ??
+        fetchedConfig?.envConfig?.auth?.authority ??
         process.env.IMJS_AUTH_CLIENT_AUTHORITY ??
         "https://imsoidc.bentley.com",
       apimAuthority:
-        fetchedConfig?.auth?.apimAuthority ??
+        fetchedConfig?.envConfig?.auth?.apimAuthority ??
         process.env.IMJS_AUTH_CLIENT_APIM_AUTHORITY ??
         "https://ims.bentley.com",
       clientId:
-        fetchedConfig?.auth?.clientId ??
+        fetchedConfig?.envConfig?.auth?.clientId ??
         process.env.IMJS_AUTH_CLIENT_CLIENT_ID ??
         "",
     },
