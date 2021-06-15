@@ -2,7 +2,9 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { FilesApiFp, FoldersApi } from "../../api/storage";
+import { FilesApiFp, FoldersApi } from "./storage";
+
+const DEMO_FOLDER_NAME = "demo-portal-imodel-connections";
 
 export const extractFolderIdFromStorageHref = (href?: string) => {
   return href?.split("/").reverse()?.[0] ?? "";
@@ -26,7 +28,7 @@ export const getDemoFolderId = async (
 ) => {
   return getFolderIdByName(
     projectFolderId,
-    "demo-portal-imodel-connections",
+    DEMO_FOLDER_NAME,
     accessToken,
     createIfNotFound,
     api
@@ -82,7 +84,8 @@ const getFolderIdByName = async (
       folderId,
       accessToken,
       pageSize,
-      currentPage * pageSize
+      currentPage * pageSize,
+      "application/vnd.bentley.itwin-platform.v1+json"
     );
     namedFolderId =
       folders.folders?.find((folder) => folder.displayName === folderName)
@@ -97,13 +100,11 @@ const getFolderIdByName = async (
     const namedFolder = await api.createFolder(
       folderId,
       accessToken,
-      undefined,
+      "application/vnd.bentley.itwin-platform.v1+json",
       {
-        folder: {
-          displayName: folderName,
-          description:
-            "Folder used by the Demo portal to store iModel automatic iModel creation",
-        },
+        displayName: folderName,
+        description:
+          "Folder used by the Demo portal to store iModel automatic iModel creation",
       }
     );
     namedFolderId = namedFolder.folder?.id ?? "";

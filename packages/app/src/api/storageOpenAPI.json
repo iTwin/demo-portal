@@ -6,7 +6,7 @@
     "description": "Storage API allowing quick files managing"
   },
   "host": "api.bentley.com",
-  "basePath": "/storage/v1",
+  "basePath": "/storage",
   "schemes": ["https"],
   "securityDefinitions": {
     "apiKeyHeader": {
@@ -40,131 +40,9 @@
     }
   ],
   "paths": {
-    "/recycleBin/folders/{folderId}/restore": {
-      "post": {
-        "description": "---\r\n\r\nRestore deleted folder from the recycle bin\r\n\r\n### Authentication\r\n\r\nRequires *Authorization* header with valid Bearer token for scope *storage:modify*.\r\n\r\n---",
-        "operationId": "restore-folder",
-        "summary": "Restore folder",
-        "tags": ["Folders"],
-        "parameters": [
-          {
-            "name": "folderId",
-            "in": "path",
-            "description": "Folder Id",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "OAuth access token with scope 'storage:modify'",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "Accept",
-            "in": "header",
-            "description": "RECOMMENDED. Request a specific version of iTwin Platform API.",
-            "type": "string",
-            "enum": ["application/vnd.bentley.itwin-platform.v1+json"]
-          }
-        ],
-        "produces": ["application/json"],
-        "responses": {
-          "204": {
-            "description": "A folder was restored successfully."
-          },
-          "401": {
-            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
-            "examples": {
-              "application/json": "{\n\r\"statusCode\": 401,\n\r\"message\": \"Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint.\"}"
-            }
-          },
-          "404": {
-            "description": "Folder cannot be found.",
-            "examples": {
-              "application/json": "{\r\n  \"error\": {\r\n    \"code\": \"FolderNotFound\",\r\n    \"message\": \"Requested folder not available.\"\r\n  }\r\n}"
-            }
-          },
-          "429": {
-            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
-            "headers": {
-              "retry-after": {
-                "type": "string",
-                "description": "The number of requests exceeds the rate-limit for the client subscription."
-              }
-            },
-            "examples": {
-              "application/json": "{\n\r\"code\": \"TooManyRequests\",\n\r\"message\": \"More requests were received than the subscription rate-limit allows.\"}"
-            }
-          }
-        }
-      }
-    },
-    "/recycleBin/files/{fileId}": {
-      "delete": {
-        "description": "---\r\n\r\nDelete a file from the recycle bin\r\n\r\n### Authentication\r\n\r\nRequires *Authorization* header with valid Bearer token for scope *storage:modify*.\r\n\r\n---",
-        "operationId": "delete-file-from-recycle-bin",
-        "summary": "Delete file from recycle bin",
-        "tags": ["Files"],
-        "parameters": [
-          {
-            "name": "fileId",
-            "in": "path",
-            "description": "File Id",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "OAuth access token with scope 'storage:modify'",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "Accept",
-            "in": "header",
-            "description": "RECOMMENDED. Request a specific version of iTwin Platform API.",
-            "type": "string",
-            "enum": ["application/vnd.bentley.itwin-platform.v1+json"]
-          }
-        ],
-        "produces": ["application/json"],
-        "responses": {
-          "204": {
-            "description": "A file was deleted successfully."
-          },
-          "401": {
-            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
-            "examples": {
-              "application/json": "{\n\r\"statusCode\": 401,\n\r\"message\": \"Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint.\"}"
-            }
-          },
-          "404": {
-            "description": "File cannot be found.",
-            "examples": {
-              "application/json": "{\r\n  \"error\": {\r\n    \"code\": \"FileNotFound\",\r\n    \"message\": \"Requested file not available.\"\r\n  }\r\n}"
-            }
-          },
-          "429": {
-            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
-            "headers": {
-              "retry-after": {
-                "type": "string",
-                "description": "The number of requests exceeds the rate-limit for the client subscription."
-              }
-            },
-            "examples": {
-              "application/json": "{\n\r\"code\": \"TooManyRequests\",\n\r\"message\": \"More requests were received than the subscription rate-limit allows.\"}"
-            }
-          }
-        }
-      }
-    },
     "/files/{fileId}/download": {
       "get": {
-        "description": "---\r\n\r\nRetrieves file\r\n\r\n### Notes\r\n\r\nThis endpoint returns 302 status code with Location header, which on success contains a link to the file. Redirection is not supported by developer portal and an error could be returned while using the \"Try it\" feature for this API. However, this endpoint will work if a request is sent from a different http client or by using the link specified in the response Location header.\r\n\r\n### Authentication\r\n\r\nRequires *Authorization* header with valid Bearer token for scope *storage:read*.\r\n\r\n---",
+        "description": "---\r\n\r\nRetrieves file\r\n\r\n### Notes\r\n\r\nThis endpoint returns 302 status code with Location header, which on success contains a link to the file. Redirection is not supported by developer portal and an error could be returned while using the \"Try it\" feature for this API. However, this endpoint will work if a request is sent from a different http client or by using the link specified in the response Location header.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `storage:read`.\r\n\r\n---",
         "operationId": "download-file",
         "summary": "Download file",
         "tags": ["Files"],
@@ -179,14 +57,14 @@
           {
             "name": "Authorization",
             "in": "header",
-            "description": "OAuth access token with scope 'storage:read'",
+            "description": "OAuth access token with scope `storage:read`",
             "required": true,
             "type": "string"
           },
           {
             "name": "Accept",
             "in": "header",
-            "description": "RECOMMENDED. Request a specific version of iTwin Platform API.",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
             "type": "string",
             "enum": ["application/vnd.bentley.itwin-platform.v1+json"]
           }
@@ -225,7 +103,7 @@
     },
     "/recycleBin/folders/{folderId}": {
       "delete": {
-        "description": "---\r\n\r\nDelete a folder from the recycle bin\r\n\r\n### Authentication\r\n\r\nRequires *Authorization* header with valid Bearer token for scope *storage:modify*.\r\n\r\n---",
+        "description": "---\r\n\r\nDelete a folder from the recycle bin\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `storage:modify`.\r\n\r\n---",
         "operationId": "delete-folder-from-recycle-bin",
         "summary": "Delete folder from recycle bin",
         "tags": ["Folders"],
@@ -240,14 +118,14 @@
           {
             "name": "Authorization",
             "in": "header",
-            "description": "OAuth access token with scope 'storage:modify'",
+            "description": "OAuth access token with scope `storage:modify`",
             "required": true,
             "type": "string"
           },
           {
             "name": "Accept",
             "in": "header",
-            "description": "RECOMMENDED. Request a specific version of iTwin Platform API.",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
             "type": "string",
             "enum": ["application/vnd.bentley.itwin-platform.v1+json"]
           }
@@ -286,7 +164,7 @@
     },
     "/recycleBin/files/{fileId}/restore": {
       "post": {
-        "description": "---\r\n\r\nRestore deleted file from the recycle bin\r\n\r\n### Authentication\r\n\r\nRequires *Authorization* header with valid Bearer token for scope *storage:modify*.\r\n\r\n---",
+        "description": "---\r\n\r\nRestore deleted file from the recycle bin\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `storage:modify`.\r\n\r\n---",
         "operationId": "restore-file",
         "summary": "Restore file",
         "tags": ["Files"],
@@ -301,14 +179,14 @@
           {
             "name": "Authorization",
             "in": "header",
-            "description": "OAuth access token with scope 'storage:modify'",
+            "description": "OAuth access token with scope `storage:modify`",
             "required": true,
             "type": "string"
           },
           {
             "name": "Accept",
             "in": "header",
-            "description": "RECOMMENDED. Request a specific version of iTwin Platform API.",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
             "type": "string",
             "enum": ["application/vnd.bentley.itwin-platform.v1+json"]
           }
@@ -345,135 +223,9 @@
         }
       }
     },
-    "/files/{fileId}": {
-      "delete": {
-        "description": "---\r\n\r\nDelete a file\r\n\r\n### Notes\r\n\r\nFile moved to the recycle bin will be completely removed after 30 days.\r\n\r\n### Authentication\r\n\r\nRequires *Authorization* header with valid Bearer token for scope *storage:modify*.\r\n\r\n---",
-        "operationId": "delete-file",
-        "summary": "Delete file",
-        "tags": ["Files"],
-        "parameters": [
-          {
-            "name": "fileId",
-            "in": "path",
-            "description": "File Id",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "OAuth access token with scope 'storage:modify'",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "Accept",
-            "in": "header",
-            "description": "RECOMMENDED. Request a specific version of iTwin Platform API.",
-            "type": "string",
-            "enum": ["application/vnd.bentley.itwin-platform.v1+json"]
-          }
-        ],
-        "produces": ["application/json"],
-        "responses": {
-          "204": {
-            "description": "A file was deleted successfully."
-          },
-          "401": {
-            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
-            "examples": {
-              "application/json": "{\n\r\"statusCode\": 401,\n\r\"message\": \"Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint.\"}"
-            }
-          },
-          "404": {
-            "description": "File cannot be found.",
-            "examples": {
-              "application/json": "{\r\n  \"error\": {\r\n    \"code\": \"FileNotFound\",\r\n    \"message\": \"Requested file not available.\"\r\n  }\r\n}"
-            }
-          },
-          "429": {
-            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
-            "headers": {
-              "retry-after": {
-                "type": "string",
-                "description": "The number of requests exceeds the rate-limit for the client subscription."
-              }
-            },
-            "examples": {
-              "application/json": "{\n\r\"code\": \"TooManyRequests\",\n\r\"message\": \"More requests were received than the subscription rate-limit allows.\"}"
-            }
-          }
-        }
-      },
-      "get": {
-        "description": "---\r\n\r\nRetrieves file\r\n\r\n### Authentication\r\n\r\nRequires *Authorization* header with valid Bearer token for scope *storage:read*.\r\n\r\n---",
-        "operationId": "get-file",
-        "summary": "Get file",
-        "tags": ["Files"],
-        "parameters": [
-          {
-            "name": "fileId",
-            "in": "path",
-            "description": "File Id",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "OAuth access token with scope 'storage:read'",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "Accept",
-            "in": "header",
-            "description": "RECOMMENDED. Request a specific version of iTwin Platform API.",
-            "type": "string",
-            "enum": ["application/vnd.bentley.itwin-platform.v1+json"]
-          }
-        ],
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/file"
-            },
-            "examples": {
-              "application/json": "{\r\n  \"file\": {\r\n    \"id\": \"TYJsPN0xtkWId0yUrXkS5pN5AQzuullIkxz5aDnDJSI\",\r\n    \"displayName\": \"file.txt\",\r\n    \"description\": \"test file\",\r\n    \"path\": \"folderName/file.txt\",\r\n    \"size\": 1,\r\n    \"createdBy\": \"1140f95b-1ba0-49d9-bbf4-b53e54d80387\",\r\n    \"lastModifiedBy\": \"1140f95b-1ba0-49d9-bbf4-b53e54d80387\",\r\n    \"createdDateTime\": \"2020-05-03T11:05:11.0133549Z\",\r\n    \"lastModifiedDateTime\": \"2020-05-03T11:05:11.0133549Z\",\r\n    \"parentFolderId\": \"TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s\"\r\n  }\r\n}\r\n"
-            }
-          },
-          "401": {
-            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
-            "examples": {
-              "application/json": "{\n\r\"statusCode\": 401,\n\r\"message\": \"Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint.\"}"
-            }
-          },
-          "404": {
-            "description": "File cannot be found.",
-            "examples": {
-              "application/json": "{\r\n  \"error\": {\r\n    \"code\": \"FileNotFound\",\r\n    \"message\": \"Requested file not available.\"\r\n  }\r\n}"
-            }
-          },
-          "429": {
-            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
-            "headers": {
-              "retry-after": {
-                "type": "string",
-                "description": "The number of requests exceeds the rate-limit for the client subscription."
-              }
-            },
-            "examples": {
-              "application/json": "{\n\r\"code\": \"TooManyRequests\",\n\r\"message\": \"More requests were received than the subscription rate-limit allows.\"}"
-            }
-          }
-        }
-      }
-    },
     "/folders/{folderId}": {
       "delete": {
-        "description": "---\r\n\r\nDelete a folder\r\n\r\n### Notes\r\n\r\nFolder moved to the recycle bin will be completely removed after 30 days.\r\n\r\n### Authentication\r\n\r\nRequires *Authorization* header with valid Bearer token for scope *storage:modify*.\r\n\r\n---",
+        "description": "---\r\n\r\nDelete a folder\r\n\r\n### Notes\r\n\r\nFolder moved to the recycle bin will be completely removed after 30 days.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `storage:modify`.\r\n\r\n---",
         "operationId": "delete-folder",
         "summary": "Delete folder",
         "tags": ["Folders"],
@@ -488,14 +240,14 @@
           {
             "name": "Authorization",
             "in": "header",
-            "description": "OAuth access token with scope 'storage:modify'",
+            "description": "OAuth access token with scope `storage:modify`",
             "required": true,
             "type": "string"
           },
           {
             "name": "Accept",
             "in": "header",
-            "description": "RECOMMENDED. Request a specific version of iTwin Platform API.",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
             "type": "string",
             "enum": ["application/vnd.bentley.itwin-platform.v1+json"]
           }
@@ -532,7 +284,7 @@
         }
       },
       "get": {
-        "description": "---\r\n\r\nRetrieves folder\r\n\r\n### Authentication\r\n\r\nRequires *Authorization* header with valid Bearer token for scope *storage:read*.\r\n\r\n---",
+        "description": "---\r\n\r\nRetrieves folder\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `storage:read`.\r\n\r\n---",
         "operationId": "get-folder",
         "summary": "Get folder",
         "tags": ["Folders"],
@@ -547,14 +299,14 @@
           {
             "name": "Authorization",
             "in": "header",
-            "description": "OAuth access token with scope 'storage:read'",
+            "description": "OAuth access token with scope `storage:read`",
             "required": true,
             "type": "string"
           },
           {
             "name": "Accept",
             "in": "header",
-            "description": "RECOMMENDED. Request a specific version of iTwin Platform API.",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
             "type": "string",
             "enum": ["application/vnd.bentley.itwin-platform.v1+json"]
           }
@@ -595,13 +347,153 @@
             }
           }
         }
+      },
+      "patch": {
+        "description": "---\r\n\r\nUpdate folder\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `storage:modify`.\r\n\r\n### Errors\r\n\r\nThis request can return InvalidCreateFolderRequest error with 422 status code. This could happen because of these reasons:\r\n\r\n- Folder name contains invalid characters.\r\n- Folder name's length is larger than 255 characters.\r\n\r\n---\r\n",
+        "operationId": "update-folder",
+        "summary": "Update folder",
+        "tags": ["Folders"],
+        "parameters": [
+          {
+            "name": "folderId",
+            "in": "path",
+            "description": "Folder Id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `storage:modify`",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "type": "string",
+            "enum": ["application/vnd.bentley.itwin-platform.v1+json"]
+          },
+          {
+            "name": "folder-update",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/folder-update"
+            }
+          }
+        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/folder-result"
+            },
+            "examples": {
+              "application/json": "{\r\n  \"folder\": {\r\n    \"id\": \"TYJsPN0xtkWId0yUrXkS5pN5AQzuullIkxz5aDnDJSI\",\r\n    \"displayName\": \"test\",\r\n    \"description\": \"test folder\",\r\n    \"path\": \"folderName/test\",\r\n    \"createdBy\": \"1140f95b-1ba0-49d9-bbf4-b53e54d80387\",\r\n    \"lastModifiedBy\": \"1140f95b-1ba0-49d9-bbf4-b53e54d80387\",\r\n    \"createdDateTime\": \"2020-05-03T11:05:11.0133549Z\",\r\n    \"lastModifiedDateTime\": \"2021-05-15T12:07:06.7841448Z\",\r\n    \"parentFolderId\": \"TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s\"\r\n  }\r\n}\r\n"
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "examples": {
+              "application/json": "{\n\r\"statusCode\": 401,\n\r\"message\": \"Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint.\"}"
+            }
+          },
+          "404": {
+            "description": "Parent folder cannot be found.",
+            "examples": {
+              "application/json": "{\r\n  \"error\": {\r\n    \"code\": \"FolderNotFound\",\r\n    \"message\": \"Requested folder not available.\"\r\n  }\r\n}"
+            }
+          },
+          "422": {
+            "description": "Invalid request to update a folder. Make sure that a valid folder ID and folder details were passed in.",
+            "examples": {
+              "application/json": "{\r\n  \"error\": {\r\n    \"code\": \"InvalidStorageRequest\",\r\n    \"message\": \"The request to update folder was invalid. Please see the API Reference for possible reasons.\"\r\n  }\r\n}"
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "type": "string",
+                "description": "The number of requests exceeds the rate-limit for the client subscription."
+              }
+            },
+            "examples": {
+              "application/json": "{\n\r\"code\": \"TooManyRequests\",\n\r\"message\": \"More requests were received than the subscription rate-limit allows.\"}"
+            }
+          }
+        }
       }
     },
-    "/files/{fileId}/complete": {
+    "/recycleBin/folders/{folderId}/restore": {
       "post": {
-        "description": "---\r\n\r\nComplete file creation\r\n\r\n### Authentication\r\n\r\nRequires *Authorization* header with valid Bearer token for scope *storage:modify*.\r\n\r\n---\r\n",
-        "operationId": "complete-file-creation",
-        "summary": "Complete file creation",
+        "description": "---\r\n\r\nRestore deleted folder from the recycle bin\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `storage:modify`.\r\n\r\n---",
+        "operationId": "restore-folder",
+        "summary": "Restore folder",
+        "tags": ["Folders"],
+        "parameters": [
+          {
+            "name": "folderId",
+            "in": "path",
+            "description": "Folder Id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `storage:modify`",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "type": "string",
+            "enum": ["application/vnd.bentley.itwin-platform.v1+json"]
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "204": {
+            "description": "A folder was restored successfully."
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "examples": {
+              "application/json": "{\n\r\"statusCode\": 401,\n\r\"message\": \"Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint.\"}"
+            }
+          },
+          "404": {
+            "description": "Folder cannot be found.",
+            "examples": {
+              "application/json": "{\r\n  \"error\": {\r\n    \"code\": \"FolderNotFound\",\r\n    \"message\": \"Requested folder not available.\"\r\n  }\r\n}"
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "type": "string",
+                "description": "The number of requests exceeds the rate-limit for the client subscription."
+              }
+            },
+            "examples": {
+              "application/json": "{\n\r\"code\": \"TooManyRequests\",\n\r\"message\": \"More requests were received than the subscription rate-limit allows.\"}"
+            }
+          }
+        }
+      }
+    },
+    "/recycleBin/files/{fileId}": {
+      "delete": {
+        "description": "---\r\n\r\nDelete a file from the recycle bin\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `storage:modify`.\r\n\r\n---",
+        "operationId": "delete-file-from-recycle-bin",
+        "summary": "Delete file from recycle bin",
         "tags": ["Files"],
         "parameters": [
           {
@@ -614,28 +506,22 @@
           {
             "name": "Authorization",
             "in": "header",
-            "description": "OAuth access token with scope 'storage:modify'",
+            "description": "OAuth access token with scope `storage:modify`",
             "required": true,
             "type": "string"
           },
           {
             "name": "Accept",
             "in": "header",
-            "description": "RECOMMENDED. Request a specific version of iTwin Platform API.",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
             "type": "string",
             "enum": ["application/vnd.bentley.itwin-platform.v1+json"]
           }
         ],
         "produces": ["application/json"],
         "responses": {
-          "201": {
-            "description": "Created",
-            "schema": {
-              "$ref": "#/definitions/file (created)"
-            },
-            "examples": {
-              "application/json": "{\r\n  \"file\": {\r\n    \"id\": \"TYJsPN0xtkWId0yUrXkS5pN5AQzuullIkxz5aDnDJSI\",\r\n    \"displayName\": \"test.txt\",\r\n    \"description\": \"test file\",\r\n    \"path\": \"folderName/test.txt\",\r\n    \"size\": 8,\r\n    \"createdBy\": \"1140f95b-1ba0-49d9-bbf4-b53e54d80387\",\r\n    \"lastModifiedBy\": \"1140f95b-1ba0-49d9-bbf4-b53e54d80387\",\r\n    \"createdDateTime\": \"2020-05-03T11:05:11.0133549Z\",\r\n    \"lastModifiedDateTime\": \"2020-05-03T11:05:11.0133549Z\",\r\n    \"parentFolderId\": \"TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s\"\r\n  }\r\n}\r\n"
-            }
+          "204": {
+            "description": "A file was deleted successfully."
           },
           "401": {
             "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
@@ -664,173 +550,9 @@
         }
       }
     },
-    "/folders/{folderId}/files": {
-      "post": {
-        "description": "---\r\n\r\nCreate new file\r\n\r\n### Notes\r\n\r\nFile creation is three steps operation. This request will create file's meta data. Next two requests need to be executed by using links from the response.\r\n\r\n- uploadUrl is required for file upload. Upload can be done by sending http request and specifying x-ms-blob-type header to BlockBlob.\r\n- completeUrl should be used to confirm file upload and it is final request for file creation.\r\n\r\n### Authentication\r\n\r\nRequires *Authorization* header with valid Bearer token for scope *storage:modify*.\r\n\r\n### Errors\r\n\r\nThis request can return InvalidCreateFileRequest error with 422 status code. This could happen because of these reasons:\r\n\r\n- File name contains invalid characters.\r\n- File name's length is larger than 255 characters.\r\n- File could be harmful. For example, executable files are not accepted.\r\n\r\n---\r\n",
-        "operationId": "create-file",
-        "summary": "Create file",
-        "tags": ["Files"],
-        "parameters": [
-          {
-            "name": "folderId",
-            "in": "path",
-            "description": "Folder Id",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "OAuth access token with scope 'storage:modify'",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "Accept",
-            "in": "header",
-            "description": "RECOMMENDED. Request a specific version of iTwin Platform API.",
-            "type": "string",
-            "enum": ["application/vnd.bentley.itwin-platform.v1+json"]
-          },
-          {
-            "name": "file (create)",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/file (create)"
-            }
-          }
-        ],
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "responses": {
-          "202": {
-            "description": "Accepted",
-            "schema": {
-              "$ref": "#/definitions/file (upload)"
-            },
-            "examples": {
-              "application/json": "{\r\n  \"_links\":{\r\n    \"completeUrl\": {\r\n        \"href\": \"https://api.bentley.com/storage/files/TYJsPN0xtkWId0yUrXkS5pN5AQzuullIkxz5aDnDJSI/complete\"\r\n    },\r\n    \"uploadUrl\": {\r\n      \"href\": \"https://projectshareprodeussa01.blob.core.windows.net/azuresqldbecpluginstorage/ProjectShare/File/b6145b7f-fee9-4a13-b1e4-5d061970373e?sv=2017-04-17&sr=b&sig=4NfdEriAONQhbHGkrTAL4bNMzjW8Qm5l%2FoEPiSQl%2BPo%3D&se=2020-10-19T15:12:51Z&sp=rw&rscd=attachment%3B%20filename%3D%22test.txt%22&userid=b905387c-a685-4d27-aab7-468c9ff0c9a6\"\r\n    }\r\n  }\r\n}\r\n\r\n"
-            }
-          },
-          "401": {
-            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
-            "examples": {
-              "application/json": "{\n\r\"statusCode\": 401,\n\r\"message\": \"Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint.\"}"
-            }
-          },
-          "404": {
-            "description": "Parent folder cannot be found.",
-            "examples": {
-              "application/json": "{\r\n  \"error\": {\r\n    \"code\": \"FolderNotFound\",\r\n    \"message\": \"Requested folder not available.\"\r\n  }\r\n}"
-            }
-          },
-          "422": {
-            "description": "Invalid request to create a file. Make sure that a valid file ID and file details were passed in.",
-            "examples": {
-              "application/json": "{\r\n  \"error\": {\r\n    \"code\": \"InvalidStorageRequest\",\r\n    \"message\": \"The request to create file was invalid. Please see the API Reference for possible reasons.\"\r\n  }\r\n}"
-            }
-          },
-          "429": {
-            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
-            "headers": {
-              "retry-after": {
-                "type": "string",
-                "description": "The number of requests exceeds the rate-limit for the client subscription."
-              }
-            },
-            "examples": {
-              "application/json": "{\n\r\"code\": \"TooManyRequests\",\n\r\"message\": \"More requests were received than the subscription rate-limit allows.\"}"
-            }
-          }
-        }
-      },
-      "get": {
-        "description": "---\r\n\r\nRetrieves files\r\n\r\n### Authentication\r\n\r\nRequires *Authorization* header with valid Bearer token for scope *storage:read*.\r\n\r\n---",
-        "operationId": "get-files-in-folder",
-        "summary": "Get files in folder",
-        "tags": ["Files"],
-        "parameters": [
-          {
-            "name": "folderId",
-            "in": "path",
-            "description": "Folder Id",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "$top",
-            "in": "query",
-            "description": "The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.",
-            "type": "integer"
-          },
-          {
-            "name": "$skip",
-            "in": "query",
-            "description": "The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.",
-            "type": "integer"
-          },
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "OAuth access token with scope 'storage:read'",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "Accept",
-            "in": "header",
-            "description": "RECOMMENDED. Request a specific version of iTwin Platform API.",
-            "type": "string",
-            "enum": ["application/vnd.bentley.itwin-platform.v1+json"]
-          }
-        ],
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/files"
-            },
-            "examples": {
-              "application/json": "{\r\n  \"files\": [\r\n    {\r\n      \"id\": \"TYJsPN0xtkWId0yUrXkS5pN5AQzuullIkxz5aDnDJSI\",\r\n      \"displayName\": \"test.txt\",\r\n      \"description\": \"test file\",\r\n      \"path\": \"folderName/test.txt\",\r\n      \"size\": 1,\r\n      \"createdBy\": \"1140f95b-1ba0-49d9-bbf4-b53e54d80387\",\r\n      \"lastModifiedBy\": \"1140f95b-1ba0-49d9-bbf4-b53e54d80387\",\r\n      \"createdDateTime\": \"2020-05-03T11:05:11.0133549Z\",\r\n      \"lastModifiedDateTime\": \"2020-05-03T11:05:11.0133549Z\",\r\n      \"parentFolderId\": \"TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s\"\r\n    },\r\n    {\r\n      \"id\": \"TYJsPN0xtkWId0yUrXkS5s4FlCroosBMlyDhZZmlzoc\",\r\n      \"displayName\": \"test2.txt\",\r\n      \"description\": \"test file 2\",\r\n      \"path\": \"folderName/test2.txt\",\r\n      \"size\": 1,\r\n      \"createdBy\": \"1140f95b-1ba0-49d9-bbf4-b53e54d80387\",\r\n      \"lastModifiedBy\": \"1140f95b-1ba0-49d9-bbf4-b53e54d80387\",\r\n      \"createdDateTime\": \"2020-05-03T11:05:12.0133549Z\",\r\n      \"lastModifiedDateTime\": \"2020-05-03T11:05:12.0133549Z\",\r\n      \"parentFolderId\": \"TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s\"\r\n    }\r\n  ],\r\n  \"_links\": {\r\n    \"self\": {\r\n      \"href\": \"https://api.bentley.com/storage/folders/TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s/files?$skip=4&$top=2\"\r\n    },\r\n    \"prev\": {\r\n      \"href\": \"https://api.bentley.com/storage/folders/TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s/files?$skip=2&$top=2\"\r\n    },\r\n    \"next\": {\r\n      \"href\": \"https://api.bentley.com/storage/folders/TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s/files?$skip=6&$top=2\"\r\n    }\r\n  }\r\n}\r\n"
-            }
-          },
-          "401": {
-            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
-            "examples": {
-              "application/json": "{\n\r\"statusCode\": 401,\n\r\"message\": \"Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint.\"}"
-            }
-          },
-          "404": {
-            "description": "Folder cannot be found.",
-            "examples": {
-              "application/json": "{\r\n  \"error\": {\r\n    \"code\": \"FolderNotFound\",\r\n    \"message\": \"Requested folder not available.\"\r\n  }\r\n}"
-            }
-          },
-          "422": {
-            "description": "Invalid request to get files in folder",
-            "examples": {
-              "application/json": "{\r\n    \"error\": {\r\n        \"code\": \"InvalidStorageRequest\",\r\n        \"message\": \"Page size is over 1000 items limit.\"\r\n    }\r\n}"
-            }
-          },
-          "429": {
-            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
-            "headers": {
-              "retry-after": {
-                "type": "string",
-                "description": "The number of requests exceeds the rate-limit for the client subscription."
-              }
-            },
-            "examples": {
-              "application/json": "{\n\r\"code\": \"TooManyRequests\",\n\r\"message\": \"More requests were received than the subscription rate-limit allows.\"}"
-            }
-          }
-        }
-      }
-    },
     "/folders/{folderId}/folders": {
       "post": {
-        "description": "---\r\n\r\nCreate new folder\r\n\r\n### Authentication\r\n\r\nRequires *Authorization* header with valid Bearer token for scope *storage:modify*.\r\n\r\n### Errors\r\n\r\nThis request can return InvalidCreateFolderRequest error with 422 status code. This could happen because of these reasons:\r\n\r\n- Folder name contains invalid characters.\r\n- Folder name's length is larger than 255 characters.\r\n\r\n---\r\n",
+        "description": "---\r\n\r\nCreate new folder\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `storage:modify`.\r\n\r\n### Errors\r\n\r\nThis request can return InvalidCreateFolderRequest error with 422 status code. This could happen because of these reasons:\r\n\r\n- Folder name contains invalid characters.\r\n- Folder name's length is larger than 255 characters.\r\n\r\n---\r\n",
         "operationId": "create-folder",
         "summary": "Create folder",
         "tags": ["Folders"],
@@ -845,22 +567,22 @@
           {
             "name": "Authorization",
             "in": "header",
-            "description": "OAuth access token with scope 'storage:modify'",
+            "description": "OAuth access token with scope `storage:modify`",
             "required": true,
             "type": "string"
           },
           {
             "name": "Accept",
             "in": "header",
-            "description": "RECOMMENDED. Request a specific version of iTwin Platform API.",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
             "type": "string",
             "enum": ["application/vnd.bentley.itwin-platform.v1+json"]
           },
           {
-            "name": "folder (create)",
+            "name": "folder-create",
             "in": "body",
             "schema": {
-              "$ref": "#/definitions/folder (create)"
+              "$ref": "#/definitions/folder-create"
             }
           }
         ],
@@ -870,7 +592,7 @@
           "201": {
             "description": "Created",
             "schema": {
-              "$ref": "#/definitions/folder (created)"
+              "$ref": "#/definitions/folder-result"
             },
             "examples": {
               "application/json": "{\r\n  \"folder\": {\r\n    \"id\": \"TYJsPN0xtkWId0yUrXkS5pN5AQzuullIkxz5aDnDJSI\",\r\n    \"displayName\": \"test\",\r\n    \"description\": \"test folder\",\r\n    \"path\": \"folderName/test\",\r\n    \"createdBy\": \"1140f95b-1ba0-49d9-bbf4-b53e54d80387\",\r\n    \"lastModifiedBy\": \"1140f95b-1ba0-49d9-bbf4-b53e54d80387\",\r\n    \"createdDateTime\": \"2020-05-03T11:05:11.0133549Z\",\r\n    \"lastModifiedDateTime\": \"2020-05-03T11:05:11.0133549Z\",\r\n    \"parentFolderId\": \"TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s\"\r\n  }\r\n}\r\n"
@@ -909,7 +631,7 @@
         }
       },
       "get": {
-        "description": "---\r\n\r\nRetrieves folders\r\n\r\n### Authentication\r\n\r\nRequires *Authorization* header with valid Bearer token for scope *storage:read*.\r\n\r\n---",
+        "description": "---\r\n\r\nRetrieves folders\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `storage:read`.\r\n\r\n---",
         "operationId": "get-folders-in-folder",
         "summary": "Get folders in folder",
         "tags": ["Folders"],
@@ -936,14 +658,14 @@
           {
             "name": "Authorization",
             "in": "header",
-            "description": "OAuth access token with scope 'storage:read'",
+            "description": "OAuth access token with scope `storage:read`",
             "required": true,
             "type": "string"
           },
           {
             "name": "Accept",
             "in": "header",
-            "description": "RECOMMENDED. Request a specific version of iTwin Platform API.",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
             "type": "string",
             "enum": ["application/vnd.bentley.itwin-platform.v1+json"]
           }
@@ -992,9 +714,214 @@
         }
       }
     },
+    "/files/{fileId}": {
+      "get": {
+        "description": "---\r\n\r\nRetrieves file\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `storage:read`.\r\n\r\n---",
+        "operationId": "get-file",
+        "summary": "Get file",
+        "tags": ["Files"],
+        "parameters": [
+          {
+            "name": "fileId",
+            "in": "path",
+            "description": "File Id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `storage:read`",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "type": "string",
+            "enum": ["application/vnd.bentley.itwin-platform.v1+json"]
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/file-result"
+            },
+            "examples": {
+              "application/json": "{\r\n  \"file\": {\r\n    \"id\": \"TYJsPN0xtkWId0yUrXkS5pN5AQzuullIkxz5aDnDJSI\",\r\n    \"displayName\": \"file.txt\",\r\n    \"description\": \"test file\",\r\n    \"path\": \"folderName/file.txt\",\r\n    \"size\": 1,\r\n    \"createdBy\": \"1140f95b-1ba0-49d9-bbf4-b53e54d80387\",\r\n    \"lastModifiedBy\": \"1140f95b-1ba0-49d9-bbf4-b53e54d80387\",\r\n    \"createdDateTime\": \"2020-05-03T11:05:11.0133549Z\",\r\n    \"lastModifiedDateTime\": \"2020-05-03T11:05:11.0133549Z\",\r\n    \"parentFolderId\": \"TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s\"\r\n  }\r\n}\r\n"
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "examples": {
+              "application/json": "{\n\r\"statusCode\": 401,\n\r\"message\": \"Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint.\"}"
+            }
+          },
+          "404": {
+            "description": "File cannot be found.",
+            "examples": {
+              "application/json": "{\r\n  \"error\": {\r\n    \"code\": \"FileNotFound\",\r\n    \"message\": \"Requested file not available.\"\r\n  }\r\n}"
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "type": "string",
+                "description": "The number of requests exceeds the rate-limit for the client subscription."
+              }
+            },
+            "examples": {
+              "application/json": "{\n\r\"code\": \"TooManyRequests\",\n\r\"message\": \"More requests were received than the subscription rate-limit allows.\"}"
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "---\r\n\r\nUpdate file\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `storage:modify`.\r\n\r\n### Errors\r\n\r\nThis request can return InvalidCreateFileRequest error with 422 status code. This could happen because of these reasons:\r\n\r\n- File name contains invalid characters.\r\n- File name's length is larger than 255 characters.\r\n- File could be harmful. For example, executable files are not accepted.\r\n\r\n---\r\n",
+        "operationId": "update-file",
+        "summary": "Update file",
+        "tags": ["Files"],
+        "parameters": [
+          {
+            "name": "fileId",
+            "in": "path",
+            "description": "File Id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `storage:modify`",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "type": "string",
+            "enum": ["application/vnd.bentley.itwin-platform.v1+json"]
+          },
+          {
+            "name": "file-update",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/file-update"
+            }
+          }
+        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/file-result"
+            },
+            "examples": {
+              "application/json": "{\r\n  \"file\": {\r\n    \"id\": \"TYJsPN0xtkWId0yUrXkS5pN5AQzuullIkxz5aDnDJSI\",\r\n    \"displayName\": \"test.txt\",\r\n    \"description\": \"test file\",\r\n    \"path\": \"folderName/test.txt\",\r\n    \"size\": 8,\r\n    \"createdBy\": \"1140f95b-1ba0-49d9-bbf4-b53e54d80387\",\r\n    \"lastModifiedBy\": \"1140f95b-1ba0-49d9-bbf4-b53e54d80387\",\r\n    \"createdDateTime\": \"2020-05-03T11:05:11.0133549Z\",\r\n    \"lastModifiedDateTime\": \"2021-05-15T12:07:06.7841448Z\",\r\n    \"parentFolderId\": \"TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s\"\r\n  }\r\n}\r\n"
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "examples": {
+              "application/json": "{\n\r\"statusCode\": 401,\n\r\"message\": \"Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint.\"}"
+            }
+          },
+          "404": {
+            "description": "File cannot be found.",
+            "examples": {
+              "application/json": "{\r\n  \"error\": {\r\n    \"code\": \"FileNotFound\",\r\n    \"message\": \"Requested file not available.\"\r\n  }\r\n}"
+            }
+          },
+          "422": {
+            "description": "Invalid request to update a file. Make sure that a valid file ID and file details were passed in.",
+            "examples": {
+              "application/json": "{\r\n  \"error\": {\r\n    \"code\": \"InvalidStorageRequest\",\r\n    \"message\": \"The request to update file was invalid. Please see the API Reference for possible reasons.\"\r\n  }\r\n}"
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "type": "string",
+                "description": "The number of requests exceeds the rate-limit for the client subscription."
+              }
+            },
+            "examples": {
+              "application/json": "{\n\r\"code\": \"TooManyRequests\",\n\r\"message\": \"More requests were received than the subscription rate-limit allows.\"}"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "---\r\n\r\nDelete a file\r\n\r\n### Notes\r\n\r\nFile moved to the recycle bin will be completely removed after 30 days.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `storage:modify`.\r\n\r\n---",
+        "operationId": "delete-file",
+        "summary": "Delete file",
+        "tags": ["Files"],
+        "parameters": [
+          {
+            "name": "fileId",
+            "in": "path",
+            "description": "File Id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `storage:modify`",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "type": "string",
+            "enum": ["application/vnd.bentley.itwin-platform.v1+json"]
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "204": {
+            "description": "A file was deleted successfully."
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "examples": {
+              "application/json": "{\n\r\"statusCode\": 401,\n\r\"message\": \"Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint.\"}"
+            }
+          },
+          "404": {
+            "description": "File cannot be found.",
+            "examples": {
+              "application/json": "{\r\n  \"error\": {\r\n    \"code\": \"FileNotFound\",\r\n    \"message\": \"Requested file not available.\"\r\n  }\r\n}"
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "type": "string",
+                "description": "The number of requests exceeds the rate-limit for the client subscription."
+              }
+            },
+            "examples": {
+              "application/json": "{\n\r\"code\": \"TooManyRequests\",\n\r\"message\": \"More requests were received than the subscription rate-limit allows.\"}"
+            }
+          }
+        }
+      }
+    },
     "/folders/{folderId}/search": {
       "get": {
-        "description": "---\r\n\r\nFinds files and folders in folder by name\r\n\r\n### Notes\r\n\r\nThis query supports wildcard characters in the name parameter\r\n\r\n### Authentication\r\n\r\nRequires *Authorization* header with valid Bearer token for scope *storage:read*.\r\n\r\n---",
+        "description": "---\r\n\r\nFinds files and folders in folder by name\r\n\r\n### Notes\r\n\r\nThis query supports wildcard characters in the name parameter\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `storage:read`.\r\n\r\n---",
         "operationId": "search-for-folders-and-files-in-folder",
         "summary": "Search for folders and files in folder",
         "tags": ["Folders", "Files"],
@@ -1028,14 +955,14 @@
           {
             "name": "Authorization",
             "in": "header",
-            "description": "OAuth access token with scope 'storage:read'",
+            "description": "OAuth access token with scope `storage:read`",
             "required": true,
             "type": "string"
           },
           {
             "name": "Accept",
             "in": "header",
-            "description": "RECOMMENDED. Request a specific version of iTwin Platform API.",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
             "type": "string",
             "enum": ["application/vnd.bentley.itwin-platform.v1+json"]
           }
@@ -1064,7 +991,7 @@
             }
           },
           "422": {
-            "description": "Invalid request to get projects",
+            "description": "Invalid request to search for folders and files",
             "examples": {
               "application/json": "{\r\n    \"error\": {\r\n        \"code\": \"InvalidStorageRequest\",\r\n        \"message\": \"Page size is over 1000 items limit.\"\r\n    }\r\n}"
             }
@@ -1086,7 +1013,7 @@
     },
     "/folders/{folderId}/list": {
       "get": {
-        "description": "---\r\n\r\nRetrieves files and folders\r\n\r\n### Authentication\r\n\r\nRequires *Authorization* header with valid Bearer token for scope *storage:read*.\r\n\r\n---",
+        "description": "---\r\n\r\nRetrieves files and folders\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `storage:read`.\r\n\r\n---",
         "operationId": "get-folders-and-files-in-folder",
         "summary": "Get folders and files in folder",
         "tags": ["Folders", "Files"],
@@ -1113,14 +1040,14 @@
           {
             "name": "Authorization",
             "in": "header",
-            "description": "OAuth access token with scope 'storage:read'",
+            "description": "OAuth access token with scope `storage:read`",
             "required": true,
             "type": "string"
           },
           {
             "name": "Accept",
             "in": "header",
-            "description": "RECOMMENDED. Request a specific version of iTwin Platform API.",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
             "type": "string",
             "enum": ["application/vnd.bentley.itwin-platform.v1+json"]
           }
@@ -1169,9 +1096,319 @@
         }
       }
     },
+    "/files/{fileId}/complete": {
+      "post": {
+        "description": "---\r\n\r\nComplete file creation\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `storage:modify`.\r\n\r\n---\r\n",
+        "operationId": "complete-file-creation",
+        "summary": "Complete file creation",
+        "tags": ["Files"],
+        "parameters": [
+          {
+            "name": "fileId",
+            "in": "path",
+            "description": "File Id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `storage:modify`",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "type": "string",
+            "enum": ["application/vnd.bentley.itwin-platform.v1+json"]
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/file-result"
+            },
+            "examples": {
+              "application/json": "{\r\n  \"file\": {\r\n    \"id\": \"TYJsPN0xtkWId0yUrXkS5pN5AQzuullIkxz5aDnDJSI\",\r\n    \"displayName\": \"test.txt\",\r\n    \"description\": \"test file\",\r\n    \"path\": \"folderName/test.txt\",\r\n    \"size\": 8,\r\n    \"createdBy\": \"1140f95b-1ba0-49d9-bbf4-b53e54d80387\",\r\n    \"lastModifiedBy\": \"1140f95b-1ba0-49d9-bbf4-b53e54d80387\",\r\n    \"createdDateTime\": \"2020-05-03T11:05:11.0133549Z\",\r\n    \"lastModifiedDateTime\": \"2020-05-03T11:05:11.0133549Z\",\r\n    \"parentFolderId\": \"TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s\"\r\n  }\r\n}\r\n"
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "examples": {
+              "application/json": "{\n\r\"statusCode\": 401,\n\r\"message\": \"Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint.\"}"
+            }
+          },
+          "404": {
+            "description": "File cannot be found.",
+            "examples": {
+              "application/json": "{\r\n  \"error\": {\r\n    \"code\": \"FileNotFound\",\r\n    \"message\": \"Requested file not available.\"\r\n  }\r\n}"
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "type": "string",
+                "description": "The number of requests exceeds the rate-limit for the client subscription."
+              }
+            },
+            "examples": {
+              "application/json": "{\n\r\"code\": \"TooManyRequests\",\n\r\"message\": \"More requests were received than the subscription rate-limit allows.\"}"
+            }
+          }
+        }
+      }
+    },
+    "/folders/{folderId}/files": {
+      "get": {
+        "description": "---\r\n\r\nRetrieves files\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `storage:read`.\r\n\r\n---",
+        "operationId": "get-files-in-folder",
+        "summary": "Get files in folder",
+        "tags": ["Files"],
+        "parameters": [
+          {
+            "name": "folderId",
+            "in": "path",
+            "description": "Folder Id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.",
+            "type": "integer"
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.",
+            "type": "integer"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `storage:read`",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "type": "string",
+            "enum": ["application/vnd.bentley.itwin-platform.v1+json"]
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/files"
+            },
+            "examples": {
+              "application/json": "{\r\n  \"files\": [\r\n    {\r\n      \"id\": \"TYJsPN0xtkWId0yUrXkS5pN5AQzuullIkxz5aDnDJSI\",\r\n      \"displayName\": \"test.txt\",\r\n      \"description\": \"test file\",\r\n      \"path\": \"folderName/test.txt\",\r\n      \"size\": 1,\r\n      \"createdBy\": \"1140f95b-1ba0-49d9-bbf4-b53e54d80387\",\r\n      \"lastModifiedBy\": \"1140f95b-1ba0-49d9-bbf4-b53e54d80387\",\r\n      \"createdDateTime\": \"2020-05-03T11:05:11.0133549Z\",\r\n      \"lastModifiedDateTime\": \"2020-05-03T11:05:11.0133549Z\",\r\n      \"parentFolderId\": \"TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s\"\r\n    },\r\n    {\r\n      \"id\": \"TYJsPN0xtkWId0yUrXkS5s4FlCroosBMlyDhZZmlzoc\",\r\n      \"displayName\": \"test2.txt\",\r\n      \"description\": \"test file 2\",\r\n      \"path\": \"folderName/test2.txt\",\r\n      \"size\": 1,\r\n      \"createdBy\": \"1140f95b-1ba0-49d9-bbf4-b53e54d80387\",\r\n      \"lastModifiedBy\": \"1140f95b-1ba0-49d9-bbf4-b53e54d80387\",\r\n      \"createdDateTime\": \"2020-05-03T11:05:12.0133549Z\",\r\n      \"lastModifiedDateTime\": \"2020-05-03T11:05:12.0133549Z\",\r\n      \"parentFolderId\": \"TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s\"\r\n    }\r\n  ],\r\n  \"_links\": {\r\n    \"self\": {\r\n      \"href\": \"https://api.bentley.com/storage/folders/TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s/files?$skip=4&$top=2\"\r\n    },\r\n    \"prev\": {\r\n      \"href\": \"https://api.bentley.com/storage/folders/TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s/files?$skip=2&$top=2\"\r\n    },\r\n    \"next\": {\r\n      \"href\": \"https://api.bentley.com/storage/folders/TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s/files?$skip=6&$top=2\"\r\n    }\r\n  }\r\n}\r\n"
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "examples": {
+              "application/json": "{\n\r\"statusCode\": 401,\n\r\"message\": \"Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint.\"}"
+            }
+          },
+          "404": {
+            "description": "Folder cannot be found.",
+            "examples": {
+              "application/json": "{\r\n  \"error\": {\r\n    \"code\": \"FolderNotFound\",\r\n    \"message\": \"Requested folder not available.\"\r\n  }\r\n}"
+            }
+          },
+          "422": {
+            "description": "Invalid request to get files in folder",
+            "examples": {
+              "application/json": "{\r\n    \"error\": {\r\n        \"code\": \"InvalidStorageRequest\",\r\n        \"message\": \"Page size is over 1000 items limit.\"\r\n    }\r\n}"
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "type": "string",
+                "description": "The number of requests exceeds the rate-limit for the client subscription."
+              }
+            },
+            "examples": {
+              "application/json": "{\n\r\"code\": \"TooManyRequests\",\n\r\"message\": \"More requests were received than the subscription rate-limit allows.\"}"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "---\r\n\r\nCreate new file\r\n\r\n### Notes\r\n\r\nFile creation is three steps operation. This request will create file's meta data. Next two requests need to be executed by using links from the response.\r\n\r\n- uploadUrl is required for file upload. Upload can be done by sending http request and specifying x-ms-blob-type header to BlockBlob.\r\n- completeUrl should be used to confirm file upload and it is final request for file creation.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `storage:modify`.\r\n\r\n### Errors\r\n\r\nThis request can return InvalidCreateFileRequest error with 422 status code. This could happen because of these reasons:\r\n\r\n- File name contains invalid characters.\r\n- File name's length is larger than 255 characters.\r\n- File could be harmful. For example, executable files are not accepted.\r\n\r\n---\r\n",
+        "operationId": "create-file",
+        "summary": "Create file",
+        "tags": ["Files"],
+        "parameters": [
+          {
+            "name": "folderId",
+            "in": "path",
+            "description": "Folder Id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `storage:modify`",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "type": "string",
+            "enum": ["application/vnd.bentley.itwin-platform.v1+json"]
+          },
+          {
+            "name": "file-create",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/file-create"
+            }
+          }
+        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "202": {
+            "description": "Accepted",
+            "schema": {
+              "$ref": "#/definitions/file-upload"
+            },
+            "examples": {
+              "application/json": "{\r\n  \"_links\":{\r\n    \"completeUrl\": {\r\n        \"href\": \"https://api.bentley.com/storage/files/TYJsPN0xtkWId0yUrXkS5pN5AQzuullIkxz5aDnDJSI/complete\"\r\n    },\r\n    \"uploadUrl\": {\r\n      \"href\": \"https://projectshareprodeussa01.blob.core.windows.net/azuresqldbecpluginstorage/ProjectShare/File/b6145b7f-fee9-4a13-b1e4-5d061970373e?sv=2017-04-17&sr=b&sig=4NfdEriAONQhbHGkrTAL4bNMzjW8Qm5l%2FoEPiSQl%2BPo%3D&se=2020-10-19T15:12:51Z&sp=rw&rscd=attachment%3B%20filename%3D%22test.txt%22&userid=b905387c-a685-4d27-aab7-468c9ff0c9a6\"\r\n    }\r\n  }\r\n}\r\n\r\n"
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "examples": {
+              "application/json": "{\n\r\"statusCode\": 401,\n\r\"message\": \"Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint.\"}"
+            }
+          },
+          "404": {
+            "description": "Parent folder cannot be found.",
+            "examples": {
+              "application/json": "{\r\n  \"error\": {\r\n    \"code\": \"FolderNotFound\",\r\n    \"message\": \"Requested folder not available.\"\r\n  }\r\n}"
+            }
+          },
+          "422": {
+            "description": "Invalid request to create a file. Make sure that a valid file ID and file details were passed in.",
+            "examples": {
+              "application/json": "{\r\n  \"error\": {\r\n    \"code\": \"InvalidStorageRequest\",\r\n    \"message\": \"The request to create file was invalid. Please see the API Reference for possible reasons.\"\r\n  }\r\n}"
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "type": "string",
+                "description": "The number of requests exceeds the rate-limit for the client subscription."
+              }
+            },
+            "examples": {
+              "application/json": "{\n\r\"code\": \"TooManyRequests\",\n\r\"message\": \"More requests were received than the subscription rate-limit allows.\"}"
+            }
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "description": "---\r\n\r\nRetrieves top level files and folders by project\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `storage:read`.\r\n\r\n---",
+        "operationId": "get-top-level-folders-and-files-by-project",
+        "summary": "Get top level folders and files by project",
+        "tags": ["Folders", "Files"],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "query",
+            "description": "Project Id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.",
+            "type": "integer"
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.",
+            "type": "integer"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `storage:read`",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "type": "string",
+            "enum": ["application/vnd.bentley.itwin-platform.v1+json"]
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/items"
+            },
+            "examples": {
+              "application/json": "{\r\n  \"items\": [\r\n    {\r\n      \"type\": \"folder\",\r\n      \"id\": \"TYJsPN0xtkWId0yUrXkS5pN5AQzuullIkxz5aDnDJSI\",\r\n      \"displayName\": \"test\",\r\n      \"description\": \"test folder\",\r\n      \"path\": \"folderName/test\",\r\n      \"createdBy\": \"1140f95b-1ba0-49d9-bbf4-b53e54d80387\",\r\n      \"lastModifiedBy\": \"1140f95b-1ba0-49d9-bbf4-b53e54d80387\",\r\n      \"createdDateTime\": \"2020-05-03T11:05:11.0133549Z\",\r\n      \"lastModifiedDateTime\": \"2020-05-03T11:05:11.0133549Z\",\r\n      \"parentFolderId\": \"TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s\"\r\n    },\r\n    {\r\n      \"type\": \"file\",\r\n      \"id\": \"TYJsPN0xtkWId0yUrXkS5s4FlCroosBMlyDhZZmlzoc\",\r\n      \"displayName\": \"test2.txt\",\r\n      \"description\": \"test file 2\",\r\n      \"path\": \"folderName/test2.txt\",\r\n      \"size\": 1,\r\n      \"createdBy\": \"1140f95b-1ba0-49d9-bbf4-b53e54d80387\",\r\n      \"lastModifiedBy\": \"1140f95b-1ba0-49d9-bbf4-b53e54d80387\",\r\n      \"createdDateTime\": \"2020-05-03T11:05:12.0133549Z\",\r\n      \"lastModifiedDateTime\": \"2020-05-03T11:05:12.0133549Z\",\r\n      \"parentFolderId\": \"TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s\"\r\n    }\r\n  ],\r\n  \"_links\": {\r\n    \"self\": {\r\n      \"href\": \"https://api.bentley.com/storage?projectId=6959daff-27f5-4b87-96ea-9917daa3a8ff&$skip=4&$top=2\"\r\n    },\r\n    \"prev\": {\r\n      \"href\": \"https://api.bentley.com/storage?projectId=6959daff-27f5-4b87-96ea-9917daa3a8ff&$skip=2&$top=2\"\r\n    },\r\n    \"next\": {\r\n      \"href\": \"https://api.bentley.com/storage?projectId=6959daff-27f5-4b87-96ea-9917daa3a8ff&$skip=6&$top=2\"\r\n    },\r\n    \"folder\": {\r\n      \"href\": \"https://api.bentley.com/storage/folders/TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s\"\r\n    }\r\n  }\r\n}\r\n"
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "examples": {
+              "application/json": "{\n\r\"statusCode\": 401,\n\r\"message\": \"Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint.\"}"
+            }
+          },
+          "422": {
+            "description": "Invalid request to get top level folders and files",
+            "examples": {
+              "application/json": "{\r\n    \"error\": {\r\n        \"code\": \"InvalidStorageRequest\",\r\n        \"message\": \"Page size is over 1000 items limit.\"\r\n    }\r\n}"
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "type": "string",
+                "description": "The number of requests exceeds the rate-limit for the client subscription."
+              }
+            },
+            "examples": {
+              "application/json": "{\n\r\"code\": \"TooManyRequests\",\n\r\"message\": \"More requests were received than the subscription rate-limit allows.\"}"
+            }
+          }
+        }
+      }
+    },
     "/recycleBin": {
       "get": {
-        "description": "---\r\n\r\nGet deleted files and folders\r\n\r\n### Authentication\r\n\r\nRequires *Authorization* header with valid Bearer token for scope *storage:read*.\r\n\r\n---",
+        "description": "---\r\n\r\nGet deleted files and folders\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `storage:read`.\r\n\r\n---",
         "operationId": "get-folders-and-files-in-recycle-bin",
         "summary": "Get folders and files in recycle bin",
         "tags": ["Folders", "Files"],
@@ -1198,14 +1435,14 @@
           {
             "name": "Authorization",
             "in": "header",
-            "description": "OAuth access token with scope 'storage:read'",
+            "description": "OAuth access token with scope `storage:read`",
             "required": true,
             "type": "string"
           },
           {
             "name": "Accept",
             "in": "header",
-            "description": "RECOMMENDED. Request a specific version of iTwin Platform API.",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
             "type": "string",
             "enum": ["application/vnd.bentley.itwin-platform.v1+json"]
           }
@@ -1228,7 +1465,7 @@
             }
           },
           "422": {
-            "description": "Invalid request to get projects",
+            "description": "Invalid request to get folders and files in recycle bin",
             "examples": {
               "application/json": "{\r\n    \"error\": {\r\n        \"code\": \"InvalidStorageRequest\",\r\n        \"message\": \"Page size is over 1000 items limit.\"\r\n    }\r\n}"
             }
@@ -1250,16 +1487,28 @@
     }
   },
   "definitions": {
-    "errors": {
+    "minimal-error": {
+      "title": "minimal error",
       "type": "object",
       "properties": {
-        "errors": {
-          "type": "array",
-          "items": {}
+        "self": {
+          "$ref": "#/definitions/error"
         }
       }
     },
-    "links (paging)": {
+    "error": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        }
+      }
+    },
+    "links-paging": {
+      "title": "links (paging)",
       "type": "object",
       "properties": {
         "self": {
@@ -1313,7 +1562,8 @@
         }
       }
     },
-    "folder (typed)": {
+    "folder-typed": {
+      "title": "folder (typed)",
       "type": "object",
       "properties": {
         "id": {
@@ -1348,24 +1598,8 @@
         }
       }
     },
-    "folder (created)": {
-      "type": "object",
-      "properties": {
-        "folder": {
-          "$ref": "#/definitions/folder"
-        }
-      }
-    },
-    "folder (create)": {
-      "type": "object",
-      "properties": {
-        "folder": {
-          "$ref": "#/definitions/folderCreateDetails"
-        }
-      },
-      "example": "{\r\n  \"folder\": {\r\n    \"displayName\": \"test\",\r\n    \"description\": \"test folder\"\r\n  }\r\n}\r\n"
-    },
-    "folderCreateDetails": {
+    "folder-create": {
+      "title": "folder (create)",
       "type": "object",
       "properties": {
         "displayName": {
@@ -1374,7 +1608,31 @@
         "description": {
           "type": "string"
         }
-      }
+      },
+      "example": "{\r\n  \"displayName\": \"test\",\r\n  \"description\": \"test folder\"\r\n}\r\n"
+    },
+    "folder-update": {
+      "title": "folder (update)",
+      "type": "object",
+      "properties": {
+        "displayName": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      },
+      "example": "{\r\n  \"displayName\": \"test\",\r\n  \"description\": \"test folder\"\r\n}\r\n"
+    },
+    "folder-result": {
+      "title": "folder (result)",
+      "type": "object",
+      "properties": {
+        "folder": {
+          "$ref": "#/definitions/folder-typed"
+        }
+      },
+      "example": "{\r\n  \"displayName\": \"test\",\r\n  \"description\": \"test folder\"\r\n}\r\n"
     },
     "folders": {
       "type": "object",
@@ -1386,7 +1644,16 @@
           }
         },
         "_links": {
-          "$ref": "#/definitions/links (paging)"
+          "$ref": "#/definitions/links-paging"
+        }
+      }
+    },
+    "file-result": {
+      "title": "file (result)",
+      "type": "object",
+      "properties": {
+        "file": {
+          "$ref": "#/definitions/file-typed"
         }
       }
     },
@@ -1425,7 +1692,8 @@
         }
       }
     },
-    "file (typed)": {
+    "file-typed": {
+      "title": "file (typed)",
       "type": "object",
       "properties": {
         "id": {
@@ -1463,24 +1731,8 @@
         }
       }
     },
-    "file (created)": {
-      "type": "object",
-      "properties": {
-        "file": {
-          "$ref": "#/definitions/file"
-        }
-      }
-    },
-    "file (create)": {
-      "type": "object",
-      "properties": {
-        "file": {
-          "$ref": "#/definitions/fileCreateDetails"
-        }
-      },
-      "example": "{\r\n  \"file\": {\r\n    \"displayName\": \"test.txt\",\r\n    \"description\": \"test file\"\r\n  }\r\n}\r\n"
-    },
-    "fileCreateDetails": {
+    "file-create": {
+      "title": "file (create)",
       "type": "object",
       "properties": {
         "displayName": {
@@ -1490,17 +1742,32 @@
           "type": "string"
         }
       },
-      "example": "{\r\n  \"file\": {\r\n    \"displayName\": \"test.txt\",\r\n    \"description\": \"test file\"\r\n  }\r\n}\r\n"
+      "example": "{\r\n  \"displayName\": \"test.txt\",\r\n  \"description\": \"test file\"\r\n}\r\n"
     },
-    "file (upload)": {
+    "file-update": {
+      "title": "file (update)",
+      "type": "object",
+      "properties": {
+        "displayName": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      },
+      "example": "{\r\n  \"displayName\": \"test.txt\",\r\n  \"description\": \"test file\"\r\n}\r\n"
+    },
+    "file-upload": {
+      "title": "file-upload",
       "type": "object",
       "properties": {
         "_links": {
-          "$ref": "#/definitions/links (upload)"
+          "$ref": "#/definitions/links-upload"
         }
       }
     },
-    "links (upload)": {
+    "links-upload": {
+      "title": "links (upload)",
       "type": "object",
       "properties": {
         "uploadUrl": {
@@ -1521,7 +1788,7 @@
           }
         },
         "_links": {
-          "$ref": "#/definitions/links (paging)"
+          "$ref": "#/definitions/links-paging"
         }
       }
     },
@@ -1533,7 +1800,7 @@
           "items": {}
         },
         "_links": {
-          "$ref": "#/definitions/links (paging)"
+          "$ref": "#/definitions/links-paging"
         }
       }
     }

@@ -6,7 +6,7 @@
     "description": "iModel Connections API is a cloud-based synchronization API meant to synchronize the data in Input Files and iModels. It allows users to establish links from their design files to iModels, hosted in Bentley's iModelHub. Users can setup recurring synchronization to periodically synchronize updates to their design files, or manual synchronizations."
   },
   "host": "api.bentley.com",
-  "basePath": "/synchronization/v1",
+  "basePath": "/synchronization",
   "schemes": ["https"],
   "securityDefinitions": {
     "apiKeyHeader": {
@@ -155,7 +155,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/SourceFile (create)"
+              "$ref": "#/definitions/SourceFile (createbody)"
             }
           }
         ],
@@ -169,7 +169,7 @@
           "201": {
             "description": "Connection sourceFile successfully added.",
             "schema": {
-              "$ref": "#/definitions/SourceFile"
+              "$ref": "#/definitions/SourceFile (created)"
             },
             "examples": {
               "application/json": "{\r\n  \"sourceFile\": {\r\n      \"id\": \"297c8ab9-53a3-4fe5-adf8-79b4c1a95cbb\",\r\n      \"isSpatialRoot\": true,\r\n      \"lastAddedToConnectionRunDateTime\": \"2020-10-24T02:44:13.4109666Z\",\r\n      \"iModelBridgeType\": \"MSTN\",\r\n      \"createdDateTime\": \"2020-11-17T11:37:55.518838Z\",\r\n      \"lastModifiedDateTime\": \"2020-11-17T11:37:55.518838Z\",\r\n      \"persistenceType\": \"Persistent\",\r\n      \"lastKnownFileName\": \"samplefile\",\r\n      \"executionAction\": \"Bridge\",\r\n      \"_links\": {\r\n        \"file\": {\r\n          \"href\": \"https://api.bentley.com/files/5db42812-ebb8-4c58-98a4-2eaa99e0d8b6\"\r\n        }\r\n      }\r\n  }\r\n}"
@@ -326,7 +326,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/SourceFile (create)"
+              "$ref": "#/definitions/SourceFile (createbody)"
             }
           }
         ],
@@ -671,7 +671,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Connection"
+              "$ref": "#/definitions/Connection (created)"
             },
             "examples": {
               "application/json": "{\r\n  \"connection\": {\r\n    \"id\": \"fc226d0d-1647-48d7-8c11-f1f74f2d9808\",\r\n    \"displayName\": \"30\",\r\n    \"isScheduled\": true,\r\n    \"isSchedulePaused\": false,\r\n    \"scheduleLoopIntervalInSeconds\": 1800,\r\n    \"scheduledDateTime\": \"2020-10-24T02:44:13.4109666Z\",\r\n    \"priorityLevel\": \"Low\",\r\n    \"createdDateTime\": \"2020-10-24T02:26:51.1366301Z\",\r\n    \"lastModifiedDateTime\": \"2020-11-10T14:50:03.1175774Z\",\r\n    \"persistenceType\": \"Persistent\",\r\n    \"bridgeParameters\": null,\r\n    \"_links\": {\r\n      \"iModel\": {\r\n        \"href\": \"https://api.bentley.com/imodels/5db42812-ebb8-4c58-98a4-2eaa99e0d8b6\"\r\n      },\r\n      \"projectShareLocation\": {\r\n        \"href\": \"https://api.bentley.com/projects/4tb42812-ebb8-4c58-98a4-2eaa99e0d8b6\"\r\n      },\r\n      \"lastRunDetails\": {\r\n        \"href\": \"https://api.bentley.com/synchronization/imodels/connections/fc226d0d-1647-48d7-8c11-f1f74f2d9808/runs/de626d0d-1647-48d7-8c11-f1f74f2d4523\"\r\n      }\r\n    }\r\n  }\r\n}"
@@ -1568,6 +1568,22 @@
         "fileId": {
           "description": "",
           "type": "string"
+        }
+      }
+    },
+    "SourceFile (createbody)": {
+      "type": "object",
+      "properties": {
+        "sourceFile": {
+          "$ref": "#/definitions/SourceFile (create)"
+        }
+      }
+    },
+    "SourceFile (created)": {
+      "type": "object",
+      "properties": {
+        "sourceFile": {
+          "$ref": "#/definitions/SourceFile"
         }
       }
     },

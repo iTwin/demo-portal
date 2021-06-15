@@ -22,10 +22,7 @@ import * as url from "url";
 
 import { Configuration } from "./configuration";
 
-export const BASE_PATH = "https://api.bentley.com/storage/v1".replace(
-  /\/+$/,
-  ""
-);
+export const BASE_PATH = "https://api.bentley.com/storage".replace(/\/+$/, "");
 
 /**
  *
@@ -93,15 +90,21 @@ export class RequiredError extends Error {
 /**
  *
  * @export
- * @interface Errors
+ * @interface Error
  */
-export interface Errors {
+export interface Error {
   /**
    *
-   * @type {Array<any>}
-   * @memberof Errors
+   * @type {string}
+   * @memberof Error
    */
-  errors?: Array<any>;
+  message?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof Error
+   */
+  code?: string;
 }
 
 /**
@@ -180,28 +183,14 @@ export interface File {
 export interface FileCreate {
   /**
    *
-   * @type {FileCreateDetails}
-   * @memberof FileCreate
-   */
-  file?: FileCreateDetails;
-}
-
-/**
- *
- * @export
- * @interface FileCreateDetails
- */
-export interface FileCreateDetails {
-  /**
-   *
    * @type {string}
-   * @memberof FileCreateDetails
+   * @memberof FileCreate
    */
   displayName?: string;
   /**
    *
    * @type {string}
-   * @memberof FileCreateDetails
+   * @memberof FileCreate
    */
   description?: string;
 }
@@ -209,15 +198,15 @@ export interface FileCreateDetails {
 /**
  *
  * @export
- * @interface FileCreated
+ * @interface FileResult
  */
-export interface FileCreated {
+export interface FileResult {
   /**
    *
-   * @type {any}
-   * @memberof FileCreated
+   * @type {FileTyped}
+   * @memberof FileResult
    */
-  file?: any;
+  file?: FileTyped;
 }
 
 /**
@@ -292,6 +281,26 @@ export interface FileTyped {
    * @memberof FileTyped
    */
   parentFolderId?: string;
+}
+
+/**
+ *
+ * @export
+ * @interface FileUpdate
+ */
+export interface FileUpdate {
+  /**
+   *
+   * @type {string}
+   * @memberof FileUpdate
+   */
+  displayName?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof FileUpdate
+   */
+  description?: string;
 }
 
 /**
@@ -398,28 +407,14 @@ export interface Folder {
 export interface FolderCreate {
   /**
    *
-   * @type {FolderCreateDetails}
-   * @memberof FolderCreate
-   */
-  folder?: FolderCreateDetails;
-}
-
-/**
- *
- * @export
- * @interface FolderCreateDetails
- */
-export interface FolderCreateDetails {
-  /**
-   *
    * @type {string}
-   * @memberof FolderCreateDetails
+   * @memberof FolderCreate
    */
   displayName?: string;
   /**
    *
    * @type {string}
-   * @memberof FolderCreateDetails
+   * @memberof FolderCreate
    */
   description?: string;
 }
@@ -427,15 +422,15 @@ export interface FolderCreateDetails {
 /**
  *
  * @export
- * @interface FolderCreated
+ * @interface FolderResult
  */
-export interface FolderCreated {
+export interface FolderResult {
   /**
    *
-   * @type {Folder}
-   * @memberof FolderCreated
+   * @type {FolderTyped}
+   * @memberof FolderResult
    */
-  folder?: Folder;
+  folder?: FolderTyped;
 }
 
 /**
@@ -504,6 +499,26 @@ export interface FolderTyped {
    * @memberof FolderTyped
    */
   parentFolderId?: string;
+}
+
+/**
+ *
+ * @export
+ * @interface FolderUpdate
+ */
+export interface FolderUpdate {
+  /**
+   *
+   * @type {string}
+   * @memberof FolderUpdate
+   */
+  displayName?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof FolderUpdate
+   */
+  description?: string;
 }
 
 /**
@@ -607,6 +622,20 @@ export interface LinksUpload {
 }
 
 /**
+ *
+ * @export
+ * @interface MinimalError
+ */
+export interface MinimalError {
+  /**
+   *
+   * @type {Error}
+   * @memberof MinimalError
+   */
+  self?: Error;
+}
+
+/**
  * FilesApi - fetch parameter creator
  * @export
  */
@@ -615,11 +644,11 @@ export const FilesApiFetchParamCreator = function(
 ) {
   return {
     /**
-     * ---    Complete file creation    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:modify*.    ---
+     * ---    Complete file creation    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
      * @summary Complete file creation
      * @param {string} fileId File Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:modify&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -711,12 +740,12 @@ export const FilesApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Create new file    ### Notes    File creation is three steps operation. This request will create file's meta data. Next two requests need to be executed by using links from the response.    - uploadUrl is required for file upload. Upload can be done by sending http request and specifying x-ms-blob-type header to BlockBlob.  - completeUrl should be used to confirm file upload and it is final request for file creation.    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:modify*.    ### Errors    This request can return InvalidCreateFileRequest error with 422 status code. This could happen because of these reasons:    - File name contains invalid characters.  - File name's length is larger than 255 characters.  - File could be harmful. For example, executable files are not accepted.    ---
+     * ---    Create new file    ### Notes    File creation is three steps operation. This request will create file's meta data. Next two requests need to be executed by using links from the response.    - uploadUrl is required for file upload. Upload can be done by sending http request and specifying x-ms-blob-type header to BlockBlob.  - completeUrl should be used to confirm file upload and it is final request for file creation.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Errors    This request can return InvalidCreateFileRequest error with 422 status code. This could happen because of these reasons:    - File name contains invalid characters.  - File name's length is larger than 255 characters.  - File could be harmful. For example, executable files are not accepted.    ---
      * @summary Create file
      * @param {string} folderId Folder Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:modify&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
-     * @param {FileCreate} [file__create]
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {FileCreate} [file_create]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -724,7 +753,7 @@ export const FilesApiFetchParamCreator = function(
       folderId: string,
       Authorization: string,
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
-      file__create?: FileCreate,
+      file_create?: FileCreate,
       options: any = {}
     ): FetchArgs {
       // verify required parameter 'folderId' is not null or undefined
@@ -808,8 +837,8 @@ export const FilesApiFetchParamCreator = function(
         <any>"FileCreate" !== "string" ||
         localVarRequestOptions.headers["Content-Type"] === "application/json";
       localVarRequestOptions.body = needsSerialization
-        ? JSON.stringify(file__create || {})
-        : file__create || "";
+        ? JSON.stringify(file_create || {})
+        : file_create || "";
 
       return {
         url: url.format(localVarUrlObj),
@@ -817,11 +846,11 @@ export const FilesApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Delete a file    ### Notes    File moved to the recycle bin will be completely removed after 30 days.    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:modify*.    ---
+     * ---    Delete a file    ### Notes    File moved to the recycle bin will be completely removed after 30 days.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
      * @summary Delete file
      * @param {string} fileId File Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:modify&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -916,11 +945,11 @@ export const FilesApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Delete a file from the recycle bin    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:modify*.    ---
+     * ---    Delete a file from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
      * @summary Delete file from recycle bin
      * @param {string} fileId File Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:modify&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1015,11 +1044,11 @@ export const FilesApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Retrieves file    ### Notes    This endpoint returns 302 status code with Location header, which on success contains a link to the file. Redirection is not supported by developer portal and an error could be returned while using the \"Try it\" feature for this API. However, this endpoint will work if a request is sent from a different http client or by using the link specified in the response Location header.    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+     * ---    Retrieves file    ### Notes    This endpoint returns 302 status code with Location header, which on success contains a link to the file. Redirection is not supported by developer portal and an error could be returned while using the \"Try it\" feature for this API. However, this endpoint will work if a request is sent from a different http client or by using the link specified in the response Location header.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
      * @summary Download file
      * @param {string} fileId File Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1111,11 +1140,11 @@ export const FilesApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Retrieves file    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+     * ---    Retrieves file    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
      * @summary Get file
      * @param {string} fileId File Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1207,13 +1236,13 @@ export const FilesApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Retrieves files    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+     * ---    Retrieves files    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
      * @summary Get files in folder
      * @param {string} folderId Folder Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
      * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
      * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1315,13 +1344,13 @@ export const FilesApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Retrieves files and folders    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+     * ---    Retrieves files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
      * @summary Get folders and files in folder
      * @param {string} folderId Folder Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
      * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
      * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1423,13 +1452,13 @@ export const FilesApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Get deleted files and folders    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+     * ---    Get deleted files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
      * @summary Get folders and files in recycle bin
      * @param {string} projectId Project Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
      * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
      * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1532,11 +1561,120 @@ export const FilesApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Restore deleted file from the recycle bin    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:modify*.    ---
+     * ---    Retrieves top level files and folders by project    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * @summary Get top level folders and files by project
+     * @param {string} projectId Project Id
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
+     * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
+     * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getTopLevelFoldersAndFilesByProject(
+      projectId: string,
+      Authorization: string,
+      top?: number,
+      skip?: number,
+      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+      options: any = {}
+    ): FetchArgs {
+      // verify required parameter 'projectId' is not null or undefined
+      if (projectId === null || projectId === undefined) {
+        throw new RequiredError(
+          "projectId",
+          "Required parameter projectId was null or undefined when calling getTopLevelFoldersAndFilesByProject."
+        );
+      }
+      // verify required parameter 'Authorization' is not null or undefined
+      if (Authorization === null || Authorization === undefined) {
+        throw new RequiredError(
+          "Authorization",
+          "Required parameter Authorization was null or undefined when calling getTopLevelFoldersAndFilesByProject."
+        );
+      }
+      const localVarPath = `/`;
+      const localVarUrlObj = url.parse(localVarPath, true);
+      const localVarRequestOptions = Object.assign({ method: "GET" }, options);
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication apiKeyHeader required
+      if (configuration && configuration.apiKey) {
+        const localVarApiKeyValue =
+          typeof configuration.apiKey === "function"
+            ? configuration.apiKey("X-Api-Subscription-Key")
+            : configuration.apiKey;
+        localVarHeaderParameter["X-Api-Subscription-Key"] = localVarApiKeyValue;
+      }
+
+      // authentication apiKeyQuery required
+      if (configuration && configuration.apiKey) {
+        const localVarApiKeyValue =
+          typeof configuration.apiKey === "function"
+            ? configuration.apiKey("apikey")
+            : configuration.apiKey;
+        localVarQueryParameter["apikey"] = localVarApiKeyValue;
+      }
+
+      // authentication oauth2Bentley OAuth2 Service required
+      // oauth required
+      if (configuration && configuration.accessToken) {
+        const localVarAccessTokenValue =
+          typeof configuration.accessToken === "function"
+            ? configuration.accessToken("oauth2Bentley OAuth2 Service", [
+                "storage:read storage:modify",
+              ])
+            : configuration.accessToken;
+        localVarHeaderParameter["Authorization"] =
+          "Bearer " + localVarAccessTokenValue;
+      }
+
+      if (projectId !== undefined) {
+        localVarQueryParameter["projectId"] = projectId;
+      }
+
+      if (top !== undefined) {
+        localVarQueryParameter["$top"] = top;
+      }
+
+      if (skip !== undefined) {
+        localVarQueryParameter["$skip"] = skip;
+      }
+
+      if (Authorization !== undefined && Authorization !== null) {
+        localVarHeaderParameter["Authorization"] = String(Authorization);
+      }
+
+      if (Accept !== undefined && Accept !== null) {
+        localVarHeaderParameter["Accept"] = String(Accept);
+      }
+
+      localVarUrlObj.query = Object.assign(
+        {},
+        localVarUrlObj.query,
+        localVarQueryParameter,
+        options.query
+      );
+      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+      delete localVarUrlObj.search;
+      localVarRequestOptions.headers = Object.assign(
+        {},
+        localVarHeaderParameter,
+        options.headers
+      );
+
+      return {
+        url: url.format(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * ---    Restore deleted file from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
      * @summary Restore file
      * @param {string} fileId File Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:modify&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1628,14 +1766,14 @@ export const FilesApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Finds files and folders in folder by name    ### Notes    This query supports wildcard characters in the name parameter    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+     * ---    Finds files and folders in folder by name    ### Notes    This query supports wildcard characters in the name parameter    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
      * @summary Search for folders and files in folder
      * @param {string} folderId Folder Id
      * @param {string} name Item name
-     * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
      * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
      * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1748,6 +1886,115 @@ export const FilesApiFetchParamCreator = function(
         options: localVarRequestOptions,
       };
     },
+    /**
+     * ---    Update file    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Errors    This request can return InvalidCreateFileRequest error with 422 status code. This could happen because of these reasons:    - File name contains invalid characters.  - File name's length is larger than 255 characters.  - File could be harmful. For example, executable files are not accepted.    ---
+     * @summary Update file
+     * @param {string} fileId File Id
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {FileUpdate} [file_update]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updateFile(
+      fileId: string,
+      Authorization: string,
+      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+      file_update?: FileUpdate,
+      options: any = {}
+    ): FetchArgs {
+      // verify required parameter 'fileId' is not null or undefined
+      if (fileId === null || fileId === undefined) {
+        throw new RequiredError(
+          "fileId",
+          "Required parameter fileId was null or undefined when calling updateFile."
+        );
+      }
+      // verify required parameter 'Authorization' is not null or undefined
+      if (Authorization === null || Authorization === undefined) {
+        throw new RequiredError(
+          "Authorization",
+          "Required parameter Authorization was null or undefined when calling updateFile."
+        );
+      }
+      const localVarPath = `/files/{fileId}`.replace(
+        `{${"fileId"}}`,
+        encodeURIComponent(String(fileId))
+      );
+      const localVarUrlObj = url.parse(localVarPath, true);
+      const localVarRequestOptions = Object.assign(
+        { method: "PATCH" },
+        options
+      );
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication apiKeyHeader required
+      if (configuration && configuration.apiKey) {
+        const localVarApiKeyValue =
+          typeof configuration.apiKey === "function"
+            ? configuration.apiKey("X-Api-Subscription-Key")
+            : configuration.apiKey;
+        localVarHeaderParameter["X-Api-Subscription-Key"] = localVarApiKeyValue;
+      }
+
+      // authentication apiKeyQuery required
+      if (configuration && configuration.apiKey) {
+        const localVarApiKeyValue =
+          typeof configuration.apiKey === "function"
+            ? configuration.apiKey("apikey")
+            : configuration.apiKey;
+        localVarQueryParameter["apikey"] = localVarApiKeyValue;
+      }
+
+      // authentication oauth2Bentley OAuth2 Service required
+      // oauth required
+      if (configuration && configuration.accessToken) {
+        const localVarAccessTokenValue =
+          typeof configuration.accessToken === "function"
+            ? configuration.accessToken("oauth2Bentley OAuth2 Service", [
+                "storage:read storage:modify",
+              ])
+            : configuration.accessToken;
+        localVarHeaderParameter["Authorization"] =
+          "Bearer " + localVarAccessTokenValue;
+      }
+
+      if (Authorization !== undefined && Authorization !== null) {
+        localVarHeaderParameter["Authorization"] = String(Authorization);
+      }
+
+      if (Accept !== undefined && Accept !== null) {
+        localVarHeaderParameter["Accept"] = String(Accept);
+      }
+
+      localVarHeaderParameter["Content-Type"] = "application/json";
+
+      localVarUrlObj.query = Object.assign(
+        {},
+        localVarUrlObj.query,
+        localVarQueryParameter,
+        options.query
+      );
+      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+      delete localVarUrlObj.search;
+      localVarRequestOptions.headers = Object.assign(
+        {},
+        localVarHeaderParameter,
+        options.headers
+      );
+      const needsSerialization =
+        <any>"FileUpdate" !== "string" ||
+        localVarRequestOptions.headers["Content-Type"] === "application/json";
+      localVarRequestOptions.body = needsSerialization
+        ? JSON.stringify(file_update || {})
+        : file_update || "";
+
+      return {
+        url: url.format(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
   };
 };
 
@@ -1758,11 +2005,11 @@ export const FilesApiFetchParamCreator = function(
 export const FilesApiFp = function(configuration?: Configuration) {
   return {
     /**
-     * ---    Complete file creation    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:modify*.    ---
+     * ---    Complete file creation    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
      * @summary Complete file creation
      * @param {string} fileId File Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:modify&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1771,7 +2018,7 @@ export const FilesApiFp = function(configuration?: Configuration) {
       Authorization: string,
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
       options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<FileCreated> {
+    ): (fetch?: FetchAPI, basePath?: string) => Promise<FileResult> {
       const localVarFetchArgs = FilesApiFetchParamCreator(
         configuration
       ).completeFileCreation(fileId, Authorization, Accept, options);
@@ -1792,12 +2039,12 @@ export const FilesApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Create new file    ### Notes    File creation is three steps operation. This request will create file's meta data. Next two requests need to be executed by using links from the response.    - uploadUrl is required for file upload. Upload can be done by sending http request and specifying x-ms-blob-type header to BlockBlob.  - completeUrl should be used to confirm file upload and it is final request for file creation.    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:modify*.    ### Errors    This request can return InvalidCreateFileRequest error with 422 status code. This could happen because of these reasons:    - File name contains invalid characters.  - File name's length is larger than 255 characters.  - File could be harmful. For example, executable files are not accepted.    ---
+     * ---    Create new file    ### Notes    File creation is three steps operation. This request will create file's meta data. Next two requests need to be executed by using links from the response.    - uploadUrl is required for file upload. Upload can be done by sending http request and specifying x-ms-blob-type header to BlockBlob.  - completeUrl should be used to confirm file upload and it is final request for file creation.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Errors    This request can return InvalidCreateFileRequest error with 422 status code. This could happen because of these reasons:    - File name contains invalid characters.  - File name's length is larger than 255 characters.  - File could be harmful. For example, executable files are not accepted.    ---
      * @summary Create file
      * @param {string} folderId Folder Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:modify&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
-     * @param {FileCreate} [file__create]
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {FileCreate} [file_create]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1805,12 +2052,12 @@ export const FilesApiFp = function(configuration?: Configuration) {
       folderId: string,
       Authorization: string,
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
-      file__create?: FileCreate,
+      file_create?: FileCreate,
       options?: any
     ): (fetch?: FetchAPI, basePath?: string) => Promise<FileUpload> {
       const localVarFetchArgs = FilesApiFetchParamCreator(
         configuration
-      ).createFile(folderId, Authorization, Accept, file__create, options);
+      ).createFile(folderId, Authorization, Accept, file_create, options);
       return (
         fetch: FetchAPI = portableFetch,
         basePath: string = BASE_PATH
@@ -1828,11 +2075,11 @@ export const FilesApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Delete a file    ### Notes    File moved to the recycle bin will be completely removed after 30 days.    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:modify*.    ---
+     * ---    Delete a file    ### Notes    File moved to the recycle bin will be completely removed after 30 days.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
      * @summary Delete file
      * @param {string} fileId File Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:modify&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1862,11 +2109,11 @@ export const FilesApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Delete a file from the recycle bin    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:modify*.    ---
+     * ---    Delete a file from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
      * @summary Delete file from recycle bin
      * @param {string} fileId File Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:modify&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1896,11 +2143,11 @@ export const FilesApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Retrieves file    ### Notes    This endpoint returns 302 status code with Location header, which on success contains a link to the file. Redirection is not supported by developer portal and an error could be returned while using the \"Try it\" feature for this API. However, this endpoint will work if a request is sent from a different http client or by using the link specified in the response Location header.    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+     * ---    Retrieves file    ### Notes    This endpoint returns 302 status code with Location header, which on success contains a link to the file. Redirection is not supported by developer portal and an error could be returned while using the \"Try it\" feature for this API. However, this endpoint will work if a request is sent from a different http client or by using the link specified in the response Location header.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
      * @summary Download file
      * @param {string} fileId File Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1930,11 +2177,11 @@ export const FilesApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Retrieves file    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+     * ---    Retrieves file    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
      * @summary Get file
      * @param {string} fileId File Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1943,7 +2190,7 @@ export const FilesApiFp = function(configuration?: Configuration) {
       Authorization: string,
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
       options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<any> {
+    ): (fetch?: FetchAPI, basePath?: string) => Promise<FileResult> {
       const localVarFetchArgs = FilesApiFetchParamCreator(
         configuration
       ).getFile(fileId, Authorization, Accept, options);
@@ -1964,13 +2211,13 @@ export const FilesApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Retrieves files    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+     * ---    Retrieves files    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
      * @summary Get files in folder
      * @param {string} folderId Folder Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
      * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
      * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -2002,13 +2249,13 @@ export const FilesApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Retrieves files and folders    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+     * ---    Retrieves files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
      * @summary Get folders and files in folder
      * @param {string} folderId Folder Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
      * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
      * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -2047,13 +2294,13 @@ export const FilesApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Get deleted files and folders    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+     * ---    Get deleted files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
      * @summary Get folders and files in recycle bin
      * @param {string} projectId Project Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
      * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
      * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -2092,11 +2339,56 @@ export const FilesApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Restore deleted file from the recycle bin    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:modify*.    ---
+     * ---    Retrieves top level files and folders by project    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * @summary Get top level folders and files by project
+     * @param {string} projectId Project Id
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
+     * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
+     * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getTopLevelFoldersAndFilesByProject(
+      projectId: string,
+      Authorization: string,
+      top?: number,
+      skip?: number,
+      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+      options?: any
+    ): (fetch?: FetchAPI, basePath?: string) => Promise<Items> {
+      const localVarFetchArgs = FilesApiFetchParamCreator(
+        configuration
+      ).getTopLevelFoldersAndFilesByProject(
+        projectId,
+        Authorization,
+        top,
+        skip,
+        Accept,
+        options
+      );
+      return (
+        fetch: FetchAPI = portableFetch,
+        basePath: string = BASE_PATH
+      ) => {
+        return fetch(
+          basePath + localVarFetchArgs.url,
+          localVarFetchArgs.options
+        ).then((response) => {
+          if (response.status >= 200 && response.status < 300) {
+            return response.json();
+          } else {
+            throw response;
+          }
+        });
+      };
+    },
+    /**
+     * ---    Restore deleted file from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
      * @summary Restore file
      * @param {string} fileId File Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:modify&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -2126,14 +2418,14 @@ export const FilesApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Finds files and folders in folder by name    ### Notes    This query supports wildcard characters in the name parameter    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+     * ---    Finds files and folders in folder by name    ### Notes    This query supports wildcard characters in the name parameter    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
      * @summary Search for folders and files in folder
      * @param {string} folderId Folder Id
      * @param {string} name Item name
-     * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
      * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
      * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -2173,6 +2465,42 @@ export const FilesApiFp = function(configuration?: Configuration) {
         });
       };
     },
+    /**
+     * ---    Update file    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Errors    This request can return InvalidCreateFileRequest error with 422 status code. This could happen because of these reasons:    - File name contains invalid characters.  - File name's length is larger than 255 characters.  - File could be harmful. For example, executable files are not accepted.    ---
+     * @summary Update file
+     * @param {string} fileId File Id
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {FileUpdate} [file_update]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updateFile(
+      fileId: string,
+      Authorization: string,
+      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+      file_update?: FileUpdate,
+      options?: any
+    ): (fetch?: FetchAPI, basePath?: string) => Promise<FileResult> {
+      const localVarFetchArgs = FilesApiFetchParamCreator(
+        configuration
+      ).updateFile(fileId, Authorization, Accept, file_update, options);
+      return (
+        fetch: FetchAPI = portableFetch,
+        basePath: string = BASE_PATH
+      ) => {
+        return fetch(
+          basePath + localVarFetchArgs.url,
+          localVarFetchArgs.options
+        ).then((response) => {
+          if (response.status >= 200 && response.status < 300) {
+            return response.json();
+          } else {
+            throw response;
+          }
+        });
+      };
+    },
   };
 };
 
@@ -2187,11 +2515,11 @@ export const FilesApiFactory = function(
 ) {
   return {
     /**
-     * ---    Complete file creation    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:modify*.    ---
+     * ---    Complete file creation    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
      * @summary Complete file creation
      * @param {string} fileId File Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:modify&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -2209,12 +2537,12 @@ export const FilesApiFactory = function(
       )(fetch, basePath);
     },
     /**
-     * ---    Create new file    ### Notes    File creation is three steps operation. This request will create file's meta data. Next two requests need to be executed by using links from the response.    - uploadUrl is required for file upload. Upload can be done by sending http request and specifying x-ms-blob-type header to BlockBlob.  - completeUrl should be used to confirm file upload and it is final request for file creation.    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:modify*.    ### Errors    This request can return InvalidCreateFileRequest error with 422 status code. This could happen because of these reasons:    - File name contains invalid characters.  - File name's length is larger than 255 characters.  - File could be harmful. For example, executable files are not accepted.    ---
+     * ---    Create new file    ### Notes    File creation is three steps operation. This request will create file's meta data. Next two requests need to be executed by using links from the response.    - uploadUrl is required for file upload. Upload can be done by sending http request and specifying x-ms-blob-type header to BlockBlob.  - completeUrl should be used to confirm file upload and it is final request for file creation.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Errors    This request can return InvalidCreateFileRequest error with 422 status code. This could happen because of these reasons:    - File name contains invalid characters.  - File name's length is larger than 255 characters.  - File could be harmful. For example, executable files are not accepted.    ---
      * @summary Create file
      * @param {string} folderId Folder Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:modify&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
-     * @param {FileCreate} [file__create]
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {FileCreate} [file_create]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -2222,23 +2550,23 @@ export const FilesApiFactory = function(
       folderId: string,
       Authorization: string,
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
-      file__create?: FileCreate,
+      file_create?: FileCreate,
       options?: any
     ) {
       return FilesApiFp(configuration).createFile(
         folderId,
         Authorization,
         Accept,
-        file__create,
+        file_create,
         options
       )(fetch, basePath);
     },
     /**
-     * ---    Delete a file    ### Notes    File moved to the recycle bin will be completely removed after 30 days.    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:modify*.    ---
+     * ---    Delete a file    ### Notes    File moved to the recycle bin will be completely removed after 30 days.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
      * @summary Delete file
      * @param {string} fileId File Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:modify&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -2256,11 +2584,11 @@ export const FilesApiFactory = function(
       )(fetch, basePath);
     },
     /**
-     * ---    Delete a file from the recycle bin    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:modify*.    ---
+     * ---    Delete a file from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
      * @summary Delete file from recycle bin
      * @param {string} fileId File Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:modify&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -2278,11 +2606,11 @@ export const FilesApiFactory = function(
       )(fetch, basePath);
     },
     /**
-     * ---    Retrieves file    ### Notes    This endpoint returns 302 status code with Location header, which on success contains a link to the file. Redirection is not supported by developer portal and an error could be returned while using the \"Try it\" feature for this API. However, this endpoint will work if a request is sent from a different http client or by using the link specified in the response Location header.    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+     * ---    Retrieves file    ### Notes    This endpoint returns 302 status code with Location header, which on success contains a link to the file. Redirection is not supported by developer portal and an error could be returned while using the \"Try it\" feature for this API. However, this endpoint will work if a request is sent from a different http client or by using the link specified in the response Location header.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
      * @summary Download file
      * @param {string} fileId File Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -2300,11 +2628,11 @@ export const FilesApiFactory = function(
       )(fetch, basePath);
     },
     /**
-     * ---    Retrieves file    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+     * ---    Retrieves file    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
      * @summary Get file
      * @param {string} fileId File Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -2322,13 +2650,13 @@ export const FilesApiFactory = function(
       )(fetch, basePath);
     },
     /**
-     * ---    Retrieves files    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+     * ---    Retrieves files    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
      * @summary Get files in folder
      * @param {string} folderId Folder Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
      * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
      * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -2350,13 +2678,13 @@ export const FilesApiFactory = function(
       )(fetch, basePath);
     },
     /**
-     * ---    Retrieves files and folders    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+     * ---    Retrieves files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
      * @summary Get folders and files in folder
      * @param {string} folderId Folder Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
      * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
      * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -2378,13 +2706,13 @@ export const FilesApiFactory = function(
       )(fetch, basePath);
     },
     /**
-     * ---    Get deleted files and folders    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+     * ---    Get deleted files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
      * @summary Get folders and files in recycle bin
      * @param {string} projectId Project Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
      * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
      * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -2406,11 +2734,39 @@ export const FilesApiFactory = function(
       )(fetch, basePath);
     },
     /**
-     * ---    Restore deleted file from the recycle bin    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:modify*.    ---
+     * ---    Retrieves top level files and folders by project    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * @summary Get top level folders and files by project
+     * @param {string} projectId Project Id
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
+     * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
+     * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getTopLevelFoldersAndFilesByProject(
+      projectId: string,
+      Authorization: string,
+      top?: number,
+      skip?: number,
+      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+      options?: any
+    ) {
+      return FilesApiFp(configuration).getTopLevelFoldersAndFilesByProject(
+        projectId,
+        Authorization,
+        top,
+        skip,
+        Accept,
+        options
+      )(fetch, basePath);
+    },
+    /**
+     * ---    Restore deleted file from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
      * @summary Restore file
      * @param {string} fileId File Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:modify&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -2428,14 +2784,14 @@ export const FilesApiFactory = function(
       )(fetch, basePath);
     },
     /**
-     * ---    Finds files and folders in folder by name    ### Notes    This query supports wildcard characters in the name parameter    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+     * ---    Finds files and folders in folder by name    ### Notes    This query supports wildcard characters in the name parameter    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
      * @summary Search for folders and files in folder
      * @param {string} folderId Folder Id
      * @param {string} name Item name
-     * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
      * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
      * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -2458,6 +2814,31 @@ export const FilesApiFactory = function(
         options
       )(fetch, basePath);
     },
+    /**
+     * ---    Update file    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Errors    This request can return InvalidCreateFileRequest error with 422 status code. This could happen because of these reasons:    - File name contains invalid characters.  - File name's length is larger than 255 characters.  - File could be harmful. For example, executable files are not accepted.    ---
+     * @summary Update file
+     * @param {string} fileId File Id
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {FileUpdate} [file_update]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updateFile(
+      fileId: string,
+      Authorization: string,
+      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+      file_update?: FileUpdate,
+      options?: any
+    ) {
+      return FilesApiFp(configuration).updateFile(
+        fileId,
+        Authorization,
+        Accept,
+        file_update,
+        options
+      )(fetch, basePath);
+    },
   };
 };
 
@@ -2469,11 +2850,11 @@ export const FilesApiFactory = function(
  */
 export class FilesApi extends BaseAPI {
   /**
-   * ---    Complete file creation    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:modify*.    ---
+   * ---    Complete file creation    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
    * @summary Complete file creation
    * @param {string} fileId File Id
-   * @param {string} Authorization OAuth access token with scope &#39;storage:modify&#39;
-   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+   * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FilesApi
@@ -2493,12 +2874,12 @@ export class FilesApi extends BaseAPI {
   }
 
   /**
-   * ---    Create new file    ### Notes    File creation is three steps operation. This request will create file's meta data. Next two requests need to be executed by using links from the response.    - uploadUrl is required for file upload. Upload can be done by sending http request and specifying x-ms-blob-type header to BlockBlob.  - completeUrl should be used to confirm file upload and it is final request for file creation.    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:modify*.    ### Errors    This request can return InvalidCreateFileRequest error with 422 status code. This could happen because of these reasons:    - File name contains invalid characters.  - File name's length is larger than 255 characters.  - File could be harmful. For example, executable files are not accepted.    ---
+   * ---    Create new file    ### Notes    File creation is three steps operation. This request will create file's meta data. Next two requests need to be executed by using links from the response.    - uploadUrl is required for file upload. Upload can be done by sending http request and specifying x-ms-blob-type header to BlockBlob.  - completeUrl should be used to confirm file upload and it is final request for file creation.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Errors    This request can return InvalidCreateFileRequest error with 422 status code. This could happen because of these reasons:    - File name contains invalid characters.  - File name's length is larger than 255 characters.  - File could be harmful. For example, executable files are not accepted.    ---
    * @summary Create file
    * @param {string} folderId Folder Id
-   * @param {string} Authorization OAuth access token with scope &#39;storage:modify&#39;
-   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
-   * @param {FileCreate} [file__create]
+   * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+   * @param {FileCreate} [file_create]
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FilesApi
@@ -2507,24 +2888,24 @@ export class FilesApi extends BaseAPI {
     folderId: string,
     Authorization: string,
     Accept?: "application/vnd.bentley.itwin-platform.v1+json",
-    file__create?: FileCreate,
+    file_create?: FileCreate,
     options?: any
   ) {
     return FilesApiFp(this.configuration).createFile(
       folderId,
       Authorization,
       Accept,
-      file__create,
+      file_create,
       options
     )(this.fetch, this.basePath);
   }
 
   /**
-   * ---    Delete a file    ### Notes    File moved to the recycle bin will be completely removed after 30 days.    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:modify*.    ---
+   * ---    Delete a file    ### Notes    File moved to the recycle bin will be completely removed after 30 days.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
    * @summary Delete file
    * @param {string} fileId File Id
-   * @param {string} Authorization OAuth access token with scope &#39;storage:modify&#39;
-   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+   * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FilesApi
@@ -2544,11 +2925,11 @@ export class FilesApi extends BaseAPI {
   }
 
   /**
-   * ---    Delete a file from the recycle bin    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:modify*.    ---
+   * ---    Delete a file from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
    * @summary Delete file from recycle bin
    * @param {string} fileId File Id
-   * @param {string} Authorization OAuth access token with scope &#39;storage:modify&#39;
-   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+   * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FilesApi
@@ -2568,11 +2949,11 @@ export class FilesApi extends BaseAPI {
   }
 
   /**
-   * ---    Retrieves file    ### Notes    This endpoint returns 302 status code with Location header, which on success contains a link to the file. Redirection is not supported by developer portal and an error could be returned while using the \"Try it\" feature for this API. However, this endpoint will work if a request is sent from a different http client or by using the link specified in the response Location header.    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+   * ---    Retrieves file    ### Notes    This endpoint returns 302 status code with Location header, which on success contains a link to the file. Redirection is not supported by developer portal and an error could be returned while using the \"Try it\" feature for this API. However, this endpoint will work if a request is sent from a different http client or by using the link specified in the response Location header.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
    * @summary Download file
    * @param {string} fileId File Id
-   * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
-   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+   * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
+   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FilesApi
@@ -2592,11 +2973,11 @@ export class FilesApi extends BaseAPI {
   }
 
   /**
-   * ---    Retrieves file    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+   * ---    Retrieves file    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
    * @summary Get file
    * @param {string} fileId File Id
-   * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
-   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+   * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
+   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FilesApi
@@ -2616,13 +2997,13 @@ export class FilesApi extends BaseAPI {
   }
 
   /**
-   * ---    Retrieves files    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+   * ---    Retrieves files    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
    * @summary Get files in folder
    * @param {string} folderId Folder Id
-   * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
+   * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
    * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
    * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
-   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FilesApi
@@ -2646,13 +3027,13 @@ export class FilesApi extends BaseAPI {
   }
 
   /**
-   * ---    Retrieves files and folders    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+   * ---    Retrieves files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
    * @summary Get folders and files in folder
    * @param {string} folderId Folder Id
-   * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
+   * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
    * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
    * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
-   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FilesApi
@@ -2676,13 +3057,13 @@ export class FilesApi extends BaseAPI {
   }
 
   /**
-   * ---    Get deleted files and folders    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+   * ---    Get deleted files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
    * @summary Get folders and files in recycle bin
    * @param {string} projectId Project Id
-   * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
+   * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
    * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
    * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
-   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FilesApi
@@ -2706,11 +3087,41 @@ export class FilesApi extends BaseAPI {
   }
 
   /**
-   * ---    Restore deleted file from the recycle bin    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:modify*.    ---
+   * ---    Retrieves top level files and folders by project    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+   * @summary Get top level folders and files by project
+   * @param {string} projectId Project Id
+   * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
+   * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
+   * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
+   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof FilesApi
+   */
+  public getTopLevelFoldersAndFilesByProject(
+    projectId: string,
+    Authorization: string,
+    top?: number,
+    skip?: number,
+    Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+    options?: any
+  ) {
+    return FilesApiFp(this.configuration).getTopLevelFoldersAndFilesByProject(
+      projectId,
+      Authorization,
+      top,
+      skip,
+      Accept,
+      options
+    )(this.fetch, this.basePath);
+  }
+
+  /**
+   * ---    Restore deleted file from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
    * @summary Restore file
    * @param {string} fileId File Id
-   * @param {string} Authorization OAuth access token with scope &#39;storage:modify&#39;
-   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+   * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FilesApi
@@ -2730,14 +3141,14 @@ export class FilesApi extends BaseAPI {
   }
 
   /**
-   * ---    Finds files and folders in folder by name    ### Notes    This query supports wildcard characters in the name parameter    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+   * ---    Finds files and folders in folder by name    ### Notes    This query supports wildcard characters in the name parameter    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
    * @summary Search for folders and files in folder
    * @param {string} folderId Folder Id
    * @param {string} name Item name
-   * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
+   * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
    * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
    * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
-   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FilesApi
@@ -2761,6 +3172,33 @@ export class FilesApi extends BaseAPI {
       options
     )(this.fetch, this.basePath);
   }
+
+  /**
+   * ---    Update file    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Errors    This request can return InvalidCreateFileRequest error with 422 status code. This could happen because of these reasons:    - File name contains invalid characters.  - File name's length is larger than 255 characters.  - File could be harmful. For example, executable files are not accepted.    ---
+   * @summary Update file
+   * @param {string} fileId File Id
+   * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+   * @param {FileUpdate} [file_update]
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof FilesApi
+   */
+  public updateFile(
+    fileId: string,
+    Authorization: string,
+    Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+    file_update?: FileUpdate,
+    options?: any
+  ) {
+    return FilesApiFp(this.configuration).updateFile(
+      fileId,
+      Authorization,
+      Accept,
+      file_update,
+      options
+    )(this.fetch, this.basePath);
+  }
 }
 
 /**
@@ -2772,12 +3210,12 @@ export const FoldersApiFetchParamCreator = function(
 ) {
   return {
     /**
-     * ---    Create new folder    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:modify*.    ### Errors    This request can return InvalidCreateFolderRequest error with 422 status code. This could happen because of these reasons:    - Folder name contains invalid characters.  - Folder name's length is larger than 255 characters.    ---
+     * ---    Create new folder    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Errors    This request can return InvalidCreateFolderRequest error with 422 status code. This could happen because of these reasons:    - Folder name contains invalid characters.  - Folder name's length is larger than 255 characters.    ---
      * @summary Create folder
      * @param {string} folderId Folder Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:modify&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
-     * @param {FolderCreate} [folder__create]
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {FolderCreate} [folder_create]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -2785,7 +3223,7 @@ export const FoldersApiFetchParamCreator = function(
       folderId: string,
       Authorization: string,
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
-      folder__create?: FolderCreate,
+      folder_create?: FolderCreate,
       options: any = {}
     ): FetchArgs {
       // verify required parameter 'folderId' is not null or undefined
@@ -2869,8 +3307,8 @@ export const FoldersApiFetchParamCreator = function(
         <any>"FolderCreate" !== "string" ||
         localVarRequestOptions.headers["Content-Type"] === "application/json";
       localVarRequestOptions.body = needsSerialization
-        ? JSON.stringify(folder__create || {})
-        : folder__create || "";
+        ? JSON.stringify(folder_create || {})
+        : folder_create || "";
 
       return {
         url: url.format(localVarUrlObj),
@@ -2878,11 +3316,11 @@ export const FoldersApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Delete a folder    ### Notes    Folder moved to the recycle bin will be completely removed after 30 days.    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:modify*.    ---
+     * ---    Delete a folder    ### Notes    Folder moved to the recycle bin will be completely removed after 30 days.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
      * @summary Delete folder
      * @param {string} folderId Folder Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:modify&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -2977,11 +3415,11 @@ export const FoldersApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Delete a folder from the recycle bin    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:modify*.    ---
+     * ---    Delete a folder from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
      * @summary Delete folder from recycle bin
      * @param {string} folderId Folder Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:modify&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -3076,11 +3514,11 @@ export const FoldersApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Retrieves folder    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+     * ---    Retrieves folder    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
      * @summary Get folder
      * @param {string} folderId Folder Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -3172,13 +3610,13 @@ export const FoldersApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Retrieves files and folders    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+     * ---    Retrieves files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
      * @summary Get folders and files in folder
      * @param {string} folderId Folder Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
      * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
      * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -3280,13 +3718,13 @@ export const FoldersApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Get deleted files and folders    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+     * ---    Get deleted files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
      * @summary Get folders and files in recycle bin
      * @param {string} projectId Project Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
      * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
      * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -3389,13 +3827,13 @@ export const FoldersApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Retrieves folders    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+     * ---    Retrieves folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
      * @summary Get folders in folder
      * @param {string} folderId Folder Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
      * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
      * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -3497,11 +3935,120 @@ export const FoldersApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Restore deleted folder from the recycle bin    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:modify*.    ---
+     * ---    Retrieves top level files and folders by project    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * @summary Get top level folders and files by project
+     * @param {string} projectId Project Id
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
+     * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
+     * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getTopLevelFoldersAndFilesByProject(
+      projectId: string,
+      Authorization: string,
+      top?: number,
+      skip?: number,
+      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+      options: any = {}
+    ): FetchArgs {
+      // verify required parameter 'projectId' is not null or undefined
+      if (projectId === null || projectId === undefined) {
+        throw new RequiredError(
+          "projectId",
+          "Required parameter projectId was null or undefined when calling getTopLevelFoldersAndFilesByProject."
+        );
+      }
+      // verify required parameter 'Authorization' is not null or undefined
+      if (Authorization === null || Authorization === undefined) {
+        throw new RequiredError(
+          "Authorization",
+          "Required parameter Authorization was null or undefined when calling getTopLevelFoldersAndFilesByProject."
+        );
+      }
+      const localVarPath = `/`;
+      const localVarUrlObj = url.parse(localVarPath, true);
+      const localVarRequestOptions = Object.assign({ method: "GET" }, options);
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication apiKeyHeader required
+      if (configuration && configuration.apiKey) {
+        const localVarApiKeyValue =
+          typeof configuration.apiKey === "function"
+            ? configuration.apiKey("X-Api-Subscription-Key")
+            : configuration.apiKey;
+        localVarHeaderParameter["X-Api-Subscription-Key"] = localVarApiKeyValue;
+      }
+
+      // authentication apiKeyQuery required
+      if (configuration && configuration.apiKey) {
+        const localVarApiKeyValue =
+          typeof configuration.apiKey === "function"
+            ? configuration.apiKey("apikey")
+            : configuration.apiKey;
+        localVarQueryParameter["apikey"] = localVarApiKeyValue;
+      }
+
+      // authentication oauth2Bentley OAuth2 Service required
+      // oauth required
+      if (configuration && configuration.accessToken) {
+        const localVarAccessTokenValue =
+          typeof configuration.accessToken === "function"
+            ? configuration.accessToken("oauth2Bentley OAuth2 Service", [
+                "storage:read storage:modify",
+              ])
+            : configuration.accessToken;
+        localVarHeaderParameter["Authorization"] =
+          "Bearer " + localVarAccessTokenValue;
+      }
+
+      if (projectId !== undefined) {
+        localVarQueryParameter["projectId"] = projectId;
+      }
+
+      if (top !== undefined) {
+        localVarQueryParameter["$top"] = top;
+      }
+
+      if (skip !== undefined) {
+        localVarQueryParameter["$skip"] = skip;
+      }
+
+      if (Authorization !== undefined && Authorization !== null) {
+        localVarHeaderParameter["Authorization"] = String(Authorization);
+      }
+
+      if (Accept !== undefined && Accept !== null) {
+        localVarHeaderParameter["Accept"] = String(Accept);
+      }
+
+      localVarUrlObj.query = Object.assign(
+        {},
+        localVarUrlObj.query,
+        localVarQueryParameter,
+        options.query
+      );
+      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+      delete localVarUrlObj.search;
+      localVarRequestOptions.headers = Object.assign(
+        {},
+        localVarHeaderParameter,
+        options.headers
+      );
+
+      return {
+        url: url.format(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * ---    Restore deleted folder from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
      * @summary Restore folder
      * @param {string} folderId Folder Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:modify&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -3593,14 +4140,14 @@ export const FoldersApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Finds files and folders in folder by name    ### Notes    This query supports wildcard characters in the name parameter    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+     * ---    Finds files and folders in folder by name    ### Notes    This query supports wildcard characters in the name parameter    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
      * @summary Search for folders and files in folder
      * @param {string} folderId Folder Id
      * @param {string} name Item name
-     * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
      * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
      * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -3713,6 +4260,115 @@ export const FoldersApiFetchParamCreator = function(
         options: localVarRequestOptions,
       };
     },
+    /**
+     * ---    Update folder    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Errors    This request can return InvalidCreateFolderRequest error with 422 status code. This could happen because of these reasons:    - Folder name contains invalid characters.  - Folder name's length is larger than 255 characters.    ---
+     * @summary Update folder
+     * @param {string} folderId Folder Id
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {FolderUpdate} [folder_update]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updateFolder(
+      folderId: string,
+      Authorization: string,
+      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+      folder_update?: FolderUpdate,
+      options: any = {}
+    ): FetchArgs {
+      // verify required parameter 'folderId' is not null or undefined
+      if (folderId === null || folderId === undefined) {
+        throw new RequiredError(
+          "folderId",
+          "Required parameter folderId was null or undefined when calling updateFolder."
+        );
+      }
+      // verify required parameter 'Authorization' is not null or undefined
+      if (Authorization === null || Authorization === undefined) {
+        throw new RequiredError(
+          "Authorization",
+          "Required parameter Authorization was null or undefined when calling updateFolder."
+        );
+      }
+      const localVarPath = `/folders/{folderId}`.replace(
+        `{${"folderId"}}`,
+        encodeURIComponent(String(folderId))
+      );
+      const localVarUrlObj = url.parse(localVarPath, true);
+      const localVarRequestOptions = Object.assign(
+        { method: "PATCH" },
+        options
+      );
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication apiKeyHeader required
+      if (configuration && configuration.apiKey) {
+        const localVarApiKeyValue =
+          typeof configuration.apiKey === "function"
+            ? configuration.apiKey("X-Api-Subscription-Key")
+            : configuration.apiKey;
+        localVarHeaderParameter["X-Api-Subscription-Key"] = localVarApiKeyValue;
+      }
+
+      // authentication apiKeyQuery required
+      if (configuration && configuration.apiKey) {
+        const localVarApiKeyValue =
+          typeof configuration.apiKey === "function"
+            ? configuration.apiKey("apikey")
+            : configuration.apiKey;
+        localVarQueryParameter["apikey"] = localVarApiKeyValue;
+      }
+
+      // authentication oauth2Bentley OAuth2 Service required
+      // oauth required
+      if (configuration && configuration.accessToken) {
+        const localVarAccessTokenValue =
+          typeof configuration.accessToken === "function"
+            ? configuration.accessToken("oauth2Bentley OAuth2 Service", [
+                "storage:read storage:modify",
+              ])
+            : configuration.accessToken;
+        localVarHeaderParameter["Authorization"] =
+          "Bearer " + localVarAccessTokenValue;
+      }
+
+      if (Authorization !== undefined && Authorization !== null) {
+        localVarHeaderParameter["Authorization"] = String(Authorization);
+      }
+
+      if (Accept !== undefined && Accept !== null) {
+        localVarHeaderParameter["Accept"] = String(Accept);
+      }
+
+      localVarHeaderParameter["Content-Type"] = "application/json";
+
+      localVarUrlObj.query = Object.assign(
+        {},
+        localVarUrlObj.query,
+        localVarQueryParameter,
+        options.query
+      );
+      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+      delete localVarUrlObj.search;
+      localVarRequestOptions.headers = Object.assign(
+        {},
+        localVarHeaderParameter,
+        options.headers
+      );
+      const needsSerialization =
+        <any>"FolderUpdate" !== "string" ||
+        localVarRequestOptions.headers["Content-Type"] === "application/json";
+      localVarRequestOptions.body = needsSerialization
+        ? JSON.stringify(folder_update || {})
+        : folder_update || "";
+
+      return {
+        url: url.format(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
   };
 };
 
@@ -3723,12 +4379,12 @@ export const FoldersApiFetchParamCreator = function(
 export const FoldersApiFp = function(configuration?: Configuration) {
   return {
     /**
-     * ---    Create new folder    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:modify*.    ### Errors    This request can return InvalidCreateFolderRequest error with 422 status code. This could happen because of these reasons:    - Folder name contains invalid characters.  - Folder name's length is larger than 255 characters.    ---
+     * ---    Create new folder    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Errors    This request can return InvalidCreateFolderRequest error with 422 status code. This could happen because of these reasons:    - Folder name contains invalid characters.  - Folder name's length is larger than 255 characters.    ---
      * @summary Create folder
      * @param {string} folderId Folder Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:modify&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
-     * @param {FolderCreate} [folder__create]
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {FolderCreate} [folder_create]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -3736,12 +4392,12 @@ export const FoldersApiFp = function(configuration?: Configuration) {
       folderId: string,
       Authorization: string,
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
-      folder__create?: FolderCreate,
+      folder_create?: FolderCreate,
       options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<FolderCreated> {
+    ): (fetch?: FetchAPI, basePath?: string) => Promise<FolderResult> {
       const localVarFetchArgs = FoldersApiFetchParamCreator(
         configuration
-      ).createFolder(folderId, Authorization, Accept, folder__create, options);
+      ).createFolder(folderId, Authorization, Accept, folder_create, options);
       return (
         fetch: FetchAPI = portableFetch,
         basePath: string = BASE_PATH
@@ -3759,11 +4415,11 @@ export const FoldersApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Delete a folder    ### Notes    Folder moved to the recycle bin will be completely removed after 30 days.    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:modify*.    ---
+     * ---    Delete a folder    ### Notes    Folder moved to the recycle bin will be completely removed after 30 days.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
      * @summary Delete folder
      * @param {string} folderId Folder Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:modify&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -3793,11 +4449,11 @@ export const FoldersApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Delete a folder from the recycle bin    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:modify*.    ---
+     * ---    Delete a folder from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
      * @summary Delete folder from recycle bin
      * @param {string} folderId Folder Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:modify&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -3827,11 +4483,11 @@ export const FoldersApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Retrieves folder    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+     * ---    Retrieves folder    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
      * @summary Get folder
      * @param {string} folderId Folder Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -3861,13 +4517,13 @@ export const FoldersApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Retrieves files and folders    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+     * ---    Retrieves files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
      * @summary Get folders and files in folder
      * @param {string} folderId Folder Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
      * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
      * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -3906,13 +4562,13 @@ export const FoldersApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Get deleted files and folders    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+     * ---    Get deleted files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
      * @summary Get folders and files in recycle bin
      * @param {string} projectId Project Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
      * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
      * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -3951,13 +4607,13 @@ export const FoldersApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Retrieves folders    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+     * ---    Retrieves folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
      * @summary Get folders in folder
      * @param {string} folderId Folder Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
      * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
      * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -3989,11 +4645,56 @@ export const FoldersApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Restore deleted folder from the recycle bin    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:modify*.    ---
+     * ---    Retrieves top level files and folders by project    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * @summary Get top level folders and files by project
+     * @param {string} projectId Project Id
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
+     * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
+     * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getTopLevelFoldersAndFilesByProject(
+      projectId: string,
+      Authorization: string,
+      top?: number,
+      skip?: number,
+      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+      options?: any
+    ): (fetch?: FetchAPI, basePath?: string) => Promise<Items> {
+      const localVarFetchArgs = FoldersApiFetchParamCreator(
+        configuration
+      ).getTopLevelFoldersAndFilesByProject(
+        projectId,
+        Authorization,
+        top,
+        skip,
+        Accept,
+        options
+      );
+      return (
+        fetch: FetchAPI = portableFetch,
+        basePath: string = BASE_PATH
+      ) => {
+        return fetch(
+          basePath + localVarFetchArgs.url,
+          localVarFetchArgs.options
+        ).then((response) => {
+          if (response.status >= 200 && response.status < 300) {
+            return response.json();
+          } else {
+            throw response;
+          }
+        });
+      };
+    },
+    /**
+     * ---    Restore deleted folder from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
      * @summary Restore folder
      * @param {string} folderId Folder Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:modify&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -4023,14 +4724,14 @@ export const FoldersApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Finds files and folders in folder by name    ### Notes    This query supports wildcard characters in the name parameter    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+     * ---    Finds files and folders in folder by name    ### Notes    This query supports wildcard characters in the name parameter    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
      * @summary Search for folders and files in folder
      * @param {string} folderId Folder Id
      * @param {string} name Item name
-     * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
      * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
      * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -4070,6 +4771,42 @@ export const FoldersApiFp = function(configuration?: Configuration) {
         });
       };
     },
+    /**
+     * ---    Update folder    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Errors    This request can return InvalidCreateFolderRequest error with 422 status code. This could happen because of these reasons:    - Folder name contains invalid characters.  - Folder name's length is larger than 255 characters.    ---
+     * @summary Update folder
+     * @param {string} folderId Folder Id
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {FolderUpdate} [folder_update]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updateFolder(
+      folderId: string,
+      Authorization: string,
+      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+      folder_update?: FolderUpdate,
+      options?: any
+    ): (fetch?: FetchAPI, basePath?: string) => Promise<FolderResult> {
+      const localVarFetchArgs = FoldersApiFetchParamCreator(
+        configuration
+      ).updateFolder(folderId, Authorization, Accept, folder_update, options);
+      return (
+        fetch: FetchAPI = portableFetch,
+        basePath: string = BASE_PATH
+      ) => {
+        return fetch(
+          basePath + localVarFetchArgs.url,
+          localVarFetchArgs.options
+        ).then((response) => {
+          if (response.status >= 200 && response.status < 300) {
+            return response.json();
+          } else {
+            throw response;
+          }
+        });
+      };
+    },
   };
 };
 
@@ -4084,12 +4821,12 @@ export const FoldersApiFactory = function(
 ) {
   return {
     /**
-     * ---    Create new folder    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:modify*.    ### Errors    This request can return InvalidCreateFolderRequest error with 422 status code. This could happen because of these reasons:    - Folder name contains invalid characters.  - Folder name's length is larger than 255 characters.    ---
+     * ---    Create new folder    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Errors    This request can return InvalidCreateFolderRequest error with 422 status code. This could happen because of these reasons:    - Folder name contains invalid characters.  - Folder name's length is larger than 255 characters.    ---
      * @summary Create folder
      * @param {string} folderId Folder Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:modify&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
-     * @param {FolderCreate} [folder__create]
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {FolderCreate} [folder_create]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -4097,23 +4834,23 @@ export const FoldersApiFactory = function(
       folderId: string,
       Authorization: string,
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
-      folder__create?: FolderCreate,
+      folder_create?: FolderCreate,
       options?: any
     ) {
       return FoldersApiFp(configuration).createFolder(
         folderId,
         Authorization,
         Accept,
-        folder__create,
+        folder_create,
         options
       )(fetch, basePath);
     },
     /**
-     * ---    Delete a folder    ### Notes    Folder moved to the recycle bin will be completely removed after 30 days.    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:modify*.    ---
+     * ---    Delete a folder    ### Notes    Folder moved to the recycle bin will be completely removed after 30 days.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
      * @summary Delete folder
      * @param {string} folderId Folder Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:modify&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -4131,11 +4868,11 @@ export const FoldersApiFactory = function(
       )(fetch, basePath);
     },
     /**
-     * ---    Delete a folder from the recycle bin    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:modify*.    ---
+     * ---    Delete a folder from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
      * @summary Delete folder from recycle bin
      * @param {string} folderId Folder Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:modify&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -4153,11 +4890,11 @@ export const FoldersApiFactory = function(
       )(fetch, basePath);
     },
     /**
-     * ---    Retrieves folder    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+     * ---    Retrieves folder    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
      * @summary Get folder
      * @param {string} folderId Folder Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -4175,13 +4912,13 @@ export const FoldersApiFactory = function(
       )(fetch, basePath);
     },
     /**
-     * ---    Retrieves files and folders    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+     * ---    Retrieves files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
      * @summary Get folders and files in folder
      * @param {string} folderId Folder Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
      * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
      * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -4203,13 +4940,13 @@ export const FoldersApiFactory = function(
       )(fetch, basePath);
     },
     /**
-     * ---    Get deleted files and folders    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+     * ---    Get deleted files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
      * @summary Get folders and files in recycle bin
      * @param {string} projectId Project Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
      * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
      * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -4231,13 +4968,13 @@ export const FoldersApiFactory = function(
       )(fetch, basePath);
     },
     /**
-     * ---    Retrieves folders    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+     * ---    Retrieves folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
      * @summary Get folders in folder
      * @param {string} folderId Folder Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
      * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
      * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -4259,11 +4996,39 @@ export const FoldersApiFactory = function(
       )(fetch, basePath);
     },
     /**
-     * ---    Restore deleted folder from the recycle bin    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:modify*.    ---
+     * ---    Retrieves top level files and folders by project    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * @summary Get top level folders and files by project
+     * @param {string} projectId Project Id
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
+     * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
+     * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getTopLevelFoldersAndFilesByProject(
+      projectId: string,
+      Authorization: string,
+      top?: number,
+      skip?: number,
+      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+      options?: any
+    ) {
+      return FoldersApiFp(configuration).getTopLevelFoldersAndFilesByProject(
+        projectId,
+        Authorization,
+        top,
+        skip,
+        Accept,
+        options
+      )(fetch, basePath);
+    },
+    /**
+     * ---    Restore deleted folder from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
      * @summary Restore folder
      * @param {string} folderId Folder Id
-     * @param {string} Authorization OAuth access token with scope &#39;storage:modify&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -4281,14 +5046,14 @@ export const FoldersApiFactory = function(
       )(fetch, basePath);
     },
     /**
-     * ---    Finds files and folders in folder by name    ### Notes    This query supports wildcard characters in the name parameter    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+     * ---    Finds files and folders in folder by name    ### Notes    This query supports wildcard characters in the name parameter    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
      * @summary Search for folders and files in folder
      * @param {string} folderId Folder Id
      * @param {string} name Item name
-     * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
      * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
      * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -4311,6 +5076,31 @@ export const FoldersApiFactory = function(
         options
       )(fetch, basePath);
     },
+    /**
+     * ---    Update folder    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Errors    This request can return InvalidCreateFolderRequest error with 422 status code. This could happen because of these reasons:    - Folder name contains invalid characters.  - Folder name's length is larger than 255 characters.    ---
+     * @summary Update folder
+     * @param {string} folderId Folder Id
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {FolderUpdate} [folder_update]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updateFolder(
+      folderId: string,
+      Authorization: string,
+      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+      folder_update?: FolderUpdate,
+      options?: any
+    ) {
+      return FoldersApiFp(configuration).updateFolder(
+        folderId,
+        Authorization,
+        Accept,
+        folder_update,
+        options
+      )(fetch, basePath);
+    },
   };
 };
 
@@ -4322,12 +5112,12 @@ export const FoldersApiFactory = function(
  */
 export class FoldersApi extends BaseAPI {
   /**
-   * ---    Create new folder    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:modify*.    ### Errors    This request can return InvalidCreateFolderRequest error with 422 status code. This could happen because of these reasons:    - Folder name contains invalid characters.  - Folder name's length is larger than 255 characters.    ---
+   * ---    Create new folder    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Errors    This request can return InvalidCreateFolderRequest error with 422 status code. This could happen because of these reasons:    - Folder name contains invalid characters.  - Folder name's length is larger than 255 characters.    ---
    * @summary Create folder
    * @param {string} folderId Folder Id
-   * @param {string} Authorization OAuth access token with scope &#39;storage:modify&#39;
-   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
-   * @param {FolderCreate} [folder__create]
+   * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+   * @param {FolderCreate} [folder_create]
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FoldersApi
@@ -4336,24 +5126,24 @@ export class FoldersApi extends BaseAPI {
     folderId: string,
     Authorization: string,
     Accept?: "application/vnd.bentley.itwin-platform.v1+json",
-    folder__create?: FolderCreate,
+    folder_create?: FolderCreate,
     options?: any
   ) {
     return FoldersApiFp(this.configuration).createFolder(
       folderId,
       Authorization,
       Accept,
-      folder__create,
+      folder_create,
       options
     )(this.fetch, this.basePath);
   }
 
   /**
-   * ---    Delete a folder    ### Notes    Folder moved to the recycle bin will be completely removed after 30 days.    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:modify*.    ---
+   * ---    Delete a folder    ### Notes    Folder moved to the recycle bin will be completely removed after 30 days.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
    * @summary Delete folder
    * @param {string} folderId Folder Id
-   * @param {string} Authorization OAuth access token with scope &#39;storage:modify&#39;
-   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+   * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FoldersApi
@@ -4373,11 +5163,11 @@ export class FoldersApi extends BaseAPI {
   }
 
   /**
-   * ---    Delete a folder from the recycle bin    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:modify*.    ---
+   * ---    Delete a folder from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
    * @summary Delete folder from recycle bin
    * @param {string} folderId Folder Id
-   * @param {string} Authorization OAuth access token with scope &#39;storage:modify&#39;
-   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+   * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FoldersApi
@@ -4397,11 +5187,11 @@ export class FoldersApi extends BaseAPI {
   }
 
   /**
-   * ---    Retrieves folder    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+   * ---    Retrieves folder    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
    * @summary Get folder
    * @param {string} folderId Folder Id
-   * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
-   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+   * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
+   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FoldersApi
@@ -4421,13 +5211,13 @@ export class FoldersApi extends BaseAPI {
   }
 
   /**
-   * ---    Retrieves files and folders    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+   * ---    Retrieves files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
    * @summary Get folders and files in folder
    * @param {string} folderId Folder Id
-   * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
+   * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
    * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
    * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
-   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FoldersApi
@@ -4451,13 +5241,13 @@ export class FoldersApi extends BaseAPI {
   }
 
   /**
-   * ---    Get deleted files and folders    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+   * ---    Get deleted files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
    * @summary Get folders and files in recycle bin
    * @param {string} projectId Project Id
-   * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
+   * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
    * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
    * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
-   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FoldersApi
@@ -4481,13 +5271,13 @@ export class FoldersApi extends BaseAPI {
   }
 
   /**
-   * ---    Retrieves folders    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+   * ---    Retrieves folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
    * @summary Get folders in folder
    * @param {string} folderId Folder Id
-   * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
+   * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
    * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
    * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
-   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FoldersApi
@@ -4511,11 +5301,41 @@ export class FoldersApi extends BaseAPI {
   }
 
   /**
-   * ---    Restore deleted folder from the recycle bin    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:modify*.    ---
+   * ---    Retrieves top level files and folders by project    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+   * @summary Get top level folders and files by project
+   * @param {string} projectId Project Id
+   * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
+   * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
+   * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
+   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof FoldersApi
+   */
+  public getTopLevelFoldersAndFilesByProject(
+    projectId: string,
+    Authorization: string,
+    top?: number,
+    skip?: number,
+    Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+    options?: any
+  ) {
+    return FoldersApiFp(this.configuration).getTopLevelFoldersAndFilesByProject(
+      projectId,
+      Authorization,
+      top,
+      skip,
+      Accept,
+      options
+    )(this.fetch, this.basePath);
+  }
+
+  /**
+   * ---    Restore deleted folder from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
    * @summary Restore folder
    * @param {string} folderId Folder Id
-   * @param {string} Authorization OAuth access token with scope &#39;storage:modify&#39;
-   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+   * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FoldersApi
@@ -4535,14 +5355,14 @@ export class FoldersApi extends BaseAPI {
   }
 
   /**
-   * ---    Finds files and folders in folder by name    ### Notes    This query supports wildcard characters in the name parameter    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *storage:read*.    ---
+   * ---    Finds files and folders in folder by name    ### Notes    This query supports wildcard characters in the name parameter    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
    * @summary Search for folders and files in folder
    * @param {string} folderId Folder Id
    * @param {string} name Item name
-   * @param {string} Authorization OAuth access token with scope &#39;storage:read&#39;
+   * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
    * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
    * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
-   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FoldersApi
@@ -4563,6 +5383,33 @@ export class FoldersApi extends BaseAPI {
       skip,
       top,
       Accept,
+      options
+    )(this.fetch, this.basePath);
+  }
+
+  /**
+   * ---    Update folder    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Errors    This request can return InvalidCreateFolderRequest error with 422 status code. This could happen because of these reasons:    - Folder name contains invalid characters.  - Folder name's length is larger than 255 characters.    ---
+   * @summary Update folder
+   * @param {string} folderId Folder Id
+   * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+   * @param {FolderUpdate} [folder_update]
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof FoldersApi
+   */
+  public updateFolder(
+    folderId: string,
+    Authorization: string,
+    Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+    folder_update?: FolderUpdate,
+    options?: any
+  ) {
+    return FoldersApiFp(this.configuration).updateFolder(
+      folderId,
+      Authorization,
+      Accept,
+      folder_update,
       options
     )(this.fetch, this.basePath);
   }
