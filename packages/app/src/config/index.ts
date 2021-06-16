@@ -17,7 +17,7 @@ interface DemoPortalBuddiConfig {
 export interface DemoPortalConfig {
   auth?: DemoPortalAuthConfig;
   buddi?: DemoPortalBuddiConfig;
-  userInfo?: UserInfo;
+  ldClientId?: string;
 }
 
 interface EnvConfig {
@@ -49,5 +49,7 @@ export const getConfig = async (): Promise<DemoPortalConfig> => {
         process.env.IMJS_AUTH_CLIENT_CLIENT_ID ??
         "",
     },
+    ldClientId:
+      fetchedConfig?.ldClientId ?? process.env.IMJS_LD_CLIENT_ID ?? "",
   };
 };
