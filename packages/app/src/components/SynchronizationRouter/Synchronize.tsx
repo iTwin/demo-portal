@@ -33,19 +33,13 @@ import {
   ExecutionResult,
   ExecutionState,
 } from "../../api/synchronization";
+import { extractIdsFromLastRunDetails } from "../../api/synchronizationApiUtils";
 import { useApiPrefix, usePrefixedUrl } from "../../api/useApiPrefix";
 import "./Synchronize.scss";
 import { useSynchronizeFileUploader } from "./useSynchronizeFileUploader";
 
 type CreateTypeFromInterface<Interface> = {
   [Property in keyof Interface]: Interface[Property];
-};
-
-const extractIdsFromLastRunDetails = (href: string | undefined) => {
-  if (!href) {
-    return [];
-  }
-  return href.split("runs")[1]?.split("/") ?? [];
 };
 
 const getAlertType = (state: string) =>

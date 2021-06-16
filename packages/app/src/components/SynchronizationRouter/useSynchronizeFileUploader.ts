@@ -2,7 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import React from "react";
+import { Alert } from "@itwin/itwinui-react";
+import React, { ComponentPropsWithoutRef } from "react";
 
 import {
   BASE_PATH as STORAGE_BASE,
@@ -10,19 +11,23 @@ import {
   FoldersApi,
 } from "../../api/storage";
 import {
-  BASE_PATH as SYNCH_BASE,
-  DefaultApi as SynchronizationApi,
-  IModelBridgeType,
-} from "../../api/synchronization";
-import { ProjectWithLinks, useApiData } from "../../api/useApiData";
-import { usePrefixedUrl } from "../../api/useApiPrefix";
-import {
   completeFileCreation,
   extractFolderIdFromStorageHref,
   getDemoFolderId,
   getIModelFolderId,
   uploadFileWithProgress,
-} from "./demoFolderUtils";
+} from "../../api/storageApiUtils";
+import {
+  BASE_PATH as SYNCH_BASE,
+  DefaultApi as SynchronizationApi,
+  IModelBridgeType,
+} from "../../api/synchronization";
+import {
+  addFileToDemoConnection,
+  getDemoConnectionAndSourceFiles,
+} from "../../api/synchronizationApiUtils";
+import { ProjectWithLinks, useApiData } from "../../api/useApiData";
+import { usePrefixedUrl } from "../../api/useApiPrefix";
 
 interface ConnectionFileUploaderOptions {
   projectId: string;
@@ -41,6 +46,14 @@ const getBridgeType = (fileName: string) => {
     fileName.split(".").reverse()[0]
   ];
 };
+
+export const getAlertType = (state: string) =>
+  (({
+    Success: "positive",
+    Error: "negative",
+  } as { [state: string]: ComponentPropsWithoutRef<typeof Alert>["type"] })[
+    state
+  ] ?? "informational");
 
 export const useSynchronizeFileUploader = ({
   projectId,
@@ -103,17 +116,26 @@ export const useSynchronizeFileUploader = ({
           undefined,
           synchronizationBaseUrl
         );
-        const connections = await synchronizeApi.getConnections(
+        const {
+          connection,
+          sourceFiles,
+        } = await getDemoConnectionAndSourceFiles(
           iModelId,
-          accessToken
+          accessToken,
+          synchronizeApi
         );
-        const existingConnection = connections.connections?.find(
-          (connection) => connection.displayName === target.name
-        );
-        if (existingConnection) {
-          throw new Error(
-            `Connection for ${fileName} already exists, update is not supported, yet ;)`
+        const demoPortalConnection = connection;
+        if (sourceFiles?.length > 0) {
+          const sourceFile = sourceFiles.find(
+            (file) =>
+              file.lastKnownFileName?.toLocaleLowerCase() ===
+              fileName.toLocaleLowerCase()
           );
+          if (sourceFile) {
+            throw new Error(
+              `Connection for ${fileName} already exists, update is not supported, yet ;)`
+            );
+          }
         }
 
         setStep(2);
@@ -134,21 +156,19 @@ export const useSynchronizeFileUploader = ({
           folderApi
         );
 
-        setStep(3);
         const fileApi = new FilesApi(undefined, StorageBaseUrl);
         setStatus("Creating file target");
         const fileUpload = await fileApi.createFile(
           iModelFolderId,
           accessToken,
-          undefined,
+          "application/vnd.bentley.itwin-platform.v1+json",
           {
-            file: {
-              description: "Demo-portal connection file",
-              displayName: fileName,
-            },
+            description: "Demo-portal connection file",
+            displayName: fileName,
           }
         );
 
+        setStep(3);
         setStatus("Uploading file");
         const uploadTarget = fileUpload._links?.uploadUrl?.href;
         if (!uploadTarget) {
@@ -161,48 +181,30 @@ export const useSynchronizeFileUploader = ({
           fileUpload._links?.completeUrl?.href,
           accessToken
         );
-        if (!file.file.id) {
+        if (!file.file?.id) {
           throw new Error("Uploaded file have no Id!");
         }
 
         setStep(4);
-        setStatus("Creating connection to uploaded file");
-        const fileConnection = await synchronizeApi.createConnection(
+        setStatus("Connecting file to iModel");
+        const connectionId = await addFileToDemoConnection(
+          demoPortalConnection?.id,
+          file.file.id,
+          bridgeType,
           iModelId,
+          projectId,
+          email.toLocaleLowerCase(),
           accessToken,
-          {
-            connection: {
-              ownerEmail: email.toLocaleLowerCase(),
-              displayName: fileName,
-              sourceFiles: [
-                {
-                  fileId: file.file.id,
-                  isSpatialRoot: false,
-                  iModelBridgeType: bridgeType,
-                },
-              ],
-              projectShareLocation: {
-                projectId,
-              },
-            },
-          }
+          synchronizeApi
         );
-        if (!fileConnection.connection?.id) {
-          throw new Error("Connection creation failed");
-        }
-        // Disabled at the moment, the connection is not "Working" at this point, owner need to be updated.
-        // setStatus("Running the connection");
-        // await synchronizeApi.runConnection(
-        //   fileConnection.connection.id,
-        //   iModelId,
-        //   accessToken
-        // );
+
+        //Disabled at the moment, the connection is not "Working" at this point, owner need to be updated.
+        setStatus("Running the connection");
+        await synchronizeApi.runConnection(connectionId, iModelId, accessToken);
         onSuccess?.();
         setStep(5);
         setState("Success");
-        setStatus(
-          "File connected, click 'Open bridge portal' button and set yourself as the connection owner, then run the connection. (Yeah, I know... :) )"
-        );
+        setStatus("Synchronization started");
       } catch (error) {
         console.error(error);
         if (typeof error?.text === "function") {

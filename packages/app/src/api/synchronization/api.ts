@@ -22,7 +22,7 @@ import * as url from "url";
 
 import { Configuration } from "./configuration";
 
-export const BASE_PATH = "https://api.bentley.com/synchronization/v1".replace(
+export const BASE_PATH = "https://api.bentley.com/synchronization".replace(
   /\/+$/,
   ""
 );
@@ -776,6 +776,34 @@ export interface SourceFileCreate {
 /**
  *
  * @export
+ * @interface SourceFileCreatebody
+ */
+export interface SourceFileCreatebody {
+  /**
+   *
+   * @type {SourceFileCreate}
+   * @memberof SourceFileCreatebody
+   */
+  sourceFile?: SourceFileCreate;
+}
+
+/**
+ *
+ * @export
+ * @interface SourceFileCreated
+ */
+export interface SourceFileCreated {
+  /**
+   *
+   * @type {SourceFile}
+   * @memberof SourceFileCreated
+   */
+  sourceFile?: SourceFile;
+}
+
+/**
+ *
+ * @export
  * @interface SourceFileSummary
  */
 export interface SourceFileSummary {
@@ -906,7 +934,7 @@ export const DefaultApiFetchParamCreator = function(
      * @summary Add Connection SourceFile
      * @param {string} connectionId
      * @param {string} Authorization OAuth access token with scope &#39;connections:modify&#39;
-     * @param {SourceFileCreate} sourceFile__create
+     * @param {SourceFileCreatebody} sourceFile__create
      * @param {string} [imodelId] iModel Id
      * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
      * @param {*} [options] Override http request option.
@@ -915,7 +943,7 @@ export const DefaultApiFetchParamCreator = function(
     addConnectionSourcefile(
       connectionId: string,
       Authorization: string,
-      sourceFile__create: SourceFileCreate,
+      sourceFile__create: SourceFileCreatebody,
       imodelId?: string,
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
       options: any = {}
@@ -1009,7 +1037,7 @@ export const DefaultApiFetchParamCreator = function(
         options.headers
       );
       const needsSerialization =
-        <any>"SourceFileCreate" !== "string" ||
+        <any>"SourceFileCreatebody" !== "string" ||
         localVarRequestOptions.headers["Content-Type"] === "application/json";
       localVarRequestOptions.body = needsSerialization
         ? JSON.stringify(sourceFile__create || {})
@@ -2295,7 +2323,7 @@ export const DefaultApiFetchParamCreator = function(
      * @param {string} connectionId
      * @param {string} sourceFileId
      * @param {string} Authorization OAuth access token with scope &#39;connections:modify&#39;
-     * @param {SourceFileCreate} sourceFile__create
+     * @param {SourceFileCreatebody} sourceFile__create
      * @param {string} [imodelId] iModel Id
      * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
      * @param {*} [options] Override http request option.
@@ -2305,7 +2333,7 @@ export const DefaultApiFetchParamCreator = function(
       connectionId: string,
       sourceFileId: string,
       Authorization: string,
-      sourceFile__create: SourceFileCreate,
+      sourceFile__create: SourceFileCreatebody,
       imodelId?: string,
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
       options: any = {}
@@ -2411,7 +2439,7 @@ export const DefaultApiFetchParamCreator = function(
         options.headers
       );
       const needsSerialization =
-        <any>"SourceFileCreate" !== "string" ||
+        <any>"SourceFileCreatebody" !== "string" ||
         localVarRequestOptions.headers["Content-Type"] === "application/json";
       localVarRequestOptions.body = needsSerialization
         ? JSON.stringify(sourceFile__create || {})
@@ -2436,7 +2464,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
      * @summary Add Connection SourceFile
      * @param {string} connectionId
      * @param {string} Authorization OAuth access token with scope &#39;connections:modify&#39;
-     * @param {SourceFileCreate} sourceFile__create
+     * @param {SourceFileCreatebody} sourceFile__create
      * @param {string} [imodelId] iModel Id
      * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
      * @param {*} [options] Override http request option.
@@ -2445,11 +2473,11 @@ export const DefaultApiFp = function(configuration?: Configuration) {
     addConnectionSourcefile(
       connectionId: string,
       Authorization: string,
-      sourceFile__create: SourceFileCreate,
+      sourceFile__create: SourceFileCreatebody,
       imodelId?: string,
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
       options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<SourceFile> {
+    ): (fetch?: FetchAPI, basePath?: string) => Promise<SourceFileCreated> {
       const localVarFetchArgs = DefaultApiFetchParamCreator(
         configuration
       ).addConnectionSourcefile(
@@ -2576,7 +2604,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
       Authorization: string,
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
       options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<Connection> {
+    ): (fetch?: FetchAPI, basePath?: string) => Promise<ConnectionCreated> {
       const localVarFetchArgs = DefaultApiFetchParamCreator(
         configuration
       ).getConnection(connectionId, imodelId, Authorization, Accept, options);
@@ -2961,7 +2989,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
      * @param {string} connectionId
      * @param {string} sourceFileId
      * @param {string} Authorization OAuth access token with scope &#39;connections:modify&#39;
-     * @param {SourceFileCreate} sourceFile__create
+     * @param {SourceFileCreatebody} sourceFile__create
      * @param {string} [imodelId] iModel Id
      * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
      * @param {*} [options] Override http request option.
@@ -2971,7 +2999,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
       connectionId: string,
       sourceFileId: string,
       Authorization: string,
-      sourceFile__create: SourceFileCreate,
+      sourceFile__create: SourceFileCreatebody,
       imodelId?: string,
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
       options?: any
@@ -3021,7 +3049,7 @@ export const DefaultApiFactory = function(
      * @summary Add Connection SourceFile
      * @param {string} connectionId
      * @param {string} Authorization OAuth access token with scope &#39;connections:modify&#39;
-     * @param {SourceFileCreate} sourceFile__create
+     * @param {SourceFileCreatebody} sourceFile__create
      * @param {string} [imodelId] iModel Id
      * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
      * @param {*} [options] Override http request option.
@@ -3030,7 +3058,7 @@ export const DefaultApiFactory = function(
     addConnectionSourcefile(
       connectionId: string,
       Authorization: string,
-      sourceFile__create: SourceFileCreate,
+      sourceFile__create: SourceFileCreatebody,
       imodelId?: string,
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
       options?: any
@@ -3352,7 +3380,7 @@ export const DefaultApiFactory = function(
      * @param {string} connectionId
      * @param {string} sourceFileId
      * @param {string} Authorization OAuth access token with scope &#39;connections:modify&#39;
-     * @param {SourceFileCreate} sourceFile__create
+     * @param {SourceFileCreatebody} sourceFile__create
      * @param {string} [imodelId] iModel Id
      * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
      * @param {*} [options] Override http request option.
@@ -3362,7 +3390,7 @@ export const DefaultApiFactory = function(
       connectionId: string,
       sourceFileId: string,
       Authorization: string,
-      sourceFile__create: SourceFileCreate,
+      sourceFile__create: SourceFileCreatebody,
       imodelId?: string,
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
       options?: any
@@ -3392,7 +3420,7 @@ export class DefaultApi extends BaseAPI {
    * @summary Add Connection SourceFile
    * @param {string} connectionId
    * @param {string} Authorization OAuth access token with scope &#39;connections:modify&#39;
-   * @param {SourceFileCreate} sourceFile__create
+   * @param {SourceFileCreatebody} sourceFile__create
    * @param {string} [imodelId] iModel Id
    * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
    * @param {*} [options] Override http request option.
@@ -3402,7 +3430,7 @@ export class DefaultApi extends BaseAPI {
   public addConnectionSourcefile(
     connectionId: string,
     Authorization: string,
-    sourceFile__create: SourceFileCreate,
+    sourceFile__create: SourceFileCreatebody,
     imodelId?: string,
     Accept?: "application/vnd.bentley.itwin-platform.v1+json",
     options?: any
@@ -3747,7 +3775,7 @@ export class DefaultApi extends BaseAPI {
    * @param {string} connectionId
    * @param {string} sourceFileId
    * @param {string} Authorization OAuth access token with scope &#39;connections:modify&#39;
-   * @param {SourceFileCreate} sourceFile__create
+   * @param {SourceFileCreatebody} sourceFile__create
    * @param {string} [imodelId] iModel Id
    * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
    * @param {*} [options] Override http request option.
@@ -3758,7 +3786,7 @@ export class DefaultApi extends BaseAPI {
     connectionId: string,
     sourceFileId: string,
     Authorization: string,
-    sourceFile__create: SourceFileCreate,
+    sourceFile__create: SourceFileCreatebody,
     imodelId?: string,
     Accept?: "application/vnd.bentley.itwin-platform.v1+json",
     options?: any
