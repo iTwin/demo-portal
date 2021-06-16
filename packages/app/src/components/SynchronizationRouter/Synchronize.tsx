@@ -27,14 +27,12 @@ import { RouteComponentProps } from "@reach/router";
 import React, { ComponentPropsWithoutRef } from "react";
 
 import {
-  BASE_PATH as SYNCH_BASE,
   Connection,
-  DefaultApi as SynchronizationApi,
   ExecutionResult,
   ExecutionState,
-} from "../../api/synchronization";
-import { extractIdsFromLastRunDetails } from "../../api/synchronizationApiUtils";
-import { useApiPrefix, usePrefixedUrl } from "../../api/useApiPrefix";
+} from "../../api/synchronization/generated";
+import { SynchronizationClient } from "../../api/synchronization/synchronizationClient";
+import { useApiPrefix } from "../../api/useApiPrefix";
 import "./Synchronize.scss";
 import { useSynchronizeFileUploader } from "./useSynchronizeFileUploader";
 
@@ -62,26 +60,17 @@ export const Synchronize = ({
   accessToken,
   email,
 }: SynchronizeProps) => {
-  const synchronizationBaseUrl = usePrefixedUrl(SYNCH_BASE);
   const urlPrefix = useApiPrefix();
 
   const [connections, setConnections] = React.useState<any[]>([]);
   const fetchConnections = React.useCallback(async () => {
-    const api = new SynchronizationApi(undefined, synchronizationBaseUrl);
-    const connections = await api.getConnections(
-      iModelId,
-      accessToken,
-      undefined,
-      undefined,
-      undefined,
-      {
-        headers: {
-          Prefer: "return=representation",
-        },
-      }
-    );
+    if (!accessToken || !iModelId) {
+      return;
+    }
+    const client = new SynchronizationClient(urlPrefix, accessToken);
+    const connections = await client.getConnections(iModelId);
     setConnections(connections.connections ?? []);
-  }, [accessToken, iModelId, synchronizationBaseUrl]);
+  }, [accessToken, iModelId, urlPrefix]);
 
   React.useEffect(() => void fetchConnections(), [fetchConnections]);
 
@@ -240,7 +229,7 @@ export const Synchronize = ({
                       const [
                         connectionId,
                         runId,
-                      ] = extractIdsFromLastRunDetails(
+                      ] = SynchronizationClient.extractIdsFromLastRunDetails(
                         props.value?.lastRunDetails?.href
                       );
                       React.useEffect(() => {
@@ -248,17 +237,12 @@ export const Synchronize = ({
                           setStatus("Never ran");
                           return;
                         }
-                        const api = new SynchronizationApi(
-                          undefined,
-                          synchronizationBaseUrl
+                        const client = new SynchronizationClient(
+                          urlPrefix,
+                          accessToken
                         );
-                        api
-                          .getConnectionRun(
-                            connectionId,
-                            runId,
-                            accessToken,
-                            iModelId
-                          )
+                        client
+                          .getConnectionRun(iModelId, connectionId, runId)
                           .then((result) => {
                             if (
                               result.run?.endDateTime &&
@@ -306,16 +290,15 @@ export const Synchronize = ({
                     id: "btns",
                     accessor: "id",
                     Cell: (props) => {
-                      const api = new SynchronizationApi(
-                        undefined,
-                        synchronizationBaseUrl
+                      const client = new SynchronizationClient(
+                        urlPrefix,
+                        accessToken
                       );
                       const deleteConnection = async () => {
                         if (window.confirm("Confirm delete")) {
-                          await api.deleteConnection(
-                            props.value ?? "",
+                          await client.deleteConnection(
                             iModelId,
-                            accessToken
+                            props.value ?? ""
                           );
                           toaster.positive(
                             `Connection ${props.row.original.displayName} deleted!`
@@ -324,11 +307,7 @@ export const Synchronize = ({
                         }
                       };
                       const runConnection = async () => {
-                        await api.runConnection(
-                          props.value ?? "",
-                          iModelId,
-                          accessToken
-                        );
+                        await client.runConnection(iModelId, props.value ?? "");
                         toaster.positive(
                           `Connection ${props.row.original.displayName} scheduled!`
                         );
@@ -357,7 +336,7 @@ export const Synchronize = ({
                 ],
               },
             ],
-            [accessToken, fetchConnections, iModelId, synchronizationBaseUrl]
+            [accessToken, fetchConnections, iModelId, urlPrefix]
           )}
           emptyTableContent={
             "No existing connections, drop file above to create new connections"

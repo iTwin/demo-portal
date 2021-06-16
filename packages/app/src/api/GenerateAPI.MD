@@ -4,19 +4,21 @@ Note to myself, this is the "simplest" that we can use the storage api with mini
 
 After Exporting the OpenAPI v2 (json) file "xxx.json" (if the API changes),
 
-1. Compare current "xxxOpenAPIOrignial.json" file with "xxxOpenAPI.json" (right-click and "Select for compare" in VSCode)
+1. Compare current "xxxOriginal.json" file with "xxxAdjusted.json" (right-click and "Select for compare" in VSCode)
 
-2. Replicate relevant changes to "xxx.json". (Might need to adapt depending on the changes, but it should give a general guide, note that xxxOpenAPIOriginal.json have a 2 space indentation, so xxx.json should be saved once to apply these before comparing)
+2. Replicate relevant changes to "xxx.json". (Might need to adapt depending on the changes, but it should give a general guide, note that xxxOriginal.json have a 2 space indentation, so xxx.json should be saved once to apply these before comparing)
 
-3. Save updated "xxx.json" over "xxxOpenAPI.json".
+3. Save the original but properly indented (2 spaces) "xxx.json" over "xxxOriginal.json".
 
-4. From the root folder (or adapt the `${PWD}/packages/app/src/api` part if you prefer), run the following command (dont forget to replace the `xxx` part and start docker before... :) )
+4. Save updated "xxx.json" over "xxxAdjusted.json".
+
+5. From the root folder (or adapt the `${PWD}/packages/app/src/api` part if you prefer), run the following command (dont forget to replace the `xxx` part and start docker before... :) )
 
 ```ps
-docker run --rm -v "${PWD}/packages/app/src/api:/local" swaggerapi/swagger-codegen-cli generate -i /local/xxxOpenAPI.json -l typescript-fetch -o /local/xxx --additional-properties=supportsES6=true,modelPropertyNaming=original
+docker run --rm -v "${PWD}/packages/app/src/api/xxx:/local" swaggerapi/swagger-codegen-cli generate -i /local/openapi/xxxAdjusted.json -l typescript-fetch -o /local/generated --additional-properties=supportsES6=true,modelPropertyNaming=original
 ```
 
-5. After the command ran successfully, update the file `packages/app/src/api/xxx/api.ts` with these 2 additional lines on top of the file:
+6. After the command ran successfully, update the file `packages/app/src/api/xxx/generated/api.ts` with these 2 additional lines on top of the file:
 
 ```diff
 + /* eslint-disable */
@@ -27,11 +29,11 @@ docker run --rm -v "${PWD}/packages/app/src/api:/local" swaggerapi/swagger-codeg
 and `export` the `BASE_PATH` in it (Required for environment awareness):
 
 ```diff
-- const BASE_PATH = "https://api.bentley.com/xxx/v1".replace(
-+ export const BASE_PATH = "https://api.bentley.com/xxx/v1".replace(
+- const BASE_PATH = "https://api.bentley.com/xxx".replace(
++ export const BASE_PATH = "https://api.bentley.com/xxx".replace(
 ```
 
-6. Fix existing code from whatever have changed in the API as they are not guaranteed to be compatible in any way.
+7. Fix existing code from whatever have changed in the API as they are not guaranteed to be compatible in any way.
 
 ## Additional informations
 
