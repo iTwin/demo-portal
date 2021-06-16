@@ -2,7 +2,6 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-
 import { useConfig } from "../config/ConfigProvider";
 
 /**
@@ -25,12 +24,22 @@ export const useApiPrefix = () => {
 /**
  *
  * @param baseUrl
+ * @param prefix
  * @returns Url with proper prefix based on BUDDI environment configuration
  */
-export const usePrefixedUrl = (baseUrl?: string) => {
-  const prefix = useApiPrefix();
+export const prefixUrl = (baseUrl?: string, prefix?: string) => {
   if (prefix && baseUrl) {
     return baseUrl.replace("api.bentley.com", `${prefix}-api.bentley.com`);
   }
   return baseUrl;
+};
+
+/**
+ *
+ * @param baseUrl
+ * @returns Url with proper prefix based on BUDDI environment configuration
+ */
+export const usePrefixedUrl = (baseUrl?: string) => {
+  const prefix = useApiPrefix();
+  return prefixUrl(baseUrl, prefix);
 };

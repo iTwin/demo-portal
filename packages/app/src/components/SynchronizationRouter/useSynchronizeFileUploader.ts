@@ -5,29 +5,10 @@
 import { Alert } from "@itwin/itwinui-react";
 import React, { ComponentPropsWithoutRef } from "react";
 
-import {
-  BASE_PATH as STORAGE_BASE,
-  FilesApi,
-  FoldersApi,
-} from "../../api/storage";
-import {
-  completeFileCreation,
-  extractFolderIdFromStorageHref,
-  getDemoFolderId,
-  getIModelFolderId,
-  uploadFileWithProgress,
-} from "../../api/storageApiUtils";
-import {
-  BASE_PATH as SYNCH_BASE,
-  DefaultApi as SynchronizationApi,
-  IModelBridgeType,
-} from "../../api/synchronization";
-import {
-  addFileToDemoConnection,
-  getDemoConnectionAndSourceFiles,
-} from "../../api/synchronizationApiUtils";
+import { StorageClient } from "../../api/storage/storageClient";
+import { SynchronizationClient } from "../../api/synchronization/synchronizationClient";
 import { ProjectWithLinks, useApiData } from "../../api/useApiData";
-import { usePrefixedUrl } from "../../api/useApiPrefix";
+import { useApiPrefix } from "../../api/useApiPrefix";
 
 interface ConnectionFileUploaderOptions {
   projectId: string;
@@ -35,17 +16,6 @@ interface ConnectionFileUploaderOptions {
   accessToken: string;
   email: string;
 }
-
-const getBridgeType = (fileName: string) => {
-  return ({
-    dgn: IModelBridgeType.MSTN,
-    rvt: IModelBridgeType.REVIT,
-    nwd: IModelBridgeType.NWD,
-    ifc: IModelBridgeType.IFC,
-  } as { [extension: string]: IModelBridgeType })[
-    fileName.split(".").reverse()[0]
-  ];
-};
 
 export const getAlertType = (state: string) =>
   (({
@@ -61,8 +31,7 @@ export const useSynchronizeFileUploader = ({
   accessToken = "",
   email = "",
 }: ConnectionFileUploaderOptions) => {
-  const synchronizationBaseUrl = usePrefixedUrl(SYNCH_BASE);
-  const StorageBaseUrl = usePrefixedUrl(STORAGE_BASE);
+  const urlPrefix = useApiPrefix();
   const { results } = useApiData<{ project: ProjectWithLinks }>({
     url: projectId
       ? `https://api.bentley.com/projects/${projectId}`
@@ -92,7 +61,9 @@ export const useSynchronizeFileUploader = ({
         if (email === "") {
           throw new Error("User email required, none provided");
         }
-        const projectFolderId = extractFolderIdFromStorageHref(storageLinkHref);
+        const projectFolderId = StorageClient.extractFolderIdFromStorageHref(
+          storageLinkHref
+        );
         if (!projectFolderId) {
           throw new Error(
             "Project folder could not be determined, please refresh the page"
@@ -104,7 +75,7 @@ export const useSynchronizeFileUploader = ({
         }
         const target = fileList[0];
         const fileName = target?.name;
-        const bridgeType = getBridgeType(fileName);
+        const bridgeType = SynchronizationClient.getBridgeType(fileName);
         if (!bridgeType) {
           throw new Error(
             "This file type is not supported, current file support are .dgn, .rvt, .nwd and .ifc"
@@ -112,18 +83,14 @@ export const useSynchronizeFileUploader = ({
         }
 
         setStatus("Validating new connection");
-        const synchronizeApi = new SynchronizationApi(
-          undefined,
-          synchronizationBaseUrl
+        const synchronization = new SynchronizationClient(
+          urlPrefix,
+          accessToken
         );
         const {
           connection,
           sourceFiles,
-        } = await getDemoConnectionAndSourceFiles(
-          iModelId,
-          accessToken,
-          synchronizeApi
-        );
+        } = await synchronization.getDemoConnectionAndSourceFiles(iModelId);
         const demoPortalConnection = connection;
         if (sourceFiles?.length > 0) {
           const sourceFile = sourceFiles.find(
@@ -140,33 +107,23 @@ export const useSynchronizeFileUploader = ({
 
         setStep(2);
         setStatus("Validating demo portal file share");
-        const folderApi = new FoldersApi(undefined, StorageBaseUrl);
-        const demoFolderId = await getDemoFolderId(
+        const storage = new StorageClient(urlPrefix, accessToken);
+        const demoFolderId = await storage.getDemoFolderId(
           projectFolderId,
-          accessToken,
-          true,
-          folderApi
+          true
         );
         setStatus("Validating iModel file share");
-        const iModelFolderId = await getIModelFolderId(
+        const iModelFolderId = await storage.getIModelFolderId(
           demoFolderId,
           iModelId,
-          accessToken,
-          true,
-          folderApi
+          true
         );
 
-        const fileApi = new FilesApi(undefined, StorageBaseUrl);
         setStatus("Creating file target");
-        const fileUpload = await fileApi.createFile(
-          iModelFolderId,
-          accessToken,
-          "application/vnd.bentley.itwin-platform.v1+json",
-          {
-            description: "Demo-portal connection file",
-            displayName: fileName,
-          }
-        );
+        const fileUpload = await storage.createFile(iModelFolderId, {
+          description: "Demo-portal connection file",
+          displayName: fileName,
+        });
 
         setStep(3);
         setStatus("Uploading file");
@@ -174,12 +131,11 @@ export const useSynchronizeFileUploader = ({
         if (!uploadTarget) {
           throw new Error("No upload target");
         }
-        await uploadFileWithProgress(uploadTarget, target, setProgress);
+        await storage.uploadFileWithProgress(uploadTarget, target, setProgress);
 
         setStatus("Completing file creation");
-        const file = await completeFileCreation(
-          fileUpload._links?.completeUrl?.href,
-          accessToken
+        const file = await storage.completeFileCreation(
+          fileUpload._links?.completeUrl?.href
         );
         if (!file.file?.id) {
           throw new Error("Uploaded file have no Id!");
@@ -187,20 +143,18 @@ export const useSynchronizeFileUploader = ({
 
         setStep(4);
         setStatus("Connecting file to iModel");
-        const connectionId = await addFileToDemoConnection(
+        const connectionId = await synchronization.addFileToDemoConnection(
+          projectId,
+          iModelId,
           demoPortalConnection?.id,
           file.file.id,
           bridgeType,
-          iModelId,
-          projectId,
-          email.toLocaleLowerCase(),
-          accessToken,
-          synchronizeApi
+          email.toLocaleLowerCase()
         );
 
         //Disabled at the moment, the connection is not "Working" at this point, owner need to be updated.
         setStatus("Running the connection");
-        await synchronizeApi.runConnection(connectionId, iModelId, accessToken);
+        await synchronization.runConnection(iModelId, connectionId);
         onSuccess?.();
         setStep(5);
         setState("Success");
@@ -222,15 +176,7 @@ export const useSynchronizeFileUploader = ({
         setState("Error");
       }
     },
-    [
-      StorageBaseUrl,
-      synchronizationBaseUrl,
-      accessToken,
-      email,
-      iModelId,
-      projectId,
-      storageLinkHref,
-    ]
+    [accessToken, email, iModelId, projectId, storageLinkHref, urlPrefix]
   );
   return { uploadFiles, status, progress, state, step };
 };
