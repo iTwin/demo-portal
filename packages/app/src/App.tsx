@@ -86,6 +86,7 @@ const App: React.FC = () => {
 
   return (
     <ConfigProvider {...appConfig}>
+      <LaunchDarklyLauncher />
       <MainContainer
         header={
           <Header
@@ -131,4 +132,4 @@ const App: React.FC = () => {
   );
 };
 
-export default LaunchDarklyLauncher(App);
+export default App;

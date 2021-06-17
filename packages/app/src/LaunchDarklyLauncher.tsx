@@ -3,31 +3,30 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { UserInfo } from "@bentley/itwin-client";
-import { withLDProvider } from "launchdarkly-react-client-sdk";
+import { LDProvider } from "launchdarkly-react-client-sdk";
+import { ProviderConfig } from "launchdarkly-react-client-sdk/lib/types";
 import React, { useEffect, useState } from "react";
 
 import AuthorizationClient from "./AuthorizationClient";
 
-export const LaunchDarklyLauncher = (app: any) => {
-  const clientID = process.env.IMJS_LD_CLIENT_ID;
-  const deferInitialization = false;
+export const LaunchDarklyLauncher = () => {
+  const props: ProviderConfig = {
+    clientSideID: process.env.IMJS_LD_CLIENT_ID as string,
+    deferInitialization: false,
+  };
   const [user, setUser] = useState<UserInfo>();
 
   useEffect(() => {
-    AuthorizationClient.apimClient.onUserStateChanged.addListener((token) => {
+    AuthorizationClient.apimClient?.onUserStateChanged.addListener((token) => {
       setUser(token?.getUserInfo());
     });
   });
 
   const UpdatedLaunchDarklyApp = (user: UserInfo | undefined) => {
-    return withLDProvider({
-      clientSideID: clientID as string,
-      deferInitialization: deferInitialization,
-      user: {
-        key: user?.id.toUpperCase(),
-        name: user?.email?.id,
-      },
-    })(app);
+    const userProps = { key: user?.id, name: user?.email?.id };
+    const newProps = { ...props, userProps };
+
+    return <LDProvider {...newProps} />;
   };
 
   return UpdatedLaunchDarklyApp(user);

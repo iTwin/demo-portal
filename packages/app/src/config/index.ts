@@ -1,5 +1,3 @@
-import { UserInfo } from "@bentley/itwin-client";
-
 /*---------------------------------------------------------------------------------------------
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
@@ -50,6 +48,8 @@ export const getConfig = async (): Promise<DemoPortalConfig> => {
         "",
     },
     ldClientId:
-      fetchedConfig?.ldClientId ?? process.env.IMJS_LD_CLIENT_ID ?? "",
+      fetchedConfig?.envConfig.ldClientId ??
+      process.env.IMJS_LD_CLIENT_ID ??
+      "",
   };
 };
