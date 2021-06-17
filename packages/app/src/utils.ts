@@ -12,3 +12,7 @@ type Falsy = false | 0 | "" | null | undefined;
  */
 export const spreadIf: <T>(addIfTrue: T | Falsy) => [T] | [] = (addIfTrue) =>
   addIfTrue ? [addIfTrue] : [];
+
+export type CreateTypeFromInterface<Interface> = {
+  [Property in keyof Interface]: Interface[Property];
+};
