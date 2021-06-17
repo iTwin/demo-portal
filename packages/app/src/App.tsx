@@ -85,50 +85,51 @@ const App: React.FC = () => {
   };
 
   return (
-    <ConfigProvider {...appConfig}>
-      <LaunchDarklyLauncher />
-      <MainContainer
-        header={
-          <Header
-            handleLogin={onLoginClick}
-            loggedIn={isAuthorized}
-            handleLogout={onLogoutClick}
-            accessTokenObject={accessTokenObject}
-          />
-        }
-        sidebar={<Sidebar />}
-      >
-        {isLoggingIn ? (
-          <span>"Logging in...."</span>
-        ) : (
-          isAuthorized && (
-            <Router className={"router"}>
-              <ViewRouter accessToken={accessToken} path="view/*" />
-              <SynchronizationRouter
-                path="synchronize/*"
-                accessToken={accessToken}
-                email={accessTokenObject?.getUserInfo()?.email?.id ?? ""}
-              />
-              <StayTunedRouter
-                path="validate/*"
-                featureName={"Validate iModel"}
-              />
-              <StayTunedRouter
-                path="compare/*"
-                featureName={"Version Compare"}
-              />
-              <StayTunedRouter path="query/*" featureName={"Query"} />
-              <StayTunedRouter path="report/*" featureName={"Report"} />
-              <StayTunedRouter
-                path="ai-ml/*"
-                featureName={"Artifical Intelligence - Machine Learning"}
-              />
-              <Redirect noThrow={true} from="/" to="view" default={true} />
-            </Router>
-          )
-        )}
-      </MainContainer>
-    </ConfigProvider>
+    <LaunchDarklyLauncher>
+      <ConfigProvider {...appConfig}>
+        <MainContainer
+          header={
+            <Header
+              handleLogin={onLoginClick}
+              loggedIn={isAuthorized}
+              handleLogout={onLogoutClick}
+              accessTokenObject={accessTokenObject}
+            />
+          }
+          sidebar={<Sidebar />}
+        >
+          {isLoggingIn ? (
+            <span>"Logging in...."</span>
+          ) : (
+            isAuthorized && (
+              <Router className={"router"}>
+                <ViewRouter accessToken={accessToken} path="view/*" />
+                <SynchronizationRouter
+                  path="synchronize/*"
+                  accessToken={accessToken}
+                  email={accessTokenObject?.getUserInfo()?.email?.id ?? ""}
+                />
+                <StayTunedRouter
+                  path="validate/*"
+                  featureName={"Validate iModel"}
+                />
+                <StayTunedRouter
+                  path="compare/*"
+                  featureName={"Version Compare"}
+                />
+                <StayTunedRouter path="query/*" featureName={"Query"} />
+                <StayTunedRouter path="report/*" featureName={"Report"} />
+                <StayTunedRouter
+                  path="ai-ml/*"
+                  featureName={"Artifical Intelligence - Machine Learning"}
+                />
+                <Redirect noThrow={true} from="/" to="view" default={true} />
+              </Router>
+            )
+          )}
+        </MainContainer>
+      </ConfigProvider>
+    </LaunchDarklyLauncher>
   );
 };
 
