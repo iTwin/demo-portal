@@ -85,8 +85,8 @@ const App: React.FC = () => {
   };
 
   return (
-    <LaunchDarklyLauncher>
-      <ConfigProvider {...appConfig}>
+    <ConfigProvider {...appConfig}>
+      <LaunchDarklyLauncher>
         <MainContainer
           header={
             <Header
@@ -128,8 +128,8 @@ const App: React.FC = () => {
             )
           )}
         </MainContainer>
-      </ConfigProvider>
-    </LaunchDarklyLauncher>
+      </LaunchDarklyLauncher>
+    </ConfigProvider>
   );
 };
 
