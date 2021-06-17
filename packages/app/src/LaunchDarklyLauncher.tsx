@@ -3,8 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { UserInfo } from "@bentley/itwin-client";
-import { render } from "@testing-library/react";
-import { asyncWithLDProvider, LDProvider } from "launchdarkly-react-client-sdk";
+import { LDProvider } from "launchdarkly-react-client-sdk";
 import { ProviderConfig } from "launchdarkly-react-client-sdk/lib/types";
 import React, { useEffect, useState } from "react";
 
