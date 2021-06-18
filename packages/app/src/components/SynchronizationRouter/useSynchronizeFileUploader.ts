@@ -154,11 +154,20 @@ export const useSynchronizeFileUploader = ({
 
         //Disabled at the moment, the connection is not "Working" at this point, owner need to be updated.
         setStatus("Running the connection");
-        await synchronization.runConnection(iModelId, connectionId);
+        const runStatus = await synchronization.runConnection(
+          iModelId,
+          connectionId
+        );
+        if (runStatus.status === 303) {
+          setStatus(
+            "Complete, synchronization must be started after current run"
+          );
+        } else {
+          setStatus("Synchronization started");
+        }
         onSuccess?.();
         setStep(5);
         setState("Success");
-        setStatus("Synchronization started");
       } catch (error) {
         console.error(error);
         if (typeof error?.text === "function") {

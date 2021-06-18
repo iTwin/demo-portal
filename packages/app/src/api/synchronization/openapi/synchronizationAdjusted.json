@@ -1457,7 +1457,7 @@
         "bridgeType": {
           "type": "string"
         },
-        "Tasks": {
+        "tasks": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/Task"

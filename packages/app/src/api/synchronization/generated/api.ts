@@ -495,7 +495,7 @@ export interface Job {
    * @type {Array<Task>}
    * @memberof Job
    */
-  Tasks?: Array<Task>;
+  tasks?: Array<Task>;
 }
 
 /**

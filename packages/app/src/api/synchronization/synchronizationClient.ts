@@ -3,7 +3,13 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { prefixUrl } from "../useApiPrefix";
-import { BASE_PATH, DefaultApi, IModelBridgeType } from "./generated";
+import {
+  BASE_PATH,
+  DefaultApi,
+  IModelBridgeType,
+  Run,
+  SourceFile,
+} from "./generated";
 
 export class SynchronizationClient {
   private DEMO_CONNECTION_NAME = "demo-portal-imodel-connection";
@@ -21,7 +27,6 @@ export class SynchronizationClient {
    * @returns
    */
   static extractIdsFromLastRunDetails(href: string | undefined) {
-    console.log(href);
     if (!href) {
       return [];
     }
@@ -46,6 +51,41 @@ export class SynchronizationClient {
     } as { [extension: string]: IModelBridgeType })[
       fileName.split(".").reverse()[0]
     ];
+  }
+
+  /**
+   * Until API is fixed so task.sourceFileId actually returns a source.id, we need to guess
+   * which one it is. So far, the order are the same, except the jobs are by bridgeType
+   * (So, if 2 file, one revit, and one MSTN, both will have task index 0 in their respective jobs...)
+   * @param run Last run details fetched from getRun or getRuns api.
+   * @param sources List of available sourceFiles for this connection
+   * @param sourcesIndex Index in the sourceFiles of the file we are looking for
+   * @returns Task info
+   */
+  static getTaskInfoFromRun(
+    run: Run,
+    sources: SourceFile[],
+    sourcesIndex: number
+  ) {
+    let taskIndex = 0;
+    if (
+      sources.some((source) => {
+        if (
+          source.iModelBridgeType === sources[sourcesIndex].iModelBridgeType
+        ) {
+          if (source.id === sources[sourcesIndex].id) {
+            return true;
+          }
+          taskIndex++;
+        }
+        return false;
+      })
+    ) {
+      const job = run.jobs?.find((job) => {
+        return job.bridgeType === sources[sourcesIndex].iModelBridgeType;
+      });
+      return job?.tasks?.[taskIndex];
+    }
   }
 
   /**
@@ -129,7 +169,13 @@ export class SynchronizationClient {
   async getDemoConnectionAndSourceFiles(iModelId: string) {
     const connections = await this.synchronizationApi.getConnections(
       iModelId,
-      this.accessToken
+      this.accessToken,
+      undefined,
+      undefined,
+      "application/vnd.bentley.itwin-platform.v1+json",
+      {
+        headers: { Prefer: "return=representation" },
+      }
     );
     const demoPortalConnection = connections.connections?.find(
       (connection) => connection.displayName === this.DEMO_CONNECTION_NAME
