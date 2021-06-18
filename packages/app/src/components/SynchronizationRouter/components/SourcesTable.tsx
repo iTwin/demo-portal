@@ -77,11 +77,9 @@ export const SourcesTable = ({ sources }: SourcesTableProps) => {
                   props.data,
                   props.row.index
                 );
-                display =
-                  !task?.startDateTime ||
-                  task?.startDateTime?.startsWith("0001")
-                    ? ""
-                    : new Date(task?.startDateTime).toLocaleString();
+                display = SynchronizationClient.formatSynchronizationDate(
+                  task?.startDateTime
+                );
               }
               return display;
             },
@@ -98,10 +96,9 @@ export const SourcesTable = ({ sources }: SourcesTableProps) => {
                   props.data,
                   props.row.index
                 );
-                display =
-                  !task?.endDateTime || task?.endDateTime?.startsWith("0001")
-                    ? ""
-                    : new Date(task?.endDateTime).toLocaleString();
+                display = SynchronizationClient.formatSynchronizationDate(
+                  task?.endDateTime
+                );
               }
               return display;
             },
