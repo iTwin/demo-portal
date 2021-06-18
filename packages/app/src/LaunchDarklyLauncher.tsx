@@ -36,5 +36,9 @@ export const LaunchDarklyLauncher = (props: any) => {
     userProps,
   };
 
-  return <LDProvider {...LDProps}>{props.children}</LDProvider>;
+  return clientId ? (
+    <LDProvider {...LDProps}>{props.children}</LDProvider>
+  ) : (
+    props.children
+  );
 };
