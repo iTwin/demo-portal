@@ -15,13 +15,19 @@ interface TileDropTargetProps {
 
 export const TileDropTarget = ({ isDisabled = false }: TileDropTargetProps) => (
   <div className={"tile-drop-target"}>
-    <div className={"tile-upload-options"}>
-      <BridgeIcon bridgeType={IModelBridgeType.MSTN} />
-      <BridgeIcon bridgeType={IModelBridgeType.REVIT} />
-      <BridgeIcon bridgeType={IModelBridgeType.NWD} />
-      <BridgeIcon bridgeType={IModelBridgeType.IFC} />
-    </div>
-    {isDisabled ? <SvgRemove /> : <SvgUpload className={"tile-upload-icon"} />}
+    {!isDisabled && (
+      <div className={"tile-upload-options"}>
+        <BridgeIcon bridgeType={IModelBridgeType.MSTN} />
+        <BridgeIcon bridgeType={IModelBridgeType.REVIT} />
+        <BridgeIcon bridgeType={IModelBridgeType.NWD} />
+        <BridgeIcon bridgeType={IModelBridgeType.IFC} />
+      </div>
+    )}
+    {isDisabled ? (
+      <SvgRemove className={"tile-upload-icon"} />
+    ) : (
+      <SvgUpload className={"tile-upload-icon"} />
+    )}
     <div className={"tile-upload-text"}>
       {isDisabled ? "Upload already in progress" : "Drop to upload"}
     </div>
