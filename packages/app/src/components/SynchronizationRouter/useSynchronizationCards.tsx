@@ -14,6 +14,7 @@ import {
 } from "@itwin/itwinui-react";
 import classnames from "classnames";
 import React, { ComponentPropsWithoutRef } from "react";
+import { useInView } from "react-intersection-observer";
 
 import {
   ExecutionResult,
@@ -54,7 +55,7 @@ export const useSynchronizationCards: UseIndividualState = (
 
   const [active, setActive] = React.useState(false);
 
-  const ref = React.useRef<HTMLDivElement | null>(null);
+  const dragTarget = React.useRef<HTMLDivElement | null>(null);
   const {
     progress,
     step,
@@ -69,12 +70,13 @@ export const useSynchronizationCards: UseIndividualState = (
     email,
   });
 
+  const { ref: inViewRef, inView } = useInView({ triggerOnce: true });
   const {
     connection,
     sourceFiles,
     fetchSources,
     lastRunResults,
-  } = useSynchronizeInfo(iModelId, accessToken);
+  } = useSynchronizeInfo(inView ? iModelId : "", accessToken);
 
   React.useEffect(() => void fetchSources(), [fetchSources]);
 
@@ -217,14 +219,14 @@ export const useSynchronizationCards: UseIndividualState = (
         // only set active if a file is dragged over
         if (!active && e.dataTransfer?.items?.[0]?.kind === "file") {
           setActive(true);
-          ref.current = e.target as HTMLDivElement;
+          dragTarget.current = e.target as HTMLDivElement;
         }
       },
       onDragLeave: (e: any) => {
         e.stopPropagation();
         e.preventDefault();
         // only set inactive if secondary target is outside the component
-        if (active && !ref.current?.contains(e.target)) {
+        if (active && !dragTarget.current?.contains(e.target)) {
           setActive(false);
         }
       },
@@ -250,7 +252,7 @@ export const useSynchronizationCards: UseIndividualState = (
       ),
       className: classnames("tile-with-status", active && "hollow-shell"),
       children: (
-        <div className={"tile-status"}>
+        <div className={"tile-status"} ref={inViewRef}>
           {connectionStatus}
           {active && <TileDropTarget isDisabled={state === "Working"} />}
         </div>

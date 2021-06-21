@@ -636,6 +636,58 @@ export interface MinimalError {
 }
 
 /**
+ *
+ * @export
+ * @interface TopItems
+ */
+export interface TopItems {
+  /**
+   *
+   * @type {Array<any>}
+   * @memberof TopItems
+   */
+  items?: Array<any>;
+  /**
+   *
+   * @type {TopLinksPaging}
+   * @memberof TopItems
+   */
+  _links?: TopLinksPaging;
+}
+
+/**
+ *
+ * @export
+ * @interface TopLinksPaging
+ */
+export interface TopLinksPaging {
+  /**
+   *
+   * @type {Link}
+   * @memberof TopLinksPaging
+   */
+  self?: Link;
+  /**
+   *
+   * @type {Link}
+   * @memberof TopLinksPaging
+   */
+  next?: Link;
+  /**
+   *
+   * @type {Link}
+   * @memberof TopLinksPaging
+   */
+  prev?: Link;
+  /**
+   *
+   * @type {Link}
+   * @memberof TopLinksPaging
+   */
+  folder?: Link;
+}
+
+/**
  * FilesApi - fetch parameter creator
  * @export
  */
@@ -2356,7 +2408,7 @@ export const FilesApiFp = function(configuration?: Configuration) {
       skip?: number,
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
       options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<Items> {
+    ): (fetch?: FetchAPI, basePath?: string) => Promise<TopItems> {
       const localVarFetchArgs = FilesApiFetchParamCreator(
         configuration
       ).getTopLevelFoldersAndFilesByProject(
@@ -4662,7 +4714,7 @@ export const FoldersApiFp = function(configuration?: Configuration) {
       skip?: number,
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
       options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<Items> {
+    ): (fetch?: FetchAPI, basePath?: string) => Promise<TopItems> {
       const localVarFetchArgs = FoldersApiFetchParamCreator(
         configuration
       ).getTopLevelFoldersAndFilesByProject(

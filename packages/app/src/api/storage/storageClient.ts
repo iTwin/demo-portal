@@ -73,16 +73,34 @@ export class StorageClient {
    * Retrieves the id of the folder named "demo-portal-imodel-connections" in the provided folder.
    * Note that this will cache retrieved value and not return to the network as these are not
    * expected to change through the lifetime of the project.
-   * @param projectFolderId Found by calling getProject api.
+   * @param projectId
    * @param createIfNotFound
    * @returns A storage api folderID if found or createIfNotFound is true, an empty string otherwise.
    */
-  async getDemoFolderId(projectFolderId: string, createIfNotFound: boolean) {
-    return this.getFolderIdByName(
-      projectFolderId,
-      this.DEMO_FOLDER_NAME,
-      createIfNotFound
+  async getDemoFolderId(projectId: string, createIfNotFound: boolean) {
+    const projectInfo = await this.foldersApi.getTopLevelFoldersAndFilesByProject(
+      projectId,
+      this.accessToken,
+      1000,
+      0,
+      "application/vnd.bentley.itwin-platform.v1+json"
     );
+    const topFolderId = projectInfo._links?.folder?.href
+      ?.split("/")
+      .reverse()[0];
+    const demoFolder = projectInfo.items?.find(
+      (folder) => folder.displayName === this.DEMO_FOLDER_NAME
+    );
+    if (demoFolder) {
+      return demoFolder.id;
+    }
+    if (topFolderId) {
+      return this.getFolderIdByName(
+        topFolderId,
+        this.DEMO_FOLDER_NAME,
+        createIfNotFound
+      );
+    }
   }
 
   /**
