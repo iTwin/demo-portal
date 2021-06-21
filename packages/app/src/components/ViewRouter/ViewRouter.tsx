@@ -55,13 +55,15 @@ const View = (props: ViewProps) => {
 
 interface ViewRouterProps extends RouteComponentProps {
   accessToken: string;
+  email: string;
 }
 
-export const ViewRouter = ({ accessToken }: ViewRouterProps) => {
+export const ViewRouter = ({ accessToken, email }: ViewRouterProps) => {
   return (
     <Router className="viewer-container router">
       <SelectionRouter
         accessToken={accessToken}
+        email={email}
         path="*"
         hideIModelActions={["view"]}
       />

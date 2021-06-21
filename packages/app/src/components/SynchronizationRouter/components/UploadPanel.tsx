@@ -43,20 +43,19 @@ export const UploadPanel = ({
     progress,
     state,
     step,
+    resetUploader,
   } = useSynchronizeFileUploader({
     iModelId,
     projectId,
     accessToken,
     email,
   });
-  const [hideStatus, setHideStatus] = React.useState(true);
 
   const uploadAndRefresh = React.useCallback(
     (fileList: FileList | null) => {
       if (!fileList || fileList.length === 0) {
         return;
       }
-      setHideStatus(false);
       void uploadFiles(fileList, onSuccess);
     },
     [onSuccess, uploadFiles]
@@ -66,7 +65,7 @@ export const UploadPanel = ({
     <>
       <Wizard
         type={"workflow"}
-        currentStep={hideStatus ? 0 : step}
+        currentStep={step}
         steps={[
           {
             name: "Choose a file",
@@ -99,14 +98,12 @@ export const UploadPanel = ({
           },
         ]}
       />
-      {!hideStatus && status && state && (
+      {status && state && (
         <Alert
           type={getAlertType(state)}
           className={"full-width-alert"}
           onClose={
-            getAlertType(state) !== "informational"
-              ? () => setHideStatus(true)
-              : undefined
+            getAlertType(state) !== "informational" ? resetUploader : undefined
           }
         >
           {status}

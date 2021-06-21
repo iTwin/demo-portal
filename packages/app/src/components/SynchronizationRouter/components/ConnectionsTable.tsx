@@ -7,7 +7,6 @@ import {
   Body,
   ButtonGroup,
   IconButton,
-  ProgressRadial,
   Table,
   toaster,
 } from "@itwin/itwinui-react";
@@ -15,13 +14,13 @@ import React, { useContext } from "react";
 
 import {
   Connection,
-  ExecutionResult,
   ExecutionState,
 } from "../../../api/synchronization/generated";
 import { SynchronizationClient } from "../../../api/synchronization/synchronizationClient";
 import { useApiPrefix } from "../../../api/useApiPrefix";
 import { CreateTypeFromInterface } from "../../../utils";
 import { LastRunContext } from "../Synchronize";
+import { interpretRunInfo } from "../useSynchronizeInfo";
 import { SkeletonCell } from "./SkeletonCell";
 
 interface ConnectionsTableProps {
@@ -55,75 +54,15 @@ export const ConnectionsTable = ({
                 accessor: "_links",
                 id: "last-run-results",
                 Cell: (props) => {
-                  const [status, setStatus] = React.useState<
-                    ExecutionResult | ExecutionState | string | undefined
-                  >();
-                  const [runTime, setRunTime] = React.useState("");
                   const run = React.useContext(LastRunContext);
-                  React.useEffect(() => {
-                    if (!run) {
-                      setStatus("Never ran");
-                      return;
-                    }
-                    if (run?.endDateTime && run.startDateTime) {
-                      if (run.endDateTime.startsWith("0001")) {
-                        setRunTime(new Date().toLocaleTimeString() + " -");
-                      } else {
-                        setRunTime(
-                          new Date(run?.endDateTime).toLocaleString() + " -"
-                        );
-                      }
-                    } else {
-                      setRunTime("");
-                    }
-                    setStatus(
-                      run.state === ExecutionState.Completed
-                        ? run.result
-                        : run.state
-                    );
-                  }, [run]);
-                  const displayState =
-                    !run || !run.state || !run.result
-                      ? undefined
-                      : run.state !== ExecutionState.Completed
-                      ? "working"
-                      : {
-                          [ExecutionResult.Canceled]: "warning",
-                          [ExecutionResult.Error]: "negative",
-                          [ExecutionResult.PartialSuccess]: "positive",
-                          [ExecutionResult.Skipped]: "warning",
-                          [ExecutionResult.Success]: "positive",
-                          [ExecutionResult.TimedOut]: "negative",
-                          [ExecutionResult.Undetermined]: "",
-                        }[run.result];
-
-                  const radialIndeterminate =
-                    displayState === "warning" ? false : true;
-                  const radialStyle =
-                    displayState === "warning"
-                      ? {
-                          color: "var(--iui-color-foreground-warning)",
-                        }
-                      : undefined;
-                  const radialStatus =
-                    displayState === "positive"
-                      ? "positive"
-                      : displayState === "negative"
-                      ? "negative"
-                      : undefined;
+                  const runInfo = interpretRunInfo(run);
                   return (
                     <SkeletonCell {...props}>
-                      {runTime}{" "}
-                      {status ?? <Body isSkeleton={true}>Fetching...</Body>}
-                      {run?.state && run.result && (
-                        <ProgressRadial
-                          style={radialStyle}
-                          indeterminate={radialIndeterminate}
-                          value={100}
-                          size={"small"}
-                          status={radialStatus}
-                        />
+                      {runInfo.time}{" "}
+                      {runInfo.status ?? (
+                        <Body isSkeleton={true}>Fetching...</Body>
                       )}
+                      {run?.state && run.result && runInfo.icon}
                     </SkeletonCell>
                   );
                 },

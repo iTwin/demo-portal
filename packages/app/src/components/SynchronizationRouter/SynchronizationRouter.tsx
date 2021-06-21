@@ -21,6 +21,7 @@ export const SynchronizationRouter = ({
     <Router className="router">
       <SelectionRouter
         accessToken={accessToken}
+        email={email}
         path="*"
         hideIModelActions={["synchronize"]}
       />

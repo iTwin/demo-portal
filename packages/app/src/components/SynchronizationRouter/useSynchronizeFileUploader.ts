@@ -187,5 +187,11 @@ export const useSynchronizeFileUploader = ({
     },
     [accessToken, email, iModelId, projectId, storageLinkHref, urlPrefix]
   );
-  return { uploadFiles, status, progress, state, step };
+  const resetUploader = () => {
+    setStep(0);
+    setStatus(undefined);
+    setProgress(0);
+    setState(undefined);
+  };
+  return { uploadFiles, status, progress, state, step, resetUploader };
 };

@@ -16,6 +16,10 @@ import { useApiPrefix } from "../../api/useApiPrefix";
 import { useCreateIModelAction } from "../IModelCRUDRouter/useCreateIModelAction";
 import { useDeleteIModelAction } from "../IModelCRUDRouter/useDeleteIModelAction";
 import { useEditIModelAction } from "../IModelCRUDRouter/useEditIModelAction";
+import {
+  SynchronizationCardContext,
+  useSynchronizationCards,
+} from "../SynchronizationRouter/useSynchronizationCards";
 import { useSynchronizeIModelAction } from "../SynchronizationRouter/useSynchronizeIModelAction";
 import { useViewIModelAction } from "../ViewRouter/useViewIModelAction";
 import "./SelectIModel.scss";
@@ -27,6 +31,7 @@ interface GetProjectResult {
 type IModelRouteProps = RouteComponentProps<
   IModelGridProps & {
     hideActions?: ("view" | "synchronize" | "edit" | "delete")[];
+    email?: string;
   }
 >;
 export const SelectIModel = ({
@@ -34,6 +39,7 @@ export const SelectIModel = ({
   projectId,
   navigate,
   hideActions,
+  email,
   ...rest
 }: IModelRouteProps) => {
   const { results } = useApiData<GetProjectResult>({
@@ -59,21 +65,24 @@ export const SelectIModel = ({
         <ButtonGroup>{createIconButton}</ButtonGroup>
       </div>
       <div className="scrolling-tab-content">
-        <IModelGrid
-          key={refreshKey}
-          accessToken={accessToken}
-          projectId={projectId}
-          onThumbnailClick={(imodel) => navigate?.(`imodel/${imodel.id}`)}
-          iModelActions={[
-            viewAction,
-            editAction,
-            synchronizeAction,
-            deleteAction,
-          ].filter((action) => !hideActions?.includes(action.key as any))}
-          apiOverrides={{ serverEnvironmentPrefix }}
-          {...rest}
-        />
-        {deleteDialog}
+        <SynchronizationCardContext.Provider value={{ email }}>
+          <IModelGrid
+            useIndividualState={useSynchronizationCards}
+            key={refreshKey}
+            accessToken={accessToken}
+            projectId={projectId}
+            onThumbnailClick={(imodel) => navigate?.(`imodel/${imodel.id}`)}
+            iModelActions={[
+              viewAction,
+              editAction,
+              synchronizeAction,
+              deleteAction,
+            ].filter((action) => !hideActions?.includes(action.key as any))}
+            apiOverrides={{ serverEnvironmentPrefix }}
+            {...rest}
+          />
+          {deleteDialog}
+        </SynchronizationCardContext.Provider>
       </div>
     </div>
   );

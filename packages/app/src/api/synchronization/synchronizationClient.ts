@@ -54,6 +54,42 @@ export class SynchronizationClient {
   }
 
   /**
+   * Synchronization API will send a date in year 0001 if the date is meant to be empty,
+   * this will format it accordingly to and empty string, or a "toLocaleString" otherwise.
+   * @param synchDate Date to be parsed
+   * @param suffix suffix to add if the date is not "empty"
+   * @returns
+   */
+  static formatSynchronizationDate(synchDate: string | undefined, suffix = "") {
+    if (!synchDate || synchDate.startsWith("0001")) {
+      return "";
+    }
+    return new Date(synchDate).toLocaleString() + suffix;
+  }
+
+  /**
+   *
+   * @param src Typically, either a run or a task returned by synchronization API
+   * @param fallback If endDate is "empty", "start" return formatted startDateTime, "now" return current time only.
+   * @param suffix suffix to add if the date is not "empty"
+   * @returns
+   */
+  static formatSynchronizationLatestDate(
+    src: { startDateTime?: string; endDateTime?: string } | undefined,
+    fallback: "start" | "now",
+    suffix = ""
+  ) {
+    const endDate = this.formatSynchronizationDate(src?.endDateTime, suffix);
+    if (endDate) {
+      return endDate;
+    }
+    if (fallback === "start") {
+      return this.formatSynchronizationDate(src?.startDateTime, suffix);
+    }
+    return new Date().toLocaleTimeString() + suffix;
+  }
+
+  /**
    * Until API is fixed so task.sourceFileId actually returns a source.id, we need to guess
    * which one it is. So far, the order are the same, except the jobs are by bridgeType
    * (So, if 2 file, one revit, and one MSTN, both will have task index 0 in their respective jobs...)
