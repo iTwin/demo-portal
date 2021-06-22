@@ -33,8 +33,8 @@
     "@itwin/create-imodel-react": "^0.2.1",
     "@itwin/delete-imodel-react": "^0.2.0",
     "@itwin/imodel-browser-react": "^0.10.3",
-    "@itwin/itwinui-icons-react": "^1.1.2",
     "@itwin/itwinui-css": "^0.18.1",
+    "@itwin/itwinui-icons-react": "^1.1.2",
     "@itwin/itwinui-react": "^1.7.2",
     "@reach/router": "^1.3.4",
     "@svgr/webpack": "4.3.3",
@@ -52,6 +52,7 @@
     "portable-fetch": "^3.0.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
+    "react-intersection-observer": "^8.32.0",
     "typescript": "^3.7.2"
   },
   "scripts": {

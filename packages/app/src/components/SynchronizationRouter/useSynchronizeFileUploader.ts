@@ -7,7 +7,6 @@ import React, { ComponentPropsWithoutRef } from "react";
 
 import { StorageClient } from "../../api/storage/storageClient";
 import { SynchronizationClient } from "../../api/synchronization/synchronizationClient";
-import { ProjectWithLinks, useApiData } from "../../api/useApiData";
 import { useApiPrefix } from "../../api/useApiPrefix";
 
 interface ConnectionFileUploaderOptions {
@@ -32,15 +31,6 @@ export const useSynchronizeFileUploader = ({
   email = "",
 }: ConnectionFileUploaderOptions) => {
   const urlPrefix = useApiPrefix();
-  const { results } = useApiData<{ project: ProjectWithLinks }>({
-    url: projectId
-      ? `https://api.bentley.com/projects/${projectId}`
-      : undefined,
-    accessToken,
-  });
-
-  const storageLinkHref = results?.project?._links?.storage?.href;
-
   const [step, setStep] = React.useState(0);
   const [status, setStatus] = React.useState<string | undefined>();
   const [progress, setProgress] = React.useState(0);
@@ -60,14 +50,6 @@ export const useSynchronizeFileUploader = ({
         }
         if (email === "") {
           throw new Error("User email required, none provided");
-        }
-        const projectFolderId = StorageClient.extractFolderIdFromStorageHref(
-          storageLinkHref
-        );
-        if (!projectFolderId) {
-          throw new Error(
-            "Project folder could not be determined, please refresh the page"
-          );
         }
 
         if (fileList.length > 1) {
@@ -108,10 +90,7 @@ export const useSynchronizeFileUploader = ({
         setStep(2);
         setStatus("Validating demo portal file share");
         const storage = new StorageClient(urlPrefix, accessToken);
-        const demoFolderId = await storage.getDemoFolderId(
-          projectFolderId,
-          true
-        );
+        const demoFolderId = await storage.getDemoFolderId(projectId, true);
         setStatus("Validating iModel file share");
         const iModelFolderId = await storage.getIModelFolderId(
           demoFolderId,
@@ -185,7 +164,7 @@ export const useSynchronizeFileUploader = ({
         setState("Error");
       }
     },
-    [accessToken, email, iModelId, projectId, storageLinkHref, urlPrefix]
+    [accessToken, email, iModelId, projectId, urlPrefix]
   );
   const resetUploader = () => {
     setStep(0);

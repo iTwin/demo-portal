@@ -1373,7 +1373,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/items"
+              "$ref": "#/definitions/top-items"
             },
             "examples": {
               "application/json": "{\r\n  \"items\": [\r\n    {\r\n      \"type\": \"folder\",\r\n      \"id\": \"TYJsPN0xtkWId0yUrXkS5pN5AQzuullIkxz5aDnDJSI\",\r\n      \"displayName\": \"test\",\r\n      \"description\": \"test folder\",\r\n      \"path\": \"folderName/test\",\r\n      \"createdBy\": \"1140f95b-1ba0-49d9-bbf4-b53e54d80387\",\r\n      \"lastModifiedBy\": \"1140f95b-1ba0-49d9-bbf4-b53e54d80387\",\r\n      \"createdDateTime\": \"2020-05-03T11:05:11.0133549Z\",\r\n      \"lastModifiedDateTime\": \"2020-05-03T11:05:11.0133549Z\",\r\n      \"parentFolderId\": \"TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s\"\r\n    },\r\n    {\r\n      \"type\": \"file\",\r\n      \"id\": \"TYJsPN0xtkWId0yUrXkS5s4FlCroosBMlyDhZZmlzoc\",\r\n      \"displayName\": \"test2.txt\",\r\n      \"description\": \"test file 2\",\r\n      \"path\": \"folderName/test2.txt\",\r\n      \"size\": 1,\r\n      \"createdBy\": \"1140f95b-1ba0-49d9-bbf4-b53e54d80387\",\r\n      \"lastModifiedBy\": \"1140f95b-1ba0-49d9-bbf4-b53e54d80387\",\r\n      \"createdDateTime\": \"2020-05-03T11:05:12.0133549Z\",\r\n      \"lastModifiedDateTime\": \"2020-05-03T11:05:12.0133549Z\",\r\n      \"parentFolderId\": \"TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s\"\r\n    }\r\n  ],\r\n  \"_links\": {\r\n    \"self\": {\r\n      \"href\": \"https://api.bentley.com/storage?projectId=6959daff-27f5-4b87-96ea-9917daa3a8ff&$skip=4&$top=2\"\r\n    },\r\n    \"prev\": {\r\n      \"href\": \"https://api.bentley.com/storage?projectId=6959daff-27f5-4b87-96ea-9917daa3a8ff&$skip=2&$top=2\"\r\n    },\r\n    \"next\": {\r\n      \"href\": \"https://api.bentley.com/storage?projectId=6959daff-27f5-4b87-96ea-9917daa3a8ff&$skip=6&$top=2\"\r\n    },\r\n    \"folder\": {\r\n      \"href\": \"https://api.bentley.com/storage/folders/TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s\"\r\n    }\r\n  }\r\n}\r\n"
@@ -1518,6 +1518,24 @@
           "$ref": "#/definitions/link"
         },
         "prev": {
+          "$ref": "#/definitions/link"
+        }
+      }
+    },
+    "top-links-paging": {
+      "title": "links (paging)",
+      "type": "object",
+      "properties": {
+        "self": {
+          "$ref": "#/definitions/link"
+        },
+        "next": {
+          "$ref": "#/definitions/link"
+        },
+        "prev": {
+          "$ref": "#/definitions/link"
+        },
+        "folder": {
           "$ref": "#/definitions/link"
         }
       }
@@ -1801,6 +1819,18 @@
         },
         "_links": {
           "$ref": "#/definitions/links-paging"
+        }
+      }
+    },
+    "top-items": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {}
+        },
+        "_links": {
+          "$ref": "#/definitions/top-links-paging"
         }
       }
     }
