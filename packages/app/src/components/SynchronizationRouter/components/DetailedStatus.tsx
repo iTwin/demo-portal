@@ -22,8 +22,7 @@ export const DetailedStatus = ({
   <div className={"detailed-status"}>
     {altIcon ?? (
       <ProgressRadial
-        className={"status-icon"} //Not used by ProgressRadial, should be fixed in upcoming release
-        style={{ flexShrink: 0 }} //Compensate className issue above, remove once fixed.
+        className={"status-icon"}
         indeterminate={true}
         status={status}
         size={"small"}
