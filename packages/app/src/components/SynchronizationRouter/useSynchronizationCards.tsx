@@ -7,7 +7,6 @@ import { SvgPlay, SvgSync } from "@itwin/itwinui-icons-react";
 import {
   Body,
   IconButton,
-  ProgressRadial,
   Tag,
   TagContainer,
   toaster,
@@ -36,12 +35,7 @@ export const SynchronizationCardContext = React.createContext<{
 }>({});
 
 const getProgressStatus = (state = "") =>
-  (({
-    Success: "positive",
-    Error: "negative",
-  } as {
-    [state: string]: ComponentPropsWithoutRef<typeof ProgressRadial>["status"];
-  })[state]);
+  state === "Error" ? "negative" : undefined;
 
 /**
  * Adds the ability to see synchronization details and add upload drop target handling.
@@ -114,11 +108,11 @@ export const useSynchronizationCards: UseIndividualState = (
 
   React.useEffect(() => {
     if (state) {
+      const progressStatus = getProgressStatus(state);
       setConnectionStatus(
         <DetailedStatus
-          text={status && state === "Working" ? status : state}
-          status={getProgressStatus(state)}
-          altIcon={state ? undefined : <></>}
+          text={status && progressStatus !== "negative" ? status : state}
+          status={progressStatus}
           progress={step === 3 ? progress : undefined}
         />
       );
@@ -155,7 +149,7 @@ export const useSynchronizationCards: UseIndividualState = (
         const runInfo = interpretRunInfo(lastRunResults);
         setConnectionStatus(
           <DetailedStatus
-            text={runInfo.time + runInfo.status}
+            text={`${runInfo.time} ${runInfo.status}`}
             altIcon={runInfo.icon}
           />
         );

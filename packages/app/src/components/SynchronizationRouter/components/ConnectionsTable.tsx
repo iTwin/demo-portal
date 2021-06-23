@@ -21,6 +21,7 @@ import { useApiPrefix } from "../../../api/useApiPrefix";
 import { CreateTypeFromInterface } from "../../../utils";
 import { LastRunContext } from "../Synchronize";
 import { interpretRunInfo } from "../useSynchronizeInfo";
+import "./ConnectionsTable.scss";
 import { SkeletonCell } from "./SkeletonCell";
 
 interface ConnectionsTableProps {
@@ -58,11 +59,13 @@ export const ConnectionsTable = ({
                   const runInfo = interpretRunInfo(run);
                   return (
                     <SkeletonCell {...props}>
-                      {runInfo.time}{" "}
-                      {runInfo.status ?? (
-                        <Body isSkeleton={true}>Fetching...</Body>
-                      )}
-                      {run?.state && run.result && runInfo.icon}
+                      <div className={"status-cell"}>
+                        {run?.state && run.result && runInfo.icon}
+                        {runInfo.time}{" "}
+                        {runInfo.status ?? (
+                          <Body isSkeleton={true}>Fetching...</Body>
+                        )}
+                      </div>
                     </SkeletonCell>
                   );
                 },

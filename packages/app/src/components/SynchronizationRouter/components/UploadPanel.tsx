@@ -113,6 +113,7 @@ export const UploadPanel = ({
       {state !== "Working" && (
         <FileUpload onFileDropped={uploadAndRefresh}>
           <FileUploadTemplate
+            acceptType={".dgn,.rvt,.ifc,.nwd"}
             acceptMultiple={false}
             onChange={(e) => uploadAndRefresh(e?.target?.files)}
           />
