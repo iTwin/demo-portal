@@ -9,6 +9,7 @@ import {
 } from "@itwin/imodel-browser-react";
 import { ButtonGroup, Title } from "@itwin/itwinui-react";
 import { RouteComponentProps } from "@reach/router";
+import { useFlags } from "launchdarkly-react-client-sdk";
 import React from "react";
 
 import { useApiData } from "../../api/useApiData";
@@ -48,6 +49,13 @@ export const SelectIModel = ({
   const { editAction } = useEditIModelAction({ navigate });
   const { viewAction } = useViewIModelAction();
   const serverEnvironmentPrefix = useApiPrefix();
+  const { deleteImodel } = useFlags();
+  const actions: any = [viewAction, editAction, synchronizeAction];
+
+  if (deleteImodel) {
+    actions.push(deleteAction);
+  }
+
   return (
     <div className="scrolling-tab-container">
       <div className={"title-section"}>
@@ -64,12 +72,9 @@ export const SelectIModel = ({
           accessToken={accessToken}
           projectId={projectId}
           onThumbnailClick={(imodel) => navigate?.(`imodel/${imodel.id}`)}
-          iModelActions={[
-            viewAction,
-            editAction,
-            synchronizeAction,
-            deleteAction,
-          ].filter((action) => !hideActions?.includes(action.key as any))}
+          iModelActions={actions.filter(
+            (action: any) => !hideActions?.includes(action.key as any)
+          )}
           apiOverrides={{ serverEnvironmentPrefix }}
           {...rest}
         />
