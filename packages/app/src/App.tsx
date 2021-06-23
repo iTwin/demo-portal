@@ -11,6 +11,7 @@ import AuthorizationClient from "./AuthorizationClient";
 import { Header } from "./components/Header/Header";
 import MainContainer from "./components/MainLayout/MainContainer";
 import { Sidebar } from "./components/MainLayout/Sidebar";
+import { ManageVersionsRouter } from "./components/ManageVersionsRouter/ManageVersionsRouter";
 import { StayTunedRouter } from "./components/StayTunedRouter/StayTunedRouter";
 import { SynchronizationRouter } from "./components/SynchronizationRouter/SynchronizationRouter";
 import { ViewRouter } from "./components/ViewRouter/ViewRouter";
@@ -108,6 +109,11 @@ const App: React.FC = () => {
               />
               <SynchronizationRouter
                 path="synchronize/*"
+                accessToken={accessToken}
+                email={accessTokenObject?.getUserInfo()?.email?.id ?? ""}
+              />
+              <ManageVersionsRouter
+                path="manage-versions/*"
                 accessToken={accessToken}
                 email={accessTokenObject?.getUserInfo()?.email?.id ?? ""}
               />
