@@ -1727,6 +1727,11 @@
   resolved "https://registry.yarnpkg.com/@itwin/itwinui-css/-/itwinui-css-0.18.1.tgz#df9fd3e9b47e4515ad105fd172f9607582f1d617"
   integrity sha512-D9ox/198QCJGku3vIRQa5Gt4j24CwstNxwPrnzpzA8uq0Fev4NqMUe3wAuP0iyP6DlxGGw6djy5yq5S9YDqkXQ==
 
+"@itwin/itwinui-css@^0.21.0":
+  version "0.21.0"
+  resolved "https://registry.yarnpkg.com/@itwin/itwinui-css/-/itwinui-css-0.21.0.tgz#62bc9e0ef7408b8d3ae96aa401e3b360c4820039"
+  integrity sha512-NzPmKfeXZP7/vCt+q4a3CgBlWJS9PbYzKJ0dlKSF9Qq0O+DNV4FL8pwdmxp2iIcntZe7jKBIrm2WogIz1B58Bw==
+
 "@itwin/itwinui-css@^0.9.0":
   version "0.9.0"
   resolved "https://registry.yarnpkg.com/@itwin/itwinui-css/-/itwinui-css-0.9.0.tgz#eb5bec4a6d45927591401cc2d528076f999c857a"
@@ -1747,12 +1752,26 @@
   resolved "https://registry.yarnpkg.com/@itwin/itwinui-illustrations-react/-/itwinui-illustrations-react-1.0.2.tgz#4b1f04a1c331937ec501dde3a25275bb2d995cec"
   integrity sha512-sgBmBBOGOLNPuT/G700iQqlPB/QRBBWczSkVZJ7mpCZaktMfJxX2SH1NhUUpJ4emf20dsLEeAo62Gz7ek7DMkA==
 
-"@itwin/itwinui-react@^1.6.0", "@itwin/itwinui-react@^1.7.2":
+"@itwin/itwinui-react@^1.6.0":
   version "1.7.2"
   resolved "https://registry.yarnpkg.com/@itwin/itwinui-react/-/itwinui-react-1.7.2.tgz#1ed6a699be2dbc08febf8620e452e3ddd3c12bbb"
   integrity sha512-twqFvhwg1avkblf+dqR0uJvwmZNfX+b+2DyKrxFkoPjo8U+g3ryowcxDBd535QEXxhUxa2tiA5G0VfsZRcMung==
   dependencies:
     "@itwin/itwinui-css" "^0.18.1"
+    "@itwin/itwinui-icons-react" "^1.1.1"
+    "@itwin/itwinui-illustrations-react" "^1.0.1"
+    "@tippyjs/react" "^4.2.5"
+    "@types/react-table" "^7.0.18"
+    classnames "^2.2.6"
+    react-table "^7.1.0"
+    react-transition-group "^4.1.1"
+
+"@itwin/itwinui-react@^1.9.0":
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/@itwin/itwinui-react/-/itwinui-react-1.9.0.tgz#01414a66f3c14ba1c14514a61efb3572798d64b5"
+  integrity sha512-2sYcOyCFLcYXEblcvnyaAn+lMVqsNpURAGvsKyLrDiysD2/xnhh5wu1ewoDYDBYWfvaE/sGSiUlK4a9xDl/Lmg==
+  dependencies:
+    "@itwin/itwinui-css" "^0.21.0"
     "@itwin/itwinui-icons-react" "^1.1.1"
     "@itwin/itwinui-illustrations-react" "^1.0.1"
     "@tippyjs/react" "^4.2.5"
@@ -11475,7 +11494,7 @@ react-input-autosize@^2.2.2:
   dependencies:
     prop-types "^15.5.8"
 
-react-intersection-observer@^8.31.1:
+react-intersection-observer@^8.31.1, react-intersection-observer@^8.32.0:
   version "8.32.0"
   resolved "https://registry.yarnpkg.com/react-intersection-observer/-/react-intersection-observer-8.32.0.tgz#47249332e12e8bb99ed35a10bb7dd10446445a7b"
   integrity sha512-RlC6FvS3MFShxTn4FHAy904bVjX5Nn4/eTjUkurW0fHK+M/fyQdXuyCy9+L7yjA+YMGogzzSJNc7M4UtfSKvtw==
