@@ -7,7 +7,6 @@ import {
   IModelGridProps,
   ProjectFull,
 } from "@itwin/imodel-browser-react";
-import { ContextMenuBuilderItem } from "@itwin/imodel-browser-react/cjs/utils/_buildMenuOptions";
 import { ButtonGroup, Title } from "@itwin/itwinui-react";
 import { RouteComponentProps } from "@reach/router";
 import { useFlags } from "launchdarkly-react-client-sdk";
@@ -45,11 +44,7 @@ export const SelectIModel = ({
   const { viewAction } = useViewIModelAction();
   const serverEnvironmentPrefix = useApiPrefix();
   const { deleteImodel } = useFlags();
-  const actions: ContextMenuBuilderItem[] = [
-    viewAction,
-    editAction,
-    synchronizeAction,
-  ];
+  const actions: any[] = [viewAction, editAction, synchronizeAction];
 
   if (deleteImodel) {
     actions.push(deleteAction);
@@ -68,8 +63,7 @@ export const SelectIModel = ({
           projectId={projectId}
           onThumbnailClick={(imodel) => navigate?.(`imodel/${imodel.id}`)}
           iModelActions={actions.filter(
-            (action: ContextMenuBuilderItem) =>
-              !hideActions?.includes(action.key as any)
+            (action: any) => !hideActions?.includes(action.key as any)
           )}
           apiOverrides={{ serverEnvironmentPrefix }}
           {...rest}
