@@ -7,7 +7,6 @@ import React, { ComponentPropsWithoutRef } from "react";
 
 import { StorageClient } from "../../api/storage/storageClient";
 import { SynchronizationClient } from "../../api/synchronization/synchronizationClient";
-import { ProjectWithLinks, useApiData } from "../../api/useApiData";
 import { useApiPrefix } from "../../api/useApiPrefix";
 
 interface ConnectionFileUploaderOptions {
@@ -32,15 +31,6 @@ export const useSynchronizeFileUploader = ({
   email = "",
 }: ConnectionFileUploaderOptions) => {
   const urlPrefix = useApiPrefix();
-  const { results } = useApiData<{ project: ProjectWithLinks }>({
-    url: projectId
-      ? `https://api.bentley.com/projects/${projectId}`
-      : undefined,
-    accessToken,
-  });
-
-  const storageLinkHref = results?.project?._links?.storage?.href;
-
   const [step, setStep] = React.useState(0);
   const [status, setStatus] = React.useState<string | undefined>();
   const [progress, setProgress] = React.useState(0);
@@ -60,14 +50,6 @@ export const useSynchronizeFileUploader = ({
         }
         if (email === "") {
           throw new Error("User email required, none provided");
-        }
-        const projectFolderId = StorageClient.extractFolderIdFromStorageHref(
-          storageLinkHref
-        );
-        if (!projectFolderId) {
-          throw new Error(
-            "Project folder could not be determined, please refresh the page"
-          );
         }
 
         if (fileList.length > 1) {
@@ -108,10 +90,7 @@ export const useSynchronizeFileUploader = ({
         setStep(2);
         setStatus("Validating demo portal file share");
         const storage = new StorageClient(urlPrefix, accessToken);
-        const demoFolderId = await storage.getDemoFolderId(
-          projectFolderId,
-          true
-        );
+        const demoFolderId = await storage.getDemoFolderId(projectId, true);
         setStatus("Validating iModel file share");
         const iModelFolderId = await storage.getIModelFolderId(
           demoFolderId,
@@ -154,11 +133,20 @@ export const useSynchronizeFileUploader = ({
 
         //Disabled at the moment, the connection is not "Working" at this point, owner need to be updated.
         setStatus("Running the connection");
-        await synchronization.runConnection(iModelId, connectionId);
+        const runStatus = await synchronization.runConnection(
+          iModelId,
+          connectionId
+        );
+        if (runStatus.status === 303) {
+          setStatus(
+            "Complete, synchronization must be started after current run"
+          );
+        } else {
+          setStatus("Synchronization started");
+        }
         onSuccess?.();
         setStep(5);
         setState("Success");
-        setStatus("Synchronization started");
       } catch (error) {
         console.error(error);
         if (typeof error?.text === "function") {
@@ -176,7 +164,13 @@ export const useSynchronizeFileUploader = ({
         setState("Error");
       }
     },
-    [accessToken, email, iModelId, projectId, storageLinkHref, urlPrefix]
+    [accessToken, email, iModelId, projectId, urlPrefix]
   );
-  return { uploadFiles, status, progress, state, step };
+  const resetUploader = () => {
+    setStep(0);
+    setStatus(undefined);
+    setProgress(0);
+    setState(undefined);
+  };
+  return { uploadFiles, status, progress, state, step, resetUploader };
 };
