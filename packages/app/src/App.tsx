@@ -103,7 +103,11 @@ const App: React.FC = () => {
           ) : (
             isAuthorized && (
               <Router className={"router"}>
-                <ViewRouter accessToken={accessToken} path="view/*" />
+                <ViewRouter
+                  accessToken={accessToken}
+                  path="view/*"
+                  email={accessTokenObject?.getUserInfo()?.email?.id ?? ""}
+                />
                 <SynchronizationRouter
                   path="synchronize/*"
                   accessToken={accessToken}
