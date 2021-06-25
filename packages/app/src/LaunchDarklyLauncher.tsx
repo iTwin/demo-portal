@@ -32,7 +32,6 @@ export const LaunchDarklyLauncher = (props: any) => {
 
   const LDProps = {
     clientSideID: clientId as string,
-    deferInitialization: false,
     userProps,
   };
 
