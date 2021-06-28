@@ -50,15 +50,15 @@ export const SelectProject = ({
         labels={[
           <span className={"tab-with-icon"} key="favorite">
             <SvgStarHollow />
-            <p>Favorite projects</p>
+            <span>Favorite projects</span>
           </span>,
           <span className={"tab-with-icon"} key={"recents"}>
             <SvgCalendar />
-            <p>Recent projects</p>
+            <span>Recent projects</span>
           </span>,
           <span className={"tab-with-icon"} key={"all"}>
             <SvgList />
-            <p>My projects</p>
+            <span>My projects</span>
           </span>,
         ]}
         onTabSelected={setProjectType}
