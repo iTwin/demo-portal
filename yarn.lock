@@ -1742,7 +1742,7 @@
   resolved "https://registry.yarnpkg.com/@itwin/itwinui-icons-react/-/itwinui-icons-react-0.1.0.tgz#812bf14c090d7c5a412e9a678781b5a793966ca9"
   integrity sha512-zD11tk6ze8ObJD30l5TOSjQq7giNOwqqLNSqATWSjyiuYnnNlxm80ApKXFfzo+j3hnLg4mQvwhzDPyyMIYzHEw==
 
-"@itwin/itwinui-icons-react@^1.1.1", "@itwin/itwinui-icons-react@^1.1.2":
+"@itwin/itwinui-icons-react@^1.1.1", "@itwin/itwinui-icons-react@^1.1.2", "@itwin/itwinui-icons-react@^1.2.0":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@itwin/itwinui-icons-react/-/itwinui-icons-react-1.2.0.tgz#82c6f6896639990c31ee806ee2af6a9ed23856fd"
   integrity sha512-yeBIJPWli/iLKaTLmhsd7ZOn9bMRouN3dGHggJjBjAsgJNNtahbfB/NfOS17DcN6Ejt4Z70VAzMdpwzJ/34CKA==
@@ -1779,6 +1779,16 @@
     classnames "^2.2.6"
     react-table "^7.1.0"
     react-transition-group "^4.1.1"
+
+"@itwin/manage-versions-react@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@itwin/manage-versions-react/-/manage-versions-react-0.5.0.tgz#d517f110112db8524957f94a4d0f769f512e6844"
+  integrity sha512-EwToBiZOs5EuiNgAaBQYPkLFGCrqG3wCIYii73E6t8cLFJ+lpFJt6PGbwrPvdQ8c3QFNXCsnN2FzRKi3SxZmrg==
+  dependencies:
+    "@itwin/itwinui-css" "^0.9.0"
+    "@itwin/itwinui-icons-react" "^1.2.0"
+    "@itwin/itwinui-react" "^1.6.0"
+    classnames "^2.2.6"
 
 "@jest/console@^24.7.1", "@jest/console@^24.9.0":
   version "24.9.0"
