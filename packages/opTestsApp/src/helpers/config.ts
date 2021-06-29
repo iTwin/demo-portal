@@ -17,18 +17,9 @@ if (envResult.error) {
 expand(envResult);
 
 export const User1: User = {
-  username: process.env.GenericUserName1 ?? "",
-  password: process.env.GenericUserPassword1 ?? "",
+  username: process.env.TestUserName ?? "",
+  password: process.env.TestPassword ?? "",
 };
 export const SiteUrl: string = process.env.SiteUrl ?? "";
 
 export const BrowserName = process.env.BROWSER ?? "chromium";
-
-// for DesignReview tests
-export const DRProjectID = process.env.DR_PROJECT_ID ?? "Missing Project Id";
-export const DRIModelID = process.env.DR_IMODEL_ID ?? "Missing iModel Id";
-export const DRChangeSetID =
-  process.env.DR_CHANGESET_ID ?? "Missing Changeset Id";
-
-export const ProjectNameContainingIModel =
-  process.env.PROJECT_NAME_CONTAINING_IMODEL ?? "DesignReviewTestDatasets";

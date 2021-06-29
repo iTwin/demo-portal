@@ -34,8 +34,6 @@
     "roots": [
       "<rootDir>/src"
     ],
-    "verbose": true,
-    "preset": "jest-playwright-preset",
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
     }

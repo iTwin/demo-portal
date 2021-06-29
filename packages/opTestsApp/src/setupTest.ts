@@ -6,7 +6,7 @@
 import { Browser, BrowserContext, chromium, Page } from "playwright-chromium";
 
 import { SiteUrl, User1 } from "./helpers/config"; // BrowserName
-import { Home, OIDC } from "./helpers/selectors";
+import { Base, Home, OIDC } from "./helpers/selectors";
 import { elementExists, getBrowserPath } from "./helpers/utils";
 
 let context: BrowserContext;
@@ -23,6 +23,7 @@ const login = async (): Promise<void> => {
 
   try {
     await page.goto(SiteUrl);
+    await page.click(Base.signInButton);
     if (await elementExists(page, OIDC.v2.usernameInput)) {
       await page.fill(OIDC.v2.usernameInput, User1.username);
       await page.click(OIDC.v2.nextInput, { delay: 500 });

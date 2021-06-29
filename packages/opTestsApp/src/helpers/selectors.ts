@@ -40,35 +40,29 @@ export const Base: BaseSelectors = {
 };
 
 export interface HomeSelectors {
+  icon: string;
   Portal: string;
-  IModelSearch: string;
-  ProjectSearch: string;
   Card: {
+    grid: string;
     thumbnail: string;
-    overTitle: string;
     title: string;
-    projectTitle: string;
   };
 }
 
-export interface DesignReviewSelectors {
-  iframe: string;
-  ninezone: string;
-}
-
 export const Home: HomeSelectors = {
-  Portal: "text='Ad Hoc Review'",
-  IModelSearch: "css=[class*=IModelBrowser_SearchBox] >> input",
-  ProjectSearch: "css=[class*=ProjectsBrowser_SearchBox] >> input",
+  icon: "css=.iui-header-logo",
+  Portal: "text='iTwin Demo'",
   Card: {
-    thumbnail: "css=.iTwinCommon_Card_Thumbnail",
-    overTitle: "css=.iTwinCommon_IModelCard_OverTitle",
-    title: "css=.iTwinCommon_IModelCard_Title",
-    projectTitle: "css=.iTwinCommon_ProjectCard_Title",
+    grid: "css=[class*=iac-grid-structure]",
+    thumbnail: "css=.iui-thumbnail",
+    title: "css=.iui-name-label",
   },
 };
 
-export const DesignReview: DesignReviewSelectors = {
-  iframe: 'iframe[data-testid="dr-iframe"]',
-  ninezone: "id=uifw-ninezone-area",
+export interface ViewerSelectors {
+  container: string;
+}
+
+export const Viewer: ViewerSelectors = {
+  container: "css=.itwin-viewer-container",
 };
