@@ -66,11 +66,11 @@ jobs:
         Contents: yarn.lock
         TargetFolder: opTestsApp
         OverWrite: true
-    - task: PublishPipelineArtifact@0
+    - task: PublishBuildArtifacts@1
       displayName: 'Publish OpsTest Artifact'
       inputs:
-        artifactName: OperationalTests
-        targetPath: opTestsApp
+        ArtifactName: OperationalTests
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)/OperationalTests'
 
 - job: credScan
   pool: PRG
