@@ -64,7 +64,7 @@ jobs:
       displayName: 'Copy yarn.lock file to: opTestsApp'
       inputs:
         Contents: yarn.lock
-        TargetFolder: packages/opTestsApp
+        TargetFolder: '$(Agent.BuildDirectory)/packages/opTestsApp'
         OverWrite: true
     - task: PublishBuildArtifacts@1
       displayName: 'Publish OpsTest Artifact'
