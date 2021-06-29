@@ -86,7 +86,7 @@ const App: React.FC = () => {
 
   return (
     <ConfigProvider {...appConfig}>
-      <LaunchDarklyLauncher>
+      <LaunchDarklyLauncher token={accessTokenObject}>
         <MainContainer
           header={
             <Header
@@ -113,6 +113,7 @@ const App: React.FC = () => {
                   accessToken={accessToken}
                   email={accessTokenObject?.getUserInfo()?.email?.id ?? ""}
                 />
+
                 <StayTunedRouter
                   path="validate/*"
                   featureName={"Validate iModel"}

@@ -14,9 +14,8 @@ const ConfigContext = React.createContext<DemoPortalConfig>({});
 
 export const ConfigProvider = (props: ConfigProviderProps) => {
   const { children, ...rest } = props;
-
   return (
-    <ConfigContext.Provider value={rest}> {children} </ConfigContext.Provider>
+    <ConfigContext.Provider value={rest}>{children}</ConfigContext.Provider>
   );
 };
 
