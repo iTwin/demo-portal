@@ -70,7 +70,7 @@ jobs:
       displayName: 'Publish OpsTest Artifact'
       inputs:
         ArtifactName: OperationalTests
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)/OperationalTests'
+        PathtoPublish: 'packages/opTestsApp'
 
 - job: credScan
   pool: PRG
