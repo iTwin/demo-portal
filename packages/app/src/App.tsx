@@ -114,7 +114,11 @@ const App: React.FC = () => {
                   accessToken={accessToken}
                   email={accessTokenObject?.getUserInfo()?.email?.id ?? ""}
                 />
-
+                <ManageVersionsRouter
+                  path="manage-versions/*"
+                  accessToken={accessToken}
+                  email={accessTokenObject?.getUserInfo()?.email?.id ?? ""}
+                />
                 <StayTunedRouter
                   path="validate/*"
                   featureName={"Validate iModel"}
@@ -135,7 +139,6 @@ const App: React.FC = () => {
           )}
         </MainContainer>
       </LaunchDarklyLauncher>
-
     </ConfigProvider>
   );
 };
