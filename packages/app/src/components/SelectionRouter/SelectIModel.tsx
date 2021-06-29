@@ -12,6 +12,7 @@ import { useApiPrefix } from "../../api/useApiPrefix";
 import { useCreateIModelAction } from "../IModelCRUDRouter/useCreateIModelAction";
 import { useDeleteIModelAction } from "../IModelCRUDRouter/useDeleteIModelAction";
 import { useEditIModelAction } from "../IModelCRUDRouter/useEditIModelAction";
+import { useManageVersionsIModelAction } from "../ManageVersionsRouter/useManageVersionsIModelAction";
 import {
   SynchronizationCardContext,
   useSynchronizationCards,
@@ -23,7 +24,13 @@ import { SelectIModelTitle } from "./SelectIModelTitle";
 
 type IModelRouteProps = RouteComponentProps<
   IModelGridProps & {
-    hideActions?: ("view" | "synchronize" | "edit" | "delete")[];
+    hideActions?: (
+      | "view"
+      | "synchronize"
+      | "edit"
+      | "delete"
+      | "manage-versions"
+    )[];
     email?: string;
   }
 >;
@@ -40,11 +47,12 @@ export const SelectIModel = ({
   });
   const { createIconButton } = useCreateIModelAction({ navigate });
   const { synchronizeAction } = useSynchronizeIModelAction();
+  const { manageVersionsAction } = useManageVersionsIModelAction();
   const { editAction } = useEditIModelAction({ navigate });
   const { viewAction } = useViewIModelAction();
   const serverEnvironmentPrefix = useApiPrefix();
   const { deleteImodel } = useFlags();
-  const actions: any[] = [viewAction, editAction, synchronizeAction];
+  const actions: any[] = [viewAction, editAction, synchronizeAction, manageVersionsAction];
 
   if (deleteImodel) {
     actions.push(deleteAction);
