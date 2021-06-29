@@ -5,10 +5,10 @@
 import { IModelGrid, IModelGridProps } from "@itwin/imodel-browser-react";
 import { ButtonGroup } from "@itwin/itwinui-react";
 import { RouteComponentProps } from "@reach/router";
-import { useFlags } from "launchdarkly-react-client-sdk";
 import React from "react";
 
 import { useApiPrefix } from "../../api/useApiPrefix";
+import { useDemoFlags } from "../../LaunchDarklyProvider";
 import { useCreateIModelAction } from "../IModelCRUDRouter/useCreateIModelAction";
 import { useDeleteIModelAction } from "../IModelCRUDRouter/useDeleteIModelAction";
 import { useEditIModelAction } from "../IModelCRUDRouter/useEditIModelAction";
@@ -51,8 +51,13 @@ export const SelectIModel = ({
   const { editAction } = useEditIModelAction({ navigate });
   const { viewAction } = useViewIModelAction();
   const serverEnvironmentPrefix = useApiPrefix();
-  const { deleteImodel } = useFlags();
-  const actions: any[] = [viewAction, editAction, synchronizeAction, manageVersionsAction];
+  const { deleteImodel } = useDemoFlags();
+  const actions: any[] = [
+    viewAction,
+    editAction,
+    synchronizeAction,
+    manageVersionsAction,
+  ];
 
   if (deleteImodel) {
     actions.push(deleteAction);

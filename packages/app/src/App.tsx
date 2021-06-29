@@ -17,7 +17,7 @@ import { SynchronizationRouter } from "./components/SynchronizationRouter/Synchr
 import { ViewRouter } from "./components/ViewRouter/ViewRouter";
 import { DemoPortalConfig, getConfig } from "./config";
 import { ConfigProvider } from "./config/ConfigProvider";
-import { LaunchDarklyLauncher } from "./LaunchDarklyLauncher";
+import { LaunchDarklyProvider } from "./LaunchDarklyProvider";
 
 const App: React.FC = () => {
   const [isAuthorized, setIsAuthorized] = useState(
@@ -87,7 +87,7 @@ const App: React.FC = () => {
 
   return (
     <ConfigProvider {...appConfig}>
-      <LaunchDarklyLauncher token={accessTokenObject}>
+      <LaunchDarklyProvider token={accessTokenObject}>
         <MainContainer
           header={
             <Header
@@ -138,7 +138,7 @@ const App: React.FC = () => {
             )
           )}
         </MainContainer>
-      </LaunchDarklyLauncher>
+      </LaunchDarklyProvider>
     </ConfigProvider>
   );
 };

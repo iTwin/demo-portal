@@ -2,9 +2,10 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-// export type LdFlags =
-//     "delete-imodel";
+import { LDFlagValue } from "launchdarkly-js-sdk-common";
 
-// export type DemoFlagSet = {
-//     [key: LdFlags]
-// }
+export type LdFlags = "deleteImodel";
+
+export type DemoFlagSet = {
+  [key in LdFlags]: LDFlagValue;
+};
