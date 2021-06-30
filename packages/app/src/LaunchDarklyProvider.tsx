@@ -8,7 +8,7 @@ import { LDProvider, useFlags } from "launchdarkly-react-client-sdk";
 import React, { useEffect, useState } from "react";
 
 import { useConfig } from "./config/ConfigProvider";
-import { DemoFlagSet } from "./ldFlagList";
+import { DemoFlagSet, LdFlagDefaults } from "./ldFlagList";
 
 export const useDemoFlags = () => {
   return useFlags() as DemoFlagSet;
@@ -46,7 +46,11 @@ export const LaunchDarklyProvider = ({
   }, [token]);
 
   return ldClientId && userProps ? (
-    <LDProvider clientSideID={ldClientId} user={userProps}>
+    <LDProvider
+      clientSideID={ldClientId}
+      user={userProps}
+      flags={LdFlagDefaults}
+    >
       {children}
     </LDProvider>
   ) : (
