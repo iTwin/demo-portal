@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Viewer } from "@bentley/itwin-viewer-react";
+import { Viewer } from "@itwin/web-viewer-react";
 import { RouteComponentProps, Router } from "@reach/router";
 import React from "react";
 
