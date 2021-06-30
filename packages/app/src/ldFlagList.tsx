@@ -4,9 +4,9 @@
  *--------------------------------------------------------------------------------------------*/
 import { LDFlagValue } from "launchdarkly-js-sdk-common";
 
-export type LdFlags = "deleteImodel";
+export type LdFlags = "delete-imodel";
 
-export const LdFlagDefaults = {
+export const LdFlagDefaults: DemoFlagSet = {
   "delete-imodel": false,
 };
 

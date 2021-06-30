@@ -50,6 +50,7 @@ export const LaunchDarklyProvider = ({
       clientSideID={ldClientId}
       user={userProps}
       flags={LdFlagDefaults}
+      reactOptions={{ useCamelCaseFlagKeys: false }}
     >
       {children}
     </LDProvider>

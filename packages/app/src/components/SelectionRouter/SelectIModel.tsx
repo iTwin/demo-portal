@@ -51,7 +51,7 @@ export const SelectIModel = ({
   const { editAction } = useEditIModelAction({ navigate });
   const { viewAction } = useViewIModelAction();
   const serverEnvironmentPrefix = useApiPrefix();
-  const { deleteImodel } = useDemoFlags();
+  const flags = useDemoFlags();
   const actions: any[] = [
     viewAction,
     editAction,
@@ -59,7 +59,7 @@ export const SelectIModel = ({
     manageVersionsAction,
   ];
 
-  if (deleteImodel) {
+  if (flags["delete-imodel"]) {
     actions.push(deleteAction);
   }
 
