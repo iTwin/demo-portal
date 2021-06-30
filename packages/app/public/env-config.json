@@ -9,6 +9,8 @@
     "buddi": {
       "region": null
     },
-    "ldClientId": null
+    "launchDarkly": {
+      "clientId": null
+    }
   }
 }

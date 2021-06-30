@@ -24,7 +24,7 @@ export const LaunchDarklyProvider = ({
   children,
 }: LaunchDarklyProviderProps) => {
   const [userProps, setUserProps] = useState<LDUser>();
-  const { ldClientId } = useConfig();
+  const { launchDarkly } = useConfig();
 
   useEffect(() => {
     if (token) {
@@ -45,9 +45,9 @@ export const LaunchDarklyProvider = ({
     }
   }, [token]);
 
-  return ldClientId && userProps ? (
+  return launchDarkly?.clientId && userProps ? (
     <LDProvider
-      clientSideID={ldClientId}
+      clientSideID={launchDarkly.clientId}
       user={userProps}
       reactOptions={{ useCamelCaseFlagKeys: false }}
     >
