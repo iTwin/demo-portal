@@ -58,6 +58,20 @@ jobs:
       PathtoPublish: '$(Build.ArtifactStagingDirectory)/iTwinDemoPortal.$(Build.BuildNumber).nupkg'
       ArtifactName: OctopusPackage
 
+- job: OpsTests
+  steps:
+    - task: CopyFiles@2
+      displayName: 'Copy yarn.lock file to: opTestsApp'
+      inputs:
+        Contents: yarn.lock
+        TargetFolder: '$(Agent.BuildDirectory)/packages/opTestsApp'
+        OverWrite: true
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish OpsTest Artifact'
+      inputs:
+        ArtifactName: OperationalTests
+        PathtoPublish: 'packages/opTestsApp'
+
 - job: credScan
   pool: PRG
   steps:
