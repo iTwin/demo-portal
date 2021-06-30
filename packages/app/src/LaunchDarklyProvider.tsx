@@ -8,7 +8,7 @@ import { LDProvider, useFlags } from "launchdarkly-react-client-sdk";
 import React, { useEffect, useState } from "react";
 
 import { useConfig } from "./config/ConfigProvider";
-import { DemoFlagSet, LdFlagDefaults } from "./ldFlagList";
+import { DemoFlagSet } from "./ldFlagList";
 
 export const useDemoFlags = () => {
   return useFlags() as DemoFlagSet;
@@ -49,7 +49,6 @@ export const LaunchDarklyProvider = ({
     <LDProvider
       clientSideID={ldClientId}
       user={userProps}
-      flags={LdFlagDefaults}
       reactOptions={{ useCamelCaseFlagKeys: false }}
     >
       {children}
