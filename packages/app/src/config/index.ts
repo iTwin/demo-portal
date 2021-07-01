@@ -12,9 +12,14 @@ interface DemoPortalBuddiConfig {
   region: string;
 }
 
+interface DemoPortalLaunchDarklyConfig {
+  clientId: string;
+}
+
 export interface DemoPortalConfig {
   auth?: DemoPortalAuthConfig;
   buddi?: DemoPortalBuddiConfig;
+  launchDarkly?: DemoPortalLaunchDarklyConfig;
 }
 
 interface EnvConfig {
@@ -44,6 +49,12 @@ export const getConfig = async (): Promise<DemoPortalConfig> => {
       clientId:
         fetchedConfig?.envConfig?.auth?.clientId ??
         process.env.IMJS_AUTH_CLIENT_CLIENT_ID ??
+        "",
+    },
+    launchDarkly: {
+      clientId:
+        fetchedConfig?.envConfig?.launchDarkly?.clientId ??
+        process.env.IMJS_LD_CLIENT_ID ??
         "",
     },
   };

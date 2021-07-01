@@ -17,6 +17,7 @@ import { SynchronizationRouter } from "./components/SynchronizationRouter/Synchr
 import { ViewRouter } from "./components/ViewRouter/ViewRouter";
 import { DemoPortalConfig, getConfig } from "./config";
 import { ConfigProvider } from "./config/ConfigProvider";
+import { LaunchDarklyProvider } from "./LaunchDarklyProvider";
 
 const App: React.FC = () => {
   const [isAuthorized, setIsAuthorized] = useState(
@@ -86,56 +87,58 @@ const App: React.FC = () => {
 
   return (
     <ConfigProvider {...appConfig}>
-      <MainContainer
-        header={
-          <Header
-            handleLogin={onLoginClick}
-            loggedIn={isAuthorized}
-            handleLogout={onLogoutClick}
-            accessTokenObject={accessTokenObject}
-          />
-        }
-        sidebar={<Sidebar />}
-      >
-        {isLoggingIn ? (
-          <span>"Logging in...."</span>
-        ) : (
-          isAuthorized && (
-            <Router className={"router"}>
-              <ViewRouter
-                accessToken={accessToken}
-                path="view/*"
-                email={accessTokenObject?.getUserInfo()?.email?.id ?? ""}
-              />
-              <SynchronizationRouter
-                path="synchronize/*"
-                accessToken={accessToken}
-                email={accessTokenObject?.getUserInfo()?.email?.id ?? ""}
-              />
-              <ManageVersionsRouter
-                path="manage-versions/*"
-                accessToken={accessToken}
-                email={accessTokenObject?.getUserInfo()?.email?.id ?? ""}
-              />
-              <StayTunedRouter
-                path="validate/*"
-                featureName={"Validate iModel"}
-              />
-              <StayTunedRouter
-                path="compare/*"
-                featureName={"Version Compare"}
-              />
-              <StayTunedRouter path="query/*" featureName={"Query"} />
-              <StayTunedRouter path="report/*" featureName={"Report"} />
-              <StayTunedRouter
-                path="ai-ml/*"
-                featureName={"Artifical Intelligence - Machine Learning"}
-              />
-              <Redirect noThrow={true} from="/" to="view" default={true} />
-            </Router>
-          )
-        )}
-      </MainContainer>
+      <LaunchDarklyProvider token={accessTokenObject}>
+        <MainContainer
+          header={
+            <Header
+              handleLogin={onLoginClick}
+              loggedIn={isAuthorized}
+              handleLogout={onLogoutClick}
+              accessTokenObject={accessTokenObject}
+            />
+          }
+          sidebar={<Sidebar />}
+        >
+          {isLoggingIn ? (
+            <span>"Logging in...."</span>
+          ) : (
+            isAuthorized && (
+              <Router className={"router"}>
+                <ViewRouter
+                  accessToken={accessToken}
+                  path="view/*"
+                  email={accessTokenObject?.getUserInfo()?.email?.id ?? ""}
+                />
+                <SynchronizationRouter
+                  path="synchronize/*"
+                  accessToken={accessToken}
+                  email={accessTokenObject?.getUserInfo()?.email?.id ?? ""}
+                />
+                <ManageVersionsRouter
+                  path="manage-versions/*"
+                  accessToken={accessToken}
+                  email={accessTokenObject?.getUserInfo()?.email?.id ?? ""}
+                />
+                <StayTunedRouter
+                  path="validate/*"
+                  featureName={"Validate iModel"}
+                />
+                <StayTunedRouter
+                  path="compare/*"
+                  featureName={"Version Compare"}
+                />
+                <StayTunedRouter path="query/*" featureName={"Query"} />
+                <StayTunedRouter path="report/*" featureName={"Report"} />
+                <StayTunedRouter
+                  path="ai-ml/*"
+                  featureName={"Artifical Intelligence - Machine Learning"}
+                />
+                <Redirect noThrow={true} from="/" to="view" default={true} />
+              </Router>
+            )
+          )}
+        </MainContainer>
+      </LaunchDarklyProvider>
     </ConfigProvider>
   );
 };

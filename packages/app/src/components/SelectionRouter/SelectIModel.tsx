@@ -8,6 +8,7 @@ import { RouteComponentProps } from "@reach/router";
 import React from "react";
 
 import { useApiPrefix } from "../../api/useApiPrefix";
+import { useDemoFlags } from "../../LaunchDarklyProvider";
 import { useCreateIModelAction } from "../IModelCRUDRouter/useCreateIModelAction";
 import { useDeleteIModelAction } from "../IModelCRUDRouter/useDeleteIModelAction";
 import { useEditIModelAction } from "../IModelCRUDRouter/useEditIModelAction";
@@ -50,6 +51,18 @@ export const SelectIModel = ({
   const { editAction } = useEditIModelAction({ navigate });
   const { viewAction } = useViewIModelAction();
   const serverEnvironmentPrefix = useApiPrefix();
+  const flags = useDemoFlags();
+  const actions: any[] = [
+    viewAction,
+    editAction,
+    synchronizeAction,
+    manageVersionsAction,
+  ];
+
+  if (flags["delete-imodel"]) {
+    actions.push(deleteAction);
+  }
+
   return (
     <div className="scrolling-tab-container">
       <div className={"title-section"}>
@@ -64,13 +77,9 @@ export const SelectIModel = ({
             accessToken={accessToken}
             projectId={projectId}
             onThumbnailClick={(imodel) => navigate?.(`imodel/${imodel.id}`)}
-            iModelActions={[
-              viewAction,
-              editAction,
-              manageVersionsAction,
-              synchronizeAction,
-              deleteAction,
-            ].filter((action) => !hideActions?.includes(action.key as any))}
+            iModelActions={actions.filter(
+              (action) => !hideActions?.includes(action.key as any)
+            )}
             apiOverrides={{ serverEnvironmentPrefix }}
             {...rest}
           />
