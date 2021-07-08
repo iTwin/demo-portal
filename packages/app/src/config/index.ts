@@ -16,10 +16,15 @@ interface DemoPortalLaunchDarklyConfig {
   clientId: string;
 }
 
+interface DemoPortalAppInsightsConfig {
+  key: string;
+}
+
 export interface DemoPortalConfig {
   auth?: DemoPortalAuthConfig;
   buddi?: DemoPortalBuddiConfig;
   launchDarkly?: DemoPortalLaunchDarklyConfig;
+  appInsights?: DemoPortalAppInsightsConfig;
 }
 
 interface EnvConfig {
@@ -55,6 +60,12 @@ export const getConfig = async (): Promise<DemoPortalConfig> => {
       clientId:
         fetchedConfig?.envConfig?.launchDarkly?.clientId ??
         process.env.IMJS_LD_CLIENT_ID ??
+        "",
+    },
+    appInsights: {
+      key:
+        fetchedConfig?.envConfig?.appInsights?.key ??
+        process.env.IMJS_APP_INSIGHTS_KEY ??
         "",
     },
   };

@@ -18,6 +18,8 @@ import { ViewRouter } from "./components/ViewRouter/ViewRouter";
 import { DemoPortalConfig, getConfig } from "./config";
 import { ConfigProvider } from "./config/ConfigProvider";
 import { LaunchDarklyProvider } from "./LaunchDarklyProvider";
+import history from "./services/router/history";
+import { ai } from "./services/telemetry";
 
 const App: React.FC = () => {
   const [isAuthorized, setIsAuthorized] = useState(
@@ -73,6 +75,12 @@ const App: React.FC = () => {
       setIsLoggingIn(false);
     }
   }, [isAuthorized, isLoggingIn]);
+
+  useEffect(() => {
+    if (accessTokenObject) {
+      void ai.initialize({ history }, accessTokenObject.getUserInfo());
+    }
+  }, [accessTokenObject]);
 
   const onLoginClick = async () => {
     setIsLoggingIn(true);
