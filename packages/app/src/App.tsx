@@ -18,6 +18,8 @@ import { ViewRouter } from "./components/ViewRouter/ViewRouter";
 import { DemoPortalConfig, getConfig } from "./config";
 import { ConfigProvider } from "./config/ConfigProvider";
 import { LaunchDarklyProvider } from "./LaunchDarklyProvider";
+import history from "./services/router/history";
+import { ai } from "./services/telemetry";
 
 const App: React.FC = () => {
   const [isAuthorized, setIsAuthorized] = useState(
@@ -29,6 +31,7 @@ const App: React.FC = () => {
   const [accessTokenObject, setAccessTokenObject] = useState<AccessToken>();
   const [accessToken, setAccessToken] = useState("");
   const [appConfig, setAppConfig] = useState<DemoPortalConfig>();
+  const [aiInitialized, setAiInitialized] = useState<boolean>(false);
 
   useEffect(() => {
     const initOidc = async () => {
@@ -74,6 +77,16 @@ const App: React.FC = () => {
     }
   }, [isAuthorized, isLoggingIn]);
 
+  useEffect(() => {
+    if (accessTokenObject) {
+      void ai
+        .initialize({ history }, accessTokenObject.getUserInfo())
+        .then(() => {
+          setAiInitialized(true);
+        });
+    }
+  }, [accessTokenObject]);
+
   const onLoginClick = async () => {
     setIsLoggingIn(true);
     await AuthorizationClient.signIn();
@@ -102,7 +115,8 @@ const App: React.FC = () => {
           {isLoggingIn ? (
             <span>"Logging in...."</span>
           ) : (
-            isAuthorized && (
+            isAuthorized &&
+            aiInitialized && (
               <Router className={"router"}>
                 <ViewRouter
                   accessToken={accessToken}
