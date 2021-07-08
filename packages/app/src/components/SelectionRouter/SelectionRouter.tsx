@@ -6,8 +6,8 @@ import { Redirect, RouteComponentProps, Router } from "@reach/router";
 import React, { ComponentPropsWithoutRef } from "react";
 
 import { IModelCRUDRouter } from "../IModelCRUDRouter/IModelCRUDRouter";
-import { SelectIModel } from "./SelectIModel";
-import { SelectProject } from "./SelectProject";
+import SelectIModel from "./SelectIModel";
+import SelectProject from "./SelectProject";
 
 interface SelectionRouterProps extends RouteComponentProps {
   accessToken: string;

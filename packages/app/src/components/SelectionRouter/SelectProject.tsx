@@ -9,10 +9,12 @@ import {
   SvgStarHollow,
 } from "@itwin/itwinui-icons-react";
 import { HorizontalTabs } from "@itwin/itwinui-react";
+import { withAITracking } from "@microsoft/applicationinsights-react-js";
 import { RouteComponentProps, useLocation } from "@reach/router";
 import React, { useState } from "react";
 
 import { useApiPrefix } from "../../api/useApiPrefix";
+import { ai, trackEvent } from "../../services/telemetry";
 import { useCreateIModelAction } from "../IModelCRUDRouter/useCreateIModelAction";
 import "./SelectProject.scss";
 
@@ -22,7 +24,8 @@ export interface SelectProjectProps
 }
 
 const PROJECT_TYPE_MAP = ["", "?recents", "?myprojects"];
-export const SelectProject = ({
+
+const SelectProject = ({
   accessToken,
   navigate,
   ...gridProps
@@ -72,7 +75,10 @@ export const SelectProject = ({
           requestType={
             projectType === 0 ? "favorites" : projectType === 1 ? "recents" : ""
           }
-          onThumbnailClick={(project) => navigate?.(`project/${project.id}`)}
+          onThumbnailClick={(project) => {
+            trackEvent("ProjectClicked", { project: project.id });
+            navigate?.(`project/${project.id}`);
+          }}
           projectActions={[createAction]}
           apiOverrides={{ serverEnvironmentPrefix }}
           {...gridProps}
@@ -81,3 +87,5 @@ export const SelectProject = ({
     </div>
   );
 };
+
+export default withAITracking(ai.reactPlugin, SelectProject, "SelectProject");

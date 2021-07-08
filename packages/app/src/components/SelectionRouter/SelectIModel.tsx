@@ -4,11 +4,13 @@
  *--------------------------------------------------------------------------------------------*/
 import { IModelGrid, IModelGridProps } from "@itwin/imodel-browser-react";
 import { ButtonGroup } from "@itwin/itwinui-react";
+import { withAITracking } from "@microsoft/applicationinsights-react-js";
 import { RouteComponentProps } from "@reach/router";
 import React from "react";
 
 import { useApiPrefix } from "../../api/useApiPrefix";
 import { useDemoFlags } from "../../LaunchDarklyProvider";
+import { ai, trackEvent } from "../../services/telemetry";
 import { useCreateIModelAction } from "../IModelCRUDRouter/useCreateIModelAction";
 import { useDeleteIModelAction } from "../IModelCRUDRouter/useDeleteIModelAction";
 import { useEditIModelAction } from "../IModelCRUDRouter/useEditIModelAction";
@@ -34,7 +36,8 @@ type IModelRouteProps = RouteComponentProps<
     email?: string;
   }
 >;
-export const SelectIModel = ({
+
+const SelectIModel = ({
   accessToken = "",
   projectId = "",
   navigate,
@@ -76,7 +79,10 @@ export const SelectIModel = ({
             key={refreshKey}
             accessToken={accessToken}
             projectId={projectId}
-            onThumbnailClick={(imodel) => navigate?.(`imodel/${imodel.id}`)}
+            onThumbnailClick={(imodel) => {
+              trackEvent("iModelClicked", { iModel: imodel.id });
+              navigate?.(`imodel/${imodel.id}`);
+            }}
             iModelActions={actions.filter(
               (action) => !hideActions?.includes(action.key as any)
             )}
@@ -89,3 +95,5 @@ export const SelectIModel = ({
     </div>
   );
 };
+
+export default withAITracking(ai.reactPlugin, SelectIModel, "SelectIModel");

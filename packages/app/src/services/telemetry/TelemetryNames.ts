@@ -4,4 +4,4 @@
  *--------------------------------------------------------------------------------------------*/
 export type TelemetryMetricName = "";
 
-export type TelemetryEventName = "";
+export type TelemetryEventName = "ProjectClicked" | "iModelClicked";
