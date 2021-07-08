@@ -31,7 +31,6 @@ const App: React.FC = () => {
   const [accessTokenObject, setAccessTokenObject] = useState<AccessToken>();
   const [accessToken, setAccessToken] = useState("");
   const [appConfig, setAppConfig] = useState<DemoPortalConfig>();
-  const [aiInitialized, setAiInitialized] = useState<boolean>(false);
 
   useEffect(() => {
     const initOidc = async () => {
@@ -79,11 +78,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     if (accessTokenObject) {
-      void ai
-        .initialize({ history }, accessTokenObject.getUserInfo())
-        .then(() => {
-          setAiInitialized(true);
-        });
+      void ai.initialize({ history }, accessTokenObject.getUserInfo());
     }
   }, [accessTokenObject]);
 
@@ -115,8 +110,7 @@ const App: React.FC = () => {
           {isLoggingIn ? (
             <span>"Logging in...."</span>
           ) : (
-            isAuthorized &&
-            aiInitialized && (
+            isAuthorized && (
               <Router className={"router"}>
                 <ViewRouter
                   accessToken={accessToken}
