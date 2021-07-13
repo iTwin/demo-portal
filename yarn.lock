@@ -1761,10 +1761,10 @@
     "@itwin/itwinui-icons-react" "^0.1.0"
     "@itwin/itwinui-react" "^1.6.0"
 
-"@itwin/error-handling-react@1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@itwin/error-handling-react/-/error-handling-react-1.0.1.tgz#6b16fc8979093a189c4b65eba93b7fee41e0b208"
-  integrity sha512-zsNzbsrIiFkgmzcS8UFgCtaavg6H5mWDsYL0w2YFh7OgIHg80iW8LmS1Vkm2ZXKWRhHld4iTXK007rG5JvtSJA==
+"@itwin/error-handling-react@1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@itwin/error-handling-react/-/error-handling-react-1.0.2.tgz#538fa86b653b98a3cfb13527939e8e3b0b1f7b50"
+  integrity sha512-xEcfZmFZtZZUoqZZfk1OIpPSqhD5vwr5lULuh2mNy+f3uPzixEvkQsx16BouPlY6O0hW6IoWkABTYe2UwgRSVw==
   dependencies:
     apollo-client "^2.6.4"
     classnames "^2.3.1"
@@ -1854,26 +1854,26 @@
     "@itwin/itwinui-react" "^1.6.0"
     classnames "^2.2.6"
 
-"@itwin/viewer-react@1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@itwin/viewer-react/-/viewer-react-1.0.1.tgz#c669d1bcc5e3516b4a130da84f709844b4857748"
-  integrity sha512-HOFwizId7HzuXzXvVt+kEAfbxULfiUKJR30xZf7sm7LbNj347RngRFC9GtThl8awyWx7HpOcHfTM77qhFxkH6g==
+"@itwin/viewer-react@1.0.6":
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@itwin/viewer-react/-/viewer-react-1.0.6.tgz#a35be903cefab1184120a462b824a3e4f5ce051d"
+  integrity sha512-7eAHlkGetYLlqMbExf8uVZsTTnLt0vrYRFabQ4veweAGqceIDpuHP2Pd6SgD+83Lc0wR7Wivq687V2//40o0Cg==
   dependencies:
     "@bentley/icons-generic-webfont" "^1.0.15"
     "@bentley/property-grid-react" "^1.2.1"
     "@bentley/tree-widget-react" "^1.2.8"
-    "@itwin/error-handling-react" "1.0.1"
+    "@itwin/error-handling-react" "1.0.2"
     "@microsoft/applicationinsights-react-js" "2.3.1"
     "@microsoft/applicationinsights-web" "2.3.1"
     history "^4.10.1"
     react-spring "^8.0.27"
 
-"@itwin/web-viewer-react@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@itwin/web-viewer-react/-/web-viewer-react-1.0.1.tgz#f60d0a1449d92ed5727e516516b2b8f807341755"
-  integrity sha512-+2cweyxMMPSEYw6aDDIWQvfHMCZu0TFaAoYfUYEITQfV0seeEbhh/7x+3qD4FisuO/p+XLdo0UX/MhQYwQFCwQ==
+"@itwin/web-viewer-react@^1.0.6":
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@itwin/web-viewer-react/-/web-viewer-react-1.0.6.tgz#9602ec282ab15dea2407e00489bbf9700d0c9d45"
+  integrity sha512-dtXROcCrBar2dy8bwiHhSa4NCluBwKHzZlCNKmU+SF83NNvcCqaZ7jKKTDDTiIzZsYTc1W68h+ieSPiirqrICw==
   dependencies:
-    "@itwin/viewer-react" "1.0.1"
+    "@itwin/viewer-react" "1.0.6"
     oidc-client "^1.10.1"
 
 "@jest/console@^24.7.1", "@jest/console@^24.9.0":
@@ -3722,7 +3722,7 @@ axe-core@^4.0.2:
   resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.2.2.tgz#0c987d82c8b82b4b9b7a945f1b5ef0d8fed586ed"
   integrity sha512-OKRkKM4ojMEZRJ5UNJHmq9tht7cEnRnqKG6KyB/trYws00Xtkv12mHtlJ0SK7cmuNbrU8dPUova3ELTuilfBbw==
 
-axios@^0.21.1:
+axios@0.21.1, axios@^0.21.1:
   version "0.21.1"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.21.1.tgz#22563481962f4d6bde9a76d516ef0e5d3c09b2b8"
   integrity sha512-dKQiRHxGD9PPRIUNIWvZhPTPpl1rf/OxTYKsqKUDjBwYylTvV7SjSHJb9ratfyzM6wCdLCOYLzs73qpg5c4iGA==
@@ -5796,10 +5796,10 @@ domhandler@^4.0.0, domhandler@^4.2.0:
   dependencies:
     domelementtype "^2.2.0"
 
-dompurify@^2.0.12:
-  version "2.2.9"
-  resolved "https://registry.yarnpkg.com/dompurify/-/dompurify-2.2.9.tgz#4b42e244238032d9286a0d2c87b51313581d9624"
-  integrity sha512-+9MqacuigMIZ+1+EwoEltogyWGFTJZWU3258Rupxs+2CGs4H914G9er6pZbsme/bvb5L67o2rade9n21e4RW/w==
+dompurify@^2.0.12, dompurify@^2.1.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/dompurify/-/dompurify-2.3.0.tgz#07bb39515e491588e5756b1d3e8375b5964814e2"
+  integrity sha512-VV5C6Kr53YVHGOBKO/F86OYX6/iLTw2yVSI721gKetxpHCK/V5TaLEf9ODjRgl1KLSWRMY6cUhAbv/c+IUnwQw==
 
 domready@1.0.8:
   version "1.0.8"
@@ -6755,14 +6755,7 @@ fastq@^1.6.0:
   dependencies:
     reusify "^1.0.4"
 
-faye-websocket@^0.10.0:
-  version "0.10.0"
-  resolved "https://registry.yarnpkg.com/faye-websocket/-/faye-websocket-0.10.0.tgz#4e492f8d04dfb6f89003507f6edbf2d501e7c6f4"
-  integrity sha1-TkkvjQTftviQA1B/btvy1QHnxvQ=
-  dependencies:
-    websocket-driver ">=0.5.1"
-
-faye-websocket@~0.11.1:
+faye-websocket@^0.10.0, faye-websocket@^0.11.0, faye-websocket@~0.11.1:
   version "0.11.4"
   resolved "https://registry.yarnpkg.com/faye-websocket/-/faye-websocket-0.11.4.tgz#7f0d9275cfdd86a1c963dc8b65fcc451edcbb1da"
   integrity sha512-CzbClwlXAuiRQAlUyfqPgvPoNKTckTPGfwZV4ZdAhVcP2lh9KUxJg2b5GkE7XbjKQ3YJnQ9z6D9ntLAlB+tP8g==
@@ -10878,6 +10871,11 @@ object-keys@^1.0.12, object-keys@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/object-keys/-/object-keys-1.1.1.tgz#1c47f272df277f3b1daf061677d9c82e2322c60e"
   integrity sha512-NuAESUOUMrlIXOfHKzD6bpPu3tYt3xvjNdRIQ+FeT0lNb4K8WR70CaDxhuNguS2XG+GjkyMwOzsN5ZktImfhLA==
+
+object-path@^0.11.5:
+  version "0.11.5"
+  resolved "https://registry.yarnpkg.com/object-path/-/object-path-0.11.5.tgz#d4e3cf19601a5140a55a16ad712019a9c50b577a"
+  integrity sha512-jgSbThcoR/s+XumvGMTMf81QVBmah+/Q7K7YduKeKVWL7N111unR2d6pZZarSk6kY/caeNxUDyxOvMWyzoU2eg==
 
 object-visit@^1.0.0:
   version "1.0.1"
@@ -15044,6 +15042,11 @@ typescript@^3.9.5:
   version "3.9.10"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.9.10.tgz#70f3910ac7a51ed6bef79da7800690b19bf778b8"
   integrity sha512-w6fIxVE/H1PkLKcCPsFqKE7Kv7QUwhU8qQY2MueZXWx5cPZdwFupLgKK3vntcK98BtNHZtAF4LA/yl2a7k8R6Q==
+
+ua-parser-js@^0.7.22:
+  version "0.7.28"
+  resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.28.tgz#8ba04e653f35ce210239c64661685bf9121dec31"
+  integrity sha512-6Gurc1n//gjp9eQNXjD9O3M/sMwVtN5S8Lv9bvOYBfKfDNiIIhqiyi01vMBO45u4zkDE420w/e0se7Vs+sIg+g==
 
 uc.micro@^1.0.1:
   version "1.0.6"
