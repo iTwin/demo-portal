@@ -8,7 +8,7 @@ import {
 } from "@bentley/frontend-authorization-client";
 import { FrontendRequestContext } from "@bentley/imodeljs-frontend";
 
-class AuthorizationClient {
+class AuthClient {
   private static _oidcClient: BrowserAuthorizationClient;
   private static _apimClient: BrowserAuthorizationClient;
 
@@ -70,4 +70,4 @@ class AuthorizationClient {
   }
 }
 
-export default AuthorizationClient;
+export default AuthClient;

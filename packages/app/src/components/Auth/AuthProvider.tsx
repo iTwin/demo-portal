@@ -1,69 +1,79 @@
 import React, { useEffect, useState } from "react";
 import { AccessToken, UserInfo } from "@bentley/itwin-client";
 import { useConfig } from "../../config/ConfigProvider";
-import AuthorizationClient from "../../AuthorizationClient";
+import AuthClient from "../../services/auth/AuthClient";
 import { ai } from "../../services/telemetry";
 
 export interface AuthContextValue {
+  isAuthenticated?: boolean;
   accessToken?: AccessToken;
   userInfo?: UserInfo;
 }
 
-export interface AuthProviderProps extends AuthContextValue {
+export interface AuthProviderProps {
   children: React.ReactNode;
 }
 
 export const AuthContext = React.createContext<AuthContextValue>({});
 
-export const AuthProvider = ({ children, ...rest }: AuthProviderProps) => {
-//   const [isAuthenticated, setIsAuthenticated] = useState(
-//     AuthorizationClient.oidcClient
-//       ? AuthorizationClient.oidcClient.isAuthorized
-//       : false
-//   );
-//   const [accessTokenObject, setAccessTokenObject] = useState<AccessToken>();
-//   const [userInfo, setUserInfo] = useState<UserInfo>()
+export const AuthProvider = ({ children }: AuthProviderProps) => {
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    AuthClient.oidcClient
+      ? AuthClient.oidcClient.isAuthorized
+      : false
+  );
+  const [accessTokenObject, setAccessTokenObject] = useState<AccessToken>();
+  const [userInfo, setUserInfo] = useState<UserInfo>();
 
-//   const { auth } = useConfig();
+  const { auth } = useConfig();
 
-//   useEffect(() => {
-//     const initOidc = async () => {
-//       if (!AuthorizationClient.oidcClient && auth) {
-//         if (!auth.clientId) {
-//           throw new Error(
-//             "Please add a valid client ID in the .env.local file and restart the application"
-//           );
-//         }
-//         await AuthorizationClient.initializeOidc(
-//           auth.clientId,
-//           auth.authority,
-//           auth.apimAuthority
-//         );
-//         AuthorizationClient.apimClient.onUserStateChanged.addListener(
-//           (token) => {
-//             setAccessTokenObject(token);
-//             ai.updateUserInfo(token?.getUserInfo())
-//             // const userInfo = token?.getUserInfo();
-//             // console.log("apim");
-//             // console.log(userInfo);
-//             // console.log(token?.toTokenString() ?? "");
-//           }
-//         );
-//       }
+  useEffect(() => {
+    const initOidc = async () => {
+      if (!AuthClient.oidcClient && auth) {
+        if (!auth.clientId) {
+          throw new Error(
+            "Please add a valid client ID in the .env.local file and restart the application"
+          );
+        }
+        await AuthClient.initializeOidc(
+          auth.clientId,
+          auth.authority,
+          auth.apimAuthority
+        );
+        AuthClient.apimClient.onUserStateChanged.addListener(
+          (token) => {
+            setAccessTokenObject(token);
+            const userInfo = token?.getUserInfo();
+            setUserInfo(userInfo);
+            ai.updateUserInfo(userInfo);
+            console.log(userInfo);
+            console.log(token?.toTokenString() ?? "");
+          }
+        );
+      }
 
-//       try {
-//         // attempt silent signin
-//         await AuthorizationClient.signInSilent();
-//         setIsAuthenticated(AuthorizationClient.oidcClient.isAuthorized);
-//       } catch (error) {
-//         // swallow the error. User can click the button to sign in
-//       }
-//     };
-//     initOidc().catch((error) => console.error(error));
-//   }, [auth]);
+      try {
+        // attempt silent signin
+        await AuthClient.signInSilent();
+        setIsAuthenticated(AuthClient.oidcClient.isAuthorized);
+      } catch (error) {
+        // swallow the error. User can click the button to sign in
+      }
+    };
+    initOidc().catch((error) => console.error(error));
+  }, [auth]);
 
-
-  return <AuthContext.Provider value={rest}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider
+      value={{
+        isAuthenticated,
+        accessToken: accessTokenObject,
+        userInfo,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 export const useAuth = () => {
