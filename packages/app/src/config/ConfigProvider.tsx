@@ -2,20 +2,29 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-import { DemoPortalConfig } from ".";
+import { DemoPortalConfig, getConfig } from ".";
 
-export interface ConfigProviderProps extends DemoPortalConfig {
+export interface ConfigProviderProps {
   children: React.ReactNode;
 }
 
 const ConfigContext = React.createContext<DemoPortalConfig>({});
 
-export const ConfigProvider = (props: ConfigProviderProps) => {
-  const { children, ...rest } = props;
+export const ConfigProvider = ({ children }: ConfigProviderProps) => {
+  const [appConfig, setAppConfig] = useState<DemoPortalConfig>();
+
+  useEffect(() => {
+    void getConfig().then((config) => {
+      setAppConfig(config);
+    });
+  }, []);
+
   return (
-    <ConfigContext.Provider value={rest}>{children}</ConfigContext.Provider>
+    <ConfigContext.Provider value={{ ...appConfig }}>
+      {children}
+    </ConfigContext.Provider>
   );
 };
 
