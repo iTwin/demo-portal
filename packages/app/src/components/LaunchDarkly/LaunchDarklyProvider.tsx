@@ -2,12 +2,12 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AccessToken } from "@bentley/itwin-client";
 import { LDUser } from "launchdarkly-js-sdk-common";
 import { LDProvider, useFlags } from "launchdarkly-react-client-sdk";
-import React, { useEffect, useState } from "react";
+import React, { useMemo } from "react";
+import { useAuth } from "../Auth/AuthProvider";
 
-import { useConfig } from "./config/ConfigProvider";
+import { useConfig } from "../../config/ConfigProvider";
 import { DemoFlagSet } from "./ldFlagList";
 
 export const useDemoFlags = () => {
@@ -15,40 +15,36 @@ export const useDemoFlags = () => {
 };
 
 export interface LaunchDarklyProviderProps {
-  token?: AccessToken;
   children?: any;
 }
 
 export const LaunchDarklyProvider = ({
-  token,
   children,
 }: LaunchDarklyProviderProps) => {
-  const [userProps, setUserProps] = useState<LDUser>();
   const { launchDarkly } = useConfig();
+  const { userInfo } = useAuth();
 
-  useEffect(() => {
-    if (token) {
-      const user = token.getUserInfo();
-      if (user) {
-        const newUserProps = {
-          key: user.id.toUpperCase(),
-          name: user.email?.id.toUpperCase(),
-          custom: {
-            CountryIso:
-              user.featureTracking?.usageCountryIso.toUpperCase() ?? "",
-            ImsId: user.id.toUpperCase(),
-            UltimateId: user.featureTracking?.ultimateSite.toUpperCase() ?? "",
-          },
-        };
-        setUserProps(newUserProps);
-      }
+  const ldUser: LDUser | undefined = useMemo(() => {
+    if (userInfo) {
+      const imsId = userInfo.id.toUpperCase();
+      return {
+        key: imsId,
+        name: userInfo.email?.id.toUpperCase(),
+        custom: {
+          CountryIso:
+            userInfo.featureTracking?.usageCountryIso.toUpperCase() ?? "",
+          ImsId: imsId,
+          UltimateId:
+            userInfo.featureTracking?.ultimateSite.toUpperCase() ?? "",
+        },
+      };
     }
-  }, [token]);
+  }, [userInfo]);
 
-  return launchDarkly?.clientId && userProps ? (
+  return launchDarkly?.clientId && ldUser ? (
     <LDProvider
       clientSideID={launchDarkly.clientId}
-      user={userProps}
+      user={ldUser}
       reactOptions={{ useCamelCaseFlagKeys: false }}
     >
       {children}
