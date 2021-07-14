@@ -1,11 +1,16 @@
-import React, { useEffect, useState } from "react";
+/*---------------------------------------------------------------------------------------------
+ * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
+ * See LICENSE.md in the project root for license terms and full copyright notice.
+ *--------------------------------------------------------------------------------------------*/
 import { AccessToken, UserInfo } from "@bentley/itwin-client";
+import React, { useEffect, useState } from "react";
+
 import { useConfig } from "../../config/ConfigProvider";
 import AuthClient from "../../services/auth/AuthClient";
 import { ai } from "../../services/telemetry";
 
 export interface AuthContextValue {
-  isAuthenticated?: boolean;
+  isAuthenticated: boolean;
   accessToken?: AccessToken;
   userInfo?: UserInfo;
 }
@@ -14,15 +19,15 @@ export interface AuthProviderProps {
   children: React.ReactNode;
 }
 
-export const AuthContext = React.createContext<AuthContextValue>({});
+const AuthContext = React.createContext<AuthContextValue>({
+  isAuthenticated: false,
+});
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState(
-    AuthClient.oidcClient
-      ? AuthClient.oidcClient.isAuthorized
-      : false
+    AuthClient.oidcClient ? AuthClient.oidcClient.isAuthorized : false
   );
-  const [accessTokenObject, setAccessTokenObject] = useState<AccessToken>();
+  const [accessToken, setAccessToken] = useState<AccessToken>();
   const [userInfo, setUserInfo] = useState<UserInfo>();
 
   const { auth } = useConfig();
@@ -40,16 +45,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
           auth.authority,
           auth.apimAuthority
         );
-        AuthClient.apimClient.onUserStateChanged.addListener(
-          (token) => {
-            setAccessTokenObject(token);
-            const userInfo = token?.getUserInfo();
-            setUserInfo(userInfo);
-            ai.updateUserInfo(userInfo);
-            console.log(userInfo);
-            console.log(token?.toTokenString() ?? "");
-          }
-        );
+        AuthClient.apimClient.onUserStateChanged.addListener((token) => {
+          setIsAuthenticated(token?.isExpired(0) ?? false);
+          setAccessToken(token);
+          const userInfo = token?.getUserInfo();
+          setUserInfo(userInfo);
+          ai.updateUserInfo(userInfo);
+        });
       }
 
       try {
@@ -67,7 +69,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     <AuthContext.Provider
       value={{
         isAuthenticated,
-        accessToken: accessTokenObject,
+        accessToken,
         userInfo,
       }}
     >

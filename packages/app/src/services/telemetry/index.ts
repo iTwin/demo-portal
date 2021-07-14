@@ -97,6 +97,7 @@ class TelemetryService {
 
   updateUserInfo(userInfo?: UserInfo) {
     this._userInfo = userInfo;
+    this._configureUserContext();
   }
 }
 

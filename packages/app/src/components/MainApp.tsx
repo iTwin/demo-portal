@@ -1,4 +1,9 @@
+/*---------------------------------------------------------------------------------------------
+ * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
+ * See LICENSE.md in the project root for license terms and full copyright notice.
+ *--------------------------------------------------------------------------------------------*/
 import React, { useState } from "react";
+
 import AuthClient from "../services/auth/AuthClient";
 import { useAuth } from "./Auth/AuthProvider";
 import { Header } from "./Header/Header";
@@ -8,12 +13,7 @@ import { MainRouter } from "./MainRouter";
 
 export const MainApp = () => {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(
-    AuthClient.oidcClient
-      ? AuthClient.oidcClient.isAuthorized
-      : false
-  );
-  const { accessToken: accessTokenObject } = useAuth();
+  const { accessToken, isAuthenticated } = useAuth();
 
   const onLoginClick = async () => {
     setIsLoggingIn(true);
@@ -23,7 +23,6 @@ export const MainApp = () => {
   const onLogoutClick = async () => {
     setIsLoggingIn(false);
     await AuthClient.signOut();
-    setIsAuthenticated(false);
   };
 
   return (
@@ -31,9 +30,9 @@ export const MainApp = () => {
       header={
         <Header
           handleLogin={onLoginClick}
-          loggedIn={isAuthenticated}
           handleLogout={onLogoutClick}
-          accessTokenObject={accessTokenObject}
+          loggedIn={isAuthenticated}
+          accessTokenObject={accessToken}
         />
       }
       sidebar={<Sidebar />}
