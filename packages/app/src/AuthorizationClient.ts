@@ -25,7 +25,7 @@ class AuthorizationClient {
     authority: string,
     apimAuthority: string
   ): Promise<void> {
-    if (this._oidcClient) {
+    if (this._oidcClient && this._apimClient) {
       return;
     }
 
@@ -43,11 +43,15 @@ class AuthorizationClient {
       authority,
     };
 
-    this._oidcClient = new BrowserAuthorizationClient(oidcConfiguration);
-    this._apimClient = new BrowserAuthorizationClient({
-      ...oidcConfiguration,
-      authority: apimAuthority,
-    });
+    if (!this._oidcClient) {
+      this._oidcClient = new BrowserAuthorizationClient(oidcConfiguration);
+    }
+    if (!this._apimClient) {
+      this._apimClient = new BrowserAuthorizationClient({
+        ...oidcConfiguration,
+        authority: apimAuthority,
+      });
+    }
   }
 
   public static async signIn(): Promise<void> {

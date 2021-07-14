@@ -3,34 +3,32 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { AccessToken } from "@bentley/itwin-client";
-import { Redirect, Router } from "@reach/router";
 import React, { useEffect, useState } from "react";
 
 import "./App.scss";
 import AuthorizationClient from "./AuthorizationClient";
+import { AuthProvider } from "./components/Auth/AuthProvider";
 import { Header } from "./components/Header/Header";
+import { MainRouter } from "./components/Main";
 import MainContainer from "./components/MainLayout/MainContainer";
 import { Sidebar } from "./components/MainLayout/Sidebar";
-import { ManageVersionsRouter } from "./components/ManageVersionsRouter/ManageVersionsRouter";
-import { StayTunedRouter } from "./components/StayTunedRouter/StayTunedRouter";
-import { SynchronizationRouter } from "./components/SynchronizationRouter/SynchronizationRouter";
-import { ViewRouter } from "./components/ViewRouter/ViewRouter";
 import { DemoPortalConfig, getConfig } from "./config";
 import { ConfigProvider } from "./config/ConfigProvider";
-import { LaunchDarklyProvider } from "./LaunchDarklyProvider";
+import { LaunchDarklyProvider } from "./components/LaunchDarkly/LaunchDarklyProvider";
 import history from "./services/router/history";
 import { ai } from "./services/telemetry";
 
 const App: React.FC = () => {
-  const [isAuthorized, setIsAuthorized] = useState(
+  const [isAuthenticated, setIsAuthenticated] = useState(
     AuthorizationClient.oidcClient
       ? AuthorizationClient.oidcClient.isAuthorized
       : false
   );
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [accessTokenObject, setAccessTokenObject] = useState<AccessToken>();
-  const [accessToken, setAccessToken] = useState("");
+  // const [accessToken, setAccessToken] = useState("");
   const [appConfig, setAppConfig] = useState<DemoPortalConfig>();
+  const [isWhitelisted, setIsWhitelisted] = useState(false);
 
   useEffect(() => {
     const initOidc = async () => {
@@ -48,7 +46,9 @@ const App: React.FC = () => {
         AuthorizationClient.apimClient.onUserStateChanged.addListener(
           (token) => {
             setAccessTokenObject(token);
-            setAccessToken(token?.toTokenString() ?? "");
+            // setAccessToken(token?.toTokenString() ?? "");
+            console.log(token?.getUserInfo());
+            console.log(token?.toTokenString() ?? "");
           }
         );
       }
@@ -56,7 +56,7 @@ const App: React.FC = () => {
       try {
         // attempt silent signin
         await AuthorizationClient.signInSilent();
-        setIsAuthorized(AuthorizationClient.oidcClient.isAuthorized);
+        setIsAuthenticated(AuthorizationClient.oidcClient.isAuthorized);
       } catch (error) {
         // swallow the error. User can click the button to sign in
       }
@@ -71,16 +71,28 @@ const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (isLoggingIn && isAuthorized) {
+    if (isLoggingIn && isAuthenticated) {
       setIsLoggingIn(false);
     }
-  }, [isAuthorized, isLoggingIn]);
+  }, [isAuthenticated, isLoggingIn]);
 
   useEffect(() => {
     if (accessTokenObject) {
-      void ai.initialize({ history }, accessTokenObject.getUserInfo());
+      const userInfo = accessTokenObject.getUserInfo();
+      void ai.initialize({ history }, userInfo);
+
+      if (
+        appConfig?.auth?.whitelistedUltimateIds &&
+        userInfo?.featureTracking?.ultimateSite
+      ) {
+        setIsWhitelisted(
+          appConfig.auth.whitelistedUltimateIds.includes(
+            userInfo.featureTracking.ultimateSite
+          )
+        );
+      }
     }
-  }, [accessTokenObject]);
+  }, [accessTokenObject, appConfig]);
 
   const onLoginClick = async () => {
     setIsLoggingIn(true);
@@ -90,63 +102,42 @@ const App: React.FC = () => {
   const onLogoutClick = async () => {
     setIsLoggingIn(false);
     await AuthorizationClient.signOut();
-    setIsAuthorized(false);
+    setIsAuthenticated(false);
   };
 
   return (
     <ConfigProvider {...appConfig}>
-      <LaunchDarklyProvider token={accessTokenObject}>
-        <MainContainer
-          header={
-            <Header
-              handleLogin={onLoginClick}
-              loggedIn={isAuthorized}
-              handleLogout={onLogoutClick}
-              accessTokenObject={accessTokenObject}
-            />
-          }
-          sidebar={<Sidebar />}
-        >
-          {isLoggingIn ? (
-            <span>"Logging in...."</span>
-          ) : (
-            isAuthorized && (
-              <Router className={"router"}>
-                <ViewRouter
-                  accessToken={accessToken}
-                  path="view/*"
-                  email={accessTokenObject?.getUserInfo()?.email?.id ?? ""}
-                />
-                <SynchronizationRouter
-                  path="synchronize/*"
-                  accessToken={accessToken}
-                  email={accessTokenObject?.getUserInfo()?.email?.id ?? ""}
-                />
-                <ManageVersionsRouter
-                  path="manage-versions/*"
-                  accessToken={accessToken}
-                  email={accessTokenObject?.getUserInfo()?.email?.id ?? ""}
-                />
-                <StayTunedRouter
-                  path="validate/*"
-                  featureName={"Validate iModel"}
-                />
-                <StayTunedRouter
-                  path="compare/*"
-                  featureName={"Version Compare"}
-                />
-                <StayTunedRouter path="query/*" featureName={"Query"} />
-                <StayTunedRouter path="report/*" featureName={"Report"} />
-                <StayTunedRouter
-                  path="ai-ml/*"
-                  featureName={"Artifical Intelligence - Machine Learning"}
-                />
-                <Redirect noThrow={true} from="/" to="view" default={true} />
-              </Router>
-            )
-          )}
-        </MainContainer>
-      </LaunchDarklyProvider>
+      <AuthProvider
+        accessToken={accessTokenObject}
+        userInfo={accessTokenObject?.getUserInfo()}
+      >
+        <LaunchDarklyProvider>
+          <MainContainer
+            header={
+              <Header
+                handleLogin={onLoginClick}
+                loggedIn={isAuthenticated}
+                handleLogout={onLogoutClick}
+                accessTokenObject={accessTokenObject}
+              />
+            }
+            sidebar={<Sidebar />}
+          >
+            {isLoggingIn ? (
+              <span>"Logging in...."</span>
+            ) : (
+              isAuthenticated && (
+                // isWhitelisted
+                // ? (
+                <MainRouter />
+                // ) : (
+                //   <ErrorPage errorType="401" />
+                // )
+              )
+            )}
+          </MainContainer>
+        </LaunchDarklyProvider>
+      </AuthProvider>
     </ConfigProvider>
   );
 };

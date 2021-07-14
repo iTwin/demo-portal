@@ -94,6 +94,10 @@ class TelemetryService {
   get reactPlugin() {
     return this._reactPlugin;
   }
+
+  updateUserInfo(userInfo?: UserInfo) {
+    this._userInfo = userInfo;
+  }
 }
 
 export const ai = new TelemetryService();
