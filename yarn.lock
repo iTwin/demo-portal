@@ -1854,10 +1854,10 @@
     "@itwin/itwinui-react" "^1.6.0"
     classnames "^2.2.6"
 
-"@itwin/viewer-react@1.0.6":
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/@itwin/viewer-react/-/viewer-react-1.0.6.tgz#a35be903cefab1184120a462b824a3e4f5ce051d"
-  integrity sha512-7eAHlkGetYLlqMbExf8uVZsTTnLt0vrYRFabQ4veweAGqceIDpuHP2Pd6SgD+83Lc0wR7Wivq687V2//40o0Cg==
+"@itwin/viewer-react@1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@itwin/viewer-react/-/viewer-react-1.2.0.tgz#e44697467c1edf849015e72ae7a519a9692db229"
+  integrity sha512-qgY8d7AjuxX4UeE/kF8m8hZ4hnrwmOVgBKylcWEostjarG/gM4wxYIUFJRbInVsJEMZn8tX7Iil0EDl126Xo1Q==
   dependencies:
     "@bentley/icons-generic-webfont" "^1.0.15"
     "@bentley/property-grid-react" "^1.2.1"
@@ -1868,12 +1868,12 @@
     history "^4.10.1"
     react-spring "^8.0.27"
 
-"@itwin/web-viewer-react@^1.0.6":
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/@itwin/web-viewer-react/-/web-viewer-react-1.0.6.tgz#9602ec282ab15dea2407e00489bbf9700d0c9d45"
-  integrity sha512-dtXROcCrBar2dy8bwiHhSa4NCluBwKHzZlCNKmU+SF83NNvcCqaZ7jKKTDDTiIzZsYTc1W68h+ieSPiirqrICw==
+"@itwin/web-viewer-react@^1.0.8":
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/@itwin/web-viewer-react/-/web-viewer-react-1.0.8.tgz#905107deeb1ac8abdbb230e8fee2e7bfe49a3138"
+  integrity sha512-CkDC1+DG0oW1nJxdbB6xNEnVBG5yD7uDPiMC3a4AmUYNtW83p5+FWrXX2PtVGiAX18poaj4gWIoaa25+mupsug==
   dependencies:
-    "@itwin/viewer-react" "1.0.6"
+    "@itwin/viewer-react" "1.2.0"
     oidc-client "^1.10.1"
 
 "@jest/console@^24.7.1", "@jest/console@^24.9.0":
