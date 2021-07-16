@@ -8,7 +8,7 @@ import {
 } from "@bentley/frontend-authorization-client";
 import { FrontendRequestContext } from "@bentley/imodeljs-frontend";
 
-class AuthorizationClient {
+class AuthClient {
   private static _oidcClient: BrowserAuthorizationClient;
   private static _apimClient: BrowserAuthorizationClient;
 
@@ -25,7 +25,7 @@ class AuthorizationClient {
     authority: string,
     apimAuthority: string
   ): Promise<void> {
-    if (this._oidcClient) {
+    if (this._oidcClient && this._apimClient) {
       return;
     }
 
@@ -43,11 +43,15 @@ class AuthorizationClient {
       authority,
     };
 
-    this._oidcClient = new BrowserAuthorizationClient(oidcConfiguration);
-    this._apimClient = new BrowserAuthorizationClient({
-      ...oidcConfiguration,
-      authority: apimAuthority,
-    });
+    if (!this._oidcClient) {
+      this._oidcClient = new BrowserAuthorizationClient(oidcConfiguration);
+    }
+    if (!this._apimClient) {
+      this._apimClient = new BrowserAuthorizationClient({
+        ...oidcConfiguration,
+        authority: apimAuthority,
+      });
+    }
   }
 
   public static async signIn(): Promise<void> {
@@ -66,4 +70,4 @@ class AuthorizationClient {
   }
 }
 
-export default AuthorizationClient;
+export default AuthClient;

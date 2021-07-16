@@ -6,7 +6,7 @@ import { Viewer } from "@itwin/web-viewer-react";
 import { RouteComponentProps, Router } from "@reach/router";
 import React from "react";
 
-import AuthorizationClient from "../../AuthorizationClient";
+import AuthClient from "../../services/auth/AuthClient";
 import { useConfig } from "../../config/ConfigProvider";
 import { SelectionRouter } from "../SelectionRouter/SelectionRouter";
 
@@ -46,7 +46,7 @@ const View = (props: ViewProps) => {
     <Viewer
       contextId={props.projectId ?? ""}
       iModelId={props.iModelId ?? ""}
-      authConfig={{ oidcClient: AuthorizationClient.oidcClient }}
+      authConfig={{ oidcClient: AuthClient.oidcClient }}
       theme={useThemeWatcher()}
       backend={{ buddiRegion }}
     />

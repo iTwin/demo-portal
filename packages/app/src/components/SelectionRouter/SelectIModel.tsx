@@ -9,7 +9,7 @@ import { RouteComponentProps } from "@reach/router";
 import React from "react";
 
 import { useApiPrefix } from "../../api/useApiPrefix";
-import { useDemoFlags } from "../../LaunchDarklyProvider";
+import { useDemoFlags } from "../LaunchDarkly/LaunchDarklyProvider";
 import { ai, trackEvent } from "../../services/telemetry";
 import { useCreateIModelAction } from "../IModelCRUDRouter/useCreateIModelAction";
 import { useDeleteIModelAction } from "../IModelCRUDRouter/useDeleteIModelAction";
