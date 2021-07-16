@@ -9,7 +9,7 @@ import { useAuth } from "./Auth/AuthProvider";
 import { Header } from "./Header/Header";
 import MainContainer from "./MainLayout/MainContainer";
 import { Sidebar } from "./MainLayout/Sidebar";
-import { MainRouter } from "./MainRouter";
+import { AuthorizedRouter } from "./MainRouter";
 
 export const MainApp = () => {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
@@ -40,7 +40,7 @@ export const MainApp = () => {
       {isLoggingIn ? (
         <span>"Logging in...."</span>
       ) : (
-        isAuthenticated && <MainRouter />
+        isAuthenticated && <AuthorizedRouter />
       )}
     </MainContainer>
   );
