@@ -16,13 +16,10 @@ export const withAuthorization = (Component: any) => {
     const { userInfo } = useAuth();
 
     useEffect(() => {
-      if (
-        auth?.whitelistedUltimateIds &&
-        userInfo?.featureTracking?.ultimateSite
-      ) {
-        const whitelist = auth.whitelistedUltimateIds.split(" ");
-        const userUltimate = userInfo.featureTracking.ultimateSite;
-        setIsAuthorized(whitelist.includes(userUltimate));
+      if (auth?.whitelistedIds && userInfo?.organization?.id) {
+        const whitelist = auth.whitelistedIds.split(" ");
+        const orgId = userInfo.organization?.id;
+        setIsAuthorized(whitelist.includes(orgId));
       }
     }, [auth, userInfo]);
 

@@ -6,7 +6,7 @@ interface DemoPortalAuthConfig {
   authority: string;
   apimAuthority: string;
   clientId: string;
-  whitelistedUltimateIds: string;
+  whitelistedIds: string;
 }
 
 interface DemoPortalBuddiConfig {
@@ -56,9 +56,9 @@ export const getConfig = async (): Promise<DemoPortalConfig> => {
         fetchedConfig?.envConfig?.auth?.clientId ??
         process.env.IMJS_AUTH_CLIENT_CLIENT_ID ??
         "",
-      whitelistedUltimateIds:
-        fetchedConfig?.envConfig?.auth?.whitelistedUltimateIds ??
-        process.env.IMJS_WHITELISTED_ULtIMATE_IDS ??
+      whitelistedIds:
+        fetchedConfig?.envConfig?.auth?.whitelistedIds ??
+        process.env.IMJS_DEMO_PORTAL_WHITELIST ??
         "",
     },
     launchDarkly: {
