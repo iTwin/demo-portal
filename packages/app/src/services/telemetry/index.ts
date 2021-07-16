@@ -70,7 +70,6 @@ class TelemetryService {
     this._appInsights = new ApplicationInsights({
       config: {
         instrumentationKey: appInsights?.key,
-        maxBatchInterval: 0,
         disableFetchTracking: false,
         enableAutoRouteTracking: true,
         extensions: [this._reactPlugin],
