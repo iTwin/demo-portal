@@ -9,8 +9,11 @@ import React, { useEffect, useState } from "react";
 import { useConfig } from "../../config/ConfigProvider";
 import { useAuth } from "./AuthProvider";
 
-export const withAuthorization = (Component: any) => {
-  const HOC = (Component: any) => {
+// eslint-disable-next-line @typescript-eslint/ban-types
+export const withAuthorization = <P extends {}>(
+  Component: React.ComponentType<P>
+): React.FC<P> => {
+  const HOC = ({ ...props }: P) => {
     const [isAuthorized, setIsAuthorized] = useState(false);
     const { auth } = useConfig();
     const { userInfo } = useAuth();
@@ -23,7 +26,11 @@ export const withAuthorization = (Component: any) => {
       }
     }, [auth, userInfo]);
 
-    return isAuthorized ? Component : <ErrorPage errorType="401" />;
+    return isAuthorized ? (
+      <Component {...props} />
+    ) : (
+      <ErrorPage errorType="401" />
+    );
   };
   HOC.displayName = `withAuthorization_${getDisplayName(Component)}`;
 
