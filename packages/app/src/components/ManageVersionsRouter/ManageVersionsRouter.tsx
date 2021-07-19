@@ -18,7 +18,7 @@ export const ManageVersionsRouter = ({
   email,
 }: ManageVersionsRouterProps) => {
   return (
-    <Router className="router">
+    <Router className="full-height-container">
       <SelectionRouter
         accessToken={accessToken}
         email={email}

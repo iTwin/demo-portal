@@ -23,7 +23,7 @@ export const SelectionRouter = ({
   hideIModelActions,
 }: SelectionRouterProps) => {
   return (
-    <Router className={"router"}>
+    <Router className={"full-height-container"}>
       <SelectProject accessToken={accessToken} path="/" />
       <Redirect from={"project"} to={"../"} noThrow={true} />
       <SelectIModel

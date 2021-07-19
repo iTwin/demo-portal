@@ -9,11 +9,11 @@ import { RouteComponentProps } from "@reach/router";
 import React from "react";
 
 import { useApiPrefix } from "../../api/useApiPrefix";
-import { useDemoFlags } from "../LaunchDarkly/LaunchDarklyProvider";
 import { ai, trackEvent } from "../../services/telemetry";
 import { useCreateIModelAction } from "../IModelCRUDRouter/useCreateIModelAction";
 import { useDeleteIModelAction } from "../IModelCRUDRouter/useDeleteIModelAction";
 import { useEditIModelAction } from "../IModelCRUDRouter/useEditIModelAction";
+import { useDemoFlags } from "../LaunchDarkly/LaunchDarklyProvider";
 import { useManageVersionsIModelAction } from "../ManageVersionsRouter/useManageVersionsIModelAction";
 import {
   SynchronizationCardContext,
@@ -96,4 +96,9 @@ const SelectIModel = ({
   );
 };
 
-export default withAITracking(ai.reactPlugin, SelectIModel, "SelectIModel");
+export default withAITracking(
+  ai.reactPlugin,
+  SelectIModel,
+  "SelectIModel",
+  "full-height-container"
+);

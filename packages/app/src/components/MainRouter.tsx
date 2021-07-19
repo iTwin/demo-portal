@@ -21,7 +21,7 @@ export const MainRouter = () => {
   }, [accessToken, userInfo]);
 
   return (
-    <Router className={"router"}>
+    <Router className={"full-height-container"}>
       <ViewRouter accessToken={accessTokenStr} path="view/*" email={email} />
       <SynchronizationRouter
         path="synchronize/*"

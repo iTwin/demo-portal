@@ -4,13 +4,12 @@
  *--------------------------------------------------------------------------------------------*/
 import React, { useEffect } from "react";
 
-import "./App.scss";
 import { AuthProvider } from "./components/Auth/AuthProvider";
-import { ConfigProvider } from "./config/ConfigProvider";
 import { LaunchDarklyProvider } from "./components/LaunchDarkly/LaunchDarklyProvider";
+import { MainApp } from "./components/MainApp";
+import { ConfigProvider } from "./config/ConfigProvider";
 import history from "./services/router/history";
 import { ai } from "./services/telemetry";
-import { MainApp } from "./components/MainApp";
 
 const App: React.FC = () => {
   useEffect(() => {

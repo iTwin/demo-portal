@@ -14,7 +14,7 @@ interface IModelCRUDRouterProps extends RouteComponentProps {
 
 export const IModelCRUDRouter = ({ accessToken }: IModelCRUDRouterProps) => {
   return (
-    <Router className={"router"}>
+    <Router className={"full-height-container"}>
       <IModelCreate
         accessToken={accessToken}
         path="project/:projectId/create-imodel"
