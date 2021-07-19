@@ -4,7 +4,8 @@
     "auth": {
       "authority": null,
       "apimAuthority": null,
-      "clientId": null
+      "clientId": null,
+      "whitelistedIds": null
     },
     "buddi": {
       "region": null

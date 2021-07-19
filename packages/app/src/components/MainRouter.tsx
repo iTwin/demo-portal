@@ -1,10 +1,15 @@
+/*---------------------------------------------------------------------------------------------
+ * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
+ * See LICENSE.md in the project root for license terms and full copyright notice.
+ *--------------------------------------------------------------------------------------------*/
 import { Redirect, Router } from "@reach/router";
 import React, { useMemo } from "react";
+
+import { useAuth } from "./Auth/AuthProvider";
 import { ManageVersionsRouter } from "./ManageVersionsRouter/ManageVersionsRouter";
 import { StayTunedRouter } from "./StayTunedRouter/StayTunedRouter";
 import { SynchronizationRouter } from "./SynchronizationRouter/SynchronizationRouter";
 import { ViewRouter } from "./ViewRouter/ViewRouter";
-import { useAuth } from "./Auth/AuthProvider";
 
 export const MainRouter = () => {
   const { accessToken, userInfo } = useAuth();

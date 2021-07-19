@@ -57,6 +57,8 @@ class TelemetryService {
     (envelope.data as any).user.email = this._userInfo?.email?.id ?? "No Email";
     (envelope.data as any).user.org =
       this._userInfo?.organization?.name ?? "No Organization";
+    (envelope.data as any).user.orgId =
+      this._userInfo?.organization?.id ?? "No Organization ID";
     (envelope.data as any).user.ultimate =
       this._userInfo?.featureTracking?.ultimateSite ?? "No Ultimate";
   };
@@ -68,7 +70,6 @@ class TelemetryService {
     this._appInsights = new ApplicationInsights({
       config: {
         instrumentationKey: appInsights?.key,
-        maxBatchInterval: 0,
         disableFetchTracking: false,
         enableAutoRouteTracking: true,
         extensions: [this._reactPlugin],

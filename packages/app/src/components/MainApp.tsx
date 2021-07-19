@@ -2,6 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+import { ErrorPage } from "@itwin/itwinui-react";
 import React, { useState } from "react";
 
 import AuthClient from "../services/auth/AuthClient";
@@ -13,7 +14,7 @@ import { MainRouter } from "./MainRouter";
 
 export const MainApp = () => {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
-  const { accessToken, isAuthenticated } = useAuth();
+  const { accessToken, isAuthenticated, isAuthorized } = useAuth();
 
   const onLoginClick = async () => {
     setIsLoggingIn(true);
@@ -39,8 +40,10 @@ export const MainApp = () => {
     >
       {isLoggingIn ? (
         <span>"Logging in...."</span>
+      ) : isAuthenticated && isAuthorized ? (
+        <MainRouter />
       ) : (
-        isAuthenticated && <MainRouter />
+        <ErrorPage errorType="401" />
       )}
     </MainContainer>
   );
