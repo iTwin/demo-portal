@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { AccessToken, UserInfo } from "@bentley/itwin-client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 import { useConfig } from "../../config/ConfigProvider";
 import AuthClient from "../../services/auth/AuthClient";
@@ -11,6 +11,7 @@ import { ai } from "../../services/telemetry";
 
 export interface AuthContextValue {
   isAuthenticated: boolean;
+  isAuthorized: boolean;
   accessToken?: AccessToken;
   userInfo?: UserInfo;
 }
@@ -21,6 +22,7 @@ export interface AuthProviderProps {
 
 const AuthContext = React.createContext<AuthContextValue>({
   isAuthenticated: false,
+  isAuthorized: false,
 });
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
@@ -65,10 +67,20 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     initOidc().catch((error) => console.error(error));
   }, [auth]);
 
+  const isAuthorized = useMemo(() => {
+    if (auth?.whitelistedIds && userInfo?.organization?.id) {
+      const whitelist = auth.whitelistedIds.split(" ");
+      const orgId = userInfo.organization?.id;
+      return whitelist.includes(orgId);
+    }
+    return false;
+  }, [auth, userInfo]);
+
   return (
     <AuthContext.Provider
       value={{
         isAuthenticated,
+        isAuthorized,
         accessToken,
         userInfo,
       }}

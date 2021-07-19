@@ -6,7 +6,6 @@ import { Redirect, Router } from "@reach/router";
 import React, { useMemo } from "react";
 
 import { useAuth } from "./Auth/AuthProvider";
-import { withAuthorization } from "./Auth/withAuthentication";
 import { ManageVersionsRouter } from "./ManageVersionsRouter/ManageVersionsRouter";
 import { StayTunedRouter } from "./StayTunedRouter/StayTunedRouter";
 import { SynchronizationRouter } from "./SynchronizationRouter/SynchronizationRouter";
@@ -46,5 +45,3 @@ export const MainRouter = () => {
     </Router>
   );
 };
-
-export const AuthorizedRouter = withAuthorization(MainRouter);
