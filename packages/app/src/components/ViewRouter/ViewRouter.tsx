@@ -6,8 +6,8 @@ import { Viewer } from "@itwin/web-viewer-react";
 import { RouteComponentProps, Router } from "@reach/router";
 import React from "react";
 
-import AuthClient from "../../services/auth/AuthClient";
 import { useConfig } from "../../config/ConfigProvider";
+import AuthClient from "../../services/auth/AuthClient";
 import { SelectionRouter } from "../SelectionRouter/SelectionRouter";
 
 const useThemeWatcher = () => {
@@ -60,7 +60,7 @@ interface ViewRouterProps extends RouteComponentProps {
 
 export const ViewRouter = ({ accessToken, email }: ViewRouterProps) => {
   return (
-    <Router className="viewer-container router">
+    <Router className="full-height-container">
       <SelectionRouter
         accessToken={accessToken}
         email={email}

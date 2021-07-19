@@ -88,4 +88,9 @@ const SelectProject = ({
   );
 };
 
-export default withAITracking(ai.reactPlugin, SelectProject, "SelectProject");
+export default withAITracking(
+  ai.reactPlugin,
+  SelectProject,
+  "SelectProject",
+  "full-height-container"
+);

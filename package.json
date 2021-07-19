@@ -38,6 +38,7 @@
     "build": "yarn --cwd packages/app build",
     "start": "yarn --cwd packages/app start",
     "test": "yarn --cwd packages/app test",
+    "optest": "yarn --cwd packages/opTestsApp test",
     "lint": "lint-staged --verbose",
     "prepare": "husky install"
   },
