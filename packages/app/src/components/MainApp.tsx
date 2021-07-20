@@ -40,10 +40,9 @@ export const MainApp = () => {
     >
       {isLoggingIn ? (
         <span>"Logging in...."</span>
-      ) : isAuthenticated && isAuthorized ? (
-        <MainRouter />
       ) : (
-        <ErrorPage errorType="401" />
+        isAuthenticated &&
+        (isAuthorized ? <MainRouter /> : <ErrorPage errorType="401" />)
       )}
     </MainContainer>
   );
