@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    name: CI
+    name: CI Build
     runs-on: ubuntu-latest
 
     environment:
@@ -35,4 +35,12 @@ jobs:
         TRANSPILE_DEPS: false
         DISABLE_TERSER: true
 
+    # - name: Upload build artifact
+    #   uses: actions/upload-artifact@v2
+    #   with:
+    #     name: build
+    #     path: packages/app/build
+
     # - run: yarn test
+
+    - run: yarn optest:ci

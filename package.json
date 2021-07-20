@@ -26,6 +26,7 @@
     "husky": "^6.0.0",
     "lint-staged": "^10.2.0",
     "prettier": "1.19.1",
+    "start-server-and-test": "^1.12.6",
     "stylelint": "^13.0.0",
     "stylelint-config-prettier": "^6.0.0",
     "stylelint-config-sass-guidelines": "^6.1.0",
@@ -39,6 +40,8 @@
     "start": "yarn --cwd packages/app start",
     "test": "yarn --cwd packages/app test",
     "optest": "yarn --cwd packages/opTestsApp test",
+    "optest:ci": "start-server-and-test serve:static http://localhost:3000 optest",
+    "serve:static": "serve -s packages/app/build -l 3000 --cors",
     "lint": "lint-staged --verbose",
     "prepare": "husky install"
   },
