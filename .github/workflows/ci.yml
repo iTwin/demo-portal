@@ -12,6 +12,9 @@ jobs:
     name: CI
     runs-on: ubuntu-latest
 
+    environment:
+      name: CI
+
     steps:
     - uses: actions/checkout@v2
 
@@ -22,5 +25,14 @@ jobs:
         registry-url: https://registry.npmjs.org/
 
     - run: yarn install
+
     - run: yarn build
+      # https://create-react-app.dev/docs/advanced-configuration/
+      # https://github.com/imodeljs/create-react-app/blob/imodeljs/packages/react-scripts/README-imodeljs.md
+      env:
+        GENERATE_SOURCEMAP: false
+        USE_FAST_SASS: true
+        TRANSPILE_DEPS: false
+        DISABLE_TERSER: true
+
     # - run: yarn test
