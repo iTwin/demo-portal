@@ -34,6 +34,13 @@ jobs:
         USE_FAST_SASS: true
         TRANSPILE_DEPS: false
         DISABLE_TERSER: true
+        IMJS_AUTH_CLIENT_CLIENT_ID: ${{ secrets.IMJS_AUTH_CLIENT_CLIENT_ID }}
+        IMJS_LD_CLIENT_ID: ${{ secrets.IMJS_LD_CLIENT_ID }}
+        IMJS_DEMO_PORTAL_WHITELIST: ${{ secrets.IMJS_DEMO_PORTAL_WHITELIST }}
+        IMJS_AUTH_CLIENT_APIM_AUTHORITY: ${{ secrets.IMJS_AUTH_CLIENT_APIM_AUTHORITY }}
+        IMJS_AUTH_CLIENT_AUTHORITY: ${{ secrets.IMJS_AUTH_CLIENT_AUTHORITY }}
+        IMJS_BUDDI_REGION: ${{ secrets.IMJS_BUDDI_REGION }}
+        IMJS_APP_INSIGHTS_KEY: ${{ secrets.IMJS_APP_INSIGHTS_KEY }}
 
     # - name: Upload build artifact
     #   uses: actions/upload-artifact@v2
@@ -44,6 +51,13 @@ jobs:
     # - run: yarn test
 
     - run: yarn optest:ci
+      env:
+        BROWSER: ${{ secrets.BROWSER }}
+        SiteUrl: ${{ secrets.SITEURL }}
+        TestUserName: ${{ secrets.TESTUSERNAME }}
+        TestPassword: ${{ secrets.TESTPASSWORD }}
+        UnauthorizedUserName: ${{ secrets.UNAUTHORIZEDUSERNAME }}
+        UnauthorizedPassword: ${{ secrets.UNAUTHORIZEDPASSWORD }}
 
     - name: Upload test artifact
       uses: actions/upload-artifact@v2
