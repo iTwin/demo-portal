@@ -44,3 +44,9 @@ jobs:
     # - run: yarn test
 
     - run: yarn optest:ci
+
+    - name: Upload test artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: Test Artifacts
+        path: packages/opTestApp/**/*.png

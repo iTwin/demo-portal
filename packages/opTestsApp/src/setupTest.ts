@@ -61,7 +61,7 @@ export const login = async (
 
 beforeAll(async () => {
   browser = await chromium.launch({
-    headless: process.env.NODE_ENV !== "test",
+    headless: process.env.NODE_ENV === "test",
     // devtools: process.env.NODE_ENV === "test",
     executablePath: getBrowserPath(),
     slowMo: 250,
@@ -69,7 +69,11 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await browser.close();
+  try {
+    await browser.close();
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 beforeEach(async () => {
