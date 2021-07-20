@@ -25,6 +25,7 @@ export const login = async (
   page = await context.newPage();
 
   try {
+    console.log(`SiteUrl: ${SiteUrl}`);
     await page.goto(SiteUrl);
     await page.click(Base.signInButton);
     if (await elementExists(page, OIDC.v2.usernameInput)) {
