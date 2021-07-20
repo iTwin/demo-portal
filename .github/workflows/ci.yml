@@ -42,14 +42,6 @@ jobs:
         IMJS_BUDDI_REGION: ${{ secrets.IMJS_BUDDI_REGION }}
         IMJS_APP_INSIGHTS_KEY: ${{ secrets.IMJS_APP_INSIGHTS_KEY }}
 
-    # - name: Upload build artifact
-    #   uses: actions/upload-artifact@v2
-    #   with:
-    #     name: build
-    #     path: packages/app/build
-
-    # - run: yarn test
-
     - run: yarn optest:ci
       env:
         BROWSER: ${{ secrets.BROWSER }}
