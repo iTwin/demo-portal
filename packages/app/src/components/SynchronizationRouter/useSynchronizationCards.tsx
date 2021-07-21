@@ -30,10 +30,6 @@ type UseIndividualState = ComponentPropsWithoutRef<
   typeof IModelGrid
 >["useIndividualState"];
 
-export const SynchronizationCardContext = React.createContext<{
-  email?: string;
-}>({});
-
 const getProgressStatus = (state = "") =>
   state === "Error" ? "negative" : undefined;
 
@@ -45,8 +41,6 @@ export const useSynchronizationCards: UseIndividualState = (
   { id: iModelId, projectId, ...iModel },
   { accessToken = "" }
 ) => {
-  const { email = "" } = React.useContext(SynchronizationCardContext);
-
   const [active, setActive] = React.useState(false);
 
   const dragTarget = React.useRef<HTMLDivElement | null>(null);
@@ -61,7 +55,6 @@ export const useSynchronizationCards: UseIndividualState = (
     accessToken: accessToken ?? "",
     iModelId: iModelId,
     projectId: projectId ?? "",
-    email,
   });
 
   const { ref: inViewRef, inView } = useInView({ triggerOnce: true });
@@ -78,13 +71,13 @@ export const useSynchronizationCards: UseIndividualState = (
 
   const connectionId = connection?.id;
   const runConnection = React.useCallback(async () => {
-    if (!iModelId || !connectionId) {
+    if (!connectionId) {
       return;
     }
     const client = new SynchronizationClient(urlPrefix, accessToken);
-    await client.runConnection(iModelId, connectionId);
+    await client.runConnection(connectionId);
     void fetchSources();
-  }, [accessToken, connectionId, fetchSources, iModelId, urlPrefix]);
+  }, [accessToken, connectionId, fetchSources, urlPrefix]);
 
   const lastRunId = lastRunResults?.id;
   const [preUploadRunId, setPreUploadRunId] = React.useState(lastRunId);
@@ -121,11 +114,10 @@ export const useSynchronizationCards: UseIndividualState = (
         lastRunResults.state === ExecutionState.Completed &&
         lastRunResults.result !== ExecutionResult.Error &&
         sourceFiles?.some(
-          (_, index) =>
+          ({ storageFileId }) =>
             !SynchronizationClient.getTaskInfoFromRun(
               lastRunResults,
-              sourceFiles,
-              index
+              storageFileId
             )
         )
       ) {

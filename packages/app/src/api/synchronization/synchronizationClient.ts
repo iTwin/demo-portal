@@ -3,13 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { prefixUrl } from "../useApiPrefix";
-import {
-  BASE_PATH,
-  DefaultApi,
-  IModelBridgeType,
-  Run,
-  SourceFile,
-} from "./generated";
+import { BASE_PATH, DefaultApi, IModelBridgeType, Run } from "./generated";
 
 export class SynchronizationClient {
   private DEMO_CONNECTION_NAME = "demo-portal-imodel-connection";
@@ -31,7 +25,7 @@ export class SynchronizationClient {
       return [];
     }
     if (href.includes("/runs/")) {
-      return href?.split("/connections/")[1]?.split("/runs/") ?? [];
+      return href?.split("/storageConnections/")[1]?.split("/runs/") ?? [];
     }
 
     return href?.split("runs")[1]?.split("/") ?? [];
@@ -94,33 +88,19 @@ export class SynchronizationClient {
    * which one it is. So far, the order are the same, except the jobs are by bridgeType
    * (So, if 2 file, one revit, and one MSTN, both will have task index 0 in their respective jobs...)
    * @param run Last run details fetched from getRun or getRuns api.
-   * @param sources List of available sourceFiles for this connection
-   * @param sourcesIndex Index in the sourceFiles of the file we are looking for
+   * @param storageFileId Storage file Id
    * @returns Task info
    */
-  static getTaskInfoFromRun(
-    run: Run,
-    sources: SourceFile[],
-    sourcesIndex: number
-  ) {
-    let taskIndex = 0;
-    if (
-      sources.some((source) => {
-        if (
-          source.iModelBridgeType === sources[sourcesIndex].iModelBridgeType
-        ) {
-          if (source.id === sources[sourcesIndex].id) {
-            return true;
-          }
-          taskIndex++;
+  static getTaskInfoFromRun(run: Run, storageFileId: string | undefined) {
+    if (!storageFileId) {
+      return;
+    }
+    for (const job of run.jobs ?? []) {
+      for (const task of job.tasks ?? []) {
+        if (task.storageFileId === storageFileId) {
+          return task;
         }
-        return false;
-      })
-    ) {
-      const job = run.jobs?.find((job) => {
-        return job.bridgeType === sources[sourcesIndex].iModelBridgeType;
-      });
-      return job?.tasks?.[taskIndex];
+      }
     }
   }
 
@@ -146,21 +126,15 @@ export class SynchronizationClient {
 
   /**
    * See {@link DefaultApi.getConnectionRun} for details.
-   * @param iModelId
    * @param connectionId
    * @param runId
    * @returns
    */
-  async getConnectionRun(
-    iModelId: string,
-    connectionId: string,
-    runId: string
-  ) {
-    return this.synchronizationApi.getConnectionRun(
+  async getConnectionRun(connectionId: string, runId: string) {
+    return this.synchronizationApi.getStorageConnectionRun(
       connectionId,
       runId,
       this.accessToken,
-      iModelId,
       undefined,
       undefined,
       "application/vnd.bentley.itwin-platform.v1+json"
@@ -169,29 +143,25 @@ export class SynchronizationClient {
 
   /**
    * See {@link DefaultApi.deleteConnection} for details.
-   * @param iModelId
    * @param connectionId
    * @returns
    */
-  async deleteConnection(iModelId: string, connectionId: string) {
-    return this.synchronizationApi.deleteConnection(
+  async deleteConnection(connectionId: string) {
+    return this.synchronizationApi.deleteStorageConnection(
       connectionId,
-      iModelId,
       this.accessToken,
       "application/vnd.bentley.itwin-platform.v1+json"
     );
   }
 
   /**
-   * See {@link DefaultApi.runConnection} for details.
-   * @param iModelId
+   * See {@link DefaultApi.runStorageConnection} for details.
    * @param connectionId
    * @returns
    */
-  async runConnection(iModelId: string, connectionId: string) {
-    return this.synchronizationApi.runConnection(
+  async runConnection(connectionId: string) {
+    return this.synchronizationApi.runStorageConnection(
       connectionId,
-      iModelId,
       this.accessToken,
       "application/vnd.bentley.itwin-platform.v1+json"
     );
@@ -218,10 +188,9 @@ export class SynchronizationClient {
     );
     const sourceFiles = demoPortalConnection?.id
       ? (
-          await this.synchronizationApi.getConnectionSourcefiles(
+          await this.synchronizationApi.getStorageConnectionSourcefiles(
             demoPortalConnection.id,
             this.accessToken,
-            iModelId,
             "application/vnd.bentley.itwin-platform.v1+json",
             {
               headers: { Prefer: "return=representation" },
@@ -248,51 +217,39 @@ export class SynchronizationClient {
    * @returns
    */
   async addFileToDemoConnection(
-    projectId: string,
     iModelId: string,
     demoConnectionId: string | undefined,
     fileId: string,
-    bridgeType: IModelBridgeType,
-    email: string
+    bridgeType: IModelBridgeType
   ) {
     if (!demoConnectionId) {
-      const fileConnection = await this.synchronizationApi.createConnection(
-        iModelId,
+      const fileConnection = await this.synchronizationApi.createStorageConnection(
         this.accessToken,
+        "application/vnd.bentley.itwin-platform.v1+json",
         {
-          connection: {
-            ownerEmail: email.toLocaleLowerCase(),
-            displayName: this.DEMO_CONNECTION_NAME,
-            sourceFiles: [
-              {
-                fileId,
-                isSpatialRoot: false,
-                iModelBridgeType: bridgeType,
-              },
-            ],
-            projectShareLocation: {
-              projectId,
+          iModelId,
+          displayName: this.DEMO_CONNECTION_NAME,
+          sourceFiles: [
+            {
+              storageFileId: fileId,
+              connectorType: bridgeType,
             },
-          },
+          ],
         }
       );
-      if (!fileConnection.connection?.id) {
+      if (!fileConnection.id) {
         throw new Error("Connection creation failed");
       }
-      return fileConnection.connection.id;
+      return fileConnection.id;
     }
-    const addedFile = await this.synchronizationApi.addConnectionSourcefile(
+    const addedFile = await this.synchronizationApi.addStorageConnectionSourcefile(
       demoConnectionId,
       this.accessToken,
+      "application/vnd.bentley.itwin-platform.v1+json",
       {
-        sourceFile: {
-          fileId,
-          isSpatialRoot: false,
-          iModelBridgeType: bridgeType,
-        },
-      },
-      iModelId,
-      "application/vnd.bentley.itwin-platform.v1+json"
+        storageFileId: fileId,
+        connectorType: bridgeType,
+      }
     );
     if (!addedFile.sourceFile?.id) {
       throw new Error("Updating creation failed");

@@ -3,7 +3,7 @@
   "info": {
     "title": "Synchronization",
     "version": "v1",
-    "description": "iModel Connections API is a cloud-based synchronization API meant to synchronize the data in Input Files and iModels. It allows users to establish links from their design files to iModels, hosted in Bentley's iModelHub. Users can setup recurring synchronization to periodically synchronize updates to their design files, or manual synchronizations."
+    "description": "iModel Connections API is a cloud-based synchronization API meant to synchronize the data in Input Files and iModels. It allows users to establish links from their design files to iModels, hosted in Bentley's iModelHub. Users can synchronize updates to their design files."
   },
   "host": "api.bentley.com",
   "basePath": "/synchronization",
@@ -22,73 +22,68 @@
     "oauth2Bentley OAuth2 Service": {
       "type": "oauth2",
       "scopes": {
-        "connections:read connections:modify": ""
+        "synchronization:read synchronization:modify": ""
       },
       "flow": "accessCode",
-      "authorizationUrl": "https://ims.bentley.com/connect/authorize",
-      "tokenUrl": "https://ims.bentley.com/connect/token"
+      "authorizationUrl": "https://qa-ims.bentley.com/connect/authorize",
+      "tokenUrl": "https://qa-ims.bentley.com/connect/token"
     }
   },
   "security": [
     {
       "apiKeyHeader": [],
-      "oauth2Bentley OAuth2 Service": ["connections:read connections:modify"]
+      "oauth2Bentley OAuth2 Service": [
+        "synchronization:read synchronization:modify"
+      ]
     },
     {
       "apiKeyQuery": [],
-      "oauth2Bentley OAuth2 Service": ["connections:read connections:modify"]
+      "oauth2Bentley OAuth2 Service": [
+        "synchronization:read synchronization:modify"
+      ]
     }
   ],
   "paths": {
-    "/imodels/connections/{connectionId}/sourcefiles": {
-      "get": {
-        "description": "---\r\n\r\nRetrieves connection sourceFiles for specified Id.\r\n\r\n### Notes\r\n\r\nThe `Prefer` header can be used to specify how much result metadata is desired by the client. The `Prefer` request header field is used to indicate that particular server behaviors are preferred by the client but are not required for successful completion of the request.\r\n\r\nThis operation supports `\"return=representation\"` and `\"return=minimal\"` preferences.\r\n\r\nThe `\"return=representation\"` preference indicates that the client prefers that the server include an entity representing the current state of the resource in the response to a successful request.\r\nThe `\"return=minimal\"` preference indicates that the client wishes the server to return only a minimal response to a successful request. This is the default preference if `Prefer` header is not specified.\r\n\r\n### Authentication\r\n\r\nRequires Authorization header with valid Bearer token for scope *connections:read*.\r\n\r\n---",
-        "operationId": "get-connection-sourcefiles",
-        "summary": "Get Connection SourceFiles",
+    "/imodels/storageConnections/{connectionId}/sourcefiles/{sourceFileId}": {
+      "delete": {
+        "description": "---\r\n\r\nDelete StorageConnection SourceFile\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `synchronization:modify`.\r\n\r\n\r\n---\r\n",
+        "operationId": "remove-storage-connection-sourcefile",
+        "summary": "Remove StorageConnection SourceFile",
         "parameters": [
           {
             "name": "connectionId",
             "in": "path",
+            "description": "Connection Id",
             "required": true,
             "type": "string"
           },
           {
-            "name": "imodelId",
-            "in": "query",
-            "description": "iModel Id",
+            "name": "sourceFileId",
+            "in": "path",
+            "description": "SourceFile Id",
+            "required": true,
             "type": "string"
           },
           {
             "name": "Authorization",
             "in": "header",
-            "description": "OAuth access token with scope 'connections:read'",
+            "description": "OAuth access token with scope `synchronization:modify`",
             "required": true,
             "type": "string"
           },
           {
             "name": "Accept",
             "in": "header",
-            "description": "RECOMMENDED. Request a specific version of iTwin Platform API.",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
             "type": "string",
             "enum": ["application/vnd.bentley.itwin-platform.v1+json"]
           }
         ],
         "consumes": ["application/json"],
-        "produces": [
-          "application/json;minimal",
-          "application/json;representation",
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/SourceFiles (prefer return=representation)"
-            },
-            "examples": {
-              "application/json;minimal": "{\r\n    \"sourceFiles\": [\r\n        {\r\n            \"id\": \"297c8ab9-53a3-4fe5-adf8-79b4c1a95cbb\",\r\n            \"isSpatialRoot\": true\r\n        },\r\n        {\r\n            \"id\": \"5d22aa94-cde5-48ec-afcc-6c4aca67d51b\",\r\n            \"isSpatialRoot\": false\r\n        }\r\n    ],\r\n    \"_links\": {\r\n        \"self\": {\r\n            \"href\": \"imodels/connections/{connectionId}/sourcefiles?$skip=100&$top=100\"\r\n        },\r\n        \"prev\": {\r\n            \"href\": \"imodels/connections/{connectionId}/sourcefiles?$skip=0&$top=100\"\r\n        },\r\n        \"next\": {\r\n            \"href\": \"imodels/connections/{connectionId}/sourcefiles?$skip=200&$top=100\"\r\n        }\r\n    }\r\n}",
-              "application/json;representation": "{\r\n    \"sourceFiles\": [\r\n        {\r\n            \"id\": \"297c8ab9-53a3-4fe5-adf8-79b4c1a95cbb\",\r\n            \"isSpatialRoot\": true,\r\n            \"lastAddedToConnectionRunDateTime\": \"2020-10-24T02:44:13.4109666Z\",\r\n            \"iModelBridgeType\": \"MSTN\",\r\n            \"createdDateTime\": \"2020-11-17T11:37:55.518838Z\",\r\n            \"lastModifiedDateTime\": \"2020-11-17T11:37:55.518838Z\",\r\n            \"persistenceType\": \"Persistent\",\r\n            \"lastKnownFileName\": \"samplefile\",\r\n            \"executionAction\": \"Bridge\",\r\n            \"_links\": {\r\n                \"file\": {\r\n                  \"href\": \"https://api.bentley.com/files/5db42812-ebb8-4c58-98a4-2eaa99e0d8b6\"\r\n                }\r\n              }\r\n        },\r\n        {\r\n            \"id\": \"5d22aa94-cde5-48ec-afcc-6c4aca67d51b\",\r\n            \"isSpatialRoot\": false,\r\n            \"lastAddedToConnectionRunDateTime\": \"2020-10-24T02:44:13.4109666Z\",\r\n            \"iModelBridgeType\": \"MSTN\",\r\n            \"createdDateTime\": \"2020-11-17T11:37:55.5247503Z\",\r\n            \"lastModifiedDateTime\": \"2020-11-17T11:37:55.5247503Z\",\r\n            \"persistenceType\": \"Persistent\",\r\n            \"lastKnownFileName\": \"samplefile\",\r\n            \"executionAction\": \"Bridge\",\r\n            \"_links\": {\r\n                \"file\": {\r\n                  \"href\": \"https://api.bentley.com/files/5db42812-ebb8-4c58-98a4-2eaa99e0d8b6\"\r\n                }\r\n              }\r\n        }\r\n    ],\r\n    \"_links\": {\r\n        \"self\": {\r\n            \"href\": \"https://api.bentley.com/synchronization/imodels/connections/{connectionId}/sourcefiles?$skip=100&$top=100\"\r\n        },\r\n        \"prev\": {\r\n            \"href\": \"https://api.bentley.com/synchronization/imodels/connections/{connectionId}/sourcefiles?$skip=0&$top=100\"\r\n        },\r\n        \"next\": {\r\n            \"href\": \"https://api.bentley.com/synchronization/imodels/connections/{connectionId}/sourcefiles?$skip=200&$top=100\"\r\n        }\r\n    }\r\n}"
-            }
+          "204": {
+            "description": "No Content"
           },
           "401": {
             "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
@@ -96,13 +91,16 @@
               "application/json": "{\n\r\"statusCode\": 401,\n\r\"message\": \"Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint.\"}"
             }
           },
-          "403": {
-            "description": "This response indicates that user does not have required permissions to get specified connection sourceFiles."
+          "404": {
+            "description": "This response indicates that one of the associated entities could not be found.",
+            "examples": {
+              "application/json": "{\r\n  \"error\": {\r\n    \"code\": \"ConnectionSourceFileNotFound\",\r\n    \"message\": \"Requested Connection SourceFile not available.\"\r\n  }\r\n}"
+            }
           },
           "422": {
-            "description": "Invalid request to get connection sourcefiles.",
+            "description": "Invalid request to remove connection sourcefile.",
             "examples": {
-              "application/json": "{\r\n    \"error\": {\r\n        \"code\": \"InvalidConnectionSourceFilesRequest\",\r\n        \"message\": \"Cannot perform operation.\",\r\n        \"details\": [\r\n            {\r\n                \"code\": \"MissingRequiredParameter\",\r\n                \"message\": \"imodelId was not provided.\",\r\n                \"target\": \"imodelId\"\r\n            },\r\n            {\r\n                \"code\": \"InvalidValue\",\r\n                \"message\": \"Page size is over '1000' items limit.\",\r\n                \"target\": \"$top\"\r\n            },\r\n            {\r\n                \"code\": \"InvalidValue\",\r\n                \"message\": \"Provided imodelId value is not valid.\",\r\n                \"target\": \"imodelId\"\r\n            },\r\n            {\r\n                \"code\": \"InvalidValue\",\r\n                \"message\": \"Provided connectionId value is not valid.\",\r\n                \"target\": \"connectionId\"\r\n            }\r\n        ]\r\n    }\r\n}"
+              "application/json": "{\r\n    \"error\": {\r\n        \"code\": \"InvalidStorageConnectionSourceFileRequest\",\r\n        \"message\": \"Cannot perform operation.\",\r\n        \"details\": [\r\n            {\r\n                \"code\": \"InvalidValue\",\r\n                \"message\": \"Provided connectionId value is not valid.\",\r\n                \"target\": \"connectionId\"\r\n            }\r\n        ]\r\n    }\r\n}"
             }
           },
           "429": {
@@ -119,10 +117,10 @@
           }
         }
       },
-      "post": {
-        "description": "---\r\n\r\nAdd a new connection sourceFile\r\n\r\n### Notes\r\n\r\nThe POST body MUST NOT include the id.  An id will be assigned upon successful connection sourceFile addition.\r\n\r\n### Authentication\r\n\r\nRequires *Authorization* header with valid Bearer token for scope *connections:modify*.\r\n\r\n#### iModelBridgeType\r\n\r\nValid iModelBridgeType values are:\r\n\r\n-NotSet\r\n-AFFINITYCHECKER\r\n-MSTN\r\n-AVEVAPID\r\n-AUTOPLANT\r\n-REVIT\r\n-DWG\r\n-SPXREVIEW\r\n-IFC\r\n-SPPID\r\n-AVEVADIAGRAMS\r\n-CIVIL\r\n-CIVIL3D\r\n-GEOSPATIAL\r\n-OBD\r\n-OPENTOWER\r\n-SHELLEDWCSV\r\n-NWD\r\n\r\n### Associated entities\r\nsourceFile is added to a connection. path must contain valid connection Id\r\n\r\nsourceFile associated connection is linked with an iModel.  The iModel id must be provided in the \"iModelId\" parameter when adding a connection sourceFile.\r\n\r\n---\r\n",
-        "operationId": "add-connection-sourcefile",
-        "summary": "Add Connection SourceFile",
+      "get": {
+        "description": "---\r\n\r\nRetrieves StorageConnection's SourceFile with the specified ID.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `synchronization:read`.\r\n\r\n---",
+        "operationId": "get-storage-connection-sourcefile",
+        "summary": "Get StorageConnection SourceFile",
         "parameters": [
           {
             "name": "connectionId",
@@ -131,48 +129,141 @@
             "type": "string"
           },
           {
-            "name": "imodelId",
-            "in": "query",
-            "description": "iModel Id",
+            "name": "sourceFileId",
+            "in": "path",
+            "required": true,
             "type": "string"
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.",
+            "type": "integer"
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.",
+            "type": "integer"
           },
           {
             "name": "Authorization",
             "in": "header",
-            "description": "OAuth access token with scope 'connections:modify'",
+            "description": "OAuth access token with scope `synchronization:read`",
             "required": true,
             "type": "string"
           },
           {
             "name": "Accept",
             "in": "header",
-            "description": "RECOMMENDED. Request a specific version of iTwin Platform API.",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "type": "string",
+            "enum": ["application/vnd.bentley.itwin-platform.v1+json"]
+          }
+        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/StorageFile"
+            },
+            "examples": {
+              "application/json": "{\r\n  \"sourceFile\": {\r\n    \"id\": \"297c8ab9-53a3-4fe5-adf8-79b4c1a95cbb\",\r\n    \"storageFileId\": \"t5bDFuN4qUa9ojVw1E5FGtldp8BgSbNCiJ2XMdiT-cA\",\r\n    \"connectorType\": \"MSTN\",\r\n    \"lastKnownFileName\": \"samplefile\",\r\n    \"_links\": {\r\n      \"file\": {\r\n        \"href\": \"https://api.bentley.com/files/t5bDFuN4qUa9ojVw1E5FGtldp8BgSbNCiJ2XMdiT-cA\"\r\n      }\r\n    }\r\n  }\r\n}"
+            }
+          },
+          "400": {
+            "description": "Invalid request to get connection sourceFile"
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "examples": {
+              "application/json": "{\n\r\"statusCode\": 401,\n\r\"message\": \"Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint.\"}"
+            }
+          },
+          "403": {
+            "description": "This response indicates that user does not have required permissions to get specified connection sourceFile."
+          },
+          "404": {
+            "description": "This response indicates that the specified connection sourceFile not found.",
+            "examples": {
+              "application/json": "{\r\n  \"error\": {\r\n    \"code\": \"ConnectionSourceFileNotFound\",\r\n    \"message\": \"Requested Connection SourceFile not available.\"\r\n  }\r\n}"
+            }
+          },
+          "422": {
+            "description": "Invalid request to get connection sourcefile.",
+            "examples": {
+              "application/json": "{\r\n    \"error\": {\r\n        \"code\": \"InvalidStorageConnectionSourceFileRequest\",\r\n        \"message\": \"Cannot perform operation.\",\r\n        \"details\": [\r\n            {\r\n                \"code\": \"InvalidValue\",\r\n                \"message\": \"Provided connectionId value is not valid.\",\r\n                \"target\": \"connectionId\"\r\n            }\r\n        ]\r\n    }\r\n}"
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "type": "string",
+                "description": "The number of requests exceeds the rate-limit for the client subscription."
+              }
+            },
+            "examples": {
+              "application/json": "{\n\r\"code\": \"TooManyRequests\",\n\r\"message\": \"More requests were received than the subscription rate-limit allows.\"}"
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "---\r\n\r\nUpdate an existing StorageConnection SourceFile.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `synchronization:modify`.\r\n\r\n#### ConnectorType\r\n\r\nValid ConnectorType values are:\r\n\r\n-NotSet\r\n-AFFINITYCHECKER\r\n-MSTN\r\n-AVEVAPID\r\n-AUTOPLANT\r\n-REVIT\r\n-DWG\r\n-SPXREVIEW\r\n-IFC\r\n-SPPID\r\n-AVEVADIAGRAMS\r\n-CIVIL\r\n-CIVIL3D\r\n-GEOSPATIAL\r\n-OBD\r\n-OPENTOWER\r\n-SHELLEDWCSV\r\n-NWD\r\n\r\n### Associated entities\r\nSourceFile is related to a Connection. The path must contain a valid Connection ID.\r\n\r\n---\r\n",
+        "operationId": "update-storage-connection-sourcefile",
+        "summary": "Update StorageConnection SourceFile",
+        "parameters": [
+          {
+            "name": "connectionId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "sourceFileId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `synchronization:modify`",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
             "type": "string",
             "enum": ["application/vnd.bentley.itwin-platform.v1+json"]
           },
           {
-            "name": "sourceFile (create)",
+            "name": "storage-file-create",
             "in": "body",
-            "required": true,
             "schema": {
-              "$ref": "#/definitions/SourceFile (createbody)"
+              "$ref": "#/definitions/storage-file-create"
             }
           }
         ],
         "consumes": ["application/json"],
         "produces": [
           "application/json",
-          "application/json;InvalidConnectionSourceFileRequest",
+          "application/json;InvalidStorageConnectionSourceFileRequest",
           "application/json;MissingRequestBody"
         ],
         "responses": {
-          "201": {
-            "description": "Connection sourceFile successfully added.",
+          "200": {
+            "description": "Connection sourceFile successfully updated.",
             "schema": {
-              "$ref": "#/definitions/SourceFile (created)"
+              "$ref": "#/definitions/StorageFile-body"
             },
             "examples": {
-              "application/json": "{\r\n  \"sourceFile\": {\r\n      \"id\": \"297c8ab9-53a3-4fe5-adf8-79b4c1a95cbb\",\r\n      \"isSpatialRoot\": true,\r\n      \"lastAddedToConnectionRunDateTime\": \"2020-10-24T02:44:13.4109666Z\",\r\n      \"iModelBridgeType\": \"MSTN\",\r\n      \"createdDateTime\": \"2020-11-17T11:37:55.518838Z\",\r\n      \"lastModifiedDateTime\": \"2020-11-17T11:37:55.518838Z\",\r\n      \"persistenceType\": \"Persistent\",\r\n      \"lastKnownFileName\": \"samplefile\",\r\n      \"executionAction\": \"Bridge\",\r\n      \"_links\": {\r\n        \"file\": {\r\n          \"href\": \"https://api.bentley.com/files/5db42812-ebb8-4c58-98a4-2eaa99e0d8b6\"\r\n        }\r\n      }\r\n  }\r\n}"
+              "application/json": "{\r\n  \"sourceFile\": {\r\n    \"id\": \"297c8ab9-53a3-4fe5-adf8-79b4c1a95cbb\",\r\n    \"connectorType\": \"MSTN\",\r\n    \"storageFileId\": \"t5bDFuN4qUa9ojVw1E5FGtldp8BgSbNCiJ2XMdiT-cA\",\r\n    \"lastKnownFileName\": \"samplefile\",\r\n    \"_links\": {\r\n      \"file\": {\r\n        \"href\": \"https://api.bentley.com/files/5db42812-ebb8-4c58-98a4-2eaa99e0d8b6\"\r\n      }\r\n    }\r\n  }\r\n}"
             }
           },
           "401": {
@@ -181,10 +272,16 @@
               "application/json": "{\n\r\"statusCode\": 401,\n\r\"message\": \"Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint.\"}"
             }
           },
-          "422": {
-            "description": "Invalid request to add connection sourcefile. Request payload might be missing some of the required properties.",
+          "404": {
+            "description": "This response indicates that one of the associated entities could not be found.",
             "examples": {
-              "application/json;InvalidConnectionSourceFileRequest": "{\r\n    \"error\": {\r\n        \"code\": \"InvalidConnectionSourceFileRequest\",\r\n        \"message\": \"Cannot perform operation.\",\r\n        \"details\": [\r\n            {\r\n                \"code\": \"MissingRequiredProperty\",\r\n                \"message\": \"A property required to add or update  connection sourceFile is missing.\",\r\n                \"target\": \"fileId\"\r\n            },\r\n            {\r\n                \"code\": \"MissingRequiredProperty\",\r\n                \"message\": \"A property required to add or update a connection sourceFile is missing.\",\r\n                \"target\": \"iModelBridgeType\"\r\n            },\r\n            {\r\n                \"code\": \"InvalidValue\",\r\n                \"message\": \"iModelBridgeType must be one of: NotSet, AFFINITYCHECKER, MSTN, AVEVAPID, AUTOPLANT, REVIT, DWG, SPXREVIEW, IFC, SPPID, AVEVADIAGRAMS, CIVIL, CIVIL3D, GEOSPATIAL, OBD, OPENTOWER, SHELLEDWCSV, NWD\",\r\n                \"target\": \"iModelBridgeType\"\r\n            },\r\n            {\r\n                \"code\": \"MissingRequiredParameter\",\r\n                \"message\": \"imodelId was not provided.\",\r\n                \"target\": \"imodelId\"\r\n            },\r\n            {\r\n                \"code\": \"InvalidValue\",\r\n                \"message\": \"Provided imodelId value is not valid.\",\r\n                \"target\": \"imodelId\"\r\n            },\r\n            {\r\n                \"code\": \"InvalidValue\",\r\n                \"message\": \"Provided connectionId value is not valid.\",\r\n                \"target\": \"connectionId\"\r\n            }\r\n            \r\n        ]\r\n    }\r\n}",
+              "application/json": "{\r\n  \"error\": {\r\n    \"code\": \"ConnectionSourceFileNotFound\",\r\n    \"message\": \"Requested Connection SourceFile not available.\"\r\n  }\r\n}"
+            }
+          },
+          "422": {
+            "description": "Invalid request to update connection sourcefile. Request payload might be missing some of the required properties.",
+            "examples": {
+              "application/json;InvalidStorageConnectionSourceFileRequest": "{\r\n  \"error\": {\r\n    \"code\": \"InvalidStorageConnectionSourceFileRequest\",\r\n    \"message\": \"Cannot perform operation.\",\r\n    \"details\": [\r\n      {\r\n        \"code\": \"MissingRequiredProperty\",\r\n        \"message\": \"A property required to add or update  connection sourceFile is missing.\",\r\n        \"target\": \"storageFileId\"\r\n      },\r\n      {\r\n        \"code\": \"MissingRequiredProperty\",\r\n        \"message\": \"A property required to add or update a connection sourceFile is missing.\",\r\n        \"target\": \"connectorType\"\r\n      },\r\n      {\r\n        \"code\": \"InvalidValue\",\r\n        \"message\": \"connectorType must be one of: NotSet, AFFINITYCHECKER, MSTN, AVEVAPID, AUTOPLANT, REVIT, DWG, SPXREVIEW, IFC, SPPID, AVEVADIAGRAMS, CIVIL, CIVIL3D, GEOSPATIAL, OBD, OPENTOWER, SHELLEDWCSV, NWD\",\r\n        \"target\": \"connectorType\"\r\n      },\r\n      {\r\n        \"code\": \"MissingRequiredParameter\",\r\n        \"message\": \"imodelId was not provided.\",\r\n        \"target\": \"imodelId\"\r\n      },\r\n      {\r\n        \"code\": \"InvalidValue\",\r\n        \"message\": \"Provided imodelId value is not valid.\",\r\n        \"target\": \"imodelId\"\r\n      },\r\n      {\r\n        \"code\": \"InvalidValue\",\r\n        \"message\": \"Provided connectionId value is not valid.\",\r\n        \"target\": \"connectionId\"\r\n      }\r\n    ]\r\n  }\r\n}",
               "application/json;MissingRequestBody": "{\r\n    \"error\": {\r\n        \"code\": \"MissingRequestBody\",\r\n        \"message\": \"Request body was not provided.\"\r\n    }\r\n}"
             }
           },
@@ -203,11 +300,11 @@
         }
       }
     },
-    "/imodels/connections/{connectionId}/runs": {
+    "/imodels/storageConnections/{connectionId}/runs": {
       "get": {
-        "description": "---\r\n\r\nRetrieves connection runs for specified connection.\r\n\r\n### Notes\r\n\r\nThe `Prefer` header can be used to specify how much result metadata is desired by the client. The `Prefer` request header field is used to indicate that particular server behaviors are preferred by the client but are not required for successful completion of the request.\r\n\r\nThis operation supports `\"return=representation\"` and `\"return=minimal\"` preferences.\r\n\r\nThe `\"return=representation\"` preference indicates that the client prefers that the server include an entity representing the current state of the resource in the response to a successful request.\r\nThe `\"return=minimal\"` preference indicates that the client wishes the server to return only a minimal response to a successful request. This is the default preference if `Prefer` header is not specified.\r\n\r\n### Authentication\r\n\r\nRequires Authorization header with valid Bearer token for scope *connections:read*.\r\n\r\n---",
-        "operationId": "get-connection-runs",
-        "summary": "Get Connection Runs",
+        "description": "---\r\n\r\nRetrieves all Runs for the specified connection.\r\n\r\n### Notes\r\n\r\nThe `Prefer` header can be used to specify how much result metadata is desired by the client. The `Prefer` request header field is used to indicate that particular server behaviors are preferred by the client but are not required for successful completion of the request.\r\n\r\nThis operation supports `\"return=representation\"` and `\"return=minimal\"` preferences.\r\n\r\nThe `\"return=representation\"` preference indicates that the client prefers that the server include an entity representing the current state of the resource in the response to a successful request.\r\nThe `\"return=minimal\"` preference indicates that the client wishes the server to return only a minimal response to a successful request. This is the default preference if `Prefer` header is not specified.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `synchronization:read`.\r\n\r\n---",
+        "operationId": "get-storage-connection-runs",
+        "summary": "Get StorageConnection Runs",
         "parameters": [
           {
             "name": "connectionId",
@@ -216,22 +313,16 @@
             "type": "string"
           },
           {
-            "name": "imodelId",
-            "in": "query",
-            "description": "iModel Id",
-            "type": "string"
-          },
-          {
             "name": "Authorization",
             "in": "header",
-            "description": "OAuth access token with scope 'connections:read'",
+            "description": "OAuth access token with scope `synchronization:read`",
             "required": true,
             "type": "string"
           },
           {
             "name": "Accept",
             "in": "header",
-            "description": "RECOMMENDED. Request a specific version of iTwin Platform API.",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
             "type": "string",
             "enum": ["application/vnd.bentley.itwin-platform.v1+json"]
           }
@@ -246,11 +337,11 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Runs (prefer return=representation)"
+              "$ref": "#/definitions/runs-prefer-return-representation"
             },
             "examples": {
-              "application/json;minimal": "{\r\n    \"runs\": [\r\n        {\r\n            \"id\": \"a1ecbdc8c4f6173004f9f881914a57c5511a362b\",\r\n            \"state\": \"Completed\",\r\n            \"result\": \"PartialSuccess\"\r\n        }\r\n    ],\r\n    \"_links\": {\r\n        \"self\": {\r\n            \"href\": \"imodels/connection/{connectionId}/runs?$skip=100&$top=100\"\r\n        },\r\n        \"prev\": {\r\n            \"href\": \"imodels/connection//{connectionId}/runs?$skip=0&$top=100\"\r\n        },\r\n        \"next\": {\r\n            \"href\": \"imodels/connection//{connectionId}/runs?$skip=200&$top=100\"\r\n        }\r\n    }\r\n}",
-              "application/json;representation": "{\r\n    \"runs\": [\r\n        {\r\n            \"id\": \"g8ecbdc8c4f6173004f9f881914a57c5511a362b\",\r\n            \"connectionId\": \"bc38cd8a-fd9f-4abf-9ad7-0c3b3d28720e\",\r\n            \"startDateTime\": \"2020-10-24T02:44:13.4109666Z\",\r\n            \"endDateTime\": \"2020-10-24T02:44:13.4109666Z\",\r\n            \"triggerType\": \"OnDemand\",\r\n            \"phase\": \"MasterFile\",\r\n            \"state\": \"Completed\",\r\n            \"result\": \"PartialSuccess\",\r\n            \"jobs\": [\r\n                {\r\n                    \"id\": \"f8ecbdc8c4f6173004f9f881914a57c5511a362b\",\r\n                    \"startDateTime\": \"2020-10-24T02:44:13.4109666Z\",\r\n                    \"endDateTime\": \"2020-10-24T02:44:13.4109666Z\",\r\n                    \"priority\": \"0\",\r\n                    \"hasSpatialRootTask\": \"false\",\r\n                    \"hasTaskDependencies\": \"true\",\r\n                    \"state\": \"Completed\",\r\n                    \"result\": \"PartialSuccess\",\r\n                    \"bridgeType\": \"DWG\",\r\n                    \"tasks\": [\r\n                        {\r\n                            \"id\": \"3eecbdc8c4f6173004f9f881914a57c5511a362b\",\r\n                            \"startDateTime\": \"2020-10-24T02:44:13.4109666Z\",\r\n                            \"endDateTime\": \"2020-10-24T02:44:13.4109666Z\",\r\n                            \"retryAttempts\": 0,\r\n                            \"sourceFileId\": \"\",\r\n                            \"state\": \"Completed\",\r\n                            \"dependsOnIds\": []\r\n                        }\r\n                    ]\r\n                }\r\n            ]\r\n        }\r\n    ],\r\n    \"_links\": {\r\n        \"self\": {\r\n            \"href\": \"https://api.bentley.com/synchronization/imodels/connection/{connectionId}/runs?$skip=100&$top=100\"\r\n        },\r\n        \"prev\": {\r\n            \"href\": \"https://api.bentley.com/synchronization/imodels/connection/{connectionId}/runs?$skip=0&$top=100\"\r\n        },\r\n        \"next\": {\r\n            \"href\": \"https://api.bentley.com/synchronization/imodels/connection/{connectionId}/runs?$skip=200&$top=100\"\r\n        }\r\n    }\r\n}"
+              "application/json;minimal": "{\r\n    \"runs\": [\r\n        {\r\n            \"id\": \"a1ecbdc8c4f6173004f9f881914a57c5511a362b\",\r\n            \"state\": \"Completed\",\r\n            \"result\": \"PartialSuccess\"\r\n        }\r\n    ],\r\n    \"_links\": {\r\n        \"self\": {\r\n            \"href\": \"https://api.bentley.com/synchronization/imodels/connection/{connectionId}/runs?$skip=100&$top=100\"\r\n        },\r\n        \"prev\": {\r\n            \"href\": \"https://api.bentley.com/synchronization/imodels/connection/{connectionId}/runs?$skip=0&$top=100\"\r\n        },\r\n        \"next\": {\r\n            \"href\": \"https://api.bentley.com/synchronization/imodels/connection/{connectionId}/runs?$skip=200&$top=100\"\r\n        }\r\n    }\r\n}",
+              "application/json;representation": "{\r\n    \"runs\": [\r\n        {\r\n          \"id\": \"a1ecbdc8c4f6173004f9f881914a57c5511a362b\",\r\n          \"connectionId\": \"bc38cd8a-fd9f-4abf-9ad7-0c3b3d28720e\",\r\n          \"startDateTime\": \"2020-10-24T02:44:13.4109666Z\",\r\n          \"endDateTime\": \"2020-10-24T02:47:13.4109666Z\",\r\n          \"phase\": \"MasterFile\",\r\n          \"state\": \"Completed\",\r\n          \"result\": \"PartialSuccess\",\r\n          \"jobs\": [\r\n            {\r\n                  \"id\": \"d6ecbdc8c4f6173004f9f881914a57c5511a362b\",\r\n                  \"startDateTime\": \"2020-10-24T02:44:13.4109666Z\",\r\n                  \"endDateTime\": \"2020-10-24T02:44:13.4109666Z\",\r\n                  \"state\": \"Completed\",\r\n                  \"result\": \"PartialSuccess\",\r\n                  \"connectorType\": \"DWG\",\r\n                  \"tasks\": [\r\n                    {\r\n                          \"id\": \"f5ecbdc8c4f6173004f9f881914a57c5511a362b\",\r\n                          \"startDateTime\": \"2020-10-24T02:44:13.4109666Z\",\r\n                          \"endDateTime\": \"2020-10-24T02:44:13.4109666Z\",\r\n                          \"retryAttempts\": 0,\r\n                          \"storageFileId\": \"g4ec1dc8c4f6173004f9f881914a57c5511a336d\",\r\n                          \"state\": \"Completed\",\r\n                          \"result\": \"Success\"\r\n                        }\r\n                      ]\r\n                    }\r\n                  ]\r\n        }\r\n    ],\r\n    \"_links\": {\r\n        \"self\": {\r\n            \"href\": \"https://api.bentley.com/synchronization/imodels/connection/{connectionId}/runs?$skip=100&$top=100\"\r\n        },\r\n        \"prev\": {\r\n            \"href\": \"https://api.bentley.com/synchronization/imodels/connection/{connectionId}/runs?$skip=0&$top=100\"\r\n        },\r\n        \"next\": {\r\n            \"href\": \"https://api.bentley.com/synchronization/imodels/connection/{connectionId}/runs?$skip=200&$top=100\"\r\n        }\r\n    }\r\n}"
             }
           },
           "401": {
@@ -283,11 +374,11 @@
         }
       }
     },
-    "/imodels/connections/{connectionId}/sourcefiles/{sourceFileId}": {
-      "put": {
-        "description": "---\r\n\r\nUpdate an existing connection sourceFile\r\n\r\n### Authentication\r\n\r\nRequires *Authorization* header with valid Bearer token for scope *connections:modify*.\r\n\r\n#### iModelBridgeType\r\n\r\nValid iModelBridgeType values are:\r\n\r\n-NotSet\r\n-AFFINITYCHECKER\r\n-MSTN\r\n-AVEVAPID\r\n-AUTOPLANT\r\n-REVIT\r\n-DWG\r\n-SPXREVIEW\r\n-IFC\r\n-SPPID\r\n-AVEVADIAGRAMS\r\n-CIVIL\r\n-CIVIL3D\r\n-GEOSPATIAL\r\n-OBD\r\n-OPENTOWER\r\n-SHELLEDWCSV\r\n-NWD\r\n\r\n### Associated entities\r\nsourceFile is updated to a connection. path must contain valid connection Id\r\n\r\nsourceFile associated connection is linked with an iModel.  The iModel id must be provided in the \"iModelId\" parameter when adding a connection sourceFile.\r\n\r\n---\r\n",
-        "operationId": "update-connection-sourcefile",
-        "summary": "Update Connection SourceFile",
+    "/imodels/storageConnections/{connectionId}": {
+      "get": {
+        "description": "---\r\n\r\nRetrieves a StorageConnection with the specified ID.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `synchronization:read`.\r\n\r\n---",
+        "operationId": "get-storage-connection",
+        "summary": "Get Storage Connection",
         "parameters": [
           {
             "name": "connectionId",
@@ -296,54 +387,114 @@
             "type": "string"
           },
           {
-            "name": "sourceFileId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "imodelId",
-            "in": "query",
-            "description": "iModel Id",
-            "type": "string"
-          },
-          {
             "name": "Authorization",
             "in": "header",
-            "description": "OAuth access token with scope 'connections:modify'",
+            "description": "OAuth access token with scope `synchronization:read`",
             "required": true,
             "type": "string"
           },
           {
             "name": "Accept",
             "in": "header",
-            "description": "RECOMMENDED. Request a specific version of iTwin Platform API.",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "type": "string",
+            "enum": ["application/vnd.bentley.itwin-platform.v1+json"]
+          }
+        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/StorageConnection"
+            },
+            "examples": {
+              "application/json": "{\r\n  \"connection\": {\r\n    \"id\": \"fc226d0d-1647-48d7-8c11-f1f74f2d9808\",\r\n    \"iModelId\": \"7dbd531d-6967-47b2-8945-a722a437ad7a\",\r\n    \"projectId\": \"7dbd531d-6967-47b2-8945-a722a437ad7a\",\r\n    \"displayName\": \"30\",\r\n    \"_links\": {\r\n      \"iModel\": {\r\n        \"href\": \"https://api.bentley.com/imodels/5db42812-ebb8-4c58-98a4-2eaa99e0d8b6\"\r\n      },\r\n      \"project\": {\r\n        \"href\": \"https://api.bentley.com/projects/4tb42812-ebb8-4c58-98a4-2eaa99e0d8b6\"\r\n      },\r\n      \"lastRunDetails\": {\r\n        \"href\": \"https://api.bentley.com/synchronization/imodels/storageConnections/fc226d0d-1647-48d7-8c11-f1f74f2d9808/runs/de626d0d-1647-48d7-8c11-f1f74f2d4523\"\r\n      }\r\n    }\r\n  }\r\n}"
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "examples": {
+              "application/json": "{\n\r\"statusCode\": 401,\n\r\"message\": \"Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint.\"}"
+            }
+          },
+          "403": {
+            "description": "This response indicates that user does not have required permissions to get specified connection."
+          },
+          "404": {
+            "description": "This response indicates that the specified connection not found.",
+            "examples": {
+              "application/json": "{\r\n  \"error\": {\r\n    \"code\": \"ConnectionNotFound\",\r\n    \"message\": \"Requested Connection not available.\"\r\n  }\r\n}"
+            }
+          },
+          "422": {
+            "description": "Invalid request to get a connection.",
+            "examples": {
+              "application/json": "{\r\n    \"error\": {\r\n        \"code\": \"InvalidStorageConnectionRequest\",\r\n        \"message\": \"Cannot perform operation.\",\r\n        \"details\": [\r\n        ]\r\n    }\r\n}"
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "type": "string",
+                "description": "The number of requests exceeds the rate-limit for the client subscription."
+              }
+            },
+            "examples": {
+              "application/json": "{\n\r\"code\": \"TooManyRequests\",\n\r\"message\": \"More requests were received than the subscription rate-limit allows.\"}"
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "---\r\n\r\nUpdate an existing StorageConnection.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `synchronization:modify`.\r\n\r\n### Associated entities\r\n\r\nA connection is linked with an iModel. The iModel ID is required to be set when updating a StorageConnection.\r\n\r\n---\r\n",
+        "operationId": "update-storage-connection",
+        "summary": "Update StorageConnection",
+        "parameters": [
+          {
+            "name": "connectionId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `synchronization:modify`",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
             "type": "string",
             "enum": ["application/vnd.bentley.itwin-platform.v1+json"]
           },
           {
-            "name": "sourceFile (create)",
+            "name": "storage-connection-create",
             "in": "body",
-            "required": true,
             "schema": {
-              "$ref": "#/definitions/SourceFile (createbody)"
+              "$ref": "#/definitions/storage-connection-create"
             }
           }
         ],
         "consumes": ["application/json"],
         "produces": [
           "application/json",
-          "application/json;InvalidConnectionSourceFileRequest",
+          "application/json;InvalidStorageConnectionRequest",
           "application/json;MissingRequestBody"
         ],
         "responses": {
           "200": {
-            "description": "Connection sourceFile successfully updated.",
+            "description": "Connection successfully updated.",
             "schema": {
-              "$ref": "#/definitions/SourceFile"
+              "$ref": "#/definitions/StorageConnection"
             },
             "examples": {
-              "application/json": "{\r\n  \"sourceFile\": {\r\n      \"id\": \"297c8ab9-53a3-4fe5-adf8-79b4c1a95cbb\",\r\n      \"isSpatialRoot\": true,\r\n      \"lastAddedToConnectionRunDateTime\": \"2020-10-24T02:44:13.4109666Z\",\r\n      \"iModelBridgeType\": \"MSTN\",\r\n      \"createdDateTime\": \"2020-11-17T11:37:55.518838Z\",\r\n      \"lastmodifiedDateTime\": \"2020-11-17T11:37:55.518838Z\",\r\n      \"persistenceType\": \"Persistent\",\r\n      \"lastKnownFileName\": \"samplefile\",\r\n      \"executionAction\": \"Bridge\",\r\n      \"_links\": {\r\n          \"file\": {\r\n            \"href\": \"https://api.bentley.com/files/5db42812-ebb8-4c58-98a4-2eaa99e0d8b6\"\r\n          }\r\n        }\r\n  }\r\n}"
+              "application/json": "{\r\n  \"connection\": {\r\n    \"id\": \"fc226d0d-1647-48d7-8c11-f1f74f2d9808\",\r\n    \"iModelId\": \"7dbd531d-6967-47b2-8945-a722a437ad7a\",\r\n    \"projectId\": \"7dbd531d-6967-47b2-8945-a722a437ad7a\",\r\n    \"displayName\": \"30\",\r\n    \"_links\": {\r\n      \"iModel\": {\r\n        \"href\": \"https://api.bentley.com/imodels/v1/5db42812-ebb8-4c58-98a4-2eaa99e0d8b6\"\r\n      },\r\n      \"project\": {\r\n        \"href\": \"https://api.bentley.com/projects/v1/4tb42812-ebb8-4c58-98a4-2eaa99e0d8b6\"\r\n      },\r\n      \"lastRunDetails\": {\r\n        \"href\": \"https://api.bentley.com/synchronization/imodels/storageConnections/fc226d0d-1647-48d7-8c11-f1f74f2d9808/runs/de626d0d-1647-48d7-8c11-f1f74f2d4523\"\r\n      }\r\n    }\r\n  }\r\n}"
             }
           },
           "401": {
@@ -353,15 +504,15 @@
             }
           },
           "404": {
-            "description": "This response indicates that one of the associated entities could not be found.",
+            "description": "This response indicates that the specified connection not found.",
             "examples": {
-              "application/json": "{\r\n  \"error\": {\r\n    \"code\": \"ConnectionSourceFileNotFound\",\r\n    \"message\": \"Requested Connection SourceFile not available.\"\r\n  }\r\n}"
+              "application/json": "{\r\n  \"error\": {\r\n    \"code\": \"ConnectionNotFound\",\r\n    \"message\": \"Requested Connection not available.\"\r\n  }\r\n}"
             }
           },
           "422": {
-            "description": "Invalid request to update connection sourcefile. Request payload might be missing some of the required properties.",
+            "description": "Invalid request to update connection. Request payload might be missing some of the required properties.",
             "examples": {
-              "application/json;InvalidConnectionSourceFileRequest": "{\r\n    \"error\": {\r\n        \"code\": \"InvalidConnectionSourceFileRequest\",\r\n        \"message\": \"Cannot perform operation.\",\r\n        \"details\": [\r\n            {\r\n                \"code\": \"MissingRequiredProperty\",\r\n                \"message\": \"A property required to add or update  connection sourceFile is missing.\",\r\n                \"target\": \"fileId\"\r\n            },\r\n            {\r\n                \"code\": \"MissingRequiredProperty\",\r\n                \"message\": \"A property required to add or update a connection sourceFile is missing.\",\r\n                \"target\": \"iModelBridgeType\"\r\n            },\r\n            {\r\n                \"code\": \"InvalidValue\",\r\n                \"message\": \"iModelBridgeType must be one of: NotSet, AFFINITYCHECKER, MSTN, AVEVAPID, AUTOPLANT, REVIT, DWG, SPXREVIEW, IFC, SPPID, AVEVADIAGRAMS, CIVIL, CIVIL3D, GEOSPATIAL, OBD, OPENTOWER, SHELLEDWCSV, NWD\",\r\n                \"target\": \"iModelBridgeType\"\r\n            },\r\n            {\r\n                \"code\": \"MissingRequiredParameter\",\r\n                \"message\": \"imodelId was not provided.\",\r\n                \"target\": \"imodelId\"\r\n            },\r\n            {\r\n                \"code\": \"InvalidValue\",\r\n                \"message\": \"Provided imodelId value is not valid.\",\r\n                \"target\": \"imodelId\"\r\n            },\r\n            {\r\n                \"code\": \"InvalidValue\",\r\n                \"message\": \"Provided connectionId value is not valid.\",\r\n                \"target\": \"connectionId\"\r\n            }\r\n        ]\r\n    }\r\n}",
+              "application/json;InvalidStorageConnectionRequest": "{\r\n    \"error\": {\r\n        \"code\": \"InvalidStorageConnectionRequest\",\r\n        \"message\": \"Cannot perform operation.\",\r\n        \"details\": [\r\n            {\r\n                \"code\": \"MissingRequiredProperty\",\r\n                \"message\": \"A property required to create or update a connection is missing.\",\r\n                \"target\": \"sourceFiles\"\r\n            },\r\n            {\r\n                \"code\": \"InvalidValue\",\r\n                \"message\": \"ConnectorType must be one of: NotSet, AFFINITYCHECKER, MSTN, AVEVAPID, AUTOPLANT, REVIT, DWG, SPXREVIEW, IFC, SPPID, AVEVADIAGRAMS, CIVIL, CIVIL3D, GEOSPATIAL, OBD, OPENTOWER, SHELLEDWCSV, NWD\",\r\n                \"target\": \"connectorType\"\r\n            },\r\n            {\r\n                \"code\": \"InvalidValue\",\r\n                \"message\": \"Provided connectionId value is not valid.\",\r\n                \"target\": \"connectionId\"\r\n            }\r\n        ]\r\n    }\r\n}",
               "application/json;MissingRequestBody": "{\r\n    \"error\": {\r\n        \"code\": \"MissingRequestBody\",\r\n        \"message\": \"Request body was not provided.\"\r\n    }\r\n}"
             }
           },
@@ -379,192 +530,10 @@
           }
         }
       },
-      "get": {
-        "description": "---\r\n\r\nRetrieves connection sourceFile for specified Id.\r\n\r\n### Authentication\r\n\r\nRequires Authorization header with valid Bearer token for scope *connections:read*.\r\n\r\n---",
-        "operationId": "get-connection-sourcefile",
-        "summary": "Get Connection SourceFile",
-        "parameters": [
-          {
-            "name": "connectionId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "sourceFileId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "imodelId",
-            "in": "query",
-            "description": "iModel Id",
-            "type": "string",
-            "required": true
-          },
-          {
-            "name": "$top",
-            "in": "query",
-            "description": "The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.",
-            "type": "integer"
-          },
-          {
-            "name": "$skip",
-            "in": "query",
-            "description": "The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.",
-            "type": "integer"
-          },
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "OAuth access token with scope 'connections:read'",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "Accept",
-            "in": "header",
-            "description": "RECOMMENDED. Request a specific version of iTwin Platform API.",
-            "type": "string",
-            "enum": ["application/vnd.bentley.itwin-platform.v1+json"]
-          }
-        ],
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/SourceFile"
-            },
-            "examples": {
-              "application/json": "{\r\n    \"sourceFile\": {\r\n        \"id\": \"297c8ab9-53a3-4fe5-adf8-79b4c1a95cbb\",\r\n        \"isSpatialRoot\": true,\r\n        \"lastAddedToConnectionRunDateTime\": \"2020-10-24T02:44:13.4109666Z\",\r\n        \"iModelBridgeType\": \"MSTN\",\r\n        \"createdDateTime\": \"2020-11-17T11:37:55.518838Z\",\r\n        \"lastModifiedDateTime\": \"2020-11-17T11:37:55.518838Z\",\r\n        \"persistenceType\": \"Persistent\",\r\n        \"lastKnownFileName\": \"samplefile\",\r\n        \"executionAction\": \"Bridge\",\r\n        \"_links\": {\r\n            \"file\": {\r\n              \"href\": \"https://api.bentley.com/files/5db42812-ebb8-4c58-98a4-2eaa99e0d8b6\"\r\n            }\r\n          }\r\n    }\r\n}"
-            }
-          },
-          "400": {
-            "description": "Invalid request to get connection sourceFile"
-          },
-          "401": {
-            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
-            "examples": {
-              "application/json": "{\n\r\"statusCode\": 401,\n\r\"message\": \"Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint.\"}"
-            }
-          },
-          "403": {
-            "description": "This response indicates that user does not have required permissions to get specified connection sourceFile."
-          },
-          "404": {
-            "description": "This response indicates that the specified connection sourceFile not found.",
-            "examples": {
-              "application/json": "{\r\n  \"error\": {\r\n    \"code\": \"ConnectionSourceFileNotFound\",\r\n    \"message\": \"Requested Connection SourceFile not available.\"\r\n  }\r\n}"
-            }
-          },
-          "422": {
-            "description": "Invalid request to get connection sourcefile.",
-            "examples": {
-              "application/json": "{\r\n    \"error\": {\r\n        \"code\": \"InvalidConnectionSourceFileRequest\",\r\n        \"message\": \"Cannot perform operation.\",\r\n        \"details\": [\r\n            {\r\n                \"code\": \"MissingRequiredParameter\",\r\n                \"message\": \"imodelId was not provided.\",\r\n                \"target\": \"imodelId\"\r\n            },\r\n            {\r\n                \"code\": \"InvalidValue\",\r\n                \"message\": \"Provided imodelId value is not valid.\",\r\n                \"target\": \"imodelId\"\r\n            },\r\n            {\r\n                \"code\": \"InvalidValue\",\r\n                \"message\": \"Provided connectionId value is not valid.\",\r\n                \"target\": \"connectionId\"\r\n            }\r\n        ]\r\n    }\r\n}"
-            }
-          },
-          "429": {
-            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
-            "headers": {
-              "retry-after": {
-                "type": "string",
-                "description": "The number of requests exceeds the rate-limit for the client subscription."
-              }
-            },
-            "examples": {
-              "application/json": "{\n\r\"code\": \"TooManyRequests\",\n\r\"message\": \"More requests were received than the subscription rate-limit allows.\"}"
-            }
-          }
-        }
-      },
       "delete": {
-        "description": "---\r\n\r\nDelete connection sourcefile\r\n\r\n### Authentication\r\n\r\nRequires *Authorization* header with valid Bearer token for scope *connections:modify*.\r\n\r\n\r\n---\r\n",
-        "operationId": "remove-connection-sourcefile",
-        "summary": "Remove Connection SourceFile",
-        "parameters": [
-          {
-            "name": "connectionId",
-            "in": "path",
-            "description": "Connection Id",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "sourceFileId",
-            "in": "path",
-            "description": "SourceFile Id",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "imodelId",
-            "in": "query",
-            "description": "iModel Id",
-            "type": "string",
-            "required": true
-          },
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "OAuth access token with scope 'connections:modify'",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "Accept",
-            "in": "header",
-            "description": "RECOMMENDED. Request a specific version of iTwin Platform API.",
-            "type": "string",
-            "enum": ["application/vnd.bentley.itwin-platform.v1+json"]
-          }
-        ],
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "401": {
-            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
-            "examples": {
-              "application/json": "{\n\r\"statusCode\": 401,\n\r\"message\": \"Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint.\"}"
-            }
-          },
-          "404": {
-            "description": "This response indicates that one of the associated entities could not be found.",
-            "examples": {
-              "application/json": "{\r\n  \"error\": {\r\n    \"code\": \"ConnectionSourceFileNotFound\",\r\n    \"message\": \"Requested Connection SourceFile not available.\"\r\n  }\r\n}"
-            }
-          },
-          "422": {
-            "description": "Invalid request to remove connection sourcefile.",
-            "examples": {
-              "application/json": "{\r\n    \"error\": {\r\n        \"code\": \"InvalidConnectionSourceFileRequest\",\r\n        \"message\": \"Cannot perform operation.\",\r\n        \"details\": [\r\n            {\r\n                \"code\": \"MissingRequiredParameter\",\r\n                \"message\": \"imodelId was not provided.\",\r\n                \"target\": \"imodelId\"\r\n            },\r\n            {\r\n                \"code\": \"InvalidValue\",\r\n                \"message\": \"Provided imodelId value is not valid.\",\r\n                \"target\": \"imodelId\"\r\n            },\r\n            {\r\n                \"code\": \"InvalidValue\",\r\n                \"message\": \"Provided connectionId value is not valid.\",\r\n                \"target\": \"connectionId\"\r\n            }\r\n        ]\r\n    }\r\n}"
-            }
-          },
-          "429": {
-            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
-            "headers": {
-              "retry-after": {
-                "type": "string",
-                "description": "The number of requests exceeds the rate-limit for the client subscription."
-              }
-            },
-            "examples": {
-              "application/json": "{\n\r\"code\": \"TooManyRequests\",\n\r\"message\": \"More requests were received than the subscription rate-limit allows.\"}"
-            }
-          }
-        }
-      }
-    },
-    "/imodels/connections/{connectionId}": {
-      "delete": {
-        "description": "---\r\n\r\nDelete connection\r\n\r\n### Authentication\r\n\r\nRequires *Authorization* header with valid Bearer token for scope *connections:modify*.\r\n\r\n\r\n---\r\n",
-        "operationId": "delete-connection",
-        "summary": "Delete Connection",
+        "description": "---\r\n\r\nDelete connection\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `synchronization:modify`.\r\n\r\n\r\n---\r\n",
+        "operationId": "delete-storage-connection",
+        "summary": "Delete StorageConnection",
         "parameters": [
           {
             "name": "connectionId",
@@ -573,23 +542,16 @@
             "type": "string"
           },
           {
-            "name": "imodelId",
-            "in": "query",
-            "description": "iModel Id",
-            "type": "string",
-            "required": true
-          },
-          {
             "name": "Authorization",
             "in": "header",
-            "description": "OAuth access token with scope 'connections:modify'",
+            "description": "OAuth access token with scope `synchronization:modify`",
             "required": true,
             "type": "string"
           },
           {
             "name": "Accept",
             "in": "header",
-            "description": "RECOMMENDED. Request a specific version of iTwin Platform API.",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
             "type": "string",
             "enum": ["application/vnd.bentley.itwin-platform.v1+json"]
           }
@@ -615,7 +577,85 @@
           "422": {
             "description": "Invalid request to delete connection.",
             "examples": {
-              "application/json": "{\r\n    \"error\": {\r\n        \"code\": \"InvalidConnectionRequest\",\r\n        \"message\": \"Cannot perform operation.\",\r\n        \"details\": [\r\n            {\r\n                \"code\": \"MissingRequiredParameter\",\r\n                \"message\": \"imodelId was not provided.\",\r\n                \"target\": \"imodelId\"\r\n            },\r\n            {\r\n                \"code\": \"InvalidValue\",\r\n                \"message\": \"Provided imodelId value is not valid.\",\r\n                \"target\": \"imodelId\"\r\n            }\r\n        ]\r\n    }\r\n}"
+              "application/json": "{\r\n    \"error\": {\r\n        \"code\": \"InvalidStorageConnectionRequest\",\r\n        \"message\": \"Cannot perform operation.\",\r\n        \"details\": [\r\n        ]\r\n    }\r\n}"
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "type": "string",
+                "description": "The number of requests exceeds the rate-limit for the client subscription."
+              }
+            },
+            "examples": {
+              "application/json": "{\n\r\"code\": \"TooManyRequests\",\n\r\"message\": \"More requests were received than the subscription rate-limit allows.\"}"
+            }
+          }
+        }
+      }
+    },
+    "/imodels/storageConnections/{connectionId}/sourcefiles": {
+      "post": {
+        "description": "---\r\n\r\nAdd a new Storage Source File to a Storage Connection\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `synchronization:modify`.\r\n\r\n#### ConnectorType\r\n\r\nValid ConnectorType values are:\r\n\r\n-NotSet\r\n-AFFINITYCHECKER\r\n-MSTN\r\n-AVEVAPID\r\n-AUTOPLANT\r\n-REVIT\r\n-DWG\r\n-SPXREVIEW\r\n-IFC\r\n-SPPID\r\n-AVEVADIAGRAMS\r\n-CIVIL\r\n-CIVIL3D\r\n-GEOSPATIAL\r\n-OBD\r\n-OPENTOWER\r\n-SHELLEDWCSV\r\n-NWD\r\n\r\n### Associated entities\r\nSourceFile is added to a Connection. The reuqest path must contain a valid Connection ID\r\n\r\n---\r\n",
+        "operationId": "add-storage-connection-sourcefile",
+        "summary": "Add StorageConnection SourceFile",
+        "parameters": [
+          {
+            "name": "connectionId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `synchronization:modify`",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "type": "string",
+            "enum": ["application/vnd.bentley.itwin-platform.v1+json"]
+          },
+          {
+            "name": "storage-file-create",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/storage-file-create"
+            }
+          }
+        ],
+        "consumes": ["application/json"],
+        "produces": [
+          "application/json",
+          "application/json;InvalidStorageConnectionSourceFileRequest",
+          "application/json;MissingRequestBody"
+        ],
+        "responses": {
+          "201": {
+            "description": "Storage Connection sourceFile successfully added.",
+            "schema": {
+              "$ref": "#/definitions/StorageFile-body"
+            },
+            "examples": {
+              "application/json": "{\r\n  \"sourceFile\": {\r\n      \"id\": \"297c8ab9-53a3-4fe5-adf8-79b4c1a95cbb\",\r\n      \"storageFileId\": \"t5bDFuN4qUa9ojVw1E5FGtldp8BgSbNCiJ2XMdiT-cA\",\r\n      \"connectorType\": \"MSTN\",\r\n      \"lastKnownFileName\": \"samplefile\",\r\n      \"_links\": {\r\n        \"file\": {\r\n          \"href\": \"https://api.bentley.com/files/5db42812-ebb8-4c58-98a4-2eaa99e0d8b6\"\r\n        }\r\n      }\r\n  }\r\n}"
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "examples": {
+              "application/json": "{\n\r\"statusCode\": 401,\n\r\"message\": \"Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint.\"}"
+            }
+          },
+          "422": {
+            "description": "Invalid request to add connection sourcefile. Request payload might be missing some of the required properties.",
+            "examples": {
+              "application/json;InvalidStorageConnectionSourceFileRequest": "{\r\n  \"error\": {\r\n    \"code\": \"InvalidStorageConnectionSourceFileRequest\",\r\n    \"message\": \"Cannot perform operation.\",\r\n    \"details\": [\r\n      {\r\n        \"code\": \"MissingRequiredProperty\",\r\n        \"message\": \"A property required to add or update  connection sourceFile is missing.\",\r\n        \"target\": \"storageFileId\"\r\n      },\r\n      {\r\n        \"code\": \"MissingRequiredProperty\",\r\n        \"message\": \"A property required to add or update a connection sourceFile is missing.\",\r\n        \"target\": \"connectorType\"\r\n      },\r\n      {\r\n        \"code\": \"InvalidValue\",\r\n        \"message\": \"connectorType must be one of: NotSet, AFFINITYCHECKER, MSTN, AVEVAPID, AUTOPLANT, REVIT, DWG, SPXREVIEW, IFC, SPPID, AVEVADIAGRAMS, CIVIL, CIVIL3D, GEOSPATIAL, OBD, OPENTOWER, SHELLEDWCSV, NWD\",\r\n        \"target\": \"connectorType\"\r\n      },\r\n      {\r\n        \"code\": \"MissingRequiredParameter\",\r\n        \"message\": \"imodelId was not provided.\",\r\n        \"target\": \"imodelId\"\r\n      },\r\n      {\r\n        \"code\": \"InvalidValue\",\r\n        \"message\": \"Provided imodelId value is not valid.\",\r\n        \"target\": \"imodelId\"\r\n      },\r\n      {\r\n        \"code\": \"InvalidValue\",\r\n        \"message\": \"Provided connectionId value is not valid.\",\r\n        \"target\": \"connectionId\"\r\n      }\r\n    ]\r\n  }\r\n}",
+              "application/json;MissingRequestBody": "{\r\n    \"error\": {\r\n        \"code\": \"MissingRequestBody\",\r\n        \"message\": \"Request body was not provided.\"\r\n    }\r\n}"
             }
           },
           "429": {
@@ -633,9 +673,9 @@
         }
       },
       "get": {
-        "description": "---\r\n\r\nRetrieves connection for specified id.\r\n\r\n### Authentication\r\n\r\nRequires Authorization header with valid Bearer token for scope *connections:read*.\r\n\r\n---",
-        "operationId": "get-connection",
-        "summary": "Get Connection",
+        "description": "---\r\n\r\nRetrieves SourceFiles for specified StorageConnection.\r\n\r\n### Notes\r\n\r\nThe `Prefer` header can be used to specify how much result metadata is desired by the client. The `Prefer` request header field is used to indicate that particular server behaviors are preferred by the client but are not required for successful completion of the request.\r\n\r\nThis operation supports `\"return=representation\"` and `\"return=minimal\"` preferences.\r\n\r\nThe `\"return=representation\"` preference indicates that the client prefers that the server include an entity representing the current state of the resource in the response to a successful request.\r\nThe `\"return=minimal\"` preference indicates that the client wishes the server to return only a minimal response to a successful request. This is the default preference if `Prefer` header is not specified.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `synchronization:read`.\r\n\r\n---",
+        "operationId": "get-storage-connection-sourcefiles",
+        "summary": "Get StorageConnection SourceFiles",
         "parameters": [
           {
             "name": "connectionId",
@@ -644,37 +684,35 @@
             "type": "string"
           },
           {
-            "name": "imodelId",
-            "in": "query",
-            "description": "iModel Id",
-            "type": "string",
-            "required": true
-          },
-          {
             "name": "Authorization",
             "in": "header",
-            "description": "OAuth access token with scope 'connections:read'",
+            "description": "OAuth access token with scope `synchronization:read`",
             "required": true,
             "type": "string"
           },
           {
             "name": "Accept",
             "in": "header",
-            "description": "RECOMMENDED. Request a specific version of iTwin Platform API.",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
             "type": "string",
             "enum": ["application/vnd.bentley.itwin-platform.v1+json"]
           }
         ],
         "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "produces": [
+          "application/json;minimal",
+          "application/json;representation",
+          "application/json"
+        ],
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Connection (created)"
+              "$ref": "#/definitions/storage-file-prefer-return-representation"
             },
             "examples": {
-              "application/json": "{\r\n  \"connection\": {\r\n    \"id\": \"fc226d0d-1647-48d7-8c11-f1f74f2d9808\",\r\n    \"displayName\": \"30\",\r\n    \"isScheduled\": true,\r\n    \"isSchedulePaused\": false,\r\n    \"scheduleLoopIntervalInSeconds\": 1800,\r\n    \"scheduledDateTime\": \"2020-10-24T02:44:13.4109666Z\",\r\n    \"priorityLevel\": \"Low\",\r\n    \"createdDateTime\": \"2020-10-24T02:26:51.1366301Z\",\r\n    \"lastModifiedDateTime\": \"2020-11-10T14:50:03.1175774Z\",\r\n    \"persistenceType\": \"Persistent\",\r\n    \"bridgeParameters\": null,\r\n    \"_links\": {\r\n      \"iModel\": {\r\n        \"href\": \"https://api.bentley.com/imodels/5db42812-ebb8-4c58-98a4-2eaa99e0d8b6\"\r\n      },\r\n      \"projectShareLocation\": {\r\n        \"href\": \"https://api.bentley.com/projects/4tb42812-ebb8-4c58-98a4-2eaa99e0d8b6\"\r\n      },\r\n      \"lastRunDetails\": {\r\n        \"href\": \"https://api.bentley.com/synchronization/imodels/connections/fc226d0d-1647-48d7-8c11-f1f74f2d9808/runs/de626d0d-1647-48d7-8c11-f1f74f2d4523\"\r\n      }\r\n    }\r\n  }\r\n}"
+              "application/json;minimal": "{\r\n  \"sourceFiles\": [\r\n    {\r\n      \"id\": \"297c8ab9-53a3-4fe5-adf8-79b4c1a95cbb\",\r\n      \"storageFileId\": \"t5bDFuN4qUa9ojVw1E5FGtldp8BgSbNCiJ2XMdiT-cA\",\r\n      \"lastKnownFileName\": \"samplefile\"\r\n    },\r\n    {\r\n      \"id\": \"5d22aa94-cde5-48ec-afcc-6c4aca67d51b\",\r\n      \"storageFileId\": \"t5bDFuN4qUa9ojVw1E5FGtldp8BgSbNCiJ2XMdiT-cA\",\r\n      \"lastKnownFileName\": \"samplefile\"\r\n    }\r\n  ],\r\n  \"_links\": {\r\n    \"self\": {\r\n      \"href\":\r\n        \"https://api.bentley.com/synchronization/imodels/storageConnections/{connectionId}/sourcefiles?$skip=100&$top=100\"\r\n    },\r\n    \"prev\": {\r\n      \"href\": \"https://api.bentley.com/synchronization/imodels/storageConnections/{connectionId}/sourcefiles?$skip=0&$top=100\"\r\n    },\r\n    \"next\": {\r\n      \"href\":\r\n        \"https://api.bentley.com/synchronization/imodels/storageConnections/{connectionId}/sourcefiles?$skip=200&$top=100\"\r\n    }\r\n  }\r\n}",
+              "application/json;representation": "{\r\n  \"sourceFiles\": [\r\n    {\r\n      \"id\": \"297c8ab9-53a3-4fe5-adf8-79b4c1a95cbb\",\r\n      \"storageFileId\": \"t5bDFuN4qUa9ojVw1E5FGtldp8BgSbNCiJ2XMdiT-cA\",\r\n      \"connectorType\": \"MSTN\",\r\n      \"lastKnownFileName\": \"samplefile\",\r\n      \"_links\": {\r\n        \"file\": {\r\n          \"href\": \"https://api.bentley.com/files/5db42812-ebb8-4c58-98a4-2eaa99e0d8b6\"\r\n        }\r\n      }\r\n    },\r\n    {\r\n      \"id\": \"5d22aa94-cde5-48ec-afcc-6c4aca67d51b\",\r\n      \"storageFileId\": \"t5bDFuN4qUa9ojVw1E5FGtldp8BgSbNCiJ2XMdiT-cA\",\r\n      \"connectorType\": \"MSTN\",\r\n      \"lastKnownFileName\": \"samplefile\",\r\n      \"_links\": {\r\n        \"file\": {\r\n          \"href\": \"https://api.bentley.com/files/5db42812-ebb8-4c58-98a4-2eaa99e0d8b6\"\r\n        }\r\n      }\r\n    }\r\n  ],\r\n  \"_links\": {\r\n    \"self\": {\r\n      \"href\": \"https://api.bentley.com/synchronization/imodels/storageConnections/{connectionId}/sourcefiles?$skip=100&$top=100\"\r\n    },\r\n    \"prev\": {\r\n      \"href\": \"https://api.bentley.com/synchronization/imodels/storageConnections/{connectionId}/sourcefiles?$skip=0&$top=100\"\r\n    },\r\n    \"next\": {\r\n      \"href\": \"https://api.bentley.com/synchronization/imodels/storageConnections/{connectionId}/sourcefiles?$skip=200&$top=100\"\r\n    }\r\n  }\r\n}"
             }
           },
           "401": {
@@ -684,18 +722,12 @@
             }
           },
           "403": {
-            "description": "This response indicates that user does not have required permissions to get specified connection."
-          },
-          "404": {
-            "description": "This response indicates that the specified connection not found.",
-            "examples": {
-              "application/json": "{\r\n  \"error\": {\r\n    \"code\": \"ConnectionNotFound\",\r\n    \"message\": \"Requested Connection not available.\"\r\n  }\r\n}"
-            }
+            "description": "This response indicates that user does not have required permissions to get specified connection sourceFiles."
           },
           "422": {
-            "description": "Invalid request to get a connection.",
+            "description": "Invalid request to get connection sourcefiles.",
             "examples": {
-              "application/json": "{\r\n    \"error\": {\r\n        \"code\": \"InvalidConnectionRequest\",\r\n        \"message\": \"Cannot perform operation.\",\r\n        \"details\": [\r\n            {\r\n                \"code\": \"MissingRequiredParameter\",\r\n                \"message\": \"imodelId was not provided.\",\r\n                \"target\": \"imodelId\"\r\n            },\r\n            {\r\n                \"code\": \"InvalidValue\",\r\n                \"message\": \"Provided imodelId value is not valid.\",\r\n                \"target\": \"imodelId\"\r\n            }\r\n        ]\r\n    }\r\n}"
+              "application/json": "{\r\n    \"error\": {\r\n        \"code\": \"InvalidStorageConnectionSourceFileRequest\",\r\n        \"message\": \"Cannot perform operation.\",\r\n        \"details\": [\r\n            {\r\n                \"code\": \"InvalidValue\",\r\n                \"message\": \"Page size is over '1000' items limit.\",\r\n                \"target\": \"$top\"\r\n            },\r\n            {\r\n                \"code\": \"InvalidValue\",\r\n                \"message\": \"Provided connectionId value is not valid.\",\r\n                \"target\": \"connectionId\"\r\n            }\r\n        ]\r\n    }\r\n}"
             }
           },
           "429": {
@@ -711,62 +743,50 @@
             }
           }
         }
-      },
-      "put": {
-        "description": "---\r\n\r\nUpdate an existing connection\r\n\r\n### Authentication\r\n\r\nRequires *Authorization* header with valid Bearer token for scope *connections:modify*.\r\n\r\n### Associated entities\r\n\r\nA connection is linked with an iModel.  The iModel id must be provided in the \"iModelId\" query parameter when updating a connection.\r\n\r\n---\r\n",
-        "operationId": "update-connection",
-        "summary": "Update Connection",
+      }
+    },
+    "/imodels/storageConnections": {
+      "post": {
+        "description": "---\r\n\r\nCreate a StorageConnection that describes files from Storage to synchronize to the iModel.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `synchronization:modify`.\r\n\r\n### Associated entities\r\n\r\nA connection is linked with an iModel. An iModel ID is required to be set when creating a StorageConnection.\r\n\r\n---\r\n",
+        "operationId": "create-storage-connection",
+        "summary": "Create StorageConnection",
         "parameters": [
-          {
-            "name": "connectionId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "imodelId",
-            "in": "query",
-            "description": "iModel Id",
-            "type": "string",
-            "required": true
-          },
           {
             "name": "Authorization",
             "in": "header",
-            "description": "OAuth access token with scope 'connections:modify'",
+            "description": "OAuth access token with scope `synchronization:modify`",
             "required": true,
             "type": "string"
           },
           {
             "name": "Accept",
             "in": "header",
-            "description": "RECOMMENDED. Request a specific version of iTwin Platform API.",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
             "type": "string",
             "enum": ["application/vnd.bentley.itwin-platform.v1+json"]
           },
           {
-            "name": "connection (create)",
+            "name": "storage-connection-create",
             "in": "body",
-            "required": true,
             "schema": {
-              "$ref": "#/definitions/Connection (create)"
+              "$ref": "#/definitions/storage-connection-create"
             }
           }
         ],
         "consumes": ["application/json"],
         "produces": [
           "application/json",
-          "application/json;InvalidConnectionRequest",
+          "application/json;InvalidStorageConnectionRequest",
           "application/json;MissingRequestBody"
         ],
         "responses": {
-          "200": {
-            "description": "Connection successfully updated.",
+          "201": {
+            "description": "Connection successfully created.",
             "schema": {
-              "$ref": "#/definitions/Connection (created)"
+              "$ref": "#/definitions/StorageConnection"
             },
             "examples": {
-              "application/json": "{\r\n  \"connection\": {\r\n    \"id\": \"fc226d0d-1647-48d7-8c11-f1f74f2d9808\",\r\n    \"displayName\": \"30\",\r\n    \"isScheduled\": true,\r\n    \"isSchedulePaused\": false,\r\n    \"scheduleLoopIntervalInSeconds\": 1800,\r\n    \"scheduledDateTime\": \"2020-10-24T02:44:13.4109666Z\",\r\n    \"priorityLevel\": \"Low\",\r\n    \"createdDateTime\": \"2020-10-24T02:26:51.1366301Z\",\r\n    \"lastModifiedDateTime\": \"2020-11-10T14:50:03.1175774Z\",\r\n    \"persistenceType\": \"Persistent\",\r\n    \"bridgeParameters\": null,\r\n    \"_links\": {\r\n      \"iModel\": {\r\n        \"href\": \"https://api.bentley.com/imodels/v1/5db42812-ebb8-4c58-98a4-2eaa99e0d8b6\"\r\n      },\r\n      \"projectShareLocation\": {\r\n        \"href\": \"https://api.bentley.com/projects/v1/4tb42812-ebb8-4c58-98a4-2eaa99e0d8b6\"\r\n      },\r\n      \"lastRunDetails\": {\r\n        \"href\": \"https://api.bentley.com/synchronization/imodels/connections/fc226d0d-1647-48d7-8c11-f1f74f2d9808/runs/de626d0d-1647-48d7-8c11-f1f74f2d4523\"\r\n      }\r\n    }\r\n  }\r\n}"
+              "application/json": "{\r\n  \"connection\": {\r\n    \"id\": \"fc226d0d-1647-48d7-8c11-f1f74f2d9808\",\r\n    \"displayName\": \"30\",\r\n    \"iModelId\": \"7dbd531d-6967-47b2-8945-a722a437ad7a\",\r\n    \"projectId\": \"7dbd531d-6967-47b2-8945-a722a437ad7a\",\r\n    \"_links\": {\r\n      \"iModel\": {\r\n        \"href\": \"https://api.bentley.com/imodels/5db42812-ebb8-4c58-98a4-2eaa99e0d8b6\"\r\n      },\r\n      \"project\": {\r\n        \"href\": \"https://api.bentley.com/projects/4tb42812-ebb8-4c58-98a4-2eaa99e0d8b6\"\r\n      },\r\n      \"lastRunDetails\": {\r\n        \"href\": \"https://api.bentley.com/synchronization/imodels/storageConnections/fc226d0d-1647-48d7-8c11-f1f74f2d9808/runs/de626d0d-1647-48d7-8c11-f1f74f2d4523\"\r\n      }\r\n    }\r\n  }\r\n}"
             }
           },
           "401": {
@@ -775,16 +795,10 @@
               "application/json": "{\n\r\"statusCode\": 401,\n\r\"message\": \"Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint.\"}"
             }
           },
-          "404": {
-            "description": "This response indicates that the specified connection not found.",
-            "examples": {
-              "application/json": "{\r\n  \"error\": {\r\n    \"code\": \"ConnectionNotFound\",\r\n    \"message\": \"Requested Connection not available.\"\r\n  }\r\n}"
-            }
-          },
           "422": {
-            "description": "Invalid request to update connection. Request payload might be missing some of the required properties.",
+            "description": "Invalid request to create connection. Request payload might be missing some of the required properties.",
             "examples": {
-              "application/json;InvalidConnectionRequest": "{\r\n    \"error\": {\r\n        \"code\": \"InvalidConnectionRequest\",\r\n        \"message\": \"Cannot perform operation.\",\r\n        \"details\": [\r\n            {\r\n                \"code\": \"MissingRequiredProperty\",\r\n                \"message\": \"A property required to create or update a connection is missing.\",\r\n                \"target\": \"inputFiles\"\r\n            },\r\n            {\r\n                \"code\": \"InvalidValue\",\r\n                \"message\": \"iModelBridgeType must be one of: NotSet, AFFINITYCHECKER, MSTN, AVEVAPID, AUTOPLANT, REVIT, DWG, SPXREVIEW, IFC, SPPID, AVEVADIAGRAMS, CIVIL, CIVIL3D, GEOSPATIAL, OBD, OPENTOWER, SHELLEDWCSV, NWD\",\r\n                \"target\": \"iModelBridgeType\"\r\n            },\r\n            {\r\n                \"code\": \"MissingRequiredParameter\",\r\n                \"message\": \"imodelId was not provided.\",\r\n                \"target\": \"imodelId\"\r\n            },\r\n            {\r\n                \"code\": \"InvalidValue\",\r\n                \"message\": \"Provided imodelId value is not valid.\",\r\n                \"target\": \"imodelId\"\r\n            },\r\n            {\r\n                \"code\": \"InvalidValue\",\r\n                \"message\": \"Provided connectionId value is not valid.\",\r\n                \"target\": \"connectionId\"\r\n            }\r\n        ]\r\n    }\r\n}",
+              "application/json;InvalidStorageConnectionRequest": "{\r\n    \"error\": {\r\n        \"code\": \"InvalidStorageConnectionRequest\",\r\n        \"message\": \"Cannot perform operation.\",\r\n        \"details\": [\r\n            {\r\n                \"code\": \"MissingRequiredProperty\",\r\n                \"message\": \"A property required to create or update a connection is missing.\",\r\n                \"target\": \"sourceFiles\"\r\n            },\r\n            {\r\n                \"code\": \"MissingRequiredParameter\",\r\n                \"message\": \"imodelId was not provided.\",\r\n                \"target\": \"imodelId\"\r\n            },\r\n            {\r\n                \"code\": \"InvalidValue\",\r\n                \"message\": \"ConnectorType must be one of: NotSet, AFFINITYCHECKER, MSTN, AVEVAPID, AUTOPLANT, REVIT, DWG, SPXREVIEW, IFC, SPPID, AVEVADIAGRAMS, CIVIL, CIVIL3D, GEOSPATIAL, OBD, OPENTOWER, SHELLEDWCSV, NWD\",\r\n                \"target\": \"connectorType\"\r\n            },\r\n            {\r\n                \"code\": \"MissingRequiredParameter\",\r\n                \"message\": \"imodelId was not provided.\",\r\n                \"target\": \"imodelId\"\r\n            },\r\n            {\r\n                \"code\": \"InvalidValue\",\r\n                \"message\": \"Provided imodelId value is not valid.\",\r\n                \"target\": \"imodelId\"\r\n            }\r\n        ]\r\n    }\r\n}",
               "application/json;MissingRequestBody": "{\r\n    \"error\": {\r\n        \"code\": \"MissingRequestBody\",\r\n        \"message\": \"Request body was not provided.\"\r\n    }\r\n}"
             }
           },
@@ -803,18 +817,24 @@
         }
       }
     },
-    "/imodels/connections": {
+    "/imodels/storageConnections/{connectionId}/runs/{runId}": {
       "get": {
-        "description": "---\r\n\r\nRetrieves connections for the specified iModel.\r\n\r\n### Notes\r\n\r\nThe `Prefer` header can be used to specify how much result metadata is desired by the client. The `Prefer` request header field is used to indicate that particular server behaviors are preferred by the client but are not required for successful completion of the request.\r\n\r\nThis operation supports `\"return=representation\"` and `\"return=minimal\"` preferences.\r\n\r\nThe `\"return=representation\"` preference indicates that the client prefers that the server include an entity representing the current state of the resource in the response to a successful request.\r\nThe `\"return=minimal\"` preference indicates that the client wishes the server to return only a minimal response to a successful request. This is the default preference if `Prefer` header is not specified.\r\n\r\n### Authentication\r\n\r\nRequires Authorization header with valid Bearer token for scope *connections:read*.\r\n\r\n---",
-        "operationId": "get-connections",
-        "summary": "Get Connections",
+        "description": "---\r\n\r\nRetrieves a StorageConnection Run with the specified ID.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `synchronization:read`.\r\n\r\n---",
+        "operationId": "get-storage-connection-run",
+        "summary": "Get Storage Connection Run",
         "parameters": [
           {
-            "name": "imodelId",
-            "in": "query",
-            "description": "iModel Id",
-            "type": "string",
-            "required": true
+            "name": "connectionId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "runId",
+            "in": "path",
+            "description": "Run Id",
+            "required": true,
+            "type": "string"
           },
           {
             "name": "$top",
@@ -831,33 +851,28 @@
           {
             "name": "Authorization",
             "in": "header",
-            "description": "OAuth access token with scope 'connections:read'",
+            "description": "OAuth access token with scope `synchronization:read`",
             "required": true,
             "type": "string"
           },
           {
             "name": "Accept",
             "in": "header",
-            "description": "RECOMMENDED. Request a specific version of iTwin Platform API.",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
             "type": "string",
             "enum": ["application/vnd.bentley.itwin-platform.v1+json"]
           }
         ],
         "consumes": ["application/json"],
-        "produces": [
-          "application/json;minimal",
-          "application/json;representation",
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Connections (prefer return=representation)"
+              "$ref": "#/definitions/run-body"
             },
             "examples": {
-              "application/json;minimal": "{\r\n  \"connections\": [\r\n    {\r\n      \"id\": \"fc226d0d-1647-48d7-8c11-f1f74f2d9808\",\r\n      \"displayName\": \"30\"\r\n    }\r\n  ],\r\n  \"_links\": {\r\n    \"self\": {\r\n      \"href\": \"imodels/connections?$skip=100&$top=100\"\r\n    },\r\n    \"prev\": {\r\n      \"href\": \"imodels/connectionsruns?$skip=0&$top=100\"\r\n    },\r\n    \"next\": {\r\n      \"href\": \"imodels/connections?$skip=200&$top=100\"\r\n    }\r\n  }\r\n}",
-              "application/json;representation": "{\r\n  \"connections\": [\r\n    {\r\n      \"id\": \"fc226d0d-1647-48d7-8c11-f1f74f2d9808\",\r\n      \"displayName\": \"30\",\r\n      \"isScheduled\": true,\r\n      \"isSchedulePaused\": false,\r\n      \"scheduleLoopIntervalInSeconds\": 1800,\r\n      \"scheduledDateTime\": \"2020-10-24T02:44:13.4109666Z\",\r\n      \"priorityLevel\": \"Low\",\r\n      \"createdDateTime\": \"2020-10-24T02:26:51.1366301Z\",\r\n      \"lastModifiedDateTime\": \"2020-11-10T14:50:03.1175774Z\",\r\n      \"persistenceType\": \"Persistent\",\r\n      \"bridgeParameters\": null,\r\n      \"_links\": {\r\n        \"iModel\": {\r\n          \"href\": \"https://api.bentley.com/imodels/5db42812-ebb8-4c58-98a4-2eaa99e0d8b6\"\r\n        },\r\n        \"projectShareLocation\": {\r\n          \"href\": \"https://api.bentley.com/projects/4tb42812-ebb8-4c58-98a4-2eaa99e0d8b6\"\r\n        },\r\n        \"lastRunDetails\": {\r\n          \"href\": \"https://api.bentley.com/synchronization/imodels/connections/fc226d0d-1647-48d7-8c11-f1f74f2d9808/runs/de626d0d-1647-48d7-8c11-f1f74f2d4523\"\r\n        }\r\n      }\r\n    }\r\n  ],\r\n  \"_links\": {\r\n    \"self\": {\r\n      \"href\": \"https://api.bentley.com/synchronization/imodels/connections?$skip=100&$top=100\"\r\n    },\r\n    \"prev\": {\r\n      \"href\": \"https://api.bentley.com/synchronization/imodels/connections?$skip=0&$top=100\"\r\n    },\r\n    \"next\": {\r\n      \"href\": \"https://api.bentley.com/synchronization/imodels/connections?$skip=200&$top=100\"\r\n    }\r\n  }\r\n}"
+              "application/json": "{\r\n    \"run\": {\r\n        \"id\": \"a1ecbdc8c4f6173004f9f881914a57c5511a362b\",\r\n        \"connectionId\": \"bc38cd8a-fd9f-4abf-9ad7-0c3b3d28720e\",\r\n        \"startDateTime\": \"2020-10-24T02:44:13.4109666Z\",\r\n        \"endDateTime\": \"2020-10-24T02:47:13.4109666Z\",\r\n        \"phase\": \"MasterFile\",\r\n        \"state\": \"Completed\",\r\n        \"result\": \"PartialSuccess\",\r\n        \"jobs\": [\r\n            {\r\n                \"id\": \"d6ecbdc8c4f6173004f9f881914a57c5511a362b\",\r\n                \"startDateTime\": \"2020-10-24T02:44:13.4109666Z\",\r\n                \"endDateTime\": \"2020-10-24T02:44:13.4109666Z\",\r\n                \"state\": \"Completed\",\r\n                \"result\": \"PartialSuccess\",\r\n                \"connectorType\": \"DWG\",\r\n                \"tasks\": [\r\n                    {\r\n                        \"id\": \"f5ecbdc8c4f6173004f9f881914a57c5511a362b\",\r\n                        \"startDateTime\": \"2020-10-24T02:44:13.4109666Z\",\r\n                        \"endDateTime\": \"2020-10-24T02:44:13.4109666Z\",\r\n                        \"retryAttempts\": 0,\r\n                        \"storageFileId\": \"g4ec1dc8c4f6173004f9f881914a57c5511a336d\",\r\n                        \"state\": \"Completed\",\r\n                        \"result\": \"Success\"\r\n                    }\r\n                ]\r\n            }\r\n        ]\r\n    }\r\n}"
             }
           },
           "401": {
@@ -867,90 +882,18 @@
             }
           },
           "403": {
-            "description": "This response indicates that user does not have required permissions to get specified connections."
+            "description": "This response indicates that user does not have required permissions to get specified connection run."
           },
-          "422": {
-            "description": "Invalid request to get connections.",
+          "404": {
+            "description": "This response indicates that the specified connection run not found.",
             "examples": {
-              "application/json": "{\r\n    \"error\": {\r\n        \"code\": \"InvalidConnectionsRequest\",\r\n        \"message\": \"Cannot perform operation.\",\r\n        \"details\": [\r\n            {\r\n                \"code\": \"MissingRequiredParameter\",\r\n                \"message\": \"imodelId was not provided.\",\r\n                \"target\": \"imodelId\"\r\n            },\r\n            {\r\n                \"code\": \"InvalidValue\",\r\n                \"message\": \"Page size is over '1000' items limit.\",\r\n                \"target\": \"$top\"\r\n            },\r\n            {\r\n                \"code\": \"InvalidValue\",\r\n                \"message\": \"Provided imodelId value is not valid.\",\r\n                \"target\": \"imodelId\"\r\n            }\r\n        ]\r\n    }\r\n}"
-            }
-          },
-          "429": {
-            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
-            "headers": {
-              "retry-after": {
-                "type": "string",
-                "description": "The number of requests exceeds the rate-limit for the client subscription."
-              }
-            },
-            "examples": {
-              "application/json": "{\n\r\"code\": \"TooManyRequests\",\n\r\"message\": \"More requests were received than the subscription rate-limit allows.\"}"
-            }
-          }
-        }
-      },
-      "post": {
-        "description": "---\r\n\r\nCreate a new connection\r\n\r\n### Authentication\r\n\r\nRequires *Authorization* header with valid Bearer token for scope *connections:modify*.\r\n\r\n### Associated entities\r\n\r\nA connection is linked with an iModel.  The iModel id must be provided in the \"iModelId\" query parameter when creating a connection.\r\n\r\n---\r\n",
-        "operationId": "create-connection",
-        "summary": "Create Connection",
-        "parameters": [
-          {
-            "name": "imodelId",
-            "in": "query",
-            "description": "iModel Id",
-            "type": "string",
-            "required": true
-          },
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "OAuth access token with scope 'connections:modify'",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "Accept",
-            "in": "header",
-            "description": "RECOMMENDED. Request a specific version of iTwin Platform API.",
-            "type": "string",
-            "enum": ["application/vnd.bentley.itwin-platform.v1+json"]
-          },
-          {
-            "name": "connection (create)",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/Connection (create)"
-            }
-          }
-        ],
-        "consumes": ["application/json"],
-        "produces": [
-          "application/json",
-          "application/json;InvalidConnectionRequest",
-          "application/json;MissingRequestBody"
-        ],
-        "responses": {
-          "201": {
-            "description": "Connection successfully created.",
-            "schema": {
-              "$ref": "#/definitions/Connection (created)"
-            },
-            "examples": {
-              "application/json": "{\r\n  \"connection\": {\r\n    \"id\": \"fc226d0d-1647-48d7-8c11-f1f74f2d9808\",\r\n    \"displayName\": \"30\",\r\n    \"isScheduled\": true,\r\n    \"isSchedulePaused\": false,\r\n    \"scheduleLoopIntervalInSeconds\": 1800,\r\n    \"scheduledDateTime\": \"2020-10-24T02:44:13.4109666Z\",\r\n    \"priorityLevel\": \"Low\",\r\n    \"createdDateTime\": \"2020-10-24T02:26:51.1366301Z\",\r\n    \"lastModifiedDateTime\": \"2020-11-10T14:50:03.1175774Z\",\r\n    \"persistenceType\": \"Persistent\",\r\n    \"bridgeParameters\": null,\r\n    \"_links\": {\r\n      \"iModel\": {\r\n        \"href\": \"https://api.bentley.com/imodels/5db42812-ebb8-4c58-98a4-2eaa99e0d8b6\"\r\n      },\r\n      \"projectShareLocation\": {\r\n        \"href\": \"https://api.bentley.com/projects/4tb42812-ebb8-4c58-98a4-2eaa99e0d8b6\"\r\n      },\r\n      \"lastRunDetails\": {\r\n        \"href\": \"https://api.bentley.com/synchronization/imodels/connections/fc226d0d-1647-48d7-8c11-f1f74f2d9808/runs/de626d0d-1647-48d7-8c11-f1f74f2d4523\"\r\n      }\r\n    }\r\n  }\r\n}"
-            }
-          },
-          "401": {
-            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
-            "examples": {
-              "application/json": "{\n\r\"statusCode\": 401,\n\r\"message\": \"Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint.\"}"
+              "application/json": "{\r\n  \"error\": {\r\n    \"code\": \"ConnectionRunNotFound\",\r\n    \"message\": \"Requested Connection Run not available.\"\r\n  }\r\n}"
             }
           },
           "422": {
-            "description": "Invalid request to create connection. Request payload might be missing some of the required properties.",
+            "description": "Invalid request to get connection run.",
             "examples": {
-              "application/json;InvalidConnectionRequest": "{\r\n    \"error\": {\r\n        \"code\": \"InvalidConnectionRequest\",\r\n        \"message\": \"Cannot perform operation.\",\r\n        \"details\": [\r\n            {\r\n                \"code\": \"MissingRequiredProperty\",\r\n                \"message\": \"A property required to create or update a connection is missing.\",\r\n                \"target\": \"inputFiles\"\r\n            },\r\n            {\r\n                \"code\": \"MissingRequiredParameter\",\r\n                \"message\": \"imodelId was not provided.\",\r\n                \"target\": \"imodelId\"\r\n            },\r\n            {\r\n                \"code\": \"InvalidValue\",\r\n                \"message\": \"iModelBridgeType must be one of: NotSet, AFFINITYCHECKER, MSTN, AVEVAPID, AUTOPLANT, REVIT, DWG, SPXREVIEW, IFC, SPPID, AVEVADIAGRAMS, CIVIL, CIVIL3D, GEOSPATIAL, OBD, OPENTOWER, SHELLEDWCSV, NWD\",\r\n                \"target\": \"iModelBridgeType\"\r\n            },\r\n            {\r\n                \"code\": \"MissingRequiredParameter\",\r\n                \"message\": \"imodelId was not provided.\",\r\n                \"target\": \"imodelId\"\r\n            },\r\n            {\r\n                \"code\": \"InvalidValue\",\r\n                \"message\": \"Provided imodelId value is not valid.\",\r\n                \"target\": \"imodelId\"\r\n            }\r\n        ]\r\n    }\r\n}",
-              "application/json;MissingRequestBody": "{\r\n    \"error\": {\r\n        \"code\": \"MissingRequestBody\",\r\n        \"message\": \"Request body was not provided.\"\r\n    }\r\n}"
+              "application/json": "{\r\n    \"error\": {\r\n        \"code\": \"InvalidConnectionRunRequest\",\r\n        \"message\": \"Cannot perform operation.\",\r\n        \"details\": [\r\n            {\r\n                \"code\": \"MissingRequiredParameter\",\r\n                \"message\": \"imodelId was not provided.\",\r\n                \"target\": \"imodelId\"\r\n            },\r\n            {\r\n                \"code\": \"InvalidValue\",\r\n                \"message\": \"Provided imodelId value is not valid.\",\r\n                \"target\": \"imodelId\"\r\n            },\r\n            {\r\n                \"code\": \"InvalidValue\",\r\n                \"message\": \"Provided connectionId value is not valid.\",\r\n                \"target\": \"connectionId\"\r\n            }\r\n        ]\r\n    }\r\n}"
             }
           },
           "429": {
@@ -968,11 +911,11 @@
         }
       }
     },
-    "/imodels/connections/{connectionId}/run": {
+    "/imodels/storageConnections/{connectionId}/run": {
       "post": {
-        "description": "---\r\n\r\nRuns connection for specified id.\r\n\r\n### Notes\r\n\r\nOn successful run, operation returns http status code 202/accepted - the request is accepted for processing and will execute in background. It returns location header pointing to the run to check it's status via property 'State'(NotStarted, Idle, WaitingToExecute, WaitingToRetry, Executing, Completed, Queued)  In case there is already an active run in progress for the connection, new run is not initiated, insteaded it returns 303/see other along with location header pointing to the active run. There can only be one active run per connection and another run can be initated only once active run is complete.\r\n\r\n### Authentication\r\n\r\nRequires Authorization header with valid Bearer token for scope *connection:modify*.\r\n\r\n---",
-        "operationId": "run-connection",
-        "summary": "Run Connection",
+        "description": "---\r\n\r\nRuns the specified StorageConnection.\r\n\r\n### Notes\r\n\r\nOn successful run, operation returns http status code 202/accepted - the request is accepted for processing and will execute in background. It returns location header pointing to the run to check it's status via property 'State'(NotStarted, Idle, WaitingToExecute, WaitingToRetry, Executing, Completed, Queued). In the event that multiple run requests are being made simultaneously, 409/conflict is returned and only the first request is processed. If the run is already initiated and active, a new run is not initiated, instead 303/see other is returned along with location header pointing to the active run. There can only be one active run per iModel and another run can be initated only once the active run is complete.\r\n\r\n### Authentication\r\n\r\nRequires Authorization header with valid Bearer token for scope *connection:modify*.\r\n\r\n---",
+        "operationId": "run-storage-connection",
+        "summary": "Run StorageConnection",
         "parameters": [
           {
             "name": "connectionId",
@@ -981,23 +924,16 @@
             "type": "string"
           },
           {
-            "name": "imodelId",
-            "in": "query",
-            "description": "iModel Id",
-            "type": "string",
-            "required": true
-          },
-          {
             "name": "Authorization",
             "in": "header",
-            "description": "OAuth access token with scope 'connections:modify'",
+            "description": "OAuth access token with scope `synchronization:modify`",
             "required": true,
             "type": "string"
           },
           {
             "name": "Accept",
             "in": "header",
-            "description": "RECOMMENDED. Request a specific version of iTwin Platform API.",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
             "type": "string",
             "enum": ["application/vnd.bentley.itwin-platform.v1+json"]
           }
@@ -1006,7 +942,10 @@
         "produces": ["application/json"],
         "responses": {
           "202": {
-            "description": "Accepted"
+            "description": "Accepted",
+            "examples": {
+              "application/json": ""
+            }
           },
           "303": {
             "description": "This response indicates that an active run is in progress and link is provided in location header."
@@ -1024,6 +963,12 @@
             "description": "This response indicates that the specified connection not found.",
             "examples": {
               "application/json": "{\r\n  \"error\": {\r\n    \"code\": \"ConnectionNotFound\",\r\n    \"message\": \"Requested Connection not available.\"\r\n  }\r\n}"
+            }
+          },
+          "409": {
+            "description": "A run request is already being processed.",
+            "examples": {
+              "application/json": "{\r\n  \"error\": {\r\n    \"code\": \"IModelAlreadyProcessingRequest\",\r\n    \"message\": \"The iModel is already processing this request.\"\r\n  }\r\n}"
             }
           },
           "422": {
@@ -1047,29 +992,17 @@
         }
       }
     },
-    "/imodels/connections/{connectionId}/runs/{runId}": {
+    "/imodels/connections": {
       "get": {
-        "description": "---\r\n\r\nRetrieves connection run for specified Id.\r\n\r\n### Authentication\r\n\r\nRequires Authorization header with valid Bearer token for scope *connections:read*.\r\n\r\n---",
-        "operationId": "get-connection-run",
-        "summary": "Get Connection Run",
+        "description": "---\r\n\r\nRetrieves connections for the specified iModel.\r\n\r\n### Notes\r\n\r\nThe `Prefer` header can be used to specify how much result metadata is desired by the client. The `Prefer` request header field is used to indicate that particular server behaviors are preferred by the client but are not required for successful completion of the request.\r\n\r\nThis operation supports `\"return=representation\"` and `\"return=minimal\"` preferences.\r\n\r\nThe `\"return=representation\"` preference indicates that the client prefers that the server include an entity representing the current state of the resource in the response to a successful request.\r\nThe `\"return=minimal\"` preference indicates that the client wishes the server to return only a minimal response to a successful request. This is the default preference if `Prefer` header is not specified.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `synchronization:read`.\r\n\r\n---",
+        "operationId": "get-connections",
+        "summary": "Get Connections",
         "parameters": [
-          {
-            "name": "connectionId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "runId",
-            "in": "path",
-            "description": "Run Id",
-            "required": true,
-            "type": "string"
-          },
           {
             "name": "imodelId",
             "in": "query",
             "description": "iModel Id",
+            "required": true,
             "type": "string"
           },
           {
@@ -1087,28 +1020,33 @@
           {
             "name": "Authorization",
             "in": "header",
-            "description": "OAuth access token with scope 'connections:read'",
+            "description": "OAuth access token with scope `synchronization:read`",
             "required": true,
             "type": "string"
           },
           {
             "name": "Accept",
             "in": "header",
-            "description": "RECOMMENDED. Request a specific version of iTwin Platform API.",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
             "type": "string",
             "enum": ["application/vnd.bentley.itwin-platform.v1+json"]
           }
         ],
         "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "produces": [
+          "application/json;minimal",
+          "application/json;representation",
+          "application/json"
+        ],
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Run (body)"
+              "$ref": "#/definitions/connections-prefer-return-representation"
             },
             "examples": {
-              "application/json": "{\r\n    \"run\": {\r\n        \"id\": \"a1ecbdc8c4f6173004f9f881914a57c5511a362b\",\r\n        \"connectionId\": \"bc38cd8a-fd9f-4abf-9ad7-0c3b3d28720e\",\r\n        \"startDateTime\": \"2020-10-24T02:44:13.4109666Z\",\r\n        \"endDateTime\": \"2020-10-24T02:47:13.4109666Z\",\r\n        \"triggerType\": \"OnDemand\",\r\n        \"phase\": \"MasterFile\",\r\n        \"state\": \"Completed\",\r\n        \"result\": \"PartialSuccess\",\r\n        \"jobs\": [\r\n            {\r\n                \"id\": \"d6ecbdc8c4f6173004f9f881914a57c5511a362b\",\r\n                \"startDateTime\": \"2020-10-24T02:44:13.4109666Z\",\r\n                \"endDateTime\": \"2020-10-24T02:44:13.4109666Z\",\r\n                \"priority\": \"0\",\r\n                \"hasSpatialRootTask\": \"false\",\r\n                \"hasTaskDependencies\": \"true\",\r\n                \"state\": \"Completed\",\r\n                \"result\": \"PartialSuccess\",\r\n                \"bridgeType\": \"DWG\",\r\n                \"tasks\": [\r\n                    {\r\n                        \"id\": \"f5ecbdc8c4f6173004f9f881914a57c5511a362b\",\r\n                        \"startDateTime\": \"2020-10-24T02:44:13.4109666Z\",\r\n                        \"endDateTime\": \"2020-10-24T02:44:13.4109666Z\",\r\n                        \"retryAttempts\": 0,\r\n                        \"sourceFileId\": \"\",\r\n                        \"state\": \"Completed\",\r\n                        \"dependsOnIds\": []\r\n                    }\r\n                ]\r\n            }\r\n        ]\r\n    }\r\n}"
+              "application/json;minimal": "{\r\n  \"connections\": [\r\n    {\r\n      \"id\": \"fc226d0d-1647-48d7-8c11-f1f74f2d9808\",\r\n      \"displayName\": \"30\"\r\n    }\r\n  ],\r\n  \"_links\": {\r\n    \"self\": {\r\n      \"href\": \"https://api.bentley.com/imodels/connections?$skip=100&$top=100\"\r\n    },\r\n    \"prev\": {\r\n      \"href\": \"https://api.bentley.com/imodels/connections?$skip=0&$top=100\"\r\n    },\r\n    \"next\": {\r\n      \"href\": \"https://api.bentley.com/imodels/connections?$skip=200&$top=100\"\r\n    }\r\n  }\r\n}",
+              "application/json;representation": "{\r\n  \"connections\": [\r\n    {\r\n      \"id\": \"fc226d0d-1647-48d7-8c11-f1f74f2d9808\",\r\n      \"displayName\": \"30\",\r\n      \"iModelId\": \"7dbd531d-6967-47b2-8945-a722a437ad7a\",\r\n      \"projectId\": \"7dbd531d-6967-47b2-8945-a722a437ad7a\",\r\n      \"_links\": {\r\n        \"iModel\": {\r\n          \"href\": \"https://api.bentley.com/imodels/5db42812-ebb8-4c58-98a4-2eaa99e0d8b6\"\r\n        },\r\n        \"project\": {\r\n          \"href\": \"https://api.bentley.com/projects/4tb42812-ebb8-4c58-98a4-2eaa99e0d8b6\"\r\n        },\r\n        \"lastRunDetails\": {\r\n          \"href\": \"https://api.bentley.com/synchronization/imodels/storageConnections/fc226d0d-1647-48d7-8c11-f1f74f2d9808/runs/de626d0d-1647-48d7-8c11-f1f74f2d4523\"\r\n        }\r\n      }\r\n    }\r\n  ],\r\n  \"_links\": {\r\n    \"self\": {\r\n      \"href\": \"https://api.bentley.com/synchronization/imodels/connections?$skip=100&$top=100\"\r\n    },\r\n    \"prev\": {\r\n      \"href\": \"https://api.bentley.com/synchronization/imodels/connections?$skip=0&$top=100\"\r\n    },\r\n    \"next\": {\r\n      \"href\": \"https://api.bentley.com/synchronization/imodels/connections?$skip=200&$top=100\"\r\n    }\r\n  }\r\n}"
             }
           },
           "401": {
@@ -1118,18 +1056,12 @@
             }
           },
           "403": {
-            "description": "This response indicates that user does not have required permissions to get specified connection run."
-          },
-          "404": {
-            "description": "This response indicates that the specified connection run not found.",
-            "examples": {
-              "application/json": "{\r\n  \"error\": {\r\n    \"code\": \"ConnectionRunNotFound\",\r\n    \"message\": \"Requested Connection Run not available.\"\r\n  }\r\n}"
-            }
+            "description": "This response indicates that user does not have required permissions to get specified connections."
           },
           "422": {
-            "description": "Invalid request to get connection run.",
+            "description": "Invalid request to get connections.",
             "examples": {
-              "application/json": "{\r\n    \"error\": {\r\n        \"code\": \"InvalidConnectionRunRequest\",\r\n        \"message\": \"Cannot perform operation.\",\r\n        \"details\": [\r\n            {\r\n                \"code\": \"MissingRequiredParameter\",\r\n                \"message\": \"imodelId was not provided.\",\r\n                \"target\": \"imodelId\"\r\n            },\r\n            {\r\n                \"code\": \"InvalidValue\",\r\n                \"message\": \"Provided imodelId value is not valid.\",\r\n                \"target\": \"imodelId\"\r\n            },\r\n            {\r\n                \"code\": \"InvalidValue\",\r\n                \"message\": \"Provided connectionId value is not valid.\",\r\n                \"target\": \"connectionId\"\r\n            }\r\n        ]\r\n    }\r\n}"
+              "application/json": "{\r\n    \"error\": {\r\n        \"code\": \"InvalidConnectionsRequest\",\r\n        \"message\": \"Cannot perform operation.\",\r\n        \"details\": [\r\n            {\r\n                \"code\": \"InvalidValue\",\r\n                \"message\": \"Page size is over '1000' items limit.\",\r\n                \"target\": \"$top\"\r\n            },\r\n            {\r\n                \"code\": \"InvalidValue\",\r\n                \"message\": \"Provided imodelId value is not valid.\",\r\n                \"target\": \"imodelId\"\r\n            }\r\n        ]\r\n    }\r\n}"
             }
           },
           "429": {
@@ -1210,13 +1142,14 @@
       ],
       "type": "string"
     },
-    "Connections (prefer return=minimal)": {
+    "connections-prefer-return-minimal": {
+      "title": "Connections (prefer return=minimal)",
       "type": "object",
       "properties": {
         "connections": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/Connection (summary)"
+            "$ref": "#/definitions/connection-summary"
           }
         },
         "_links": {
@@ -1224,7 +1157,8 @@
         }
       }
     },
-    "Connections (prefer return=representation)": {
+    "connections-prefer-return-representation": {
+      "title": "Connections (prefer return=representation)",
       "type": "object",
       "properties": {
         "connections": {
@@ -1242,45 +1176,21 @@
       "type": "object",
       "properties": {
         "id": {
-          "type": "string",
-          "description": "test"
+          "type": "string"
         },
         "displayName": {
           "type": "string"
         },
-        "isScheduled": {
-          "type": "boolean"
-        },
-        "scheduleLoopIntervalInSeconds": {
-          "type": "number"
-        },
-        "scheduledDateTime": {
+        "iModelId": {
           "type": "string"
-        },
-        "priorityLevel": {
-          "type": "string"
-        },
-        "createdDateTime": {
-          "type": "string"
-        },
-        "lastModifiedDateTime": {
-          "type": "string"
-        },
-        "persistenceType": {
-          "type": "string"
-        },
-        "bridgeParameters": {
-          "type": "string"
-        },
-        "isSchedulePaused": {
-          "type": "boolean"
         },
         "_links": {
-          "$ref": "#/definitions/Connection Links"
+          "$ref": "#/definitions/connection-links"
         }
       }
     },
-    "Connection (summary)": {
+    "connection-summary": {
+      "title": "Connection (summary)",
       "type": "object",
       "properties": {
         "id": {
@@ -1293,67 +1203,71 @@
         }
       }
     },
-    "Connection (created)": {
+    "StorageConnection": {
       "type": "object",
       "properties": {
-        "connection": {
-          "type": "object",
-          "$ref": "#/definitions/Connection"
+        "id": {
+          "type": "string"
+        },
+        "displayName": {
+          "type": "string"
+        },
+        "iModelId": {
+          "type": "string"
+        },
+        "_links": {
+          "$ref": "#/definitions/connection-links"
         }
       }
     },
-    "Connection (create)": {
+    "storage-connection-summary": {
+      "title": "StorageConnection (summary)",
       "type": "object",
       "properties": {
-        "connection": {
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "string"
-            },
-            "displayName": {
-              "type": "string"
-            },
-            "isScheduled": {
-              "type": "boolean"
-            },
-            "scheduleLoopIntervalInSeconds": {
-              "type": "number"
-            },
-            "ownerEmail": {
-              "type": "string"
-            },
-            "projectShareLocation": {
-              "type": "object",
-              "properties": {
-                "projectId": {
-                  "type": "string"
-                }
-              }
-            },
-            "sourceFiles": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/SourceFile (create)"
-              }
-            }
+        "id": {
+          "description": "",
+          "type": "string"
+        },
+        "displayName": {
+          "description": "",
+          "type": "string"
+        }
+      }
+    },
+    "storage-connection-create": {
+      "title": "StorageConnection (create)",
+      "required": ["sourceFiles", "iModelId"],
+      "type": "object",
+      "properties": {
+        "displayName": {
+          "type": "string"
+        },
+        "iModelId": {
+          "type": "string"
+        },
+        "sourceFiles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/storage-file-create"
           }
         }
       },
-      "example": "{\r\n  \"connection\": {\r\n    \"displayName\": \"30\",\r\n    \"isScheduled\": true,\r\n    \"scheduleLoopIntervalInSeconds\": 1800,\r\n    \"ownerEmail\": \"test.user@testorg.com\",\r\n    \"projectShareLocation\": {\r\n      \"projectId\": \"988f2774-5de8-4187-89f1-6e895489f1df\"\r\n    },\r\n    \"sourceFiles\": [\r\n      {\r\n        \"fileId\": \"658f2774-5de8-4187-89f1-6e895489f1jh\",\r\n        \"isSpatialRoot\": true,\r\n        \"iModelBridgeType\": \"MSTN\"\r\n      }\r\n    ]\r\n  }\r\n  }"
+      "example": "{\r\n  \"displayName\": \"30\",\r\n  \"iModelId\": \"7dbd531d-6967-47b2-8945-a722a437ad7a\",\r\n  \"sourceFiles\": [\r\n    {\r\n      \"storageFileId\": \"658f2774-5de8-4187-89f1-6e895489f1jh\",\r\n      \"connectorType\": \"MSTN\"\r\n    }\r\n  ]\r\n}"
     },
-    "Runs (prefer return=minimal)": {
+    "runs-prefer-return-minimal": {
+      "title": "Runs (prefer return=minimal)",
       "type": "object",
       "properties": {
         "runs": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/Run (summary)"
+            "$ref": "#/definitions/run-summary"
           }
         }
       }
     },
-    "Runs (prefer return=representation)": {
+    "runs-prefer-return-representation": {
+      "title": "Runs (prefer return=representation)",
       "type": "object",
       "properties": {
         "runs": {
@@ -1364,7 +1278,7 @@
         }
       }
     },
-    "Run (body)": {
+    "run-body": {
       "type": "object",
       "properties": {
         "run": {
@@ -1407,7 +1321,8 @@
         }
       }
     },
-    "Run (summary)": {
+    "run-summary": {
+      "title": "Run (summary)",
       "type": "object",
       "properties": {
         "id": {
@@ -1436,26 +1351,14 @@
         "endDateTime": {
           "type": "string"
         },
-        "priority": {
-          "type": "integer"
-        },
-        "hasSpatialRootTask": {
-          "type": "boolean"
-        },
-        "hasTaskDependencies": {
-          "type": "boolean"
-        },
-        "jobType": {
-          "type": "string"
-        },
         "state": {
           "type": "string"
         },
         "result": {
           "type": "string"
         },
-        "bridgeType": {
-          "type": "string"
+        "connectorType": {
+          "$ref": "#/definitions/IModelBridgeType"
         },
         "tasks": {
           "type": "array",
@@ -1477,16 +1380,10 @@
         "endDateTime": {
           "type": "string"
         },
-        "dependsOnIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
         "retryAttempts": {
           "type": "integer"
         },
-        "sourceFileId": {
+        "storageFileId": {
           "type": "string"
         },
         "state": {
@@ -1497,126 +1394,103 @@
         }
       }
     },
-    "SourceFiles (prefer return=minimal)": {
+    "storage-file-prefer-return-minimal": {
+      "title": "StorageFile (prefer return=minimal)",
       "type": "object",
       "properties": {
         "sourceFiles": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/SourceFile (summary)"
+            "$ref": "#/definitions/StorageFile (summary)"
           }
         }
       }
     },
-    "SourceFiles (prefer return=representation)": {
+    "storage-file-prefer-return-representation": {
+      "title": "StorageFile (prefer return=representation)",
       "type": "object",
       "properties": {
         "sourceFiles": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/SourceFile"
+            "$ref": "#/definitions/StorageFile"
           }
         }
       }
     },
-    "SourceFile": {
+    "StorageFile-body": {
+      "type": "object",
+      "properties": {
+        "sourceFile": {
+          "$ref": "#/definitions/StorageFile"
+        }
+      }
+    },
+    "StorageFile": {
       "type": "object",
       "properties": {
         "id": {
           "type": "string"
         },
-        "isSpatialRoot": {
-          "type": "boolean"
-        },
-        "lastAddedToConnectionRunDateTime": {
+        "storageFileId": {
           "type": "string"
         },
-        "iModelBridgeType": {
+        "connectorType": {
           "$ref": "#/definitions/IModelBridgeType"
-        },
-        "createdDateTime": {
-          "type": "string"
-        },
-        "lastModifiedDateTime": {
-          "type": "string"
-        },
-        "persistenceType": {
-          "type": "string"
-        },
-        "executionAction": {
-          "type": "string"
         },
         "lastKnownFileName": {
           "type": "string"
         },
         "_links": {
-          "$ref": "#/definitions/File Links"
+          "$ref": "#/definitions/file-links"
         }
       }
     },
-    "SourceFile (summary)": {
+    "storage-file-summary": {
+      "title": "StorageFile (summary)",
       "type": "object",
       "properties": {
         "id": {
           "description": "",
           "type": "string"
         },
-        "isSpatialRoot": {
-          "description": "",
-          "type": "string"
-        },
-        "fileId": {
+        "storageFileId": {
           "description": "",
           "type": "string"
         }
       }
     },
-    "SourceFile (createbody)": {
+    "storage-file-create": {
+      "title": "StorageFile (create)",
+      "required": ["storageFileId", "connectorType"],
       "type": "object",
       "properties": {
-        "sourceFile": {
-          "$ref": "#/definitions/SourceFile (create)"
-        }
-      }
-    },
-    "SourceFile (created)": {
-      "type": "object",
-      "properties": {
-        "sourceFile": {
-          "$ref": "#/definitions/SourceFile"
-        }
-      }
-    },
-    "SourceFile (create)": {
-      "type": "object",
-      "properties": {
-        "fileId": {
+        "storageFileId": {
           "type": "string"
         },
-        "isSpatialRoot": {
-          "type": "boolean"
-        },
-        "iModelBridgeType": {
+        "connectorType": {
           "$ref": "#/definitions/IModelBridgeType"
         }
       },
-      "example": "{\r\n  \"sourceFile\": {\r\n    \"fileId\": \"658f2774-5de8-4187-89f1-6e895489f1jh\",\r\n    \"isSpatialRoot\": true,\r\n    \"iModelBridgeType\": \"MSTN\"\r\n  }\r\n}"
+      "example": "{\r\n  \"storageFileId\": \"658f2774-5de8-4187-89f1-6e895489f1jh\",\r\n  \"connectorType\": \"MSTN\"\r\n}"
     },
-    "Connection Links": {
+    "connection-links": {
+      "title": "Connection Links",
       "type": "object",
       "properties": {
         "iModel": {
           "$ref": "#/definitions/Link"
         },
-        "projectShareLocation": {
+        "project": {
           "$ref": "#/definitions/Link"
         },
-        "lastRunDetails": {
+        "lastRun": {
           "$ref": "#/definitions/Link"
         }
       }
     },
-    "File Links": {
+    "file-links": {
+      "title": "File Links",
       "type": "object",
       "properties": {
         "file": {

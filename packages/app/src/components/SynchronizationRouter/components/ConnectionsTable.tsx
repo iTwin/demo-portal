@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { SvgDelete, SvgPlay } from "@itwin/itwinui-icons-react";
+import { SvgPlay } from "@itwin/itwinui-icons-react";
 import {
   Body,
   ButtonGroup,
@@ -26,7 +26,6 @@ import { SkeletonCell } from "./SkeletonCell";
 
 interface ConnectionsTableProps {
   refreshCallback: () => void;
-  iModelId: string;
   accessToken: string;
   connections: Connection[];
 }
@@ -34,7 +33,6 @@ interface ConnectionsTableProps {
 export const ConnectionsTable = ({
   connections,
   accessToken,
-  iModelId,
   refreshCallback,
 }: ConnectionsTableProps) => {
   const urlPrefix = useApiPrefix();
@@ -80,20 +78,8 @@ export const ConnectionsTable = ({
                     urlPrefix,
                     accessToken
                   );
-                  const deleteConnection = async () => {
-                    if (window.confirm("Confirm delete")) {
-                      await client.deleteConnection(
-                        iModelId,
-                        props.value ?? ""
-                      );
-                      toaster.positive(
-                        `Connection ${props.row.original.displayName} deleted!`
-                      );
-                      refreshCallback?.();
-                    }
-                  };
                   const runConnection = async () => {
-                    await client.runConnection(iModelId, props.value ?? "");
+                    await client.runConnection(props.value ?? "");
                     toaster.positive(
                       `Connection ${props.row.original.displayName} scheduled!`
                     );
@@ -113,17 +99,6 @@ export const ConnectionsTable = ({
                         >
                           <SvgPlay />
                         </IconButton>
-                        <IconButton
-                          styleType={"borderless"}
-                          onClick={deleteConnection}
-                          title={"Delete connection"}
-                          disabled={
-                            lastRun &&
-                            lastRun.state !== ExecutionState.Completed
-                          }
-                        >
-                          <SvgDelete />
-                        </IconButton>
                       </ButtonGroup>
                     </SkeletonCell>
                   );
@@ -132,7 +107,7 @@ export const ConnectionsTable = ({
             ],
           },
         ],
-        [accessToken, iModelId, lastRun, refreshCallback, urlPrefix]
+        [accessToken, lastRun, refreshCallback, urlPrefix]
       )}
       emptyTableContent={
         "No file connected, drop file above to create new connections"

@@ -10,24 +10,20 @@ import { Synchronize } from "./Synchronize";
 
 interface SynchronizationRouterProps extends RouteComponentProps {
   accessToken: string;
-  email: string;
 }
 
 export const SynchronizationRouter = ({
   accessToken,
-  email,
 }: SynchronizationRouterProps) => {
   return (
     <Router className="full-height-container">
       <SelectionRouter
         accessToken={accessToken}
-        email={email}
         path="*"
         hideIModelActions={["synchronize"]}
       />
       <Synchronize
         accessToken={accessToken}
-        email={email}
         path="project/:projectId/imodel/:iModelId"
       />
     </Router>

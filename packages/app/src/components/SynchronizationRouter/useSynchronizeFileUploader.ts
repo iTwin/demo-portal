@@ -13,7 +13,6 @@ interface ConnectionFileUploaderOptions {
   projectId: string;
   iModelId: string;
   accessToken: string;
-  email: string;
 }
 
 export const getAlertType = (state: string) =>
@@ -28,7 +27,6 @@ export const useSynchronizeFileUploader = ({
   projectId,
   iModelId,
   accessToken = "",
-  email = "",
 }: ConnectionFileUploaderOptions) => {
   const urlPrefix = useApiPrefix();
   const [step, setStep] = React.useState(0);
@@ -48,12 +46,8 @@ export const useSynchronizeFileUploader = ({
         if (accessToken === "") {
           throw new Error("A valid access token is required, none provided");
         }
-        if (email === "") {
-          throw new Error("User email required, none provided");
-        }
-
         if (fileList.length > 1) {
-          throw new Error("Only single file upload are supported (for now)");
+          throw new Error("Only single file upload are supported");
         }
         const target = fileList[0];
         const fileName = target?.name;
@@ -82,7 +76,7 @@ export const useSynchronizeFileUploader = ({
           );
           if (sourceFile) {
             throw new Error(
-              `Connection for ${fileName} already exists, update is not supported, yet ;)`
+              `Connection for ${fileName} already exists, update is not supported`
             );
           }
         }
@@ -123,20 +117,15 @@ export const useSynchronizeFileUploader = ({
         setStep(4);
         setStatus("Connecting file to iModel");
         const connectionId = await synchronization.addFileToDemoConnection(
-          projectId,
           iModelId,
           demoPortalConnection?.id,
           file.file.id,
-          bridgeType,
-          email.toLocaleLowerCase()
+          bridgeType
         );
 
         //Disabled at the moment, the connection is not "Working" at this point, owner need to be updated.
         setStatus("Running the connection");
-        const runStatus = await synchronization.runConnection(
-          iModelId,
-          connectionId
-        );
+        const runStatus = await synchronization.runConnection(connectionId);
         if (runStatus.status === 303) {
           setStatus(
             "Complete, synchronization must be started after current run"
@@ -164,7 +153,7 @@ export const useSynchronizeFileUploader = ({
         setState("Error");
       }
     },
-    [accessToken, email, iModelId, projectId, urlPrefix]
+    [accessToken, iModelId, projectId, urlPrefix]
   );
   const resetUploader = () => {
     setStep(0);

@@ -10,7 +10,7 @@ import {
   ExecutionResult,
   ExecutionState,
   Run,
-  SourceFile,
+  StorageFile,
 } from "../../api/synchronization/generated";
 import { SynchronizationClient } from "../../api/synchronization/synchronizationClient";
 import { useApiPrefix } from "../../api/useApiPrefix";
@@ -24,14 +24,10 @@ export const useSynchronizeInfo = (iModelId: string, accessToken: string) => {
   const fetchRunResults = React.useCallback(
     async (connectionId: string, runId: string) => {
       const client = new SynchronizationClient(urlPrefix, accessToken);
-      const { run } = await client.getConnectionRun(
-        iModelId,
-        connectionId,
-        runId
-      );
-      setLastRunResults(run);
+      const { run } = await client.getConnectionRun(connectionId, runId);
+      setLastRunResults({ ...run, connectionId });
     },
-    [accessToken, iModelId, urlPrefix]
+    [accessToken, urlPrefix]
   );
 
   React.useEffect(() => {
@@ -44,9 +40,9 @@ export const useSynchronizeInfo = (iModelId: string, accessToken: string) => {
       }, 10000);
       return () => clearTimeout(timeout);
     }
-  }, [accessToken, fetchRunResults, iModelId, lastRunResults, urlPrefix]);
+  }, [accessToken, fetchRunResults, lastRunResults, urlPrefix]);
 
-  const [sourceFiles, setSourceFiles] = React.useState<SourceFile[]>();
+  const [sourceFiles, setSourceFiles] = React.useState<StorageFile[]>();
   const fetchSources = React.useCallback(async () => {
     setLastRunResults(undefined);
     if (!accessToken || !iModelId) {
@@ -61,7 +57,7 @@ export const useSynchronizeInfo = (iModelId: string, accessToken: string) => {
       connectionId,
       runId,
     ] = SynchronizationClient.extractIdsFromLastRunDetails(
-      connection?._links?.lastRunDetails?.href
+      connection?._links?.lastRun?.href
     );
     if (connectionId && runId) {
       await fetchRunResults(connectionId, runId);
