@@ -5,7 +5,7 @@
 import { render } from "@testing-library/react";
 import React from "react";
 
-import { SelectIModel } from "./SelectIModel";
+import SelectIModel from "./SelectIModel";
 
 it("should have tiles with 'Delete IModel' option", () => {
   const { container, getByText } = render(

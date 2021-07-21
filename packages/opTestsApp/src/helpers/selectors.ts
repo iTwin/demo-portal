@@ -64,5 +64,15 @@ export interface ViewerSelectors {
 }
 
 export const Viewer: ViewerSelectors = {
-  container: "css=.itwin-viewer-container",
+  container: "css=.full-height-container",
+};
+
+export interface ErrorSelectors {
+  Unauthorized: string;
+  Component: string;
+}
+
+export const Error: ErrorSelectors = {
+  Unauthorized: "text='Unauthorized'",
+  Component: "css=.iui-non-ideal-state",
 };

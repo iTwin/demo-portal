@@ -1,0 +1,56 @@
+name: iTwin Demo Portal CI
+
+on:
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: CI Build
+    runs-on: ubuntu-latest
+
+    environment:
+      name: CI
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Use Node.js 12.x
+      uses: actions/setup-node@v2
+      with:
+        node-version: 12.x
+        registry-url: https://registry.npmjs.org/
+
+    - run: yarn install
+
+    - run: yarn build
+      # https://create-react-app.dev/docs/advanced-configuration/
+      # https://github.com/imodeljs/create-react-app/blob/imodeljs/packages/react-scripts/README-imodeljs.md
+      env:
+        GENERATE_SOURCEMAP: false
+        USE_FAST_SASS: true
+        TRANSPILE_DEPS: false
+        DISABLE_TERSER: true
+        IMJS_AUTH_CLIENT_CLIENT_ID: ${{ secrets.IMJS_AUTH_CLIENT_CLIENT_ID }}
+        IMJS_LD_CLIENT_ID: ${{ secrets.IMJS_LD_CLIENT_ID }}
+        IMJS_DEMO_PORTAL_WHITELIST: ${{ secrets.IMJS_DEMO_PORTAL_WHITELIST }}
+        IMJS_AUTH_CLIENT_APIM_AUTHORITY: ${{ secrets.IMJS_AUTH_CLIENT_APIM_AUTHORITY }}
+        IMJS_AUTH_CLIENT_AUTHORITY: ${{ secrets.IMJS_AUTH_CLIENT_AUTHORITY }}
+        IMJS_BUDDI_REGION: ${{ secrets.IMJS_BUDDI_REGION }}
+        IMJS_APP_INSIGHTS_KEY: ${{ secrets.IMJS_APP_INSIGHTS_KEY }}
+
+    - run: yarn optest:ci
+      env:
+        BROWSER: ${{ secrets.BROWSER }}
+        SiteUrl: ${{ secrets.SITEURL }}
+        TestUserName: ${{ secrets.TESTUSERNAME }}
+        TestPassword: ${{ secrets.TESTPASSWORD }}
+        UnauthorizedUserName: ${{ secrets.UNAUTHORIZEDUSERNAME }}
+        UnauthorizedPassword: ${{ secrets.UNAUTHORIZEDPASSWORD }}
+
+    - name: Upload test artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: Test Artifacts
+        path: packages/opTestApp/**/*.png

@@ -12,6 +12,7 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.1.1",
     "@typescript-eslint/parser": "^4.1.1",
+    "cross-env": "7.0.3",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^17.1.1",
     "eslint-config-prettier": "^6.9.0",
@@ -26,6 +27,8 @@
     "husky": "^6.0.0",
     "lint-staged": "^10.2.0",
     "prettier": "1.19.1",
+    "serve": "^12.0.0",
+    "start-server-and-test": "^1.12.6",
     "stylelint": "^13.0.0",
     "stylelint-config-prettier": "^6.0.0",
     "stylelint-config-sass-guidelines": "^6.1.0",
@@ -39,6 +42,8 @@
     "start": "yarn --cwd packages/app start",
     "test": "yarn --cwd packages/app test",
     "optest": "yarn --cwd packages/opTestsApp test",
+    "optest:ci": "cross-env NODE_ENV=test start-server-and-test serve:static http://localhost:3000 optest",
+    "serve:static": "serve -s packages/app/build -l 3000 --cors",
     "lint": "lint-staged --verbose",
     "prepare": "husky install"
   },

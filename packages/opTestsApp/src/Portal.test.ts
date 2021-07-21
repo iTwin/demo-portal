@@ -2,9 +2,9 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { SiteUrl } from "./helpers/config";
-import { Home, Viewer } from "./helpers/selectors";
-import { page } from "./setupTest";
+import { SiteUrl, UnauthorizedUser } from "./helpers/config";
+import { Error, Home, Viewer } from "./helpers/selectors";
+import { login, page } from "./setupTest";
 
 describe("Portal", () => {
   it("Should have right title", async () => {
@@ -26,6 +26,18 @@ describe("Portal", () => {
       expect(viewer).toBeDefined();
     } catch (error) {
       await page.screenshot({ path: "no-cards.png" });
+      throw error;
+    }
+  });
+
+  it("should block unauthorized users", async () => {
+    try {
+      await page.close(); // close the existing page where the Authorized User is logged in
+      await login(UnauthorizedUser, Error.Unauthorized); // login with an unauthorized user
+      const errorComp = await page.waitForSelector(Error.Component);
+      expect(errorComp).toBeDefined();
+    } catch (error) {
+      await page.screenshot({ path: "unauthorized.png" });
       throw error;
     }
   });
