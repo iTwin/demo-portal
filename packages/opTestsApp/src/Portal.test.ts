@@ -15,7 +15,7 @@ describe("Portal", () => {
 
   it("displays project and imodel cards and renders the viewer when the imodel card is clicked", async () => {
     try {
-      await page.goto(`${SiteUrl}/view?myprojects`);
+      await page.goto(`${SiteUrl}/view`);
       await page.waitForSelector(Home.Card.grid);
       await page.waitForSelector(Home.Card.title);
       await page.click(Home.Card.thumbnail, { delay: 1000 });
