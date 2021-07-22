@@ -12,26 +12,21 @@ import { SynchronizationRouter } from "./SynchronizationRouter/SynchronizationRo
 import { ViewRouter } from "./ViewRouter/ViewRouter";
 
 export const MainRouter = () => {
-  const { accessToken, userInfo } = useAuth();
-  const { accessTokenStr, email } = useMemo(() => {
-    return {
-      accessTokenStr: accessToken?.toTokenString() ?? "",
-      email: userInfo?.email?.id ?? "",
-    };
-  }, [accessToken, userInfo]);
+  const { accessToken } = useAuth();
+  const accessTokenStr = useMemo(() => {
+    return accessToken?.toTokenString() ?? "";
+  }, [accessToken]);
 
   return (
     <Router className={"full-height-container"}>
-      <ViewRouter accessToken={accessTokenStr} path="view/*" email={email} />
+      <ViewRouter accessToken={accessTokenStr} path="view/*" />
       <SynchronizationRouter
         path="synchronize/*"
         accessToken={accessTokenStr}
-        email={email}
       />
       <ManageVersionsRouter
         path="manage-versions/*"
         accessToken={accessTokenStr}
-        email={email}
       />
       <StayTunedRouter path="validate/*" featureName={"Validate iModel"} />
       <StayTunedRouter path="compare/*" featureName={"Version Compare"} />

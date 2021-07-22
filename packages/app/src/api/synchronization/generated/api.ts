@@ -8,7 +8,7 @@
 // tslint:disable
 /**
  * Synchronization
- * iModel Connections API is a cloud-based synchronization API meant to synchronize the data in Input Files and iModels. It allows users to establish links from their design files to iModels, hosted in Bentley's iModelHub. Users can setup recurring synchronization to periodically synchronize updates to their design files, or manual synchronizations.
+ * iModel Connections API is a cloud-based synchronization API meant to synchronize the data in Input Files and iModels. It allows users to establish links from their design files to iModels, hosted in Bentley's iModelHub. Users can synchronize updates to their design files.
  *
  * OpenAPI spec version: v1
  *
@@ -21,6 +21,7 @@ import * as portableFetch from "portable-fetch";
 import * as url from "url";
 
 import { Configuration } from "./configuration";
+
 
 export const BASE_PATH = "https://api.bentley.com/synchronization".replace(
   /\/+$/,
@@ -97,7 +98,7 @@ export class RequiredError extends Error {
  */
 export interface Connection {
   /**
-   * test
+   *
    * @type {string}
    * @memberof Connection
    */
@@ -110,156 +111,16 @@ export interface Connection {
   displayName?: string;
   /**
    *
-   * @type {boolean}
-   * @memberof Connection
-   */
-  isScheduled?: boolean;
-  /**
-   *
-   * @type {number}
-   * @memberof Connection
-   */
-  scheduleLoopIntervalInSeconds?: number;
-  /**
-   *
    * @type {string}
    * @memberof Connection
    */
-  scheduledDateTime?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof Connection
-   */
-  priorityLevel?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof Connection
-   */
-  createdDateTime?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof Connection
-   */
-  lastModifiedDateTime?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof Connection
-   */
-  persistenceType?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof Connection
-   */
-  bridgeParameters?: string;
-  /**
-   *
-   * @type {boolean}
-   * @memberof Connection
-   */
-  isSchedulePaused?: boolean;
+  iModelId?: string;
   /**
    *
    * @type {ConnectionLinks}
    * @memberof Connection
    */
   _links?: ConnectionLinks;
-}
-
-/**
- *
- * @export
- * @interface ConnectionCreate
- */
-export interface ConnectionCreate {
-  /**
-   *
-   * @type {ConnectionCreateConnection}
-   * @memberof ConnectionCreate
-   */
-  connection?: ConnectionCreateConnection;
-}
-
-/**
- *
- * @export
- * @interface ConnectionCreateConnection
- */
-export interface ConnectionCreateConnection {
-  /**
-   *
-   * @type {string}
-   * @memberof ConnectionCreateConnection
-   */
-  id?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof ConnectionCreateConnection
-   */
-  displayName?: string;
-  /**
-   *
-   * @type {boolean}
-   * @memberof ConnectionCreateConnection
-   */
-  isScheduled?: boolean;
-  /**
-   *
-   * @type {number}
-   * @memberof ConnectionCreateConnection
-   */
-  scheduleLoopIntervalInSeconds?: number;
-  /**
-   *
-   * @type {string}
-   * @memberof ConnectionCreateConnection
-   */
-  ownerEmail?: string;
-  /**
-   *
-   * @type {ConnectionCreateConnectionProjectShareLocation}
-   * @memberof ConnectionCreateConnection
-   */
-  projectShareLocation?: ConnectionCreateConnectionProjectShareLocation;
-  /**
-   *
-   * @type {Array<SourceFileCreate>}
-   * @memberof ConnectionCreateConnection
-   */
-  sourceFiles?: Array<SourceFileCreate>;
-}
-
-/**
- *
- * @export
- * @interface ConnectionCreateConnectionProjectShareLocation
- */
-export interface ConnectionCreateConnectionProjectShareLocation {
-  /**
-   *
-   * @type {string}
-   * @memberof ConnectionCreateConnectionProjectShareLocation
-   */
-  projectId?: string;
-}
-
-/**
- *
- * @export
- * @interface ConnectionCreated
- */
-export interface ConnectionCreated {
-  /**
-   *
-   * @type {Connection}
-   * @memberof ConnectionCreated
-   */
-  connection?: Connection;
 }
 
 /**
@@ -279,13 +140,13 @@ export interface ConnectionLinks {
    * @type {Link}
    * @memberof ConnectionLinks
    */
-  projectShareLocation?: Link;
+  project?: Link;
   /**
    *
    * @type {Link}
    * @memberof ConnectionLinks
    */
-  lastRunDetails?: Link;
+  lastRun?: Link;
 }
 
 /**
@@ -311,19 +172,19 @@ export interface ConnectionSummary {
 /**
  *
  * @export
- * @interface ConnectionsPreferReturnminimal
+ * @interface ConnectionsPreferReturnMinimal
  */
-export interface ConnectionsPreferReturnminimal {
+export interface ConnectionsPreferReturnMinimal {
   /**
    *
    * @type {Array<ConnectionSummary>}
-   * @memberof ConnectionsPreferReturnminimal
+   * @memberof ConnectionsPreferReturnMinimal
    */
   connections?: Array<ConnectionSummary>;
   /**
    *
    * @type {Links}
-   * @memberof ConnectionsPreferReturnminimal
+   * @memberof ConnectionsPreferReturnMinimal
    */
   _links?: Links;
 }
@@ -331,19 +192,19 @@ export interface ConnectionsPreferReturnminimal {
 /**
  *
  * @export
- * @interface ConnectionsPreferReturnrepresentation
+ * @interface ConnectionsPreferReturnRepresentation
  */
-export interface ConnectionsPreferReturnrepresentation {
+export interface ConnectionsPreferReturnRepresentation {
   /**
    *
    * @type {Array<Connection>}
-   * @memberof ConnectionsPreferReturnrepresentation
+   * @memberof ConnectionsPreferReturnRepresentation
    */
   connections?: Array<Connection>;
   /**
    *
    * @type {Links}
-   * @memberof ConnectionsPreferReturnrepresentation
+   * @memberof ConnectionsPreferReturnRepresentation
    */
   _links?: Links;
 }
@@ -450,30 +311,6 @@ export interface Job {
   endDateTime?: string;
   /**
    *
-   * @type {number}
-   * @memberof Job
-   */
-  priority?: number;
-  /**
-   *
-   * @type {boolean}
-   * @memberof Job
-   */
-  hasSpatialRootTask?: boolean;
-  /**
-   *
-   * @type {boolean}
-   * @memberof Job
-   */
-  hasTaskDependencies?: boolean;
-  /**
-   *
-   * @type {string}
-   * @memberof Job
-   */
-  jobType?: string;
-  /**
-   *
    * @type {string}
    * @memberof Job
    */
@@ -486,10 +323,10 @@ export interface Job {
   result?: string;
   /**
    *
-   * @type {string}
+   * @type {IModelBridgeType}
    * @memberof Job
    */
-  bridgeType?: string;
+  connectorType?: IModelBridgeType;
   /**
    *
    * @type {Array<Task>}
@@ -654,13 +491,13 @@ export interface RunSummary {
 /**
  *
  * @export
- * @interface RunsPreferReturnminimal
+ * @interface RunsPreferReturnMinimal
  */
-export interface RunsPreferReturnminimal {
+export interface RunsPreferReturnMinimal {
   /**
    *
    * @type {Array<RunSummary>}
-   * @memberof RunsPreferReturnminimal
+   * @memberof RunsPreferReturnMinimal
    */
   runs?: Array<RunSummary>;
 }
@@ -668,13 +505,13 @@ export interface RunsPreferReturnminimal {
 /**
  *
  * @export
- * @interface RunsPreferReturnrepresentation
+ * @interface RunsPreferReturnRepresentation
  */
-export interface RunsPreferReturnrepresentation {
+export interface RunsPreferReturnRepresentation {
   /**
    *
    * @type {Array<Run>}
-   * @memberof RunsPreferReturnrepresentation
+   * @memberof RunsPreferReturnRepresentation
    */
   runs?: Array<Run>;
 }
@@ -682,67 +519,129 @@ export interface RunsPreferReturnrepresentation {
 /**
  *
  * @export
- * @interface SourceFile
+ * @interface StorageConnection
  */
-export interface SourceFile {
+export interface StorageConnection {
   /**
    *
    * @type {string}
-   * @memberof SourceFile
+   * @memberof StorageConnection
    */
   id?: string;
   /**
    *
-   * @type {boolean}
-   * @memberof SourceFile
+   * @type {string}
+   * @memberof StorageConnection
    */
-  isSpatialRoot?: boolean;
+  displayName?: string;
   /**
    *
    * @type {string}
-   * @memberof SourceFile
+   * @memberof StorageConnection
    */
-  lastAddedToConnectionRunDateTime?: string;
+  iModelId?: string;
+  /**
+   *
+   * @type {ConnectionLinks}
+   * @memberof StorageConnection
+   */
+  _links?: ConnectionLinks;
+}
+
+/**
+ *
+ * @export
+ * @interface StorageConnectionBody
+ */
+export interface StorageConnectionBody {
+  /**
+   *
+   * @type {StorageConnection}
+   * @memberof StorageConnectionBody
+   */
+  connection?: StorageConnection;
+}
+
+/**
+ *
+ * @export
+ * @interface StorageConnectionCreate
+ */
+export interface StorageConnectionCreate {
+  /**
+   *
+   * @type {string}
+   * @memberof StorageConnectionCreate
+   */
+  displayName?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof StorageConnectionCreate
+   */
+  iModelId: string;
+  /**
+   *
+   * @type {Array<StorageFileCreate>}
+   * @memberof StorageConnectionCreate
+   */
+  sourceFiles: Array<StorageFileCreate>;
+}
+
+/**
+ *
+ * @export
+ * @interface StorageConnectionSummary
+ */
+export interface StorageConnectionSummary {
+  /**
+   *
+   * @type {string}
+   * @memberof StorageConnectionSummary
+   */
+  id?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof StorageConnectionSummary
+   */
+  displayName?: string;
+}
+
+/**
+ *
+ * @export
+ * @interface StorageFile
+ */
+export interface StorageFile {
+  /**
+   *
+   * @type {string}
+   * @memberof StorageFile
+   */
+  id?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof StorageFile
+   */
+  storageFileId?: string;
   /**
    *
    * @type {IModelBridgeType}
-   * @memberof SourceFile
+   * @memberof StorageFile
    */
-  iModelBridgeType?: IModelBridgeType;
+  connectorType?: IModelBridgeType;
   /**
    *
    * @type {string}
-   * @memberof SourceFile
-   */
-  createdDateTime?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof SourceFile
-   */
-  lastModifiedDateTime?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof SourceFile
-   */
-  persistenceType?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof SourceFile
-   */
-  executionAction?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof SourceFile
+   * @memberof StorageFile
    */
   lastKnownFileName?: string;
   /**
    *
    * @type {FileLinks}
-   * @memberof SourceFile
+   * @memberof StorageFile
    */
   _links?: FileLinks;
 }
@@ -750,109 +649,83 @@ export interface SourceFile {
 /**
  *
  * @export
- * @interface SourceFileCreate
+ * @interface StorageFileBody
  */
-export interface SourceFileCreate {
+export interface StorageFileBody {
+  /**
+   *
+   * @type {StorageFile}
+   * @memberof StorageFileBody
+   */
+  sourceFile?: StorageFile;
+}
+
+/**
+ *
+ * @export
+ * @interface StorageFileCreate
+ */
+export interface StorageFileCreate {
   /**
    *
    * @type {string}
-   * @memberof SourceFileCreate
+   * @memberof StorageFileCreate
    */
-  fileId?: string;
-  /**
-   *
-   * @type {boolean}
-   * @memberof SourceFileCreate
-   */
-  isSpatialRoot?: boolean;
+  storageFileId: string;
   /**
    *
    * @type {IModelBridgeType}
-   * @memberof SourceFileCreate
+   * @memberof StorageFileCreate
    */
-  iModelBridgeType?: IModelBridgeType;
+  connectorType: IModelBridgeType;
 }
 
 /**
  *
  * @export
- * @interface SourceFileCreatebody
+ * @interface StorageFilePreferReturnMinimal
  */
-export interface SourceFileCreatebody {
+export interface StorageFilePreferReturnMinimal {
   /**
    *
-   * @type {SourceFileCreate}
-   * @memberof SourceFileCreatebody
+   * @type {Array<StorageFileSummary>}
+   * @memberof StorageFilePreferReturnMinimal
    */
-  sourceFile?: SourceFileCreate;
+  sourceFiles?: Array<StorageFileSummary>;
 }
 
 /**
  *
  * @export
- * @interface SourceFileCreated
+ * @interface StorageFilePreferReturnRepresentation
  */
-export interface SourceFileCreated {
+export interface StorageFilePreferReturnRepresentation {
   /**
    *
-   * @type {SourceFile}
-   * @memberof SourceFileCreated
+   * @type {Array<StorageFile>}
+   * @memberof StorageFilePreferReturnRepresentation
    */
-  sourceFile?: SourceFile;
+  sourceFiles?: Array<StorageFile>;
 }
 
 /**
  *
  * @export
- * @interface SourceFileSummary
+ * @interface StorageFileSummary
  */
-export interface SourceFileSummary {
+export interface StorageFileSummary {
   /**
    *
    * @type {string}
-   * @memberof SourceFileSummary
+   * @memberof StorageFileSummary
    */
   id?: string;
   /**
    *
    * @type {string}
-   * @memberof SourceFileSummary
+   * @memberof StorageFileSummary
    */
-  isSpatialRoot?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof SourceFileSummary
-   */
-  fileId?: string;
-}
-
-/**
- *
- * @export
- * @interface SourceFilesPreferReturnminimal
- */
-export interface SourceFilesPreferReturnminimal {
-  /**
-   *
-   * @type {Array<SourceFileSummary>}
-   * @memberof SourceFilesPreferReturnminimal
-   */
-  sourceFiles?: Array<SourceFileSummary>;
-}
-
-/**
- *
- * @export
- * @interface SourceFilesPreferReturnrepresentation
- */
-export interface SourceFilesPreferReturnrepresentation {
-  /**
-   *
-   * @type {Array<SourceFile>}
-   * @memberof SourceFilesPreferReturnrepresentation
-   */
-  sourceFiles?: Array<SourceFile>;
+  storageFileId?: string;
 }
 
 /**
@@ -881,12 +754,6 @@ export interface Task {
   endDateTime?: string;
   /**
    *
-   * @type {Array<string>}
-   * @memberof Task
-   */
-  dependsOnIds?: Array<string>;
-  /**
-   *
    * @type {number}
    * @memberof Task
    */
@@ -896,7 +763,7 @@ export interface Task {
    * @type {string}
    * @memberof Task
    */
-  sourceFileId?: string;
+  storageFileId?: string;
   /**
    *
    * @type {string}
@@ -930,46 +797,37 @@ export const DefaultApiFetchParamCreator = function(
 ) {
   return {
     /**
-     * ---    Add a new connection sourceFile    ### Notes    The POST body MUST NOT include the id.  An id will be assigned upon successful connection sourceFile addition.    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *connections:modify*.    #### iModelBridgeType    Valid iModelBridgeType values are:    -NotSet  -AFFINITYCHECKER  -MSTN  -AVEVAPID  -AUTOPLANT  -REVIT  -DWG  -SPXREVIEW  -IFC  -SPPID  -AVEVADIAGRAMS  -CIVIL  -CIVIL3D  -GEOSPATIAL  -OBD  -OPENTOWER  -SHELLEDWCSV  -NWD    ### Associated entities  sourceFile is added to a connection. path must contain valid connection Id    sourceFile associated connection is linked with an iModel.  The iModel id must be provided in the \"iModelId\" parameter when adding a connection sourceFile.    ---
-     * @summary Add Connection SourceFile
+     * ---    Add a new Storage Source File to a Storage Connection    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:modify`.    #### ConnectorType    Valid ConnectorType values are:    -NotSet  -AFFINITYCHECKER  -MSTN  -AVEVAPID  -AUTOPLANT  -REVIT  -DWG  -SPXREVIEW  -IFC  -SPPID  -AVEVADIAGRAMS  -CIVIL  -CIVIL3D  -GEOSPATIAL  -OBD  -OPENTOWER  -SHELLEDWCSV  -NWD    ### Associated entities  SourceFile is added to a Connection. The reuqest path must contain a valid Connection ID    ---
+     * @summary Add StorageConnection SourceFile
      * @param {string} connectionId
-     * @param {string} Authorization OAuth access token with scope &#39;connections:modify&#39;
-     * @param {SourceFileCreatebody} sourceFile__create
-     * @param {string} [imodelId] iModel Id
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} Authorization OAuth access token with scope &#x60;synchronization:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {StorageFileCreate} [storage_file_create]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    addConnectionSourcefile(
+    addStorageConnectionSourcefile(
       connectionId: string,
       Authorization: string,
-      sourceFile__create: SourceFileCreatebody,
-      imodelId?: string,
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+      storage_file_create?: StorageFileCreate,
       options: any = {}
     ): FetchArgs {
       // verify required parameter 'connectionId' is not null or undefined
       if (connectionId === null || connectionId === undefined) {
         throw new RequiredError(
           "connectionId",
-          "Required parameter connectionId was null or undefined when calling addConnectionSourcefile."
+          "Required parameter connectionId was null or undefined when calling addStorageConnectionSourcefile."
         );
       }
       // verify required parameter 'Authorization' is not null or undefined
       if (Authorization === null || Authorization === undefined) {
         throw new RequiredError(
           "Authorization",
-          "Required parameter Authorization was null or undefined when calling addConnectionSourcefile."
+          "Required parameter Authorization was null or undefined when calling addStorageConnectionSourcefile."
         );
       }
-      // verify required parameter 'sourceFile__create' is not null or undefined
-      if (sourceFile__create === null || sourceFile__create === undefined) {
-        throw new RequiredError(
-          "sourceFile__create",
-          "Required parameter sourceFile__create was null or undefined when calling addConnectionSourcefile."
-        );
-      }
-      const localVarPath = `/imodels/connections/{connectionId}/sourcefiles`.replace(
+      const localVarPath = `/imodels/storageConnections/{connectionId}/sourcefiles`.replace(
         `{${"connectionId"}}`,
         encodeURIComponent(String(connectionId))
       );
@@ -1002,15 +860,11 @@ export const DefaultApiFetchParamCreator = function(
         const localVarAccessTokenValue =
           typeof configuration.accessToken === "function"
             ? configuration.accessToken("oauth2Bentley OAuth2 Service", [
-                "connections:read connections:modify",
+                "synchronization:read synchronization:modify",
               ])
             : configuration.accessToken;
         localVarHeaderParameter["Authorization"] =
           "Bearer " + localVarAccessTokenValue;
-      }
-
-      if (imodelId !== undefined) {
-        localVarQueryParameter["imodelId"] = imodelId;
       }
 
       if (Authorization !== undefined && Authorization !== null) {
@@ -1037,11 +891,11 @@ export const DefaultApiFetchParamCreator = function(
         options.headers
       );
       const needsSerialization =
-        <any>"SourceFileCreatebody" !== "string" ||
+        <any>"StorageFileCreate" !== "string" ||
         localVarRequestOptions.headers["Content-Type"] === "application/json";
       localVarRequestOptions.body = needsSerialization
-        ? JSON.stringify(sourceFile__create || {})
-        : sourceFile__create || "";
+        ? JSON.stringify(storage_file_create || {})
+        : storage_file_create || "";
 
       return {
         url: url.format(localVarUrlObj),
@@ -1049,44 +903,28 @@ export const DefaultApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Create a new connection    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *connections:modify*.    ### Associated entities    A connection is linked with an iModel.  The iModel id must be provided in the \"iModelId\" query parameter when creating a connection.    ---
-     * @summary Create Connection
-     * @param {string} imodelId iModel Id
-     * @param {string} Authorization OAuth access token with scope &#39;connections:modify&#39;
-     * @param {ConnectionCreate} connection__create
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * ---    Create a StorageConnection that describes files from Storage to synchronize to the iModel.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:modify`.    ### Associated entities    A connection is linked with an iModel. An iModel ID is required to be set when creating a StorageConnection.    ---
+     * @summary Create StorageConnection
+     * @param {string} Authorization OAuth access token with scope &#x60;synchronization:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {StorageConnectionCreate} [storage_connection_create]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    createConnection(
-      imodelId: string,
+    createStorageConnection(
       Authorization: string,
-      connection__create: ConnectionCreate,
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+      storage_connection_create?: StorageConnectionCreate,
       options: any = {}
     ): FetchArgs {
-      // verify required parameter 'imodelId' is not null or undefined
-      if (imodelId === null || imodelId === undefined) {
-        throw new RequiredError(
-          "imodelId",
-          "Required parameter imodelId was null or undefined when calling createConnection."
-        );
-      }
       // verify required parameter 'Authorization' is not null or undefined
       if (Authorization === null || Authorization === undefined) {
         throw new RequiredError(
           "Authorization",
-          "Required parameter Authorization was null or undefined when calling createConnection."
+          "Required parameter Authorization was null or undefined when calling createStorageConnection."
         );
       }
-      // verify required parameter 'connection__create' is not null or undefined
-      if (connection__create === null || connection__create === undefined) {
-        throw new RequiredError(
-          "connection__create",
-          "Required parameter connection__create was null or undefined when calling createConnection."
-        );
-      }
-      const localVarPath = `/imodels/connections`;
+      const localVarPath = `/imodels/storageConnections`;
       const localVarUrlObj = url.parse(localVarPath, true);
       const localVarRequestOptions = Object.assign({ method: "POST" }, options);
       const localVarHeaderParameter = {} as any;
@@ -1116,15 +954,11 @@ export const DefaultApiFetchParamCreator = function(
         const localVarAccessTokenValue =
           typeof configuration.accessToken === "function"
             ? configuration.accessToken("oauth2Bentley OAuth2 Service", [
-                "connections:read connections:modify",
+                "synchronization:read synchronization:modify",
               ])
             : configuration.accessToken;
         localVarHeaderParameter["Authorization"] =
           "Bearer " + localVarAccessTokenValue;
-      }
-
-      if (imodelId !== undefined) {
-        localVarQueryParameter["imodelId"] = imodelId;
       }
 
       if (Authorization !== undefined && Authorization !== null) {
@@ -1151,11 +985,11 @@ export const DefaultApiFetchParamCreator = function(
         options.headers
       );
       const needsSerialization =
-        <any>"ConnectionCreate" !== "string" ||
+        <any>"StorageConnectionCreate" !== "string" ||
         localVarRequestOptions.headers["Content-Type"] === "application/json";
       localVarRequestOptions.body = needsSerialization
-        ? JSON.stringify(connection__create || {})
-        : connection__create || "";
+        ? JSON.stringify(storage_connection_create || {})
+        : storage_connection_create || "";
 
       return {
         url: url.format(localVarUrlObj),
@@ -1163,18 +997,16 @@ export const DefaultApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Delete connection    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *connections:modify*.      ---
-     * @summary Delete Connection
+     * ---    Delete connection    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:modify`.      ---
+     * @summary Delete StorageConnection
      * @param {string} connectionId
-     * @param {string} imodelId iModel Id
-     * @param {string} Authorization OAuth access token with scope &#39;connections:modify&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} Authorization OAuth access token with scope &#x60;synchronization:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    deleteConnection(
+    deleteStorageConnection(
       connectionId: string,
-      imodelId: string,
       Authorization: string,
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
       options: any = {}
@@ -1183,24 +1015,17 @@ export const DefaultApiFetchParamCreator = function(
       if (connectionId === null || connectionId === undefined) {
         throw new RequiredError(
           "connectionId",
-          "Required parameter connectionId was null or undefined when calling deleteConnection."
-        );
-      }
-      // verify required parameter 'imodelId' is not null or undefined
-      if (imodelId === null || imodelId === undefined) {
-        throw new RequiredError(
-          "imodelId",
-          "Required parameter imodelId was null or undefined when calling deleteConnection."
+          "Required parameter connectionId was null or undefined when calling deleteStorageConnection."
         );
       }
       // verify required parameter 'Authorization' is not null or undefined
       if (Authorization === null || Authorization === undefined) {
         throw new RequiredError(
           "Authorization",
-          "Required parameter Authorization was null or undefined when calling deleteConnection."
+          "Required parameter Authorization was null or undefined when calling deleteStorageConnection."
         );
       }
-      const localVarPath = `/imodels/connections/{connectionId}`.replace(
+      const localVarPath = `/imodels/storageConnections/{connectionId}`.replace(
         `{${"connectionId"}}`,
         encodeURIComponent(String(connectionId))
       );
@@ -1236,15 +1061,11 @@ export const DefaultApiFetchParamCreator = function(
         const localVarAccessTokenValue =
           typeof configuration.accessToken === "function"
             ? configuration.accessToken("oauth2Bentley OAuth2 Service", [
-                "connections:read connections:modify",
+                "synchronization:read synchronization:modify",
               ])
             : configuration.accessToken;
         localVarHeaderParameter["Authorization"] =
           "Bearer " + localVarAccessTokenValue;
-      }
-
-      if (imodelId !== undefined) {
-        localVarQueryParameter["imodelId"] = imodelId;
       }
 
       if (Authorization !== undefined && Authorization !== null) {
@@ -1275,586 +1096,13 @@ export const DefaultApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Retrieves connection for specified id.    ### Authentication    Requires Authorization header with valid Bearer token for scope *connections:read*.    ---
-     * @summary Get Connection
-     * @param {string} connectionId
-     * @param {string} imodelId iModel Id
-     * @param {string} Authorization OAuth access token with scope &#39;connections:read&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getConnection(
-      connectionId: string,
-      imodelId: string,
-      Authorization: string,
-      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
-      options: any = {}
-    ): FetchArgs {
-      // verify required parameter 'connectionId' is not null or undefined
-      if (connectionId === null || connectionId === undefined) {
-        throw new RequiredError(
-          "connectionId",
-          "Required parameter connectionId was null or undefined when calling getConnection."
-        );
-      }
-      // verify required parameter 'imodelId' is not null or undefined
-      if (imodelId === null || imodelId === undefined) {
-        throw new RequiredError(
-          "imodelId",
-          "Required parameter imodelId was null or undefined when calling getConnection."
-        );
-      }
-      // verify required parameter 'Authorization' is not null or undefined
-      if (Authorization === null || Authorization === undefined) {
-        throw new RequiredError(
-          "Authorization",
-          "Required parameter Authorization was null or undefined when calling getConnection."
-        );
-      }
-      const localVarPath = `/imodels/connections/{connectionId}`.replace(
-        `{${"connectionId"}}`,
-        encodeURIComponent(String(connectionId))
-      );
-      const localVarUrlObj = url.parse(localVarPath, true);
-      const localVarRequestOptions = Object.assign({ method: "GET" }, options);
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
-
-      // authentication apiKeyHeader required
-      if (configuration && configuration.apiKey) {
-        const localVarApiKeyValue =
-          typeof configuration.apiKey === "function"
-            ? configuration.apiKey("X-Api-Subscription-Key")
-            : configuration.apiKey;
-        localVarHeaderParameter["X-Api-Subscription-Key"] = localVarApiKeyValue;
-      }
-
-      // authentication apiKeyQuery required
-      if (configuration && configuration.apiKey) {
-        const localVarApiKeyValue =
-          typeof configuration.apiKey === "function"
-            ? configuration.apiKey("subscription-key")
-            : configuration.apiKey;
-        localVarQueryParameter["subscription-key"] = localVarApiKeyValue;
-      }
-
-      // authentication oauth2Bentley OAuth2 Service required
-      // oauth required
-      if (configuration && configuration.accessToken) {
-        const localVarAccessTokenValue =
-          typeof configuration.accessToken === "function"
-            ? configuration.accessToken("oauth2Bentley OAuth2 Service", [
-                "connections:read connections:modify",
-              ])
-            : configuration.accessToken;
-        localVarHeaderParameter["Authorization"] =
-          "Bearer " + localVarAccessTokenValue;
-      }
-
-      if (imodelId !== undefined) {
-        localVarQueryParameter["imodelId"] = imodelId;
-      }
-
-      if (Authorization !== undefined && Authorization !== null) {
-        localVarHeaderParameter["Authorization"] = String(Authorization);
-      }
-
-      if (Accept !== undefined && Accept !== null) {
-        localVarHeaderParameter["Accept"] = String(Accept);
-      }
-
-      localVarUrlObj.query = Object.assign(
-        {},
-        localVarUrlObj.query,
-        localVarQueryParameter,
-        options.query
-      );
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
-      localVarRequestOptions.headers = Object.assign(
-        {},
-        localVarHeaderParameter,
-        options.headers
-      );
-
-      return {
-        url: url.format(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * ---    Retrieves connection run for specified Id.    ### Authentication    Requires Authorization header with valid Bearer token for scope *connections:read*.    ---
-     * @summary Get Connection Run
-     * @param {string} connectionId
-     * @param {string} runId Run Id
-     * @param {string} Authorization OAuth access token with scope &#39;connections:read&#39;
-     * @param {string} [imodelId] iModel Id
-     * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
-     * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getConnectionRun(
-      connectionId: string,
-      runId: string,
-      Authorization: string,
-      imodelId?: string,
-      top?: number,
-      skip?: number,
-      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
-      options: any = {}
-    ): FetchArgs {
-      // verify required parameter 'connectionId' is not null or undefined
-      if (connectionId === null || connectionId === undefined) {
-        throw new RequiredError(
-          "connectionId",
-          "Required parameter connectionId was null or undefined when calling getConnectionRun."
-        );
-      }
-      // verify required parameter 'runId' is not null or undefined
-      if (runId === null || runId === undefined) {
-        throw new RequiredError(
-          "runId",
-          "Required parameter runId was null or undefined when calling getConnectionRun."
-        );
-      }
-      // verify required parameter 'Authorization' is not null or undefined
-      if (Authorization === null || Authorization === undefined) {
-        throw new RequiredError(
-          "Authorization",
-          "Required parameter Authorization was null or undefined when calling getConnectionRun."
-        );
-      }
-      const localVarPath = `/imodels/connections/{connectionId}/runs/{runId}`
-        .replace(
-          `{${"connectionId"}}`,
-          encodeURIComponent(String(connectionId))
-        )
-        .replace(`{${"runId"}}`, encodeURIComponent(String(runId)));
-      const localVarUrlObj = url.parse(localVarPath, true);
-      const localVarRequestOptions = Object.assign({ method: "GET" }, options);
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
-
-      // authentication apiKeyHeader required
-      if (configuration && configuration.apiKey) {
-        const localVarApiKeyValue =
-          typeof configuration.apiKey === "function"
-            ? configuration.apiKey("X-Api-Subscription-Key")
-            : configuration.apiKey;
-        localVarHeaderParameter["X-Api-Subscription-Key"] = localVarApiKeyValue;
-      }
-
-      // authentication apiKeyQuery required
-      if (configuration && configuration.apiKey) {
-        const localVarApiKeyValue =
-          typeof configuration.apiKey === "function"
-            ? configuration.apiKey("subscription-key")
-            : configuration.apiKey;
-        localVarQueryParameter["subscription-key"] = localVarApiKeyValue;
-      }
-
-      // authentication oauth2Bentley OAuth2 Service required
-      // oauth required
-      if (configuration && configuration.accessToken) {
-        const localVarAccessTokenValue =
-          typeof configuration.accessToken === "function"
-            ? configuration.accessToken("oauth2Bentley OAuth2 Service", [
-                "connections:read connections:modify",
-              ])
-            : configuration.accessToken;
-        localVarHeaderParameter["Authorization"] =
-          "Bearer " + localVarAccessTokenValue;
-      }
-
-      if (imodelId !== undefined) {
-        localVarQueryParameter["imodelId"] = imodelId;
-      }
-
-      if (top !== undefined) {
-        localVarQueryParameter["$top"] = top;
-      }
-
-      if (skip !== undefined) {
-        localVarQueryParameter["$skip"] = skip;
-      }
-
-      if (Authorization !== undefined && Authorization !== null) {
-        localVarHeaderParameter["Authorization"] = String(Authorization);
-      }
-
-      if (Accept !== undefined && Accept !== null) {
-        localVarHeaderParameter["Accept"] = String(Accept);
-      }
-
-      localVarUrlObj.query = Object.assign(
-        {},
-        localVarUrlObj.query,
-        localVarQueryParameter,
-        options.query
-      );
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
-      localVarRequestOptions.headers = Object.assign(
-        {},
-        localVarHeaderParameter,
-        options.headers
-      );
-
-      return {
-        url: url.format(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * ---    Retrieves connection runs for specified connection.    ### Notes    The `Prefer` header can be used to specify how much result metadata is desired by the client. The `Prefer` request header field is used to indicate that particular server behaviors are preferred by the client but are not required for successful completion of the request.    This operation supports `\"return=representation\"` and `\"return=minimal\"` preferences.    The `\"return=representation\"` preference indicates that the client prefers that the server include an entity representing the current state of the resource in the response to a successful request.  The `\"return=minimal\"` preference indicates that the client wishes the server to return only a minimal response to a successful request. This is the default preference if `Prefer` header is not specified.    ### Authentication    Requires Authorization header with valid Bearer token for scope *connections:read*.    ---
-     * @summary Get Connection Runs
-     * @param {string} connectionId
-     * @param {string} Authorization OAuth access token with scope &#39;connections:read&#39;
-     * @param {string} [imodelId] iModel Id
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getConnectionRuns(
-      connectionId: string,
-      Authorization: string,
-      imodelId?: string,
-      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
-      options: any = {}
-    ): FetchArgs {
-      // verify required parameter 'connectionId' is not null or undefined
-      if (connectionId === null || connectionId === undefined) {
-        throw new RequiredError(
-          "connectionId",
-          "Required parameter connectionId was null or undefined when calling getConnectionRuns."
-        );
-      }
-      // verify required parameter 'Authorization' is not null or undefined
-      if (Authorization === null || Authorization === undefined) {
-        throw new RequiredError(
-          "Authorization",
-          "Required parameter Authorization was null or undefined when calling getConnectionRuns."
-        );
-      }
-      const localVarPath = `/imodels/connections/{connectionId}/runs`.replace(
-        `{${"connectionId"}}`,
-        encodeURIComponent(String(connectionId))
-      );
-      const localVarUrlObj = url.parse(localVarPath, true);
-      const localVarRequestOptions = Object.assign({ method: "GET" }, options);
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
-
-      // authentication apiKeyHeader required
-      if (configuration && configuration.apiKey) {
-        const localVarApiKeyValue =
-          typeof configuration.apiKey === "function"
-            ? configuration.apiKey("X-Api-Subscription-Key")
-            : configuration.apiKey;
-        localVarHeaderParameter["X-Api-Subscription-Key"] = localVarApiKeyValue;
-      }
-
-      // authentication apiKeyQuery required
-      if (configuration && configuration.apiKey) {
-        const localVarApiKeyValue =
-          typeof configuration.apiKey === "function"
-            ? configuration.apiKey("subscription-key")
-            : configuration.apiKey;
-        localVarQueryParameter["subscription-key"] = localVarApiKeyValue;
-      }
-
-      // authentication oauth2Bentley OAuth2 Service required
-      // oauth required
-      if (configuration && configuration.accessToken) {
-        const localVarAccessTokenValue =
-          typeof configuration.accessToken === "function"
-            ? configuration.accessToken("oauth2Bentley OAuth2 Service", [
-                "connections:read connections:modify",
-              ])
-            : configuration.accessToken;
-        localVarHeaderParameter["Authorization"] =
-          "Bearer " + localVarAccessTokenValue;
-      }
-
-      if (imodelId !== undefined) {
-        localVarQueryParameter["imodelId"] = imodelId;
-      }
-
-      if (Authorization !== undefined && Authorization !== null) {
-        localVarHeaderParameter["Authorization"] = String(Authorization);
-      }
-
-      if (Accept !== undefined && Accept !== null) {
-        localVarHeaderParameter["Accept"] = String(Accept);
-      }
-
-      localVarUrlObj.query = Object.assign(
-        {},
-        localVarUrlObj.query,
-        localVarQueryParameter,
-        options.query
-      );
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
-      localVarRequestOptions.headers = Object.assign(
-        {},
-        localVarHeaderParameter,
-        options.headers
-      );
-
-      return {
-        url: url.format(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * ---    Retrieves connection sourceFile for specified Id.    ### Authentication    Requires Authorization header with valid Bearer token for scope *connections:read*.    ---
-     * @summary Get Connection SourceFile
-     * @param {string} connectionId
-     * @param {string} sourceFileId
-     * @param {string} imodelId iModel Id
-     * @param {string} Authorization OAuth access token with scope &#39;connections:read&#39;
-     * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
-     * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getConnectionSourcefile(
-      connectionId: string,
-      sourceFileId: string,
-      imodelId: string,
-      Authorization: string,
-      top?: number,
-      skip?: number,
-      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
-      options: any = {}
-    ): FetchArgs {
-      // verify required parameter 'connectionId' is not null or undefined
-      if (connectionId === null || connectionId === undefined) {
-        throw new RequiredError(
-          "connectionId",
-          "Required parameter connectionId was null or undefined when calling getConnectionSourcefile."
-        );
-      }
-      // verify required parameter 'sourceFileId' is not null or undefined
-      if (sourceFileId === null || sourceFileId === undefined) {
-        throw new RequiredError(
-          "sourceFileId",
-          "Required parameter sourceFileId was null or undefined when calling getConnectionSourcefile."
-        );
-      }
-      // verify required parameter 'imodelId' is not null or undefined
-      if (imodelId === null || imodelId === undefined) {
-        throw new RequiredError(
-          "imodelId",
-          "Required parameter imodelId was null or undefined when calling getConnectionSourcefile."
-        );
-      }
-      // verify required parameter 'Authorization' is not null or undefined
-      if (Authorization === null || Authorization === undefined) {
-        throw new RequiredError(
-          "Authorization",
-          "Required parameter Authorization was null or undefined when calling getConnectionSourcefile."
-        );
-      }
-      const localVarPath = `/imodels/connections/{connectionId}/sourcefiles/{sourceFileId}`
-        .replace(
-          `{${"connectionId"}}`,
-          encodeURIComponent(String(connectionId))
-        )
-        .replace(
-          `{${"sourceFileId"}}`,
-          encodeURIComponent(String(sourceFileId))
-        );
-      const localVarUrlObj = url.parse(localVarPath, true);
-      const localVarRequestOptions = Object.assign({ method: "GET" }, options);
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
-
-      // authentication apiKeyHeader required
-      if (configuration && configuration.apiKey) {
-        const localVarApiKeyValue =
-          typeof configuration.apiKey === "function"
-            ? configuration.apiKey("X-Api-Subscription-Key")
-            : configuration.apiKey;
-        localVarHeaderParameter["X-Api-Subscription-Key"] = localVarApiKeyValue;
-      }
-
-      // authentication apiKeyQuery required
-      if (configuration && configuration.apiKey) {
-        const localVarApiKeyValue =
-          typeof configuration.apiKey === "function"
-            ? configuration.apiKey("subscription-key")
-            : configuration.apiKey;
-        localVarQueryParameter["subscription-key"] = localVarApiKeyValue;
-      }
-
-      // authentication oauth2Bentley OAuth2 Service required
-      // oauth required
-      if (configuration && configuration.accessToken) {
-        const localVarAccessTokenValue =
-          typeof configuration.accessToken === "function"
-            ? configuration.accessToken("oauth2Bentley OAuth2 Service", [
-                "connections:read connections:modify",
-              ])
-            : configuration.accessToken;
-        localVarHeaderParameter["Authorization"] =
-          "Bearer " + localVarAccessTokenValue;
-      }
-
-      if (imodelId !== undefined) {
-        localVarQueryParameter["imodelId"] = imodelId;
-      }
-
-      if (top !== undefined) {
-        localVarQueryParameter["$top"] = top;
-      }
-
-      if (skip !== undefined) {
-        localVarQueryParameter["$skip"] = skip;
-      }
-
-      if (Authorization !== undefined && Authorization !== null) {
-        localVarHeaderParameter["Authorization"] = String(Authorization);
-      }
-
-      if (Accept !== undefined && Accept !== null) {
-        localVarHeaderParameter["Accept"] = String(Accept);
-      }
-
-      localVarUrlObj.query = Object.assign(
-        {},
-        localVarUrlObj.query,
-        localVarQueryParameter,
-        options.query
-      );
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
-      localVarRequestOptions.headers = Object.assign(
-        {},
-        localVarHeaderParameter,
-        options.headers
-      );
-
-      return {
-        url: url.format(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * ---    Retrieves connection sourceFiles for specified Id.    ### Notes    The `Prefer` header can be used to specify how much result metadata is desired by the client. The `Prefer` request header field is used to indicate that particular server behaviors are preferred by the client but are not required for successful completion of the request.    This operation supports `\"return=representation\"` and `\"return=minimal\"` preferences.    The `\"return=representation\"` preference indicates that the client prefers that the server include an entity representing the current state of the resource in the response to a successful request.  The `\"return=minimal\"` preference indicates that the client wishes the server to return only a minimal response to a successful request. This is the default preference if `Prefer` header is not specified.    ### Authentication    Requires Authorization header with valid Bearer token for scope *connections:read*.    ---
-     * @summary Get Connection SourceFiles
-     * @param {string} connectionId
-     * @param {string} Authorization OAuth access token with scope &#39;connections:read&#39;
-     * @param {string} [imodelId] iModel Id
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getConnectionSourcefiles(
-      connectionId: string,
-      Authorization: string,
-      imodelId?: string,
-      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
-      options: any = {}
-    ): FetchArgs {
-      // verify required parameter 'connectionId' is not null or undefined
-      if (connectionId === null || connectionId === undefined) {
-        throw new RequiredError(
-          "connectionId",
-          "Required parameter connectionId was null or undefined when calling getConnectionSourcefiles."
-        );
-      }
-      // verify required parameter 'Authorization' is not null or undefined
-      if (Authorization === null || Authorization === undefined) {
-        throw new RequiredError(
-          "Authorization",
-          "Required parameter Authorization was null or undefined when calling getConnectionSourcefiles."
-        );
-      }
-      const localVarPath = `/imodels/connections/{connectionId}/sourcefiles`.replace(
-        `{${"connectionId"}}`,
-        encodeURIComponent(String(connectionId))
-      );
-      const localVarUrlObj = url.parse(localVarPath, true);
-      const localVarRequestOptions = Object.assign({ method: "GET" }, options);
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
-
-      // authentication apiKeyHeader required
-      if (configuration && configuration.apiKey) {
-        const localVarApiKeyValue =
-          typeof configuration.apiKey === "function"
-            ? configuration.apiKey("X-Api-Subscription-Key")
-            : configuration.apiKey;
-        localVarHeaderParameter["X-Api-Subscription-Key"] = localVarApiKeyValue;
-      }
-
-      // authentication apiKeyQuery required
-      if (configuration && configuration.apiKey) {
-        const localVarApiKeyValue =
-          typeof configuration.apiKey === "function"
-            ? configuration.apiKey("subscription-key")
-            : configuration.apiKey;
-        localVarQueryParameter["subscription-key"] = localVarApiKeyValue;
-      }
-
-      // authentication oauth2Bentley OAuth2 Service required
-      // oauth required
-      if (configuration && configuration.accessToken) {
-        const localVarAccessTokenValue =
-          typeof configuration.accessToken === "function"
-            ? configuration.accessToken("oauth2Bentley OAuth2 Service", [
-                "connections:read connections:modify",
-              ])
-            : configuration.accessToken;
-        localVarHeaderParameter["Authorization"] =
-          "Bearer " + localVarAccessTokenValue;
-      }
-
-      if (imodelId !== undefined) {
-        localVarQueryParameter["imodelId"] = imodelId;
-      }
-
-      if (Authorization !== undefined && Authorization !== null) {
-        localVarHeaderParameter["Authorization"] = String(Authorization);
-      }
-
-      if (Accept !== undefined && Accept !== null) {
-        localVarHeaderParameter["Accept"] = String(Accept);
-      }
-
-      localVarUrlObj.query = Object.assign(
-        {},
-        localVarUrlObj.query,
-        localVarQueryParameter,
-        options.query
-      );
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
-      localVarRequestOptions.headers = Object.assign(
-        {},
-        localVarHeaderParameter,
-        options.headers
-      );
-
-      return {
-        url: url.format(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * ---    Retrieves connections for the specified iModel.    ### Notes    The `Prefer` header can be used to specify how much result metadata is desired by the client. The `Prefer` request header field is used to indicate that particular server behaviors are preferred by the client but are not required for successful completion of the request.    This operation supports `\"return=representation\"` and `\"return=minimal\"` preferences.    The `\"return=representation\"` preference indicates that the client prefers that the server include an entity representing the current state of the resource in the response to a successful request.  The `\"return=minimal\"` preference indicates that the client wishes the server to return only a minimal response to a successful request. This is the default preference if `Prefer` header is not specified.    ### Authentication    Requires Authorization header with valid Bearer token for scope *connections:read*.    ---
+     * ---    Retrieves connections for the specified iModel.    ### Notes    The `Prefer` header can be used to specify how much result metadata is desired by the client. The `Prefer` request header field is used to indicate that particular server behaviors are preferred by the client but are not required for successful completion of the request.    This operation supports `\"return=representation\"` and `\"return=minimal\"` preferences.    The `\"return=representation\"` preference indicates that the client prefers that the server include an entity representing the current state of the resource in the response to a successful request.  The `\"return=minimal\"` preference indicates that the client wishes the server to return only a minimal response to a successful request. This is the default preference if `Prefer` header is not specified.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:read`.    ---
      * @summary Get Connections
      * @param {string} imodelId iModel Id
-     * @param {string} Authorization OAuth access token with scope &#39;connections:read&#39;
+     * @param {string} Authorization OAuth access token with scope &#x60;synchronization:read&#x60;
      * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
      * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1910,7 +1158,7 @@ export const DefaultApiFetchParamCreator = function(
         const localVarAccessTokenValue =
           typeof configuration.accessToken === "function"
             ? configuration.accessToken("oauth2Bentley OAuth2 Service", [
-                "connections:read connections:modify",
+                "synchronization:read synchronization:modify",
               ])
             : configuration.accessToken;
         localVarHeaderParameter["Authorization"] =
@@ -1957,20 +1205,16 @@ export const DefaultApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Delete connection sourcefile    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *connections:modify*.      ---
-     * @summary Remove Connection SourceFile
-     * @param {string} connectionId Connection Id
-     * @param {string} sourceFileId SourceFile Id
-     * @param {string} imodelId iModel Id
-     * @param {string} Authorization OAuth access token with scope &#39;connections:modify&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * ---    Retrieves a StorageConnection with the specified ID.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:read`.    ---
+     * @summary Get Storage Connection
+     * @param {string} connectionId
+     * @param {string} Authorization OAuth access token with scope &#x60;synchronization:read&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    removeConnectionSourcefile(
+    getStorageConnection(
       connectionId: string,
-      sourceFileId: string,
-      imodelId: string,
       Authorization: string,
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
       options: any = {}
@@ -1979,31 +1223,555 @@ export const DefaultApiFetchParamCreator = function(
       if (connectionId === null || connectionId === undefined) {
         throw new RequiredError(
           "connectionId",
-          "Required parameter connectionId was null or undefined when calling removeConnectionSourcefile."
-        );
-      }
-      // verify required parameter 'sourceFileId' is not null or undefined
-      if (sourceFileId === null || sourceFileId === undefined) {
-        throw new RequiredError(
-          "sourceFileId",
-          "Required parameter sourceFileId was null or undefined when calling removeConnectionSourcefile."
-        );
-      }
-      // verify required parameter 'imodelId' is not null or undefined
-      if (imodelId === null || imodelId === undefined) {
-        throw new RequiredError(
-          "imodelId",
-          "Required parameter imodelId was null or undefined when calling removeConnectionSourcefile."
+          "Required parameter connectionId was null or undefined when calling getStorageConnection."
         );
       }
       // verify required parameter 'Authorization' is not null or undefined
       if (Authorization === null || Authorization === undefined) {
         throw new RequiredError(
           "Authorization",
-          "Required parameter Authorization was null or undefined when calling removeConnectionSourcefile."
+          "Required parameter Authorization was null or undefined when calling getStorageConnection."
         );
       }
-      const localVarPath = `/imodels/connections/{connectionId}/sourcefiles/{sourceFileId}`
+      const localVarPath = `/imodels/storageConnections/{connectionId}`.replace(
+        `{${"connectionId"}}`,
+        encodeURIComponent(String(connectionId))
+      );
+      const localVarUrlObj = url.parse(localVarPath, true);
+      const localVarRequestOptions = Object.assign({ method: "GET" }, options);
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication apiKeyHeader required
+      if (configuration && configuration.apiKey) {
+        const localVarApiKeyValue =
+          typeof configuration.apiKey === "function"
+            ? configuration.apiKey("X-Api-Subscription-Key")
+            : configuration.apiKey;
+        localVarHeaderParameter["X-Api-Subscription-Key"] = localVarApiKeyValue;
+      }
+
+      // authentication apiKeyQuery required
+      if (configuration && configuration.apiKey) {
+        const localVarApiKeyValue =
+          typeof configuration.apiKey === "function"
+            ? configuration.apiKey("subscription-key")
+            : configuration.apiKey;
+        localVarQueryParameter["subscription-key"] = localVarApiKeyValue;
+      }
+
+      // authentication oauth2Bentley OAuth2 Service required
+      // oauth required
+      if (configuration && configuration.accessToken) {
+        const localVarAccessTokenValue =
+          typeof configuration.accessToken === "function"
+            ? configuration.accessToken("oauth2Bentley OAuth2 Service", [
+                "synchronization:read synchronization:modify",
+              ])
+            : configuration.accessToken;
+        localVarHeaderParameter["Authorization"] =
+          "Bearer " + localVarAccessTokenValue;
+      }
+
+      if (Authorization !== undefined && Authorization !== null) {
+        localVarHeaderParameter["Authorization"] = String(Authorization);
+      }
+
+      if (Accept !== undefined && Accept !== null) {
+        localVarHeaderParameter["Accept"] = String(Accept);
+      }
+
+      localVarUrlObj.query = Object.assign(
+        {},
+        localVarUrlObj.query,
+        localVarQueryParameter,
+        options.query
+      );
+      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+      delete localVarUrlObj.search;
+      localVarRequestOptions.headers = Object.assign(
+        {},
+        localVarHeaderParameter,
+        options.headers
+      );
+
+      return {
+        url: url.format(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * ---    Retrieves a StorageConnection Run with the specified ID.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:read`.    ---
+     * @summary Get Storage Connection Run
+     * @param {string} connectionId
+     * @param {string} runId Run Id
+     * @param {string} Authorization OAuth access token with scope &#x60;synchronization:read&#x60;
+     * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
+     * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getStorageConnectionRun(
+      connectionId: string,
+      runId: string,
+      Authorization: string,
+      top?: number,
+      skip?: number,
+      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+      options: any = {}
+    ): FetchArgs {
+      // verify required parameter 'connectionId' is not null or undefined
+      if (connectionId === null || connectionId === undefined) {
+        throw new RequiredError(
+          "connectionId",
+          "Required parameter connectionId was null or undefined when calling getStorageConnectionRun."
+        );
+      }
+      // verify required parameter 'runId' is not null or undefined
+      if (runId === null || runId === undefined) {
+        throw new RequiredError(
+          "runId",
+          "Required parameter runId was null or undefined when calling getStorageConnectionRun."
+        );
+      }
+      // verify required parameter 'Authorization' is not null or undefined
+      if (Authorization === null || Authorization === undefined) {
+        throw new RequiredError(
+          "Authorization",
+          "Required parameter Authorization was null or undefined when calling getStorageConnectionRun."
+        );
+      }
+      const localVarPath = `/imodels/storageConnections/{connectionId}/runs/{runId}`
+        .replace(
+          `{${"connectionId"}}`,
+          encodeURIComponent(String(connectionId))
+        )
+        .replace(`{${"runId"}}`, encodeURIComponent(String(runId)));
+      const localVarUrlObj = url.parse(localVarPath, true);
+      const localVarRequestOptions = Object.assign({ method: "GET" }, options);
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication apiKeyHeader required
+      if (configuration && configuration.apiKey) {
+        const localVarApiKeyValue =
+          typeof configuration.apiKey === "function"
+            ? configuration.apiKey("X-Api-Subscription-Key")
+            : configuration.apiKey;
+        localVarHeaderParameter["X-Api-Subscription-Key"] = localVarApiKeyValue;
+      }
+
+      // authentication apiKeyQuery required
+      if (configuration && configuration.apiKey) {
+        const localVarApiKeyValue =
+          typeof configuration.apiKey === "function"
+            ? configuration.apiKey("subscription-key")
+            : configuration.apiKey;
+        localVarQueryParameter["subscription-key"] = localVarApiKeyValue;
+      }
+
+      // authentication oauth2Bentley OAuth2 Service required
+      // oauth required
+      if (configuration && configuration.accessToken) {
+        const localVarAccessTokenValue =
+          typeof configuration.accessToken === "function"
+            ? configuration.accessToken("oauth2Bentley OAuth2 Service", [
+                "synchronization:read synchronization:modify",
+              ])
+            : configuration.accessToken;
+        localVarHeaderParameter["Authorization"] =
+          "Bearer " + localVarAccessTokenValue;
+      }
+
+      if (top !== undefined) {
+        localVarQueryParameter["$top"] = top;
+      }
+
+      if (skip !== undefined) {
+        localVarQueryParameter["$skip"] = skip;
+      }
+
+      if (Authorization !== undefined && Authorization !== null) {
+        localVarHeaderParameter["Authorization"] = String(Authorization);
+      }
+
+      if (Accept !== undefined && Accept !== null) {
+        localVarHeaderParameter["Accept"] = String(Accept);
+      }
+
+      localVarUrlObj.query = Object.assign(
+        {},
+        localVarUrlObj.query,
+        localVarQueryParameter,
+        options.query
+      );
+      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+      delete localVarUrlObj.search;
+      localVarRequestOptions.headers = Object.assign(
+        {},
+        localVarHeaderParameter,
+        options.headers
+      );
+
+      return {
+        url: url.format(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * ---    Retrieves all Runs for the specified connection.    ### Notes    The `Prefer` header can be used to specify how much result metadata is desired by the client. The `Prefer` request header field is used to indicate that particular server behaviors are preferred by the client but are not required for successful completion of the request.    This operation supports `\"return=representation\"` and `\"return=minimal\"` preferences.    The `\"return=representation\"` preference indicates that the client prefers that the server include an entity representing the current state of the resource in the response to a successful request.  The `\"return=minimal\"` preference indicates that the client wishes the server to return only a minimal response to a successful request. This is the default preference if `Prefer` header is not specified.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:read`.    ---
+     * @summary Get StorageConnection Runs
+     * @param {string} connectionId
+     * @param {string} Authorization OAuth access token with scope &#x60;synchronization:read&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getStorageConnectionRuns(
+      connectionId: string,
+      Authorization: string,
+      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+      options: any = {}
+    ): FetchArgs {
+      // verify required parameter 'connectionId' is not null or undefined
+      if (connectionId === null || connectionId === undefined) {
+        throw new RequiredError(
+          "connectionId",
+          "Required parameter connectionId was null or undefined when calling getStorageConnectionRuns."
+        );
+      }
+      // verify required parameter 'Authorization' is not null or undefined
+      if (Authorization === null || Authorization === undefined) {
+        throw new RequiredError(
+          "Authorization",
+          "Required parameter Authorization was null or undefined when calling getStorageConnectionRuns."
+        );
+      }
+      const localVarPath = `/imodels/storageConnections/{connectionId}/runs`.replace(
+        `{${"connectionId"}}`,
+        encodeURIComponent(String(connectionId))
+      );
+      const localVarUrlObj = url.parse(localVarPath, true);
+      const localVarRequestOptions = Object.assign({ method: "GET" }, options);
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication apiKeyHeader required
+      if (configuration && configuration.apiKey) {
+        const localVarApiKeyValue =
+          typeof configuration.apiKey === "function"
+            ? configuration.apiKey("X-Api-Subscription-Key")
+            : configuration.apiKey;
+        localVarHeaderParameter["X-Api-Subscription-Key"] = localVarApiKeyValue;
+      }
+
+      // authentication apiKeyQuery required
+      if (configuration && configuration.apiKey) {
+        const localVarApiKeyValue =
+          typeof configuration.apiKey === "function"
+            ? configuration.apiKey("subscription-key")
+            : configuration.apiKey;
+        localVarQueryParameter["subscription-key"] = localVarApiKeyValue;
+      }
+
+      // authentication oauth2Bentley OAuth2 Service required
+      // oauth required
+      if (configuration && configuration.accessToken) {
+        const localVarAccessTokenValue =
+          typeof configuration.accessToken === "function"
+            ? configuration.accessToken("oauth2Bentley OAuth2 Service", [
+                "synchronization:read synchronization:modify",
+              ])
+            : configuration.accessToken;
+        localVarHeaderParameter["Authorization"] =
+          "Bearer " + localVarAccessTokenValue;
+      }
+
+      if (Authorization !== undefined && Authorization !== null) {
+        localVarHeaderParameter["Authorization"] = String(Authorization);
+      }
+
+      if (Accept !== undefined && Accept !== null) {
+        localVarHeaderParameter["Accept"] = String(Accept);
+      }
+
+      localVarUrlObj.query = Object.assign(
+        {},
+        localVarUrlObj.query,
+        localVarQueryParameter,
+        options.query
+      );
+      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+      delete localVarUrlObj.search;
+      localVarRequestOptions.headers = Object.assign(
+        {},
+        localVarHeaderParameter,
+        options.headers
+      );
+
+      return {
+        url: url.format(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * ---    Retrieves StorageConnection's SourceFile with the specified ID.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:read`.    ---
+     * @summary Get StorageConnection SourceFile
+     * @param {string} connectionId
+     * @param {string} sourceFileId
+     * @param {string} Authorization OAuth access token with scope &#x60;synchronization:read&#x60;
+     * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
+     * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getStorageConnectionSourcefile(
+      connectionId: string,
+      sourceFileId: string,
+      Authorization: string,
+      top?: number,
+      skip?: number,
+      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+      options: any = {}
+    ): FetchArgs {
+      // verify required parameter 'connectionId' is not null or undefined
+      if (connectionId === null || connectionId === undefined) {
+        throw new RequiredError(
+          "connectionId",
+          "Required parameter connectionId was null or undefined when calling getStorageConnectionSourcefile."
+        );
+      }
+      // verify required parameter 'sourceFileId' is not null or undefined
+      if (sourceFileId === null || sourceFileId === undefined) {
+        throw new RequiredError(
+          "sourceFileId",
+          "Required parameter sourceFileId was null or undefined when calling getStorageConnectionSourcefile."
+        );
+      }
+      // verify required parameter 'Authorization' is not null or undefined
+      if (Authorization === null || Authorization === undefined) {
+        throw new RequiredError(
+          "Authorization",
+          "Required parameter Authorization was null or undefined when calling getStorageConnectionSourcefile."
+        );
+      }
+      const localVarPath = `/imodels/storageConnections/{connectionId}/sourcefiles/{sourceFileId}`
+        .replace(
+          `{${"connectionId"}}`,
+          encodeURIComponent(String(connectionId))
+        )
+        .replace(
+          `{${"sourceFileId"}}`,
+          encodeURIComponent(String(sourceFileId))
+        );
+      const localVarUrlObj = url.parse(localVarPath, true);
+      const localVarRequestOptions = Object.assign({ method: "GET" }, options);
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication apiKeyHeader required
+      if (configuration && configuration.apiKey) {
+        const localVarApiKeyValue =
+          typeof configuration.apiKey === "function"
+            ? configuration.apiKey("X-Api-Subscription-Key")
+            : configuration.apiKey;
+        localVarHeaderParameter["X-Api-Subscription-Key"] = localVarApiKeyValue;
+      }
+
+      // authentication apiKeyQuery required
+      if (configuration && configuration.apiKey) {
+        const localVarApiKeyValue =
+          typeof configuration.apiKey === "function"
+            ? configuration.apiKey("subscription-key")
+            : configuration.apiKey;
+        localVarQueryParameter["subscription-key"] = localVarApiKeyValue;
+      }
+
+      // authentication oauth2Bentley OAuth2 Service required
+      // oauth required
+      if (configuration && configuration.accessToken) {
+        const localVarAccessTokenValue =
+          typeof configuration.accessToken === "function"
+            ? configuration.accessToken("oauth2Bentley OAuth2 Service", [
+                "synchronization:read synchronization:modify",
+              ])
+            : configuration.accessToken;
+        localVarHeaderParameter["Authorization"] =
+          "Bearer " + localVarAccessTokenValue;
+      }
+
+      if (top !== undefined) {
+        localVarQueryParameter["$top"] = top;
+      }
+
+      if (skip !== undefined) {
+        localVarQueryParameter["$skip"] = skip;
+      }
+
+      if (Authorization !== undefined && Authorization !== null) {
+        localVarHeaderParameter["Authorization"] = String(Authorization);
+      }
+
+      if (Accept !== undefined && Accept !== null) {
+        localVarHeaderParameter["Accept"] = String(Accept);
+      }
+
+      localVarUrlObj.query = Object.assign(
+        {},
+        localVarUrlObj.query,
+        localVarQueryParameter,
+        options.query
+      );
+      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+      delete localVarUrlObj.search;
+      localVarRequestOptions.headers = Object.assign(
+        {},
+        localVarHeaderParameter,
+        options.headers
+      );
+
+      return {
+        url: url.format(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * ---    Retrieves SourceFiles for specified StorageConnection.    ### Notes    The `Prefer` header can be used to specify how much result metadata is desired by the client. The `Prefer` request header field is used to indicate that particular server behaviors are preferred by the client but are not required for successful completion of the request.    This operation supports `\"return=representation\"` and `\"return=minimal\"` preferences.    The `\"return=representation\"` preference indicates that the client prefers that the server include an entity representing the current state of the resource in the response to a successful request.  The `\"return=minimal\"` preference indicates that the client wishes the server to return only a minimal response to a successful request. This is the default preference if `Prefer` header is not specified.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:read`.    ---
+     * @summary Get StorageConnection SourceFiles
+     * @param {string} connectionId
+     * @param {string} Authorization OAuth access token with scope &#x60;synchronization:read&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getStorageConnectionSourcefiles(
+      connectionId: string,
+      Authorization: string,
+      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+      options: any = {}
+    ): FetchArgs {
+      // verify required parameter 'connectionId' is not null or undefined
+      if (connectionId === null || connectionId === undefined) {
+        throw new RequiredError(
+          "connectionId",
+          "Required parameter connectionId was null or undefined when calling getStorageConnectionSourcefiles."
+        );
+      }
+      // verify required parameter 'Authorization' is not null or undefined
+      if (Authorization === null || Authorization === undefined) {
+        throw new RequiredError(
+          "Authorization",
+          "Required parameter Authorization was null or undefined when calling getStorageConnectionSourcefiles."
+        );
+      }
+      const localVarPath = `/imodels/storageConnections/{connectionId}/sourcefiles`.replace(
+        `{${"connectionId"}}`,
+        encodeURIComponent(String(connectionId))
+      );
+      const localVarUrlObj = url.parse(localVarPath, true);
+      const localVarRequestOptions = Object.assign({ method: "GET" }, options);
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication apiKeyHeader required
+      if (configuration && configuration.apiKey) {
+        const localVarApiKeyValue =
+          typeof configuration.apiKey === "function"
+            ? configuration.apiKey("X-Api-Subscription-Key")
+            : configuration.apiKey;
+        localVarHeaderParameter["X-Api-Subscription-Key"] = localVarApiKeyValue;
+      }
+
+      // authentication apiKeyQuery required
+      if (configuration && configuration.apiKey) {
+        const localVarApiKeyValue =
+          typeof configuration.apiKey === "function"
+            ? configuration.apiKey("subscription-key")
+            : configuration.apiKey;
+        localVarQueryParameter["subscription-key"] = localVarApiKeyValue;
+      }
+
+      // authentication oauth2Bentley OAuth2 Service required
+      // oauth required
+      if (configuration && configuration.accessToken) {
+        const localVarAccessTokenValue =
+          typeof configuration.accessToken === "function"
+            ? configuration.accessToken("oauth2Bentley OAuth2 Service", [
+                "synchronization:read synchronization:modify",
+              ])
+            : configuration.accessToken;
+        localVarHeaderParameter["Authorization"] =
+          "Bearer " + localVarAccessTokenValue;
+      }
+
+      if (Authorization !== undefined && Authorization !== null) {
+        localVarHeaderParameter["Authorization"] = String(Authorization);
+      }
+
+      if (Accept !== undefined && Accept !== null) {
+        localVarHeaderParameter["Accept"] = String(Accept);
+      }
+
+      localVarUrlObj.query = Object.assign(
+        {},
+        localVarUrlObj.query,
+        localVarQueryParameter,
+        options.query
+      );
+      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+      delete localVarUrlObj.search;
+      localVarRequestOptions.headers = Object.assign(
+        {},
+        localVarHeaderParameter,
+        options.headers
+      );
+
+      return {
+        url: url.format(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * ---    Delete StorageConnection SourceFile    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:modify`.      ---
+     * @summary Remove StorageConnection SourceFile
+     * @param {string} connectionId Connection Id
+     * @param {string} sourceFileId SourceFile Id
+     * @param {string} Authorization OAuth access token with scope &#x60;synchronization:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    removeStorageConnectionSourcefile(
+      connectionId: string,
+      sourceFileId: string,
+      Authorization: string,
+      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+      options: any = {}
+    ): FetchArgs {
+      // verify required parameter 'connectionId' is not null or undefined
+      if (connectionId === null || connectionId === undefined) {
+        throw new RequiredError(
+          "connectionId",
+          "Required parameter connectionId was null or undefined when calling removeStorageConnectionSourcefile."
+        );
+      }
+      // verify required parameter 'sourceFileId' is not null or undefined
+      if (sourceFileId === null || sourceFileId === undefined) {
+        throw new RequiredError(
+          "sourceFileId",
+          "Required parameter sourceFileId was null or undefined when calling removeStorageConnectionSourcefile."
+        );
+      }
+      // verify required parameter 'Authorization' is not null or undefined
+      if (Authorization === null || Authorization === undefined) {
+        throw new RequiredError(
+          "Authorization",
+          "Required parameter Authorization was null or undefined when calling removeStorageConnectionSourcefile."
+        );
+      }
+      const localVarPath = `/imodels/storageConnections/{connectionId}/sourcefiles/{sourceFileId}`
         .replace(
           `{${"connectionId"}}`,
           encodeURIComponent(String(connectionId))
@@ -2044,15 +1812,11 @@ export const DefaultApiFetchParamCreator = function(
         const localVarAccessTokenValue =
           typeof configuration.accessToken === "function"
             ? configuration.accessToken("oauth2Bentley OAuth2 Service", [
-                "connections:read connections:modify",
+                "synchronization:read synchronization:modify",
               ])
             : configuration.accessToken;
         localVarHeaderParameter["Authorization"] =
           "Bearer " + localVarAccessTokenValue;
-      }
-
-      if (imodelId !== undefined) {
-        localVarQueryParameter["imodelId"] = imodelId;
       }
 
       if (Authorization !== undefined && Authorization !== null) {
@@ -2083,18 +1847,16 @@ export const DefaultApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Runs connection for specified id.    ### Notes    On successful run, operation returns http status code 202/accepted - the request is accepted for processing and will execute in background. It returns location header pointing to the run to check it's status via property 'State'(NotStarted, Idle, WaitingToExecute, WaitingToRetry, Executing, Completed, Queued)  In case there is already an active run in progress for the connection, new run is not initiated, insteaded it returns 303/see other along with location header pointing to the active run. There can only be one active run per connection and another run can be initated only once active run is complete.    ### Authentication    Requires Authorization header with valid Bearer token for scope *connection:modify*.    ---
-     * @summary Run Connection
+     * ---    Runs the specified StorageConnection.    ### Notes    On successful run, operation returns http status code 202/accepted - the request is accepted for processing and will execute in background. It returns location header pointing to the run to check it's status via property 'State'(NotStarted, Idle, WaitingToExecute, WaitingToRetry, Executing, Completed, Queued). In the event that multiple run requests are being made simultaneously, 409/conflict is returned and only the first request is processed. If the run is already initiated and active, a new run is not initiated, instead 303/see other is returned along with location header pointing to the active run. There can only be one active run per iModel and another run can be initated only once the active run is complete.    ### Authentication    Requires Authorization header with valid Bearer token for scope *connection:modify*.    ---
+     * @summary Run StorageConnection
      * @param {string} connectionId
-     * @param {string} imodelId iModel Id
-     * @param {string} Authorization OAuth access token with scope &#39;connections:modify&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} Authorization OAuth access token with scope &#x60;synchronization:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    runConnection(
+    runStorageConnection(
       connectionId: string,
-      imodelId: string,
       Authorization: string,
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
       options: any = {}
@@ -2103,24 +1865,17 @@ export const DefaultApiFetchParamCreator = function(
       if (connectionId === null || connectionId === undefined) {
         throw new RequiredError(
           "connectionId",
-          "Required parameter connectionId was null or undefined when calling runConnection."
-        );
-      }
-      // verify required parameter 'imodelId' is not null or undefined
-      if (imodelId === null || imodelId === undefined) {
-        throw new RequiredError(
-          "imodelId",
-          "Required parameter imodelId was null or undefined when calling runConnection."
+          "Required parameter connectionId was null or undefined when calling runStorageConnection."
         );
       }
       // verify required parameter 'Authorization' is not null or undefined
       if (Authorization === null || Authorization === undefined) {
         throw new RequiredError(
           "Authorization",
-          "Required parameter Authorization was null or undefined when calling runConnection."
+          "Required parameter Authorization was null or undefined when calling runStorageConnection."
         );
       }
-      const localVarPath = `/imodels/connections/{connectionId}/run`.replace(
+      const localVarPath = `/imodels/storageConnections/{connectionId}/run`.replace(
         `{${"connectionId"}}`,
         encodeURIComponent(String(connectionId))
       );
@@ -2153,15 +1908,11 @@ export const DefaultApiFetchParamCreator = function(
         const localVarAccessTokenValue =
           typeof configuration.accessToken === "function"
             ? configuration.accessToken("oauth2Bentley OAuth2 Service", [
-                "connections:read connections:modify",
+                "synchronization:read synchronization:modify",
               ])
             : configuration.accessToken;
         localVarHeaderParameter["Authorization"] =
           "Bearer " + localVarAccessTokenValue;
-      }
-
-      if (imodelId !== undefined) {
-        localVarQueryParameter["imodelId"] = imodelId;
       }
 
       if (Authorization !== undefined && Authorization !== null) {
@@ -2192,53 +1943,37 @@ export const DefaultApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Update an existing connection    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *connections:modify*.    ### Associated entities    A connection is linked with an iModel.  The iModel id must be provided in the \"iModelId\" query parameter when updating a connection.    ---
-     * @summary Update Connection
+     * ---    Update an existing StorageConnection.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:modify`.    ### Associated entities    A connection is linked with an iModel. The iModel ID is required to be set when updating a StorageConnection.    ---
+     * @summary Update StorageConnection
      * @param {string} connectionId
-     * @param {string} imodelId iModel Id
-     * @param {string} Authorization OAuth access token with scope &#39;connections:modify&#39;
-     * @param {ConnectionCreate} connection__create
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} Authorization OAuth access token with scope &#x60;synchronization:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {StorageConnectionCreate} [storage_connection_create]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    updateConnection(
+    updateStorageConnection(
       connectionId: string,
-      imodelId: string,
       Authorization: string,
-      connection__create: ConnectionCreate,
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+      storage_connection_create?: StorageConnectionCreate,
       options: any = {}
     ): FetchArgs {
       // verify required parameter 'connectionId' is not null or undefined
       if (connectionId === null || connectionId === undefined) {
         throw new RequiredError(
           "connectionId",
-          "Required parameter connectionId was null or undefined when calling updateConnection."
-        );
-      }
-      // verify required parameter 'imodelId' is not null or undefined
-      if (imodelId === null || imodelId === undefined) {
-        throw new RequiredError(
-          "imodelId",
-          "Required parameter imodelId was null or undefined when calling updateConnection."
+          "Required parameter connectionId was null or undefined when calling updateStorageConnection."
         );
       }
       // verify required parameter 'Authorization' is not null or undefined
       if (Authorization === null || Authorization === undefined) {
         throw new RequiredError(
           "Authorization",
-          "Required parameter Authorization was null or undefined when calling updateConnection."
+          "Required parameter Authorization was null or undefined when calling updateStorageConnection."
         );
       }
-      // verify required parameter 'connection__create' is not null or undefined
-      if (connection__create === null || connection__create === undefined) {
-        throw new RequiredError(
-          "connection__create",
-          "Required parameter connection__create was null or undefined when calling updateConnection."
-        );
-      }
-      const localVarPath = `/imodels/connections/{connectionId}`.replace(
+      const localVarPath = `/imodels/storageConnections/{connectionId}`.replace(
         `{${"connectionId"}}`,
         encodeURIComponent(String(connectionId))
       );
@@ -2271,15 +2006,11 @@ export const DefaultApiFetchParamCreator = function(
         const localVarAccessTokenValue =
           typeof configuration.accessToken === "function"
             ? configuration.accessToken("oauth2Bentley OAuth2 Service", [
-                "connections:read connections:modify",
+                "synchronization:read synchronization:modify",
               ])
             : configuration.accessToken;
         localVarHeaderParameter["Authorization"] =
           "Bearer " + localVarAccessTokenValue;
-      }
-
-      if (imodelId !== undefined) {
-        localVarQueryParameter["imodelId"] = imodelId;
       }
 
       if (Authorization !== undefined && Authorization !== null) {
@@ -2306,11 +2037,11 @@ export const DefaultApiFetchParamCreator = function(
         options.headers
       );
       const needsSerialization =
-        <any>"ConnectionCreate" !== "string" ||
+        <any>"StorageConnectionCreate" !== "string" ||
         localVarRequestOptions.headers["Content-Type"] === "application/json";
       localVarRequestOptions.body = needsSerialization
-        ? JSON.stringify(connection__create || {})
-        : connection__create || "";
+        ? JSON.stringify(storage_connection_create || {})
+        : storage_connection_create || "";
 
       return {
         url: url.format(localVarUrlObj),
@@ -2318,55 +2049,46 @@ export const DefaultApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Update an existing connection sourceFile    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *connections:modify*.    #### iModelBridgeType    Valid iModelBridgeType values are:    -NotSet  -AFFINITYCHECKER  -MSTN  -AVEVAPID  -AUTOPLANT  -REVIT  -DWG  -SPXREVIEW  -IFC  -SPPID  -AVEVADIAGRAMS  -CIVIL  -CIVIL3D  -GEOSPATIAL  -OBD  -OPENTOWER  -SHELLEDWCSV  -NWD    ### Associated entities  sourceFile is updated to a connection. path must contain valid connection Id    sourceFile associated connection is linked with an iModel.  The iModel id must be provided in the \"iModelId\" parameter when adding a connection sourceFile.    ---
-     * @summary Update Connection SourceFile
+     * ---    Update an existing StorageConnection SourceFile.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:modify`.    #### ConnectorType    Valid ConnectorType values are:    -NotSet  -AFFINITYCHECKER  -MSTN  -AVEVAPID  -AUTOPLANT  -REVIT  -DWG  -SPXREVIEW  -IFC  -SPPID  -AVEVADIAGRAMS  -CIVIL  -CIVIL3D  -GEOSPATIAL  -OBD  -OPENTOWER  -SHELLEDWCSV  -NWD    ### Associated entities  SourceFile is related to a Connection. The path must contain a valid Connection ID.    ---
+     * @summary Update StorageConnection SourceFile
      * @param {string} connectionId
      * @param {string} sourceFileId
-     * @param {string} Authorization OAuth access token with scope &#39;connections:modify&#39;
-     * @param {SourceFileCreatebody} sourceFile__create
-     * @param {string} [imodelId] iModel Id
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} Authorization OAuth access token with scope &#x60;synchronization:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {StorageFileCreate} [storage_file_create]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    updateConnectionSourcefile(
+    updateStorageConnectionSourcefile(
       connectionId: string,
       sourceFileId: string,
       Authorization: string,
-      sourceFile__create: SourceFileCreatebody,
-      imodelId?: string,
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+      storage_file_create?: StorageFileCreate,
       options: any = {}
     ): FetchArgs {
       // verify required parameter 'connectionId' is not null or undefined
       if (connectionId === null || connectionId === undefined) {
         throw new RequiredError(
           "connectionId",
-          "Required parameter connectionId was null or undefined when calling updateConnectionSourcefile."
+          "Required parameter connectionId was null or undefined when calling updateStorageConnectionSourcefile."
         );
       }
       // verify required parameter 'sourceFileId' is not null or undefined
       if (sourceFileId === null || sourceFileId === undefined) {
         throw new RequiredError(
           "sourceFileId",
-          "Required parameter sourceFileId was null or undefined when calling updateConnectionSourcefile."
+          "Required parameter sourceFileId was null or undefined when calling updateStorageConnectionSourcefile."
         );
       }
       // verify required parameter 'Authorization' is not null or undefined
       if (Authorization === null || Authorization === undefined) {
         throw new RequiredError(
           "Authorization",
-          "Required parameter Authorization was null or undefined when calling updateConnectionSourcefile."
+          "Required parameter Authorization was null or undefined when calling updateStorageConnectionSourcefile."
         );
       }
-      // verify required parameter 'sourceFile__create' is not null or undefined
-      if (sourceFile__create === null || sourceFile__create === undefined) {
-        throw new RequiredError(
-          "sourceFile__create",
-          "Required parameter sourceFile__create was null or undefined when calling updateConnectionSourcefile."
-        );
-      }
-      const localVarPath = `/imodels/connections/{connectionId}/sourcefiles/{sourceFileId}`
+      const localVarPath = `/imodels/storageConnections/{connectionId}/sourcefiles/{sourceFileId}`
         .replace(
           `{${"connectionId"}}`,
           encodeURIComponent(String(connectionId))
@@ -2404,15 +2126,11 @@ export const DefaultApiFetchParamCreator = function(
         const localVarAccessTokenValue =
           typeof configuration.accessToken === "function"
             ? configuration.accessToken("oauth2Bentley OAuth2 Service", [
-                "connections:read connections:modify",
+                "synchronization:read synchronization:modify",
               ])
             : configuration.accessToken;
         localVarHeaderParameter["Authorization"] =
           "Bearer " + localVarAccessTokenValue;
-      }
-
-      if (imodelId !== undefined) {
-        localVarQueryParameter["imodelId"] = imodelId;
       }
 
       if (Authorization !== undefined && Authorization !== null) {
@@ -2439,11 +2157,11 @@ export const DefaultApiFetchParamCreator = function(
         options.headers
       );
       const needsSerialization =
-        <any>"SourceFileCreatebody" !== "string" ||
+        <any>"StorageFileCreate" !== "string" ||
         localVarRequestOptions.headers["Content-Type"] === "application/json";
       localVarRequestOptions.body = needsSerialization
-        ? JSON.stringify(sourceFile__create || {})
-        : sourceFile__create || "";
+        ? JSON.stringify(storage_file_create || {})
+        : storage_file_create || "";
 
       return {
         url: url.format(localVarUrlObj),
@@ -2460,32 +2178,29 @@ export const DefaultApiFetchParamCreator = function(
 export const DefaultApiFp = function(configuration?: Configuration) {
   return {
     /**
-     * ---    Add a new connection sourceFile    ### Notes    The POST body MUST NOT include the id.  An id will be assigned upon successful connection sourceFile addition.    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *connections:modify*.    #### iModelBridgeType    Valid iModelBridgeType values are:    -NotSet  -AFFINITYCHECKER  -MSTN  -AVEVAPID  -AUTOPLANT  -REVIT  -DWG  -SPXREVIEW  -IFC  -SPPID  -AVEVADIAGRAMS  -CIVIL  -CIVIL3D  -GEOSPATIAL  -OBD  -OPENTOWER  -SHELLEDWCSV  -NWD    ### Associated entities  sourceFile is added to a connection. path must contain valid connection Id    sourceFile associated connection is linked with an iModel.  The iModel id must be provided in the \"iModelId\" parameter when adding a connection sourceFile.    ---
-     * @summary Add Connection SourceFile
+     * ---    Add a new Storage Source File to a Storage Connection    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:modify`.    #### ConnectorType    Valid ConnectorType values are:    -NotSet  -AFFINITYCHECKER  -MSTN  -AVEVAPID  -AUTOPLANT  -REVIT  -DWG  -SPXREVIEW  -IFC  -SPPID  -AVEVADIAGRAMS  -CIVIL  -CIVIL3D  -GEOSPATIAL  -OBD  -OPENTOWER  -SHELLEDWCSV  -NWD    ### Associated entities  SourceFile is added to a Connection. The reuqest path must contain a valid Connection ID    ---
+     * @summary Add StorageConnection SourceFile
      * @param {string} connectionId
-     * @param {string} Authorization OAuth access token with scope &#39;connections:modify&#39;
-     * @param {SourceFileCreatebody} sourceFile__create
-     * @param {string} [imodelId] iModel Id
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} Authorization OAuth access token with scope &#x60;synchronization:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {StorageFileCreate} [storage_file_create]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    addConnectionSourcefile(
+    addStorageConnectionSourcefile(
       connectionId: string,
       Authorization: string,
-      sourceFile__create: SourceFileCreatebody,
-      imodelId?: string,
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+      storage_file_create?: StorageFileCreate,
       options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<SourceFileCreated> {
+    ): (fetch?: FetchAPI, basePath?: string) => Promise<StorageFileBody> {
       const localVarFetchArgs = DefaultApiFetchParamCreator(
         configuration
-      ).addConnectionSourcefile(
+      ).addStorageConnectionSourcefile(
         connectionId,
         Authorization,
-        sourceFile__create,
-        imodelId,
         Accept,
+        storage_file_create,
         options
       );
       return (
@@ -2505,29 +2220,26 @@ export const DefaultApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Create a new connection    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *connections:modify*.    ### Associated entities    A connection is linked with an iModel.  The iModel id must be provided in the \"iModelId\" query parameter when creating a connection.    ---
-     * @summary Create Connection
-     * @param {string} imodelId iModel Id
-     * @param {string} Authorization OAuth access token with scope &#39;connections:modify&#39;
-     * @param {ConnectionCreate} connection__create
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * ---    Create a StorageConnection that describes files from Storage to synchronize to the iModel.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:modify`.    ### Associated entities    A connection is linked with an iModel. An iModel ID is required to be set when creating a StorageConnection.    ---
+     * @summary Create StorageConnection
+     * @param {string} Authorization OAuth access token with scope &#x60;synchronization:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {StorageConnectionCreate} [storage_connection_create]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    createConnection(
-      imodelId: string,
+    createStorageConnection(
       Authorization: string,
-      connection__create: ConnectionCreate,
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+      storage_connection_create?: StorageConnectionCreate,
       options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<ConnectionCreated> {
+    ): (fetch?: FetchAPI, basePath?: string) => Promise<StorageConnectionBody> {
       const localVarFetchArgs = DefaultApiFetchParamCreator(
         configuration
-      ).createConnection(
-        imodelId,
+      ).createStorageConnection(
         Authorization,
-        connection__create,
         Accept,
+        storage_connection_create,
         options
       );
       return (
@@ -2547,31 +2259,23 @@ export const DefaultApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Delete connection    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *connections:modify*.      ---
-     * @summary Delete Connection
+     * ---    Delete connection    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:modify`.      ---
+     * @summary Delete StorageConnection
      * @param {string} connectionId
-     * @param {string} imodelId iModel Id
-     * @param {string} Authorization OAuth access token with scope &#39;connections:modify&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} Authorization OAuth access token with scope &#x60;synchronization:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    deleteConnection(
+    deleteStorageConnection(
       connectionId: string,
-      imodelId: string,
       Authorization: string,
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
       options?: any
     ): (fetch?: FetchAPI, basePath?: string) => Promise<Response> {
       const localVarFetchArgs = DefaultApiFetchParamCreator(
         configuration
-      ).deleteConnection(
-        connectionId,
-        imodelId,
-        Authorization,
-        Accept,
-        options
-      );
+      ).deleteStorageConnection(connectionId, Authorization, Accept, options);
       return (
         fetch: FetchAPI = portableFetch,
         basePath: string = BASE_PATH
@@ -2589,241 +2293,13 @@ export const DefaultApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Retrieves connection for specified id.    ### Authentication    Requires Authorization header with valid Bearer token for scope *connections:read*.    ---
-     * @summary Get Connection
-     * @param {string} connectionId
-     * @param {string} imodelId iModel Id
-     * @param {string} Authorization OAuth access token with scope &#39;connections:read&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getConnection(
-      connectionId: string,
-      imodelId: string,
-      Authorization: string,
-      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
-      options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<ConnectionCreated> {
-      const localVarFetchArgs = DefaultApiFetchParamCreator(
-        configuration
-      ).getConnection(connectionId, imodelId, Authorization, Accept, options);
-      return (
-        fetch: FetchAPI = portableFetch,
-        basePath: string = BASE_PATH
-      ) => {
-        return fetch(
-          basePath + localVarFetchArgs.url,
-          localVarFetchArgs.options
-        ).then((response) => {
-          if (response.status >= 200 && response.status < 300) {
-            return response.json();
-          } else {
-            throw response;
-          }
-        });
-      };
-    },
-    /**
-     * ---    Retrieves connection run for specified Id.    ### Authentication    Requires Authorization header with valid Bearer token for scope *connections:read*.    ---
-     * @summary Get Connection Run
-     * @param {string} connectionId
-     * @param {string} runId Run Id
-     * @param {string} Authorization OAuth access token with scope &#39;connections:read&#39;
-     * @param {string} [imodelId] iModel Id
-     * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
-     * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getConnectionRun(
-      connectionId: string,
-      runId: string,
-      Authorization: string,
-      imodelId?: string,
-      top?: number,
-      skip?: number,
-      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
-      options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<RunBody> {
-      const localVarFetchArgs = DefaultApiFetchParamCreator(
-        configuration
-      ).getConnectionRun(
-        connectionId,
-        runId,
-        Authorization,
-        imodelId,
-        top,
-        skip,
-        Accept,
-        options
-      );
-      return (
-        fetch: FetchAPI = portableFetch,
-        basePath: string = BASE_PATH
-      ) => {
-        return fetch(
-          basePath + localVarFetchArgs.url,
-          localVarFetchArgs.options
-        ).then((response) => {
-          if (response.status >= 200 && response.status < 300) {
-            return response.json();
-          } else {
-            throw response;
-          }
-        });
-      };
-    },
-    /**
-     * ---    Retrieves connection runs for specified connection.    ### Notes    The `Prefer` header can be used to specify how much result metadata is desired by the client. The `Prefer` request header field is used to indicate that particular server behaviors are preferred by the client but are not required for successful completion of the request.    This operation supports `\"return=representation\"` and `\"return=minimal\"` preferences.    The `\"return=representation\"` preference indicates that the client prefers that the server include an entity representing the current state of the resource in the response to a successful request.  The `\"return=minimal\"` preference indicates that the client wishes the server to return only a minimal response to a successful request. This is the default preference if `Prefer` header is not specified.    ### Authentication    Requires Authorization header with valid Bearer token for scope *connections:read*.    ---
-     * @summary Get Connection Runs
-     * @param {string} connectionId
-     * @param {string} Authorization OAuth access token with scope &#39;connections:read&#39;
-     * @param {string} [imodelId] iModel Id
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getConnectionRuns(
-      connectionId: string,
-      Authorization: string,
-      imodelId?: string,
-      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
-      options?: any
-    ): (
-      fetch?: FetchAPI,
-      basePath?: string
-    ) => Promise<RunsPreferReturnrepresentation> {
-      const localVarFetchArgs = DefaultApiFetchParamCreator(
-        configuration
-      ).getConnectionRuns(
-        connectionId,
-        Authorization,
-        imodelId,
-        Accept,
-        options
-      );
-      return (
-        fetch: FetchAPI = portableFetch,
-        basePath: string = BASE_PATH
-      ) => {
-        return fetch(
-          basePath + localVarFetchArgs.url,
-          localVarFetchArgs.options
-        ).then((response) => {
-          if (response.status >= 200 && response.status < 300) {
-            return response.json();
-          } else {
-            throw response;
-          }
-        });
-      };
-    },
-    /**
-     * ---    Retrieves connection sourceFile for specified Id.    ### Authentication    Requires Authorization header with valid Bearer token for scope *connections:read*.    ---
-     * @summary Get Connection SourceFile
-     * @param {string} connectionId
-     * @param {string} sourceFileId
-     * @param {string} imodelId iModel Id
-     * @param {string} Authorization OAuth access token with scope &#39;connections:read&#39;
-     * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
-     * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getConnectionSourcefile(
-      connectionId: string,
-      sourceFileId: string,
-      imodelId: string,
-      Authorization: string,
-      top?: number,
-      skip?: number,
-      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
-      options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<SourceFile> {
-      const localVarFetchArgs = DefaultApiFetchParamCreator(
-        configuration
-      ).getConnectionSourcefile(
-        connectionId,
-        sourceFileId,
-        imodelId,
-        Authorization,
-        top,
-        skip,
-        Accept,
-        options
-      );
-      return (
-        fetch: FetchAPI = portableFetch,
-        basePath: string = BASE_PATH
-      ) => {
-        return fetch(
-          basePath + localVarFetchArgs.url,
-          localVarFetchArgs.options
-        ).then((response) => {
-          if (response.status >= 200 && response.status < 300) {
-            return response.json();
-          } else {
-            throw response;
-          }
-        });
-      };
-    },
-    /**
-     * ---    Retrieves connection sourceFiles for specified Id.    ### Notes    The `Prefer` header can be used to specify how much result metadata is desired by the client. The `Prefer` request header field is used to indicate that particular server behaviors are preferred by the client but are not required for successful completion of the request.    This operation supports `\"return=representation\"` and `\"return=minimal\"` preferences.    The `\"return=representation\"` preference indicates that the client prefers that the server include an entity representing the current state of the resource in the response to a successful request.  The `\"return=minimal\"` preference indicates that the client wishes the server to return only a minimal response to a successful request. This is the default preference if `Prefer` header is not specified.    ### Authentication    Requires Authorization header with valid Bearer token for scope *connections:read*.    ---
-     * @summary Get Connection SourceFiles
-     * @param {string} connectionId
-     * @param {string} Authorization OAuth access token with scope &#39;connections:read&#39;
-     * @param {string} [imodelId] iModel Id
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getConnectionSourcefiles(
-      connectionId: string,
-      Authorization: string,
-      imodelId?: string,
-      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
-      options?: any
-    ): (
-      fetch?: FetchAPI,
-      basePath?: string
-    ) => Promise<SourceFilesPreferReturnrepresentation> {
-      const localVarFetchArgs = DefaultApiFetchParamCreator(
-        configuration
-      ).getConnectionSourcefiles(
-        connectionId,
-        Authorization,
-        imodelId,
-        Accept,
-        options
-      );
-      return (
-        fetch: FetchAPI = portableFetch,
-        basePath: string = BASE_PATH
-      ) => {
-        return fetch(
-          basePath + localVarFetchArgs.url,
-          localVarFetchArgs.options
-        ).then((response) => {
-          if (response.status >= 200 && response.status < 300) {
-            return response.json();
-          } else {
-            throw response;
-          }
-        });
-      };
-    },
-    /**
-     * ---    Retrieves connections for the specified iModel.    ### Notes    The `Prefer` header can be used to specify how much result metadata is desired by the client. The `Prefer` request header field is used to indicate that particular server behaviors are preferred by the client but are not required for successful completion of the request.    This operation supports `\"return=representation\"` and `\"return=minimal\"` preferences.    The `\"return=representation\"` preference indicates that the client prefers that the server include an entity representing the current state of the resource in the response to a successful request.  The `\"return=minimal\"` preference indicates that the client wishes the server to return only a minimal response to a successful request. This is the default preference if `Prefer` header is not specified.    ### Authentication    Requires Authorization header with valid Bearer token for scope *connections:read*.    ---
+     * ---    Retrieves connections for the specified iModel.    ### Notes    The `Prefer` header can be used to specify how much result metadata is desired by the client. The `Prefer` request header field is used to indicate that particular server behaviors are preferred by the client but are not required for successful completion of the request.    This operation supports `\"return=representation\"` and `\"return=minimal\"` preferences.    The `\"return=representation\"` preference indicates that the client prefers that the server include an entity representing the current state of the resource in the response to a successful request.  The `\"return=minimal\"` preference indicates that the client wishes the server to return only a minimal response to a successful request. This is the default preference if `Prefer` header is not specified.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:read`.    ---
      * @summary Get Connections
      * @param {string} imodelId iModel Id
-     * @param {string} Authorization OAuth access token with scope &#39;connections:read&#39;
+     * @param {string} Authorization OAuth access token with scope &#x60;synchronization:read&#x60;
      * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
      * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -2837,7 +2313,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
     ): (
       fetch?: FetchAPI,
       basePath?: string
-    ) => Promise<ConnectionsPreferReturnrepresentation> {
+    ) => Promise<ConnectionsPreferReturnRepresentation> {
       const localVarFetchArgs = DefaultApiFetchParamCreator(
         configuration
       ).getConnections(imodelId, Authorization, top, skip, Accept, options);
@@ -2858,34 +2334,23 @@ export const DefaultApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Delete connection sourcefile    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *connections:modify*.      ---
-     * @summary Remove Connection SourceFile
-     * @param {string} connectionId Connection Id
-     * @param {string} sourceFileId SourceFile Id
-     * @param {string} imodelId iModel Id
-     * @param {string} Authorization OAuth access token with scope &#39;connections:modify&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * ---    Retrieves a StorageConnection with the specified ID.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:read`.    ---
+     * @summary Get Storage Connection
+     * @param {string} connectionId
+     * @param {string} Authorization OAuth access token with scope &#x60;synchronization:read&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    removeConnectionSourcefile(
+    getStorageConnection(
       connectionId: string,
-      sourceFileId: string,
-      imodelId: string,
       Authorization: string,
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
       options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<Response> {
+    ): (fetch?: FetchAPI, basePath?: string) => Promise<StorageConnection> {
       const localVarFetchArgs = DefaultApiFetchParamCreator(
         configuration
-      ).removeConnectionSourcefile(
-        connectionId,
-        sourceFileId,
-        imodelId,
-        Authorization,
-        Accept,
-        options
-      );
+      ).getStorageConnection(connectionId, Authorization, Accept, options);
       return (
         fetch: FetchAPI = portableFetch,
         basePath: string = BASE_PATH
@@ -2895,7 +2360,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
           localVarFetchArgs.options
         ).then((response) => {
           if (response.status >= 200 && response.status < 300) {
-            return response;
+            return response.json();
           } else {
             throw response;
           }
@@ -2903,67 +2368,34 @@ export const DefaultApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Runs connection for specified id.    ### Notes    On successful run, operation returns http status code 202/accepted - the request is accepted for processing and will execute in background. It returns location header pointing to the run to check it's status via property 'State'(NotStarted, Idle, WaitingToExecute, WaitingToRetry, Executing, Completed, Queued)  In case there is already an active run in progress for the connection, new run is not initiated, insteaded it returns 303/see other along with location header pointing to the active run. There can only be one active run per connection and another run can be initated only once active run is complete.    ### Authentication    Requires Authorization header with valid Bearer token for scope *connection:modify*.    ---
-     * @summary Run Connection
+     * ---    Retrieves a StorageConnection Run with the specified ID.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:read`.    ---
+     * @summary Get Storage Connection Run
      * @param {string} connectionId
-     * @param {string} imodelId iModel Id
-     * @param {string} Authorization OAuth access token with scope &#39;connections:modify&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} runId Run Id
+     * @param {string} Authorization OAuth access token with scope &#x60;synchronization:read&#x60;
+     * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
+     * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    runConnection(
+    getStorageConnectionRun(
       connectionId: string,
-      imodelId: string,
+      runId: string,
       Authorization: string,
+      top?: number,
+      skip?: number,
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
       options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<Response> {
+    ): (fetch?: FetchAPI, basePath?: string) => Promise<RunBody> {
       const localVarFetchArgs = DefaultApiFetchParamCreator(
         configuration
-      ).runConnection(connectionId, imodelId, Authorization, Accept, options);
-      return (
-        fetch: FetchAPI = portableFetch,
-        basePath: string = BASE_PATH
-      ) => {
-        return fetch(
-          basePath + localVarFetchArgs.url,
-          localVarFetchArgs.options
-        ).then((response) => {
-          if (response.status >= 200 && response.status < 300) {
-            return response;
-          } else {
-            throw response;
-          }
-        });
-      };
-    },
-    /**
-     * ---    Update an existing connection    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *connections:modify*.    ### Associated entities    A connection is linked with an iModel.  The iModel id must be provided in the \"iModelId\" query parameter when updating a connection.    ---
-     * @summary Update Connection
-     * @param {string} connectionId
-     * @param {string} imodelId iModel Id
-     * @param {string} Authorization OAuth access token with scope &#39;connections:modify&#39;
-     * @param {ConnectionCreate} connection__create
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    updateConnection(
-      connectionId: string,
-      imodelId: string,
-      Authorization: string,
-      connection__create: ConnectionCreate,
-      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
-      options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<ConnectionCreated> {
-      const localVarFetchArgs = DefaultApiFetchParamCreator(
-        configuration
-      ).updateConnection(
+      ).getStorageConnectionRun(
         connectionId,
-        imodelId,
+        runId,
         Authorization,
-        connection__create,
+        top,
+        skip,
         Accept,
         options
       );
@@ -2984,35 +2416,277 @@ export const DefaultApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Update an existing connection sourceFile    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *connections:modify*.    #### iModelBridgeType    Valid iModelBridgeType values are:    -NotSet  -AFFINITYCHECKER  -MSTN  -AVEVAPID  -AUTOPLANT  -REVIT  -DWG  -SPXREVIEW  -IFC  -SPPID  -AVEVADIAGRAMS  -CIVIL  -CIVIL3D  -GEOSPATIAL  -OBD  -OPENTOWER  -SHELLEDWCSV  -NWD    ### Associated entities  sourceFile is updated to a connection. path must contain valid connection Id    sourceFile associated connection is linked with an iModel.  The iModel id must be provided in the \"iModelId\" parameter when adding a connection sourceFile.    ---
-     * @summary Update Connection SourceFile
+     * ---    Retrieves all Runs for the specified connection.    ### Notes    The `Prefer` header can be used to specify how much result metadata is desired by the client. The `Prefer` request header field is used to indicate that particular server behaviors are preferred by the client but are not required for successful completion of the request.    This operation supports `\"return=representation\"` and `\"return=minimal\"` preferences.    The `\"return=representation\"` preference indicates that the client prefers that the server include an entity representing the current state of the resource in the response to a successful request.  The `\"return=minimal\"` preference indicates that the client wishes the server to return only a minimal response to a successful request. This is the default preference if `Prefer` header is not specified.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:read`.    ---
+     * @summary Get StorageConnection Runs
      * @param {string} connectionId
-     * @param {string} sourceFileId
-     * @param {string} Authorization OAuth access token with scope &#39;connections:modify&#39;
-     * @param {SourceFileCreatebody} sourceFile__create
-     * @param {string} [imodelId] iModel Id
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} Authorization OAuth access token with scope &#x60;synchronization:read&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    updateConnectionSourcefile(
+    getStorageConnectionRuns(
+      connectionId: string,
+      Authorization: string,
+      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+      options?: any
+    ): (
+      fetch?: FetchAPI,
+      basePath?: string
+    ) => Promise<RunsPreferReturnRepresentation> {
+      const localVarFetchArgs = DefaultApiFetchParamCreator(
+        configuration
+      ).getStorageConnectionRuns(connectionId, Authorization, Accept, options);
+      return (
+        fetch: FetchAPI = portableFetch,
+        basePath: string = BASE_PATH
+      ) => {
+        return fetch(
+          basePath + localVarFetchArgs.url,
+          localVarFetchArgs.options
+        ).then((response) => {
+          if (response.status >= 200 && response.status < 300) {
+            return response.json();
+          } else {
+            throw response;
+          }
+        });
+      };
+    },
+    /**
+     * ---    Retrieves StorageConnection's SourceFile with the specified ID.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:read`.    ---
+     * @summary Get StorageConnection SourceFile
+     * @param {string} connectionId
+     * @param {string} sourceFileId
+     * @param {string} Authorization OAuth access token with scope &#x60;synchronization:read&#x60;
+     * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
+     * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getStorageConnectionSourcefile(
       connectionId: string,
       sourceFileId: string,
       Authorization: string,
-      sourceFile__create: SourceFileCreatebody,
-      imodelId?: string,
+      top?: number,
+      skip?: number,
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
       options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<SourceFile> {
+    ): (fetch?: FetchAPI, basePath?: string) => Promise<StorageFile> {
       const localVarFetchArgs = DefaultApiFetchParamCreator(
         configuration
-      ).updateConnectionSourcefile(
+      ).getStorageConnectionSourcefile(
         connectionId,
         sourceFileId,
         Authorization,
-        sourceFile__create,
-        imodelId,
+        top,
+        skip,
         Accept,
+        options
+      );
+      return (
+        fetch: FetchAPI = portableFetch,
+        basePath: string = BASE_PATH
+      ) => {
+        return fetch(
+          basePath + localVarFetchArgs.url,
+          localVarFetchArgs.options
+        ).then((response) => {
+          if (response.status >= 200 && response.status < 300) {
+            return response.json();
+          } else {
+            throw response;
+          }
+        });
+      };
+    },
+    /**
+     * ---    Retrieves SourceFiles for specified StorageConnection.    ### Notes    The `Prefer` header can be used to specify how much result metadata is desired by the client. The `Prefer` request header field is used to indicate that particular server behaviors are preferred by the client but are not required for successful completion of the request.    This operation supports `\"return=representation\"` and `\"return=minimal\"` preferences.    The `\"return=representation\"` preference indicates that the client prefers that the server include an entity representing the current state of the resource in the response to a successful request.  The `\"return=minimal\"` preference indicates that the client wishes the server to return only a minimal response to a successful request. This is the default preference if `Prefer` header is not specified.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:read`.    ---
+     * @summary Get StorageConnection SourceFiles
+     * @param {string} connectionId
+     * @param {string} Authorization OAuth access token with scope &#x60;synchronization:read&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getStorageConnectionSourcefiles(
+      connectionId: string,
+      Authorization: string,
+      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+      options?: any
+    ): (
+      fetch?: FetchAPI,
+      basePath?: string
+    ) => Promise<StorageFilePreferReturnRepresentation> {
+      const localVarFetchArgs = DefaultApiFetchParamCreator(
+        configuration
+      ).getStorageConnectionSourcefiles(
+        connectionId,
+        Authorization,
+        Accept,
+        options
+      );
+      return (
+        fetch: FetchAPI = portableFetch,
+        basePath: string = BASE_PATH
+      ) => {
+        return fetch(
+          basePath + localVarFetchArgs.url,
+          localVarFetchArgs.options
+        ).then((response) => {
+          if (response.status >= 200 && response.status < 300) {
+            return response.json();
+          } else {
+            throw response;
+          }
+        });
+      };
+    },
+    /**
+     * ---    Delete StorageConnection SourceFile    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:modify`.      ---
+     * @summary Remove StorageConnection SourceFile
+     * @param {string} connectionId Connection Id
+     * @param {string} sourceFileId SourceFile Id
+     * @param {string} Authorization OAuth access token with scope &#x60;synchronization:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    removeStorageConnectionSourcefile(
+      connectionId: string,
+      sourceFileId: string,
+      Authorization: string,
+      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+      options?: any
+    ): (fetch?: FetchAPI, basePath?: string) => Promise<Response> {
+      const localVarFetchArgs = DefaultApiFetchParamCreator(
+        configuration
+      ).removeStorageConnectionSourcefile(
+        connectionId,
+        sourceFileId,
+        Authorization,
+        Accept,
+        options
+      );
+      return (
+        fetch: FetchAPI = portableFetch,
+        basePath: string = BASE_PATH
+      ) => {
+        return fetch(
+          basePath + localVarFetchArgs.url,
+          localVarFetchArgs.options
+        ).then((response) => {
+          if (response.status >= 200 && response.status < 300) {
+            return response;
+          } else {
+            throw response;
+          }
+        });
+      };
+    },
+    /**
+     * ---    Runs the specified StorageConnection.    ### Notes    On successful run, operation returns http status code 202/accepted - the request is accepted for processing and will execute in background. It returns location header pointing to the run to check it's status via property 'State'(NotStarted, Idle, WaitingToExecute, WaitingToRetry, Executing, Completed, Queued). In the event that multiple run requests are being made simultaneously, 409/conflict is returned and only the first request is processed. If the run is already initiated and active, a new run is not initiated, instead 303/see other is returned along with location header pointing to the active run. There can only be one active run per iModel and another run can be initated only once the active run is complete.    ### Authentication    Requires Authorization header with valid Bearer token for scope *connection:modify*.    ---
+     * @summary Run StorageConnection
+     * @param {string} connectionId
+     * @param {string} Authorization OAuth access token with scope &#x60;synchronization:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    runStorageConnection(
+      connectionId: string,
+      Authorization: string,
+      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+      options?: any
+    ): (fetch?: FetchAPI, basePath?: string) => Promise<Response> {
+      const localVarFetchArgs = DefaultApiFetchParamCreator(
+        configuration
+      ).runStorageConnection(connectionId, Authorization, Accept, options);
+      return (
+        fetch: FetchAPI = portableFetch,
+        basePath: string = BASE_PATH
+      ) => {
+        return fetch(
+          basePath + localVarFetchArgs.url,
+          localVarFetchArgs.options
+        ).then((response) => {
+          if (response.status >= 200 && response.status < 300) {
+            return response;
+          } else {
+            throw response;
+          }
+        });
+      };
+    },
+    /**
+     * ---    Update an existing StorageConnection.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:modify`.    ### Associated entities    A connection is linked with an iModel. The iModel ID is required to be set when updating a StorageConnection.    ---
+     * @summary Update StorageConnection
+     * @param {string} connectionId
+     * @param {string} Authorization OAuth access token with scope &#x60;synchronization:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {StorageConnectionCreate} [storage_connection_create]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updateStorageConnection(
+      connectionId: string,
+      Authorization: string,
+      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+      storage_connection_create?: StorageConnectionCreate,
+      options?: any
+    ): (fetch?: FetchAPI, basePath?: string) => Promise<StorageConnection> {
+      const localVarFetchArgs = DefaultApiFetchParamCreator(
+        configuration
+      ).updateStorageConnection(
+        connectionId,
+        Authorization,
+        Accept,
+        storage_connection_create,
+        options
+      );
+      return (
+        fetch: FetchAPI = portableFetch,
+        basePath: string = BASE_PATH
+      ) => {
+        return fetch(
+          basePath + localVarFetchArgs.url,
+          localVarFetchArgs.options
+        ).then((response) => {
+          if (response.status >= 200 && response.status < 300) {
+            return response.json();
+          } else {
+            throw response;
+          }
+        });
+      };
+    },
+    /**
+     * ---    Update an existing StorageConnection SourceFile.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:modify`.    #### ConnectorType    Valid ConnectorType values are:    -NotSet  -AFFINITYCHECKER  -MSTN  -AVEVAPID  -AUTOPLANT  -REVIT  -DWG  -SPXREVIEW  -IFC  -SPPID  -AVEVADIAGRAMS  -CIVIL  -CIVIL3D  -GEOSPATIAL  -OBD  -OPENTOWER  -SHELLEDWCSV  -NWD    ### Associated entities  SourceFile is related to a Connection. The path must contain a valid Connection ID.    ---
+     * @summary Update StorageConnection SourceFile
+     * @param {string} connectionId
+     * @param {string} sourceFileId
+     * @param {string} Authorization OAuth access token with scope &#x60;synchronization:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {StorageFileCreate} [storage_file_create]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updateStorageConnectionSourcefile(
+      connectionId: string,
+      sourceFileId: string,
+      Authorization: string,
+      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+      storage_file_create?: StorageFileCreate,
+      options?: any
+    ): (fetch?: FetchAPI, basePath?: string) => Promise<StorageFileBody> {
+      const localVarFetchArgs = DefaultApiFetchParamCreator(
+        configuration
+      ).updateStorageConnectionSourcefile(
+        connectionId,
+        sourceFileId,
+        Authorization,
+        Accept,
+        storage_file_create,
         options
       );
       return (
@@ -3045,234 +2719,82 @@ export const DefaultApiFactory = function(
 ) {
   return {
     /**
-     * ---    Add a new connection sourceFile    ### Notes    The POST body MUST NOT include the id.  An id will be assigned upon successful connection sourceFile addition.    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *connections:modify*.    #### iModelBridgeType    Valid iModelBridgeType values are:    -NotSet  -AFFINITYCHECKER  -MSTN  -AVEVAPID  -AUTOPLANT  -REVIT  -DWG  -SPXREVIEW  -IFC  -SPPID  -AVEVADIAGRAMS  -CIVIL  -CIVIL3D  -GEOSPATIAL  -OBD  -OPENTOWER  -SHELLEDWCSV  -NWD    ### Associated entities  sourceFile is added to a connection. path must contain valid connection Id    sourceFile associated connection is linked with an iModel.  The iModel id must be provided in the \"iModelId\" parameter when adding a connection sourceFile.    ---
-     * @summary Add Connection SourceFile
+     * ---    Add a new Storage Source File to a Storage Connection    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:modify`.    #### ConnectorType    Valid ConnectorType values are:    -NotSet  -AFFINITYCHECKER  -MSTN  -AVEVAPID  -AUTOPLANT  -REVIT  -DWG  -SPXREVIEW  -IFC  -SPPID  -AVEVADIAGRAMS  -CIVIL  -CIVIL3D  -GEOSPATIAL  -OBD  -OPENTOWER  -SHELLEDWCSV  -NWD    ### Associated entities  SourceFile is added to a Connection. The reuqest path must contain a valid Connection ID    ---
+     * @summary Add StorageConnection SourceFile
      * @param {string} connectionId
-     * @param {string} Authorization OAuth access token with scope &#39;connections:modify&#39;
-     * @param {SourceFileCreatebody} sourceFile__create
-     * @param {string} [imodelId] iModel Id
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} Authorization OAuth access token with scope &#x60;synchronization:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {StorageFileCreate} [storage_file_create]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    addConnectionSourcefile(
+    addStorageConnectionSourcefile(
       connectionId: string,
       Authorization: string,
-      sourceFile__create: SourceFileCreatebody,
-      imodelId?: string,
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+      storage_file_create?: StorageFileCreate,
       options?: any
     ) {
-      return DefaultApiFp(configuration).addConnectionSourcefile(
+      return DefaultApiFp(configuration).addStorageConnectionSourcefile(
         connectionId,
         Authorization,
-        sourceFile__create,
-        imodelId,
         Accept,
+        storage_file_create,
         options
       )(fetch, basePath);
     },
     /**
-     * ---    Create a new connection    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *connections:modify*.    ### Associated entities    A connection is linked with an iModel.  The iModel id must be provided in the \"iModelId\" query parameter when creating a connection.    ---
-     * @summary Create Connection
-     * @param {string} imodelId iModel Id
-     * @param {string} Authorization OAuth access token with scope &#39;connections:modify&#39;
-     * @param {ConnectionCreate} connection__create
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * ---    Create a StorageConnection that describes files from Storage to synchronize to the iModel.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:modify`.    ### Associated entities    A connection is linked with an iModel. An iModel ID is required to be set when creating a StorageConnection.    ---
+     * @summary Create StorageConnection
+     * @param {string} Authorization OAuth access token with scope &#x60;synchronization:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {StorageConnectionCreate} [storage_connection_create]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    createConnection(
-      imodelId: string,
-      Authorization: string,
-      connection__create: ConnectionCreate,
-      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
-      options?: any
-    ) {
-      return DefaultApiFp(configuration).createConnection(
-        imodelId,
-        Authorization,
-        connection__create,
-        Accept,
-        options
-      )(fetch, basePath);
-    },
-    /**
-     * ---    Delete connection    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *connections:modify*.      ---
-     * @summary Delete Connection
-     * @param {string} connectionId
-     * @param {string} imodelId iModel Id
-     * @param {string} Authorization OAuth access token with scope &#39;connections:modify&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    deleteConnection(
-      connectionId: string,
-      imodelId: string,
+    createStorageConnection(
       Authorization: string,
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+      storage_connection_create?: StorageConnectionCreate,
       options?: any
     ) {
-      return DefaultApiFp(configuration).deleteConnection(
-        connectionId,
-        imodelId,
+      return DefaultApiFp(configuration).createStorageConnection(
         Authorization,
         Accept,
+        storage_connection_create,
         options
       )(fetch, basePath);
     },
     /**
-     * ---    Retrieves connection for specified id.    ### Authentication    Requires Authorization header with valid Bearer token for scope *connections:read*.    ---
-     * @summary Get Connection
+     * ---    Delete connection    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:modify`.      ---
+     * @summary Delete StorageConnection
      * @param {string} connectionId
-     * @param {string} imodelId iModel Id
-     * @param {string} Authorization OAuth access token with scope &#39;connections:read&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} Authorization OAuth access token with scope &#x60;synchronization:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getConnection(
-      connectionId: string,
-      imodelId: string,
-      Authorization: string,
-      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
-      options?: any
-    ) {
-      return DefaultApiFp(configuration).getConnection(
-        connectionId,
-        imodelId,
-        Authorization,
-        Accept,
-        options
-      )(fetch, basePath);
-    },
-    /**
-     * ---    Retrieves connection run for specified Id.    ### Authentication    Requires Authorization header with valid Bearer token for scope *connections:read*.    ---
-     * @summary Get Connection Run
-     * @param {string} connectionId
-     * @param {string} runId Run Id
-     * @param {string} Authorization OAuth access token with scope &#39;connections:read&#39;
-     * @param {string} [imodelId] iModel Id
-     * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
-     * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getConnectionRun(
-      connectionId: string,
-      runId: string,
-      Authorization: string,
-      imodelId?: string,
-      top?: number,
-      skip?: number,
-      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
-      options?: any
-    ) {
-      return DefaultApiFp(configuration).getConnectionRun(
-        connectionId,
-        runId,
-        Authorization,
-        imodelId,
-        top,
-        skip,
-        Accept,
-        options
-      )(fetch, basePath);
-    },
-    /**
-     * ---    Retrieves connection runs for specified connection.    ### Notes    The `Prefer` header can be used to specify how much result metadata is desired by the client. The `Prefer` request header field is used to indicate that particular server behaviors are preferred by the client but are not required for successful completion of the request.    This operation supports `\"return=representation\"` and `\"return=minimal\"` preferences.    The `\"return=representation\"` preference indicates that the client prefers that the server include an entity representing the current state of the resource in the response to a successful request.  The `\"return=minimal\"` preference indicates that the client wishes the server to return only a minimal response to a successful request. This is the default preference if `Prefer` header is not specified.    ### Authentication    Requires Authorization header with valid Bearer token for scope *connections:read*.    ---
-     * @summary Get Connection Runs
-     * @param {string} connectionId
-     * @param {string} Authorization OAuth access token with scope &#39;connections:read&#39;
-     * @param {string} [imodelId] iModel Id
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getConnectionRuns(
+    deleteStorageConnection(
       connectionId: string,
       Authorization: string,
-      imodelId?: string,
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
       options?: any
     ) {
-      return DefaultApiFp(configuration).getConnectionRuns(
+      return DefaultApiFp(configuration).deleteStorageConnection(
         connectionId,
         Authorization,
-        imodelId,
         Accept,
         options
       )(fetch, basePath);
     },
     /**
-     * ---    Retrieves connection sourceFile for specified Id.    ### Authentication    Requires Authorization header with valid Bearer token for scope *connections:read*.    ---
-     * @summary Get Connection SourceFile
-     * @param {string} connectionId
-     * @param {string} sourceFileId
-     * @param {string} imodelId iModel Id
-     * @param {string} Authorization OAuth access token with scope &#39;connections:read&#39;
-     * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
-     * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getConnectionSourcefile(
-      connectionId: string,
-      sourceFileId: string,
-      imodelId: string,
-      Authorization: string,
-      top?: number,
-      skip?: number,
-      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
-      options?: any
-    ) {
-      return DefaultApiFp(configuration).getConnectionSourcefile(
-        connectionId,
-        sourceFileId,
-        imodelId,
-        Authorization,
-        top,
-        skip,
-        Accept,
-        options
-      )(fetch, basePath);
-    },
-    /**
-     * ---    Retrieves connection sourceFiles for specified Id.    ### Notes    The `Prefer` header can be used to specify how much result metadata is desired by the client. The `Prefer` request header field is used to indicate that particular server behaviors are preferred by the client but are not required for successful completion of the request.    This operation supports `\"return=representation\"` and `\"return=minimal\"` preferences.    The `\"return=representation\"` preference indicates that the client prefers that the server include an entity representing the current state of the resource in the response to a successful request.  The `\"return=minimal\"` preference indicates that the client wishes the server to return only a minimal response to a successful request. This is the default preference if `Prefer` header is not specified.    ### Authentication    Requires Authorization header with valid Bearer token for scope *connections:read*.    ---
-     * @summary Get Connection SourceFiles
-     * @param {string} connectionId
-     * @param {string} Authorization OAuth access token with scope &#39;connections:read&#39;
-     * @param {string} [imodelId] iModel Id
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getConnectionSourcefiles(
-      connectionId: string,
-      Authorization: string,
-      imodelId?: string,
-      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
-      options?: any
-    ) {
-      return DefaultApiFp(configuration).getConnectionSourcefiles(
-        connectionId,
-        Authorization,
-        imodelId,
-        Accept,
-        options
-      )(fetch, basePath);
-    },
-    /**
-     * ---    Retrieves connections for the specified iModel.    ### Notes    The `Prefer` header can be used to specify how much result metadata is desired by the client. The `Prefer` request header field is used to indicate that particular server behaviors are preferred by the client but are not required for successful completion of the request.    This operation supports `\"return=representation\"` and `\"return=minimal\"` preferences.    The `\"return=representation\"` preference indicates that the client prefers that the server include an entity representing the current state of the resource in the response to a successful request.  The `\"return=minimal\"` preference indicates that the client wishes the server to return only a minimal response to a successful request. This is the default preference if `Prefer` header is not specified.    ### Authentication    Requires Authorization header with valid Bearer token for scope *connections:read*.    ---
+     * ---    Retrieves connections for the specified iModel.    ### Notes    The `Prefer` header can be used to specify how much result metadata is desired by the client. The `Prefer` request header field is used to indicate that particular server behaviors are preferred by the client but are not required for successful completion of the request.    This operation supports `\"return=representation\"` and `\"return=minimal\"` preferences.    The `\"return=representation\"` preference indicates that the client prefers that the server include an entity representing the current state of the resource in the response to a successful request.  The `\"return=minimal\"` preference indicates that the client wishes the server to return only a minimal response to a successful request. This is the default preference if `Prefer` header is not specified.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:read`.    ---
      * @summary Get Connections
      * @param {string} imodelId iModel Id
-     * @param {string} Authorization OAuth access token with scope &#39;connections:read&#39;
+     * @param {string} Authorization OAuth access token with scope &#x60;synchronization:read&#x60;
      * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
      * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -3294,114 +2816,230 @@ export const DefaultApiFactory = function(
       )(fetch, basePath);
     },
     /**
-     * ---    Delete connection sourcefile    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *connections:modify*.      ---
-     * @summary Remove Connection SourceFile
-     * @param {string} connectionId Connection Id
-     * @param {string} sourceFileId SourceFile Id
-     * @param {string} imodelId iModel Id
-     * @param {string} Authorization OAuth access token with scope &#39;connections:modify&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    removeConnectionSourcefile(
-      connectionId: string,
-      sourceFileId: string,
-      imodelId: string,
-      Authorization: string,
-      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
-      options?: any
-    ) {
-      return DefaultApiFp(configuration).removeConnectionSourcefile(
-        connectionId,
-        sourceFileId,
-        imodelId,
-        Authorization,
-        Accept,
-        options
-      )(fetch, basePath);
-    },
-    /**
-     * ---    Runs connection for specified id.    ### Notes    On successful run, operation returns http status code 202/accepted - the request is accepted for processing and will execute in background. It returns location header pointing to the run to check it's status via property 'State'(NotStarted, Idle, WaitingToExecute, WaitingToRetry, Executing, Completed, Queued)  In case there is already an active run in progress for the connection, new run is not initiated, insteaded it returns 303/see other along with location header pointing to the active run. There can only be one active run per connection and another run can be initated only once active run is complete.    ### Authentication    Requires Authorization header with valid Bearer token for scope *connection:modify*.    ---
-     * @summary Run Connection
+     * ---    Retrieves a StorageConnection with the specified ID.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:read`.    ---
+     * @summary Get Storage Connection
      * @param {string} connectionId
-     * @param {string} imodelId iModel Id
-     * @param {string} Authorization OAuth access token with scope &#39;connections:modify&#39;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} Authorization OAuth access token with scope &#x60;synchronization:read&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    runConnection(
+    getStorageConnection(
       connectionId: string,
-      imodelId: string,
       Authorization: string,
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
       options?: any
     ) {
-      return DefaultApiFp(configuration).runConnection(
+      return DefaultApiFp(configuration).getStorageConnection(
         connectionId,
-        imodelId,
         Authorization,
         Accept,
         options
       )(fetch, basePath);
     },
     /**
-     * ---    Update an existing connection    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *connections:modify*.    ### Associated entities    A connection is linked with an iModel.  The iModel id must be provided in the \"iModelId\" query parameter when updating a connection.    ---
-     * @summary Update Connection
+     * ---    Retrieves a StorageConnection Run with the specified ID.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:read`.    ---
+     * @summary Get Storage Connection Run
      * @param {string} connectionId
-     * @param {string} imodelId iModel Id
-     * @param {string} Authorization OAuth access token with scope &#39;connections:modify&#39;
-     * @param {ConnectionCreate} connection__create
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} runId Run Id
+     * @param {string} Authorization OAuth access token with scope &#x60;synchronization:read&#x60;
+     * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
+     * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    updateConnection(
+    getStorageConnectionRun(
       connectionId: string,
-      imodelId: string,
+      runId: string,
       Authorization: string,
-      connection__create: ConnectionCreate,
+      top?: number,
+      skip?: number,
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
       options?: any
     ) {
-      return DefaultApiFp(configuration).updateConnection(
+      return DefaultApiFp(configuration).getStorageConnectionRun(
         connectionId,
-        imodelId,
+        runId,
         Authorization,
-        connection__create,
+        top,
+        skip,
         Accept,
         options
       )(fetch, basePath);
     },
     /**
-     * ---    Update an existing connection sourceFile    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *connections:modify*.    #### iModelBridgeType    Valid iModelBridgeType values are:    -NotSet  -AFFINITYCHECKER  -MSTN  -AVEVAPID  -AUTOPLANT  -REVIT  -DWG  -SPXREVIEW  -IFC  -SPPID  -AVEVADIAGRAMS  -CIVIL  -CIVIL3D  -GEOSPATIAL  -OBD  -OPENTOWER  -SHELLEDWCSV  -NWD    ### Associated entities  sourceFile is updated to a connection. path must contain valid connection Id    sourceFile associated connection is linked with an iModel.  The iModel id must be provided in the \"iModelId\" parameter when adding a connection sourceFile.    ---
-     * @summary Update Connection SourceFile
+     * ---    Retrieves all Runs for the specified connection.    ### Notes    The `Prefer` header can be used to specify how much result metadata is desired by the client. The `Prefer` request header field is used to indicate that particular server behaviors are preferred by the client but are not required for successful completion of the request.    This operation supports `\"return=representation\"` and `\"return=minimal\"` preferences.    The `\"return=representation\"` preference indicates that the client prefers that the server include an entity representing the current state of the resource in the response to a successful request.  The `\"return=minimal\"` preference indicates that the client wishes the server to return only a minimal response to a successful request. This is the default preference if `Prefer` header is not specified.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:read`.    ---
+     * @summary Get StorageConnection Runs
+     * @param {string} connectionId
+     * @param {string} Authorization OAuth access token with scope &#x60;synchronization:read&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getStorageConnectionRuns(
+      connectionId: string,
+      Authorization: string,
+      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+      options?: any
+    ) {
+      return DefaultApiFp(configuration).getStorageConnectionRuns(
+        connectionId,
+        Authorization,
+        Accept,
+        options
+      )(fetch, basePath);
+    },
+    /**
+     * ---    Retrieves StorageConnection's SourceFile with the specified ID.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:read`.    ---
+     * @summary Get StorageConnection SourceFile
      * @param {string} connectionId
      * @param {string} sourceFileId
-     * @param {string} Authorization OAuth access token with scope &#39;connections:modify&#39;
-     * @param {SourceFileCreatebody} sourceFile__create
-     * @param {string} [imodelId] iModel Id
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+     * @param {string} Authorization OAuth access token with scope &#x60;synchronization:read&#x60;
+     * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
+     * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    updateConnectionSourcefile(
+    getStorageConnectionSourcefile(
       connectionId: string,
       sourceFileId: string,
       Authorization: string,
-      sourceFile__create: SourceFileCreatebody,
-      imodelId?: string,
+      top?: number,
+      skip?: number,
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
       options?: any
     ) {
-      return DefaultApiFp(configuration).updateConnectionSourcefile(
+      return DefaultApiFp(configuration).getStorageConnectionSourcefile(
         connectionId,
         sourceFileId,
         Authorization,
-        sourceFile__create,
-        imodelId,
+        top,
+        skip,
         Accept,
+        options
+      )(fetch, basePath);
+    },
+    /**
+     * ---    Retrieves SourceFiles for specified StorageConnection.    ### Notes    The `Prefer` header can be used to specify how much result metadata is desired by the client. The `Prefer` request header field is used to indicate that particular server behaviors are preferred by the client but are not required for successful completion of the request.    This operation supports `\"return=representation\"` and `\"return=minimal\"` preferences.    The `\"return=representation\"` preference indicates that the client prefers that the server include an entity representing the current state of the resource in the response to a successful request.  The `\"return=minimal\"` preference indicates that the client wishes the server to return only a minimal response to a successful request. This is the default preference if `Prefer` header is not specified.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:read`.    ---
+     * @summary Get StorageConnection SourceFiles
+     * @param {string} connectionId
+     * @param {string} Authorization OAuth access token with scope &#x60;synchronization:read&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getStorageConnectionSourcefiles(
+      connectionId: string,
+      Authorization: string,
+      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+      options?: any
+    ) {
+      return DefaultApiFp(configuration).getStorageConnectionSourcefiles(
+        connectionId,
+        Authorization,
+        Accept,
+        options
+      )(fetch, basePath);
+    },
+    /**
+     * ---    Delete StorageConnection SourceFile    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:modify`.      ---
+     * @summary Remove StorageConnection SourceFile
+     * @param {string} connectionId Connection Id
+     * @param {string} sourceFileId SourceFile Id
+     * @param {string} Authorization OAuth access token with scope &#x60;synchronization:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    removeStorageConnectionSourcefile(
+      connectionId: string,
+      sourceFileId: string,
+      Authorization: string,
+      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+      options?: any
+    ) {
+      return DefaultApiFp(configuration).removeStorageConnectionSourcefile(
+        connectionId,
+        sourceFileId,
+        Authorization,
+        Accept,
+        options
+      )(fetch, basePath);
+    },
+    /**
+     * ---    Runs the specified StorageConnection.    ### Notes    On successful run, operation returns http status code 202/accepted - the request is accepted for processing and will execute in background. It returns location header pointing to the run to check it's status via property 'State'(NotStarted, Idle, WaitingToExecute, WaitingToRetry, Executing, Completed, Queued). In the event that multiple run requests are being made simultaneously, 409/conflict is returned and only the first request is processed. If the run is already initiated and active, a new run is not initiated, instead 303/see other is returned along with location header pointing to the active run. There can only be one active run per iModel and another run can be initated only once the active run is complete.    ### Authentication    Requires Authorization header with valid Bearer token for scope *connection:modify*.    ---
+     * @summary Run StorageConnection
+     * @param {string} connectionId
+     * @param {string} Authorization OAuth access token with scope &#x60;synchronization:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    runStorageConnection(
+      connectionId: string,
+      Authorization: string,
+      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+      options?: any
+    ) {
+      return DefaultApiFp(configuration).runStorageConnection(
+        connectionId,
+        Authorization,
+        Accept,
+        options
+      )(fetch, basePath);
+    },
+    /**
+     * ---    Update an existing StorageConnection.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:modify`.    ### Associated entities    A connection is linked with an iModel. The iModel ID is required to be set when updating a StorageConnection.    ---
+     * @summary Update StorageConnection
+     * @param {string} connectionId
+     * @param {string} Authorization OAuth access token with scope &#x60;synchronization:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {StorageConnectionCreate} [storage_connection_create]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updateStorageConnection(
+      connectionId: string,
+      Authorization: string,
+      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+      storage_connection_create?: StorageConnectionCreate,
+      options?: any
+    ) {
+      return DefaultApiFp(configuration).updateStorageConnection(
+        connectionId,
+        Authorization,
+        Accept,
+        storage_connection_create,
+        options
+      )(fetch, basePath);
+    },
+    /**
+     * ---    Update an existing StorageConnection SourceFile.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:modify`.    #### ConnectorType    Valid ConnectorType values are:    -NotSet  -AFFINITYCHECKER  -MSTN  -AVEVAPID  -AUTOPLANT  -REVIT  -DWG  -SPXREVIEW  -IFC  -SPPID  -AVEVADIAGRAMS  -CIVIL  -CIVIL3D  -GEOSPATIAL  -OBD  -OPENTOWER  -SHELLEDWCSV  -NWD    ### Associated entities  SourceFile is related to a Connection. The path must contain a valid Connection ID.    ---
+     * @summary Update StorageConnection SourceFile
+     * @param {string} connectionId
+     * @param {string} sourceFileId
+     * @param {string} Authorization OAuth access token with scope &#x60;synchronization:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {StorageFileCreate} [storage_file_create]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updateStorageConnectionSourcefile(
+      connectionId: string,
+      sourceFileId: string,
+      Authorization: string,
+      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+      storage_file_create?: StorageFileCreate,
+      options?: any
+    ) {
+      return DefaultApiFp(configuration).updateStorageConnectionSourcefile(
+        connectionId,
+        sourceFileId,
+        Authorization,
+        Accept,
+        storage_file_create,
         options
       )(fetch, basePath);
     },
@@ -3416,250 +3054,88 @@ export const DefaultApiFactory = function(
  */
 export class DefaultApi extends BaseAPI {
   /**
-   * ---    Add a new connection sourceFile    ### Notes    The POST body MUST NOT include the id.  An id will be assigned upon successful connection sourceFile addition.    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *connections:modify*.    #### iModelBridgeType    Valid iModelBridgeType values are:    -NotSet  -AFFINITYCHECKER  -MSTN  -AVEVAPID  -AUTOPLANT  -REVIT  -DWG  -SPXREVIEW  -IFC  -SPPID  -AVEVADIAGRAMS  -CIVIL  -CIVIL3D  -GEOSPATIAL  -OBD  -OPENTOWER  -SHELLEDWCSV  -NWD    ### Associated entities  sourceFile is added to a connection. path must contain valid connection Id    sourceFile associated connection is linked with an iModel.  The iModel id must be provided in the \"iModelId\" parameter when adding a connection sourceFile.    ---
-   * @summary Add Connection SourceFile
+   * ---    Add a new Storage Source File to a Storage Connection    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:modify`.    #### ConnectorType    Valid ConnectorType values are:    -NotSet  -AFFINITYCHECKER  -MSTN  -AVEVAPID  -AUTOPLANT  -REVIT  -DWG  -SPXREVIEW  -IFC  -SPPID  -AVEVADIAGRAMS  -CIVIL  -CIVIL3D  -GEOSPATIAL  -OBD  -OPENTOWER  -SHELLEDWCSV  -NWD    ### Associated entities  SourceFile is added to a Connection. The reuqest path must contain a valid Connection ID    ---
+   * @summary Add StorageConnection SourceFile
    * @param {string} connectionId
-   * @param {string} Authorization OAuth access token with scope &#39;connections:modify&#39;
-   * @param {SourceFileCreatebody} sourceFile__create
-   * @param {string} [imodelId] iModel Id
-   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+   * @param {string} Authorization OAuth access token with scope &#x60;synchronization:modify&#x60;
+   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+   * @param {StorageFileCreate} [storage_file_create]
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof DefaultApi
    */
-  public addConnectionSourcefile(
+  public addStorageConnectionSourcefile(
     connectionId: string,
     Authorization: string,
-    sourceFile__create: SourceFileCreatebody,
-    imodelId?: string,
     Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+    storage_file_create?: StorageFileCreate,
     options?: any
   ) {
-    return DefaultApiFp(this.configuration).addConnectionSourcefile(
+    return DefaultApiFp(this.configuration).addStorageConnectionSourcefile(
       connectionId,
       Authorization,
-      sourceFile__create,
-      imodelId,
       Accept,
+      storage_file_create,
       options
     )(this.fetch, this.basePath);
   }
 
   /**
-   * ---    Create a new connection    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *connections:modify*.    ### Associated entities    A connection is linked with an iModel.  The iModel id must be provided in the \"iModelId\" query parameter when creating a connection.    ---
-   * @summary Create Connection
-   * @param {string} imodelId iModel Id
-   * @param {string} Authorization OAuth access token with scope &#39;connections:modify&#39;
-   * @param {ConnectionCreate} connection__create
-   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+   * ---    Create a StorageConnection that describes files from Storage to synchronize to the iModel.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:modify`.    ### Associated entities    A connection is linked with an iModel. An iModel ID is required to be set when creating a StorageConnection.    ---
+   * @summary Create StorageConnection
+   * @param {string} Authorization OAuth access token with scope &#x60;synchronization:modify&#x60;
+   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+   * @param {StorageConnectionCreate} [storage_connection_create]
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof DefaultApi
    */
-  public createConnection(
-    imodelId: string,
-    Authorization: string,
-    connection__create: ConnectionCreate,
-    Accept?: "application/vnd.bentley.itwin-platform.v1+json",
-    options?: any
-  ) {
-    return DefaultApiFp(this.configuration).createConnection(
-      imodelId,
-      Authorization,
-      connection__create,
-      Accept,
-      options
-    )(this.fetch, this.basePath);
-  }
-
-  /**
-   * ---    Delete connection    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *connections:modify*.      ---
-   * @summary Delete Connection
-   * @param {string} connectionId
-   * @param {string} imodelId iModel Id
-   * @param {string} Authorization OAuth access token with scope &#39;connections:modify&#39;
-   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof DefaultApi
-   */
-  public deleteConnection(
-    connectionId: string,
-    imodelId: string,
+  public createStorageConnection(
     Authorization: string,
     Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+    storage_connection_create?: StorageConnectionCreate,
     options?: any
   ) {
-    return DefaultApiFp(this.configuration).deleteConnection(
-      connectionId,
-      imodelId,
+    return DefaultApiFp(this.configuration).createStorageConnection(
       Authorization,
       Accept,
+      storage_connection_create,
       options
     )(this.fetch, this.basePath);
   }
 
   /**
-   * ---    Retrieves connection for specified id.    ### Authentication    Requires Authorization header with valid Bearer token for scope *connections:read*.    ---
-   * @summary Get Connection
+   * ---    Delete connection    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:modify`.      ---
+   * @summary Delete StorageConnection
    * @param {string} connectionId
-   * @param {string} imodelId iModel Id
-   * @param {string} Authorization OAuth access token with scope &#39;connections:read&#39;
-   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+   * @param {string} Authorization OAuth access token with scope &#x60;synchronization:modify&#x60;
+   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof DefaultApi
    */
-  public getConnection(
-    connectionId: string,
-    imodelId: string,
-    Authorization: string,
-    Accept?: "application/vnd.bentley.itwin-platform.v1+json",
-    options?: any
-  ) {
-    return DefaultApiFp(this.configuration).getConnection(
-      connectionId,
-      imodelId,
-      Authorization,
-      Accept,
-      options
-    )(this.fetch, this.basePath);
-  }
-
-  /**
-   * ---    Retrieves connection run for specified Id.    ### Authentication    Requires Authorization header with valid Bearer token for scope *connections:read*.    ---
-   * @summary Get Connection Run
-   * @param {string} connectionId
-   * @param {string} runId Run Id
-   * @param {string} Authorization OAuth access token with scope &#39;connections:read&#39;
-   * @param {string} [imodelId] iModel Id
-   * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
-   * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
-   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof DefaultApi
-   */
-  public getConnectionRun(
-    connectionId: string,
-    runId: string,
-    Authorization: string,
-    imodelId?: string,
-    top?: number,
-    skip?: number,
-    Accept?: "application/vnd.bentley.itwin-platform.v1+json",
-    options?: any
-  ) {
-    return DefaultApiFp(this.configuration).getConnectionRun(
-      connectionId,
-      runId,
-      Authorization,
-      imodelId,
-      top,
-      skip,
-      Accept,
-      options
-    )(this.fetch, this.basePath);
-  }
-
-  /**
-   * ---    Retrieves connection runs for specified connection.    ### Notes    The `Prefer` header can be used to specify how much result metadata is desired by the client. The `Prefer` request header field is used to indicate that particular server behaviors are preferred by the client but are not required for successful completion of the request.    This operation supports `\"return=representation\"` and `\"return=minimal\"` preferences.    The `\"return=representation\"` preference indicates that the client prefers that the server include an entity representing the current state of the resource in the response to a successful request.  The `\"return=minimal\"` preference indicates that the client wishes the server to return only a minimal response to a successful request. This is the default preference if `Prefer` header is not specified.    ### Authentication    Requires Authorization header with valid Bearer token for scope *connections:read*.    ---
-   * @summary Get Connection Runs
-   * @param {string} connectionId
-   * @param {string} Authorization OAuth access token with scope &#39;connections:read&#39;
-   * @param {string} [imodelId] iModel Id
-   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof DefaultApi
-   */
-  public getConnectionRuns(
+  public deleteStorageConnection(
     connectionId: string,
     Authorization: string,
-    imodelId?: string,
     Accept?: "application/vnd.bentley.itwin-platform.v1+json",
     options?: any
   ) {
-    return DefaultApiFp(this.configuration).getConnectionRuns(
+    return DefaultApiFp(this.configuration).deleteStorageConnection(
       connectionId,
       Authorization,
-      imodelId,
       Accept,
       options
     )(this.fetch, this.basePath);
   }
 
   /**
-   * ---    Retrieves connection sourceFile for specified Id.    ### Authentication    Requires Authorization header with valid Bearer token for scope *connections:read*.    ---
-   * @summary Get Connection SourceFile
-   * @param {string} connectionId
-   * @param {string} sourceFileId
-   * @param {string} imodelId iModel Id
-   * @param {string} Authorization OAuth access token with scope &#39;connections:read&#39;
-   * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
-   * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
-   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof DefaultApi
-   */
-  public getConnectionSourcefile(
-    connectionId: string,
-    sourceFileId: string,
-    imodelId: string,
-    Authorization: string,
-    top?: number,
-    skip?: number,
-    Accept?: "application/vnd.bentley.itwin-platform.v1+json",
-    options?: any
-  ) {
-    return DefaultApiFp(this.configuration).getConnectionSourcefile(
-      connectionId,
-      sourceFileId,
-      imodelId,
-      Authorization,
-      top,
-      skip,
-      Accept,
-      options
-    )(this.fetch, this.basePath);
-  }
-
-  /**
-   * ---    Retrieves connection sourceFiles for specified Id.    ### Notes    The `Prefer` header can be used to specify how much result metadata is desired by the client. The `Prefer` request header field is used to indicate that particular server behaviors are preferred by the client but are not required for successful completion of the request.    This operation supports `\"return=representation\"` and `\"return=minimal\"` preferences.    The `\"return=representation\"` preference indicates that the client prefers that the server include an entity representing the current state of the resource in the response to a successful request.  The `\"return=minimal\"` preference indicates that the client wishes the server to return only a minimal response to a successful request. This is the default preference if `Prefer` header is not specified.    ### Authentication    Requires Authorization header with valid Bearer token for scope *connections:read*.    ---
-   * @summary Get Connection SourceFiles
-   * @param {string} connectionId
-   * @param {string} Authorization OAuth access token with scope &#39;connections:read&#39;
-   * @param {string} [imodelId] iModel Id
-   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof DefaultApi
-   */
-  public getConnectionSourcefiles(
-    connectionId: string,
-    Authorization: string,
-    imodelId?: string,
-    Accept?: "application/vnd.bentley.itwin-platform.v1+json",
-    options?: any
-  ) {
-    return DefaultApiFp(this.configuration).getConnectionSourcefiles(
-      connectionId,
-      Authorization,
-      imodelId,
-      Accept,
-      options
-    )(this.fetch, this.basePath);
-  }
-
-  /**
-   * ---    Retrieves connections for the specified iModel.    ### Notes    The `Prefer` header can be used to specify how much result metadata is desired by the client. The `Prefer` request header field is used to indicate that particular server behaviors are preferred by the client but are not required for successful completion of the request.    This operation supports `\"return=representation\"` and `\"return=minimal\"` preferences.    The `\"return=representation\"` preference indicates that the client prefers that the server include an entity representing the current state of the resource in the response to a successful request.  The `\"return=minimal\"` preference indicates that the client wishes the server to return only a minimal response to a successful request. This is the default preference if `Prefer` header is not specified.    ### Authentication    Requires Authorization header with valid Bearer token for scope *connections:read*.    ---
+   * ---    Retrieves connections for the specified iModel.    ### Notes    The `Prefer` header can be used to specify how much result metadata is desired by the client. The `Prefer` request header field is used to indicate that particular server behaviors are preferred by the client but are not required for successful completion of the request.    This operation supports `\"return=representation\"` and `\"return=minimal\"` preferences.    The `\"return=representation\"` preference indicates that the client prefers that the server include an entity representing the current state of the resource in the response to a successful request.  The `\"return=minimal\"` preference indicates that the client wishes the server to return only a minimal response to a successful request. This is the default preference if `Prefer` header is not specified.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:read`.    ---
    * @summary Get Connections
    * @param {string} imodelId iModel Id
-   * @param {string} Authorization OAuth access token with scope &#39;connections:read&#39;
+   * @param {string} Authorization OAuth access token with scope &#x60;synchronization:read&#x60;
    * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
    * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
-   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof DefaultApi
@@ -3683,56 +3159,23 @@ export class DefaultApi extends BaseAPI {
   }
 
   /**
-   * ---    Delete connection sourcefile    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *connections:modify*.      ---
-   * @summary Remove Connection SourceFile
-   * @param {string} connectionId Connection Id
-   * @param {string} sourceFileId SourceFile Id
-   * @param {string} imodelId iModel Id
-   * @param {string} Authorization OAuth access token with scope &#39;connections:modify&#39;
-   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof DefaultApi
-   */
-  public removeConnectionSourcefile(
-    connectionId: string,
-    sourceFileId: string,
-    imodelId: string,
-    Authorization: string,
-    Accept?: "application/vnd.bentley.itwin-platform.v1+json",
-    options?: any
-  ) {
-    return DefaultApiFp(this.configuration).removeConnectionSourcefile(
-      connectionId,
-      sourceFileId,
-      imodelId,
-      Authorization,
-      Accept,
-      options
-    )(this.fetch, this.basePath);
-  }
-
-  /**
-   * ---    Runs connection for specified id.    ### Notes    On successful run, operation returns http status code 202/accepted - the request is accepted for processing and will execute in background. It returns location header pointing to the run to check it's status via property 'State'(NotStarted, Idle, WaitingToExecute, WaitingToRetry, Executing, Completed, Queued)  In case there is already an active run in progress for the connection, new run is not initiated, insteaded it returns 303/see other along with location header pointing to the active run. There can only be one active run per connection and another run can be initated only once active run is complete.    ### Authentication    Requires Authorization header with valid Bearer token for scope *connection:modify*.    ---
-   * @summary Run Connection
+   * ---    Retrieves a StorageConnection with the specified ID.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:read`.    ---
+   * @summary Get Storage Connection
    * @param {string} connectionId
-   * @param {string} imodelId iModel Id
-   * @param {string} Authorization OAuth access token with scope &#39;connections:modify&#39;
-   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+   * @param {string} Authorization OAuth access token with scope &#x60;synchronization:read&#x60;
+   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof DefaultApi
    */
-  public runConnection(
+  public getStorageConnection(
     connectionId: string,
-    imodelId: string,
     Authorization: string,
     Accept?: "application/vnd.bentley.itwin-platform.v1+json",
     options?: any
   ) {
-    return DefaultApiFp(this.configuration).runConnection(
+    return DefaultApiFp(this.configuration).getStorageConnection(
       connectionId,
-      imodelId,
       Authorization,
       Accept,
       options
@@ -3740,64 +3183,223 @@ export class DefaultApi extends BaseAPI {
   }
 
   /**
-   * ---    Update an existing connection    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *connections:modify*.    ### Associated entities    A connection is linked with an iModel.  The iModel id must be provided in the \"iModelId\" query parameter when updating a connection.    ---
-   * @summary Update Connection
+   * ---    Retrieves a StorageConnection Run with the specified ID.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:read`.    ---
+   * @summary Get Storage Connection Run
    * @param {string} connectionId
-   * @param {string} imodelId iModel Id
-   * @param {string} Authorization OAuth access token with scope &#39;connections:modify&#39;
-   * @param {ConnectionCreate} connection__create
-   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+   * @param {string} runId Run Id
+   * @param {string} Authorization OAuth access token with scope &#x60;synchronization:read&#x60;
+   * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
+   * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
+   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof DefaultApi
    */
-  public updateConnection(
+  public getStorageConnectionRun(
     connectionId: string,
-    imodelId: string,
+    runId: string,
     Authorization: string,
-    connection__create: ConnectionCreate,
+    top?: number,
+    skip?: number,
     Accept?: "application/vnd.bentley.itwin-platform.v1+json",
     options?: any
   ) {
-    return DefaultApiFp(this.configuration).updateConnection(
+    return DefaultApiFp(this.configuration).getStorageConnectionRun(
       connectionId,
-      imodelId,
+      runId,
       Authorization,
-      connection__create,
+      top,
+      skip,
       Accept,
       options
     )(this.fetch, this.basePath);
   }
 
   /**
-   * ---    Update an existing connection sourceFile    ### Authentication    Requires *Authorization* header with valid Bearer token for scope *connections:modify*.    #### iModelBridgeType    Valid iModelBridgeType values are:    -NotSet  -AFFINITYCHECKER  -MSTN  -AVEVAPID  -AUTOPLANT  -REVIT  -DWG  -SPXREVIEW  -IFC  -SPPID  -AVEVADIAGRAMS  -CIVIL  -CIVIL3D  -GEOSPATIAL  -OBD  -OPENTOWER  -SHELLEDWCSV  -NWD    ### Associated entities  sourceFile is updated to a connection. path must contain valid connection Id    sourceFile associated connection is linked with an iModel.  The iModel id must be provided in the \"iModelId\" parameter when adding a connection sourceFile.    ---
-   * @summary Update Connection SourceFile
+   * ---    Retrieves all Runs for the specified connection.    ### Notes    The `Prefer` header can be used to specify how much result metadata is desired by the client. The `Prefer` request header field is used to indicate that particular server behaviors are preferred by the client but are not required for successful completion of the request.    This operation supports `\"return=representation\"` and `\"return=minimal\"` preferences.    The `\"return=representation\"` preference indicates that the client prefers that the server include an entity representing the current state of the resource in the response to a successful request.  The `\"return=minimal\"` preference indicates that the client wishes the server to return only a minimal response to a successful request. This is the default preference if `Prefer` header is not specified.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:read`.    ---
+   * @summary Get StorageConnection Runs
+   * @param {string} connectionId
+   * @param {string} Authorization OAuth access token with scope &#x60;synchronization:read&#x60;
+   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public getStorageConnectionRuns(
+    connectionId: string,
+    Authorization: string,
+    Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+    options?: any
+  ) {
+    return DefaultApiFp(this.configuration).getStorageConnectionRuns(
+      connectionId,
+      Authorization,
+      Accept,
+      options
+    )(this.fetch, this.basePath);
+  }
+
+  /**
+   * ---    Retrieves StorageConnection's SourceFile with the specified ID.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:read`.    ---
+   * @summary Get StorageConnection SourceFile
    * @param {string} connectionId
    * @param {string} sourceFileId
-   * @param {string} Authorization OAuth access token with scope &#39;connections:modify&#39;
-   * @param {SourceFileCreatebody} sourceFile__create
-   * @param {string} [imodelId] iModel Id
-   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] RECOMMENDED. Request a specific version of iTwin Platform API.
+   * @param {string} Authorization OAuth access token with scope &#x60;synchronization:read&#x60;
+   * @param {number} [top] The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.
+   * @param {number} [skip] The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.
+   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof DefaultApi
    */
-  public updateConnectionSourcefile(
+  public getStorageConnectionSourcefile(
     connectionId: string,
     sourceFileId: string,
     Authorization: string,
-    sourceFile__create: SourceFileCreatebody,
-    imodelId?: string,
+    top?: number,
+    skip?: number,
     Accept?: "application/vnd.bentley.itwin-platform.v1+json",
     options?: any
   ) {
-    return DefaultApiFp(this.configuration).updateConnectionSourcefile(
+    return DefaultApiFp(this.configuration).getStorageConnectionSourcefile(
       connectionId,
       sourceFileId,
       Authorization,
-      sourceFile__create,
-      imodelId,
+      top,
+      skip,
       Accept,
+      options
+    )(this.fetch, this.basePath);
+  }
+
+  /**
+   * ---    Retrieves SourceFiles for specified StorageConnection.    ### Notes    The `Prefer` header can be used to specify how much result metadata is desired by the client. The `Prefer` request header field is used to indicate that particular server behaviors are preferred by the client but are not required for successful completion of the request.    This operation supports `\"return=representation\"` and `\"return=minimal\"` preferences.    The `\"return=representation\"` preference indicates that the client prefers that the server include an entity representing the current state of the resource in the response to a successful request.  The `\"return=minimal\"` preference indicates that the client wishes the server to return only a minimal response to a successful request. This is the default preference if `Prefer` header is not specified.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:read`.    ---
+   * @summary Get StorageConnection SourceFiles
+   * @param {string} connectionId
+   * @param {string} Authorization OAuth access token with scope &#x60;synchronization:read&#x60;
+   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public getStorageConnectionSourcefiles(
+    connectionId: string,
+    Authorization: string,
+    Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+    options?: any
+  ) {
+    return DefaultApiFp(this.configuration).getStorageConnectionSourcefiles(
+      connectionId,
+      Authorization,
+      Accept,
+      options
+    )(this.fetch, this.basePath);
+  }
+
+  /**
+   * ---    Delete StorageConnection SourceFile    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:modify`.      ---
+   * @summary Remove StorageConnection SourceFile
+   * @param {string} connectionId Connection Id
+   * @param {string} sourceFileId SourceFile Id
+   * @param {string} Authorization OAuth access token with scope &#x60;synchronization:modify&#x60;
+   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public removeStorageConnectionSourcefile(
+    connectionId: string,
+    sourceFileId: string,
+    Authorization: string,
+    Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+    options?: any
+  ) {
+    return DefaultApiFp(this.configuration).removeStorageConnectionSourcefile(
+      connectionId,
+      sourceFileId,
+      Authorization,
+      Accept,
+      options
+    )(this.fetch, this.basePath);
+  }
+
+  /**
+   * ---    Runs the specified StorageConnection.    ### Notes    On successful run, operation returns http status code 202/accepted - the request is accepted for processing and will execute in background. It returns location header pointing to the run to check it's status via property 'State'(NotStarted, Idle, WaitingToExecute, WaitingToRetry, Executing, Completed, Queued). In the event that multiple run requests are being made simultaneously, 409/conflict is returned and only the first request is processed. If the run is already initiated and active, a new run is not initiated, instead 303/see other is returned along with location header pointing to the active run. There can only be one active run per iModel and another run can be initated only once the active run is complete.    ### Authentication    Requires Authorization header with valid Bearer token for scope *connection:modify*.    ---
+   * @summary Run StorageConnection
+   * @param {string} connectionId
+   * @param {string} Authorization OAuth access token with scope &#x60;synchronization:modify&#x60;
+   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public runStorageConnection(
+    connectionId: string,
+    Authorization: string,
+    Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+    options?: any
+  ) {
+    return DefaultApiFp(this.configuration).runStorageConnection(
+      connectionId,
+      Authorization,
+      Accept,
+      options
+    )(this.fetch, this.basePath);
+  }
+
+  /**
+   * ---    Update an existing StorageConnection.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:modify`.    ### Associated entities    A connection is linked with an iModel. The iModel ID is required to be set when updating a StorageConnection.    ---
+   * @summary Update StorageConnection
+   * @param {string} connectionId
+   * @param {string} Authorization OAuth access token with scope &#x60;synchronization:modify&#x60;
+   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+   * @param {StorageConnectionCreate} [storage_connection_create]
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public updateStorageConnection(
+    connectionId: string,
+    Authorization: string,
+    Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+    storage_connection_create?: StorageConnectionCreate,
+    options?: any
+  ) {
+    return DefaultApiFp(this.configuration).updateStorageConnection(
+      connectionId,
+      Authorization,
+      Accept,
+      storage_connection_create,
+      options
+    )(this.fetch, this.basePath);
+  }
+
+  /**
+   * ---    Update an existing StorageConnection SourceFile.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `synchronization:modify`.    #### ConnectorType    Valid ConnectorType values are:    -NotSet  -AFFINITYCHECKER  -MSTN  -AVEVAPID  -AUTOPLANT  -REVIT  -DWG  -SPXREVIEW  -IFC  -SPPID  -AVEVADIAGRAMS  -CIVIL  -CIVIL3D  -GEOSPATIAL  -OBD  -OPENTOWER  -SHELLEDWCSV  -NWD    ### Associated entities  SourceFile is related to a Connection. The path must contain a valid Connection ID.    ---
+   * @summary Update StorageConnection SourceFile
+   * @param {string} connectionId
+   * @param {string} sourceFileId
+   * @param {string} Authorization OAuth access token with scope &#x60;synchronization:modify&#x60;
+   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+   * @param {StorageFileCreate} [storage_file_create]
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public updateStorageConnectionSourcefile(
+    connectionId: string,
+    sourceFileId: string,
+    Authorization: string,
+    Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+    storage_file_create?: StorageFileCreate,
+    options?: any
+  ) {
+    return DefaultApiFp(this.configuration).updateStorageConnectionSourcefile(
+      connectionId,
+      sourceFileId,
+      Authorization,
+      Accept,
+      storage_file_create,
       options
     )(this.fetch, this.basePath);
   }

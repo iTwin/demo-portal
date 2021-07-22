@@ -15,10 +15,7 @@ import { useDeleteIModelAction } from "../IModelCRUDRouter/useDeleteIModelAction
 import { useEditIModelAction } from "../IModelCRUDRouter/useEditIModelAction";
 import { useDemoFlags } from "../LaunchDarkly/LaunchDarklyProvider";
 import { useManageVersionsIModelAction } from "../ManageVersionsRouter/useManageVersionsIModelAction";
-import {
-  SynchronizationCardContext,
-  useSynchronizationCards,
-} from "../SynchronizationRouter/useSynchronizationCards";
+import { useSynchronizationCards } from "../SynchronizationRouter/useSynchronizationCards";
 import { useSynchronizeIModelAction } from "../SynchronizationRouter/useSynchronizeIModelAction";
 import { useViewIModelAction } from "../ViewRouter/useViewIModelAction";
 import "./SelectIModel.scss";
@@ -33,7 +30,6 @@ type IModelRouteProps = RouteComponentProps<
       | "delete"
       | "manage-versions"
     )[];
-    email?: string;
   }
 >;
 
@@ -42,7 +38,6 @@ const SelectIModel = ({
   projectId = "",
   navigate,
   hideActions,
-  email,
   ...rest
 }: IModelRouteProps) => {
   const { deleteAction, deleteDialog, refreshKey } = useDeleteIModelAction({
@@ -73,24 +68,22 @@ const SelectIModel = ({
         <ButtonGroup>{createIconButton}</ButtonGroup>
       </div>
       <div className="scrolling-tab-content">
-        <SynchronizationCardContext.Provider value={{ email }}>
-          <IModelGrid
-            useIndividualState={useSynchronizationCards}
-            key={refreshKey}
-            accessToken={accessToken}
-            projectId={projectId}
-            onThumbnailClick={(imodel) => {
-              trackEvent("iModelClicked", { iModel: imodel.id });
-              navigate?.(`imodel/${imodel.id}`);
-            }}
-            iModelActions={actions.filter(
-              (action) => !hideActions?.includes(action.key as any)
-            )}
-            apiOverrides={{ serverEnvironmentPrefix }}
-            {...rest}
-          />
-          {deleteDialog}
-        </SynchronizationCardContext.Provider>
+        <IModelGrid
+          useIndividualState={useSynchronizationCards}
+          key={refreshKey}
+          accessToken={accessToken}
+          projectId={projectId}
+          onThumbnailClick={(imodel) => {
+            trackEvent("iModelClicked", { iModel: imodel.id });
+            navigate?.(`imodel/${imodel.id}`);
+          }}
+          iModelActions={actions.filter(
+            (action) => !hideActions?.includes(action.key as any)
+          )}
+          apiOverrides={{ serverEnvironmentPrefix }}
+          {...rest}
+        />
+        {deleteDialog}
       </div>
     </div>
   );

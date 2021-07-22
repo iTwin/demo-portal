@@ -48,6 +48,25 @@ export class StorageClient {
   }
 
   /**
+   * See {@link FilesApi.getFile} for details.
+   * @param fileId Id of the file to retrieve.
+   * @returns
+   */
+  async getFile(fileId: string, abortSignal?: AbortSignal) {
+    const options = abortSignal
+      ? {
+          signal: abortSignal,
+        }
+      : {};
+    return this.filesApi.getFile(
+      fileId,
+      this.accessToken,
+      "application/vnd.bentley.itwin-platform.v1+json",
+      options
+    );
+  }
+
+  /**
    * See {@link FilesApi.completeFileCreation} for details.
    * @param completeUrl Complete URL returned by the "createFile" api call.
    * @returns Created file

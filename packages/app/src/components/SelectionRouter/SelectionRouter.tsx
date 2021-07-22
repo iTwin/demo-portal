@@ -11,7 +11,6 @@ import SelectProject from "./SelectProject";
 
 interface SelectionRouterProps extends RouteComponentProps {
   accessToken: string;
-  email: string;
   hideIModelActions?: ComponentPropsWithoutRef<
     typeof SelectIModel
   >["hideActions"];
@@ -19,7 +18,6 @@ interface SelectionRouterProps extends RouteComponentProps {
 
 export const SelectionRouter = ({
   accessToken,
-  email,
   hideIModelActions,
 }: SelectionRouterProps) => {
   return (
@@ -28,7 +26,6 @@ export const SelectionRouter = ({
       <Redirect from={"project"} to={"../"} noThrow={true} />
       <SelectIModel
         accessToken={accessToken}
-        email={email}
         path="project/:projectId"
         hideActions={hideIModelActions}
       />

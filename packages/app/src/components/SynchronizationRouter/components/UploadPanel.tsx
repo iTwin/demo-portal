@@ -18,7 +18,6 @@ interface UploadPanelProps {
   iModelId: string;
   projectId: string;
   accessToken: string;
-  email: string;
   onSuccess?: () => void;
 }
 
@@ -34,7 +33,6 @@ export const UploadPanel = ({
   iModelId,
   projectId,
   accessToken,
-  email,
   onSuccess,
 }: UploadPanelProps) => {
   const {
@@ -48,7 +46,6 @@ export const UploadPanel = ({
     iModelId,
     projectId,
     accessToken,
-    email,
   });
 
   const uploadAndRefresh = React.useCallback(

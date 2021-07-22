@@ -10,18 +10,15 @@ import { ManageVersions } from "./ManageVersions";
 
 interface ManageVersionsRouterProps extends RouteComponentProps {
   accessToken: string;
-  email: string;
 }
 
 export const ManageVersionsRouter = ({
   accessToken,
-  email,
 }: ManageVersionsRouterProps) => {
   return (
     <Router className="full-height-container">
       <SelectionRouter
         accessToken={accessToken}
-        email={email}
         path="*"
         hideIModelActions={["manage-versions"]}
       />

@@ -20,13 +20,11 @@ export interface SynchronizeProps extends RouteComponentProps {
   projectId?: string;
   iModelId?: string;
   accessToken: string;
-  email: string;
 }
 export const Synchronize = ({
   iModelId = "",
   projectId = "",
   accessToken,
-  email,
 }: SynchronizeProps) => {
   const {
     connection,
@@ -63,7 +61,6 @@ export const Synchronize = ({
           iModelId={iModelId}
           projectId={projectId}
           accessToken={accessToken}
-          email={email}
           onSuccess={fetchSources}
         />
       </div>
@@ -72,13 +69,12 @@ export const Synchronize = ({
           <ConnectionsTable
             accessToken={accessToken}
             connections={connections}
-            iModelId={iModelId}
             refreshCallback={fetchSources}
           />
           {sources.length > 0 && (
             <>
               <hr />
-              <SourcesTable sources={sources} />
+              <SourcesTable sources={sources} accessToken={accessToken} />
             </>
           )}
         </LastRunContext.Provider>
