@@ -551,6 +551,20 @@ export interface StorageConnection {
 /**
  *
  * @export
+ * @interface StorageConnectionBody
+ */
+export interface StorageConnectionBody {
+  /**
+   *
+   * @type {StorageConnection}
+   * @memberof StorageConnectionBody
+   */
+  connection?: StorageConnection;
+}
+
+/**
+ *
+ * @export
  * @interface StorageConnectionCreate
  */
 export interface StorageConnectionCreate {
@@ -2219,7 +2233,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
       storage_connection_create?: StorageConnectionCreate,
       options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<StorageConnection> {
+    ): (fetch?: FetchAPI, basePath?: string) => Promise<StorageConnectionBody> {
       const localVarFetchArgs = DefaultApiFetchParamCreator(
         configuration
       ).createStorageConnection(

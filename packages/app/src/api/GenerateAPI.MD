@@ -44,3 +44,17 @@ Other option could be to use this command instead once the original files are pr
 ```ps
 docker run --rm -v \"${PWD}/packages/app/src/api:/local\" openapitools/openapi-generator-cli generate -i /local/storage.json -g typescript-fetch -o /local/storage --additional-properties=typescriptThreePlus=true,withoutRuntimeChecks=true
 ```
+
+## Ready to go command lines
+
+### Storage
+
+```ps
+docker run --rm -v "${PWD}/packages/app/src/api/storage:/local" swaggerapi/swagger-codegen-cli generate -i /local/openapi/storageAdjusted.json -l typescript-fetch -o /local/generated --additional-properties=supportsES6=true,modelPropertyNaming=original
+```
+
+### Synchronization
+
+```ps
+docker run --rm -v "${PWD}/packages/app/src/api/synchronization:/local" swaggerapi/swagger-codegen-cli generate -i /local/openapi/synchronizationAdjusted.json -l typescript-fetch -o /local/generated --additional-properties=supportsES6=true,modelPropertyNaming=original
+```

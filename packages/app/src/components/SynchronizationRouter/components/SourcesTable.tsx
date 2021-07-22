@@ -126,7 +126,7 @@ export const SourcesTable = ({ sources, accessToken }: SourcesTableProps) => {
             },
           },
         ],
-        []
+        [accessToken, urlPrefix]
       )}
       emptyTableContent={
         "No file connected, drop file above to create new connections"

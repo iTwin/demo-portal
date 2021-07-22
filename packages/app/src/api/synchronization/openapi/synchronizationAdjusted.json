@@ -783,7 +783,7 @@
           "201": {
             "description": "Connection successfully created.",
             "schema": {
-              "$ref": "#/definitions/StorageConnection"
+              "$ref": "#/definitions/StorageConnection-body"
             },
             "examples": {
               "application/json": "{\r\n  \"connection\": {\r\n    \"id\": \"fc226d0d-1647-48d7-8c11-f1f74f2d9808\",\r\n    \"displayName\": \"30\",\r\n    \"iModelId\": \"7dbd531d-6967-47b2-8945-a722a437ad7a\",\r\n    \"projectId\": \"7dbd531d-6967-47b2-8945-a722a437ad7a\",\r\n    \"_links\": {\r\n      \"iModel\": {\r\n        \"href\": \"https://api.bentley.com/imodels/5db42812-ebb8-4c58-98a4-2eaa99e0d8b6\"\r\n      },\r\n      \"project\": {\r\n        \"href\": \"https://api.bentley.com/projects/4tb42812-ebb8-4c58-98a4-2eaa99e0d8b6\"\r\n      },\r\n      \"lastRunDetails\": {\r\n        \"href\": \"https://api.bentley.com/synchronization/imodels/storageConnections/fc226d0d-1647-48d7-8c11-f1f74f2d9808/runs/de626d0d-1647-48d7-8c11-f1f74f2d4523\"\r\n      }\r\n    }\r\n  }\r\n}"
@@ -1200,6 +1200,14 @@
         "displayName": {
           "description": "",
           "type": "string"
+        }
+      }
+    },
+    "StorageConnection-body": {
+      "type": "object",
+      "properties": {
+        "connection": {
+          "$ref": "#/definitions/StorageConnection"
         }
       }
     },

@@ -223,7 +223,9 @@ export class SynchronizationClient {
     bridgeType: IModelBridgeType
   ) {
     if (!demoConnectionId) {
-      const fileConnection = await this.synchronizationApi.createStorageConnection(
+      const {
+        connection,
+      } = await this.synchronizationApi.createStorageConnection(
         this.accessToken,
         "application/vnd.bentley.itwin-platform.v1+json",
         {
@@ -237,10 +239,10 @@ export class SynchronizationClient {
           ],
         }
       );
-      if (!fileConnection.id) {
+      if (!connection?.id) {
         throw new Error("Connection creation failed");
       }
-      return fileConnection.id;
+      return connection.id;
     }
     const addedFile = await this.synchronizationApi.addStorageConnectionSourcefile(
       demoConnectionId,
