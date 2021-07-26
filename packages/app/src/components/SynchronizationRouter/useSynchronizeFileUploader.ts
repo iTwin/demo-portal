@@ -5,6 +5,7 @@
 import { Alert } from "@itwin/itwinui-react";
 import React, { ComponentPropsWithoutRef } from "react";
 
+import { FileUpload } from "../../api/storage/generated";
 import { StorageClient } from "../../api/storage/storageClient";
 import { SynchronizationClient } from "../../api/synchronization/synchronizationClient";
 import { useApiPrefix } from "../../api/useApiPrefix";
@@ -58,16 +59,17 @@ export const useSynchronizeFileUploader = ({
           );
         }
 
+        let storageFileIdToUpdate: string | undefined;
+
         setStatus("Validating new connection");
         const synchronization = new SynchronizationClient(
           urlPrefix,
           accessToken
         );
         const {
-          connection,
+          connection: demoPortalConnection,
           sourceFiles,
         } = await synchronization.getDemoConnectionAndSourceFiles(iModelId);
-        const demoPortalConnection = connection;
         if (sourceFiles?.length > 0) {
           const sourceFile = sourceFiles.find(
             (file) =>
@@ -75,9 +77,7 @@ export const useSynchronizeFileUploader = ({
               fileName.toLocaleLowerCase()
           );
           if (sourceFile) {
-            throw new Error(
-              `Connection for ${fileName} already exists, update is not supported`
-            );
+            storageFileIdToUpdate = sourceFile.storageFileId;
           }
         }
 
@@ -92,11 +92,18 @@ export const useSynchronizeFileUploader = ({
           true
         );
 
-        setStatus("Creating file target");
-        const fileUpload = await storage.createFile(iModelFolderId, {
-          description: "Demo-portal connection file",
-          displayName: fileName,
-        });
+        let fileUpload: FileUpload;
+
+        if (storageFileIdToUpdate) {
+          setStatus("Getting file target");
+          fileUpload = await storage.updateFile(storageFileIdToUpdate);
+        } else {
+          setStatus("Creating file target");
+          fileUpload = await storage.createFile(iModelFolderId, {
+            description: "Demo-portal connection file",
+            displayName: fileName,
+          });
+        }
 
         setStep(3);
         setStatus("Uploading file");
@@ -106,7 +113,9 @@ export const useSynchronizeFileUploader = ({
         }
         await storage.uploadFileWithProgress(uploadTarget, target, setProgress);
 
-        setStatus("Completing file creation");
+        setStatus(
+          `Completing file ${storageFileIdToUpdate ? "upload" : "creation"}`
+        );
         const file = await storage.completeFileCreation(
           fileUpload._links?.completeUrl?.href
         );
@@ -115,13 +124,16 @@ export const useSynchronizeFileUploader = ({
         }
 
         setStep(4);
-        setStatus("Connecting file to iModel");
-        const connectionId = await synchronization.addFileToDemoConnection(
-          iModelId,
-          demoPortalConnection?.id,
-          file.file.id,
-          bridgeType
-        );
+        let connectionId = demoPortalConnection?.id ?? "";
+        if (!storageFileIdToUpdate) {
+          setStatus("Connecting file to iModel");
+          connectionId = await synchronization.addFileToDemoConnection(
+            iModelId,
+            demoPortalConnection?.id,
+            file.file.id,
+            bridgeType
+          );
+        }
 
         //Disabled at the moment, the connection is not "Working" at this point, owner need to be updated.
         setStatus("Running the connection");

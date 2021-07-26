@@ -5,22 +5,18 @@
 import { Table } from "@itwin/itwinui-react";
 import React from "react";
 
-import { StorageClient } from "../../../api/storage/storageClient";
 import { StorageFile } from "../../../api/synchronization/generated";
 import { SynchronizationClient } from "../../../api/synchronization/synchronizationClient";
-import { useApiPrefix } from "../../../api/useApiPrefix";
 import { CreateTypeFromInterface } from "../../../utils";
 import { LastRunContext } from "../Synchronize";
 import { BridgeIcon } from "./BridgeIcon";
 import { SkeletonCell } from "./SkeletonCell";
 
 interface SourcesTableProps {
-  accessToken: string;
   sources: StorageFile[];
 }
 
-export const SourcesTable = ({ sources, accessToken }: SourcesTableProps) => {
-  const urlPrefix = useApiPrefix();
+export const SourcesTable = ({ sources }: SourcesTableProps) => {
   return (
     <Table<CreateTypeFromInterface<StorageFile>>
       data={sources}
@@ -47,28 +43,7 @@ export const SourcesTable = ({ sources, accessToken }: SourcesTableProps) => {
           },
           {
             accessor: "lastKnownFileName",
-            Cell: (props) => {
-              const [value, setValue] = React.useState(props.value);
-              React.useEffect(() => {
-                if (!props.value && props.row.original.storageFileId) {
-                  const abortController = new AbortController();
-                  const client = new StorageClient(urlPrefix, accessToken);
-                  client
-                    .getFile(
-                      props.row.original.storageFileId,
-                      abortController.signal
-                    )
-                    .then((file) => {
-                      setValue(file.file?.displayName);
-                    })
-                    .catch(() => {
-                      // value already empty.
-                    });
-                  return () => abortController.abort();
-                }
-              }, [props.row.original.storageFileId, props.value]);
-              return <SkeletonCell {...props}>{value}</SkeletonCell>;
-            },
+            Cell: SkeletonCell,
           },
           {
             id: "state",
@@ -126,7 +101,7 @@ export const SourcesTable = ({ sources, accessToken }: SourcesTableProps) => {
             },
           },
         ],
-        [accessToken, urlPrefix]
+        []
       )}
       emptyTableContent={
         "No file connected, drop file above to create new connections"

@@ -88,19 +88,19 @@ export class RequiredError extends Error {
 }
 
 /**
- *
+ * Error representation.
  * @export
  * @interface Error
  */
 export interface Error {
   /**
-   *
+   * Error message.
    * @type {string}
    * @memberof Error
    */
   message?: string;
   /**
-   *
+   * Error code.
    * @type {string}
    * @memberof Error
    */
@@ -114,81 +114,81 @@ export interface Error {
  */
 export interface File {
   /**
-   *
+   * Unique Identifier of the file.
    * @type {string}
    * @memberof File
    */
   id?: string;
   /**
-   *
+   * Display name of the file.
    * @type {string}
    * @memberof File
    */
   displayName?: string;
   /**
-   *
+   * Description of the file.
    * @type {string}
    * @memberof File
    */
   description?: string;
   /**
-   *
+   * Absolute path to the file.
    * @type {string}
    * @memberof File
    */
   path?: string;
   /**
-   *
+   * Size to the file in bytes.
    * @type {number}
    * @memberof File
    */
   size?: number;
   /**
-   *
+   * Display name of the user who modified file last.
    * @type {string}
    * @memberof File
    */
-  createdBy?: string;
+  lastModifiedByDisplayName?: string;
   /**
-   *
-   * @type {string}
-   * @memberof File
-   */
-  lastModifiedBy?: string;
-  /**
-   *
+   * Date when the file was created.
    * @type {string}
    * @memberof File
    */
   createdDateTime?: string;
   /**
-   *
+   * Date when the file was last time modified.
    * @type {string}
    * @memberof File
    */
   lastModifiedDateTime?: string;
   /**
-   *
+   * Unique Identifier of the parent folder.
    * @type {string}
    * @memberof File
    */
   parentFolderId?: string;
+  /**
+   *
+   * @type {LinksItem}
+   * @memberof File
+   */
+  _links?: LinksItem;
 }
 
 /**
- *
+ * Model for file creation.
  * @export
  * @interface FileCreate
  */
 export interface FileCreate {
   /**
-   *
+   * Display name of the file.
    * @type {string}
    * @memberof FileCreate
    */
-  displayName?: string;
+  displayName: string;
   /**
-   *
+   * Description of the file.
    * @type {string}
    * @memberof FileCreate
    */
@@ -196,15 +196,15 @@ export interface FileCreate {
 }
 
 /**
- *
+ * Retrieved file response containing file.
  * @export
- * @interface FileResult
+ * @interface FileResponse
  */
-export interface FileResult {
+export interface FileResponse {
   /**
    *
    * @type {FileTyped}
-   * @memberof FileResult
+   * @memberof FileResponse
    */
   file?: FileTyped;
 }
@@ -216,87 +216,101 @@ export interface FileResult {
  */
 export interface FileTyped {
   /**
-   *
+   * Unique Identifier of the file.
    * @type {string}
    * @memberof FileTyped
    */
   id?: string;
   /**
-   *
+   * Identification of the file entity.
    * @type {string}
    * @memberof FileTyped
    */
-  type?: string;
+  type?: FileTyped.TypeEnum;
   /**
-   *
+   * Display name of the file.
    * @type {string}
    * @memberof FileTyped
    */
   displayName?: string;
   /**
-   *
+   * Description of the file.
    * @type {string}
    * @memberof FileTyped
    */
   description?: string;
   /**
-   *
+   * Absolute path to the file.
    * @type {string}
    * @memberof FileTyped
    */
   path?: string;
   /**
-   *
+   * Size to the file in bytes.
    * @type {number}
    * @memberof FileTyped
    */
   size?: number;
   /**
-   *
+   * Display name of the user who modified file last.
    * @type {string}
    * @memberof FileTyped
    */
-  createdBy?: string;
+  lastModifiedByDisplayName?: string;
   /**
-   *
-   * @type {string}
-   * @memberof FileTyped
-   */
-  lastModifiedBy?: string;
-  /**
-   *
+   * Date when the file was created.
    * @type {string}
    * @memberof FileTyped
    */
   createdDateTime?: string;
   /**
-   *
+   * Date when the file was last time modified.
    * @type {string}
    * @memberof FileTyped
    */
   lastModifiedDateTime?: string;
   /**
-   *
+   * Unique Identifier of the parent folder.
    * @type {string}
    * @memberof FileTyped
    */
   parentFolderId?: string;
+  /**
+   *
+   * @type {LinksItem}
+   * @memberof FileTyped
+   */
+  _links?: LinksItem;
 }
 
 /**
- *
+ * @export
+ * @namespace FileTyped
+ */
+export namespace FileTyped {
+  /**
+   * @export
+   * @enum {string}
+   */
+  export enum TypeEnum {
+    File = <any>"file",
+  }
+}
+
+/**
+ * Model for file update.
  * @export
  * @interface FileUpdate
  */
 export interface FileUpdate {
   /**
-   *
+   * Display name of the file.
    * @type {string}
    * @memberof FileUpdate
    */
   displayName?: string;
   /**
-   *
+   * Description of the file.
    * @type {string}
    * @memberof FileUpdate
    */
@@ -304,7 +318,7 @@ export interface FileUpdate {
 }
 
 /**
- *
+ * Model for file upload.
  * @export
  * @interface FileUpload
  */
@@ -318,17 +332,17 @@ export interface FileUpload {
 }
 
 /**
- *
+ * List of files.
  * @export
  * @interface Files
  */
 export interface Files {
   /**
    *
-   * @type {Array<any>}
+   * @type {Array<FileTyped>}
    * @memberof Files
    */
-  files?: Array<any>;
+  files?: Array<FileTyped>;
   /**
    *
    * @type {LinksPaging}
@@ -338,81 +352,81 @@ export interface Files {
 }
 
 /**
- *
+ * Full representation of the folder.
  * @export
  * @interface Folder
  */
 export interface Folder {
   /**
-   *
+   * Unique Identifier of the folder.
    * @type {string}
    * @memberof Folder
    */
   id?: string;
   /**
-   *
+   * Display name of the folder.
    * @type {string}
    * @memberof Folder
    */
   displayName?: string;
   /**
-   *
+   * Description of the folder.
    * @type {string}
    * @memberof Folder
    */
   description?: string;
   /**
-   *
+   * Absolute path to the folder.
    * @type {string}
    * @memberof Folder
    */
   path?: string;
   /**
-   *
+   * Display name of the user who modified folder last.
    * @type {string}
    * @memberof Folder
    */
-  createdBy?: string;
+  lastModifiedByDisplayName?: string;
   /**
-   *
-   * @type {string}
-   * @memberof Folder
-   */
-  lastModifiedBy?: string;
-  /**
-   *
+   * Date when the folder was created.
    * @type {string}
    * @memberof Folder
    */
   createdDateTime?: string;
   /**
-   *
+   * Date when the folder was last time modified.
    * @type {string}
    * @memberof Folder
    */
   lastModifiedDateTime?: string;
   /**
-   *
+   * Unique Identifier of the parent folder.
    * @type {string}
    * @memberof Folder
    */
   parentFolderId?: string;
+  /**
+   *
+   * @type {LinksItem}
+   * @memberof Folder
+   */
+  _links?: LinksItem;
 }
 
 /**
- *
+ * Model for folder creation.
  * @export
  * @interface FolderCreate
  */
 export interface FolderCreate {
   /**
-   *
+   * Display name of the folder.
    * @type {string}
    * @memberof FolderCreate
    */
-  displayName?: string;
+  displayName: string;
   /**
-   *
+   * Description of the folder.
    * @type {string}
    * @memberof FolderCreate
    */
@@ -420,101 +434,115 @@ export interface FolderCreate {
 }
 
 /**
- *
+ * Retrieved folder response containing folder.
  * @export
- * @interface FolderResult
+ * @interface FolderResponse
  */
-export interface FolderResult {
+export interface FolderResponse {
   /**
    *
-   * @type {FolderTyped}
-   * @memberof FolderResult
+   * @type {Folder}
+   * @memberof FolderResponse
    */
-  folder?: FolderTyped;
+  folder?: Folder;
 }
 
 /**
- *
+ * Full representation of the folder with folder type.
  * @export
  * @interface FolderTyped
  */
 export interface FolderTyped {
   /**
-   *
+   * Unique Identifier of the folder.
    * @type {string}
    * @memberof FolderTyped
    */
   id?: string;
   /**
-   *
+   * Identification of the folder entity.
    * @type {string}
    * @memberof FolderTyped
    */
-  type?: string;
+  type?: FolderTyped.TypeEnum;
   /**
-   *
+   * Display name of the folder.
    * @type {string}
    * @memberof FolderTyped
    */
   displayName?: string;
   /**
-   *
+   * Description of the folder.
    * @type {string}
    * @memberof FolderTyped
    */
   description?: string;
   /**
-   *
+   * Absolute path to the folder.
    * @type {string}
    * @memberof FolderTyped
    */
   path?: string;
   /**
-   *
+   * Display name of the user who modified folder last.
    * @type {string}
    * @memberof FolderTyped
    */
-  createdBy?: string;
+  lastModifiedByDisplayName?: string;
   /**
-   *
-   * @type {string}
-   * @memberof FolderTyped
-   */
-  lastModifiedBy?: string;
-  /**
-   *
+   * Date when the folder was created.
    * @type {string}
    * @memberof FolderTyped
    */
   createdDateTime?: string;
   /**
-   *
+   * Date when the folder was last time modified.
    * @type {string}
    * @memberof FolderTyped
    */
   lastModifiedDateTime?: string;
   /**
-   *
+   * Unique Identifier of the parent folder.
    * @type {string}
    * @memberof FolderTyped
    */
   parentFolderId?: string;
+  /**
+   *
+   * @type {LinksItem}
+   * @memberof FolderTyped
+   */
+  _links?: LinksItem;
 }
 
 /**
- *
+ * @export
+ * @namespace FolderTyped
+ */
+export namespace FolderTyped {
+  /**
+   * @export
+   * @enum {string}
+   */
+  export enum TypeEnum {
+    Folder = <any>"folder",
+  }
+}
+
+/**
+ * Model for folder update.
  * @export
  * @interface FolderUpdate
  */
 export interface FolderUpdate {
   /**
-   *
+   * Display name of the folder.
    * @type {string}
    * @memberof FolderUpdate
    */
   displayName?: string;
   /**
-   *
+   * Description of the folder.
    * @type {string}
    * @memberof FolderUpdate
    */
@@ -522,13 +550,13 @@ export interface FolderUpdate {
 }
 
 /**
- *
+ * List of folders.
  * @export
  * @interface Folders
  */
 export interface Folders {
   /**
-   *
+   * List of folders.
    * @type {Array<Folder>}
    * @memberof Folders
    */
@@ -542,13 +570,13 @@ export interface Folders {
 }
 
 /**
- *
+ * List of folders and files.
  * @export
  * @interface Items
  */
 export interface Items {
   /**
-   *
+   * List of folders and files.
    * @type {Array<any>}
    * @memberof Items
    */
@@ -564,11 +592,31 @@ export interface Items {
 /**
  *
  * @export
+ * @interface ItemsWithFolderLink
+ */
+export interface ItemsWithFolderLink {
+  /**
+   *
+   * @type {Array<any>}
+   * @memberof ItemsWithFolderLink
+   */
+  items?: Array<any>;
+  /**
+   *
+   * @type {LinksPagingWithFolderLink}
+   * @memberof ItemsWithFolderLink
+   */
+  _links?: LinksPagingWithFolderLink;
+}
+
+/**
+ * Hyperlink container.
+ * @export
  * @interface Link
  */
 export interface Link {
   /**
-   *
+   * Hyperlink to the specific entity.
    * @type {string}
    * @memberof Link
    */
@@ -576,7 +624,33 @@ export interface Link {
 }
 
 /**
- *
+ * URLs for accessing users' details and parent folder.
+ * @export
+ * @interface LinksItem
+ */
+export interface LinksItem {
+  /**
+   *
+   * @type {Link}
+   * @memberof LinksItem
+   */
+  createdBy?: Link;
+  /**
+   *
+   * @type {Link}
+   * @memberof LinksItem
+   */
+  lastModifiedBy?: Link;
+  /**
+   *
+   * @type {Link}
+   * @memberof LinksItem
+   */
+  parentFolder?: Link;
+}
+
+/**
+ * URLs for redoing the current request, getting to the previous or next page of results, if applicable containg.
  * @export
  * @interface LinksPaging
  */
@@ -602,7 +676,39 @@ export interface LinksPaging {
 }
 
 /**
- *
+ * URLs for redoing the current request, getting to the previous or next page of results, if applicable containg, and retrieving root folder.
+ * @export
+ * @interface LinksPagingWithFolderLink
+ */
+export interface LinksPagingWithFolderLink {
+  /**
+   *
+   * @type {Link}
+   * @memberof LinksPagingWithFolderLink
+   */
+  self?: Link;
+  /**
+   *
+   * @type {Link}
+   * @memberof LinksPagingWithFolderLink
+   */
+  next?: Link;
+  /**
+   *
+   * @type {Link}
+   * @memberof LinksPagingWithFolderLink
+   */
+  prev?: Link;
+  /**
+   *
+   * @type {Link}
+   * @memberof LinksPagingWithFolderLink
+   */
+  folder?: Link;
+}
+
+/**
+ * Hyperlinks for further file upload and confirmation.
  * @export
  * @interface LinksUpload
  */
@@ -622,7 +728,7 @@ export interface LinksUpload {
 }
 
 /**
- *
+ * Minimal error representation.
  * @export
  * @interface MinimalError
  */
@@ -636,58 +742,6 @@ export interface MinimalError {
 }
 
 /**
- *
- * @export
- * @interface TopItems
- */
-export interface TopItems {
-  /**
-   *
-   * @type {Array<any>}
-   * @memberof TopItems
-   */
-  items?: Array<any>;
-  /**
-   *
-   * @type {TopLinksPaging}
-   * @memberof TopItems
-   */
-  _links?: TopLinksPaging;
-}
-
-/**
- *
- * @export
- * @interface TopLinksPaging
- */
-export interface TopLinksPaging {
-  /**
-   *
-   * @type {Link}
-   * @memberof TopLinksPaging
-   */
-  self?: Link;
-  /**
-   *
-   * @type {Link}
-   * @memberof TopLinksPaging
-   */
-  next?: Link;
-  /**
-   *
-   * @type {Link}
-   * @memberof TopLinksPaging
-   */
-  prev?: Link;
-  /**
-   *
-   * @type {Link}
-   * @memberof TopLinksPaging
-   */
-  folder?: Link;
-}
-
-/**
  * FilesApi - fetch parameter creator
  * @export
  */
@@ -696,8 +750,8 @@ export const FilesApiFetchParamCreator = function(
 ) {
   return {
     /**
-     * ---    Complete file creation    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
-     * @summary Complete file creation
+     * ---    Complete file creation    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_write` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
+     * @summary Complete file upload
      * @param {string} fileId File Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
      * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
@@ -792,7 +846,7 @@ export const FilesApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Create new file    ### Notes    File creation is three steps operation. This request will create file's meta data. Next two requests need to be executed by using links from the response.    - uploadUrl is required for file upload. Upload can be done by sending http request and specifying x-ms-blob-type header to BlockBlob.  - completeUrl should be used to confirm file upload and it is final request for file creation.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Errors    This request can return InvalidCreateFileRequest error with 422 status code. This could happen because of these reasons:    - File name contains invalid characters.  - File name's length is larger than 255 characters.  - File could be harmful. For example, executable files are not accepted.    ---
+     * ---    Create new file    ### Notes    File creation is three steps operation. This request will create file's meta data. Next two requests need to be executed by using links from the response. Maximum file size to upload with single request is **256 MiB**. If bigger file needs to be uploaded there are possibility to use Azure libraries to upload file via given Azure SAS url or by uploading file with [multiple requests](https://docs.microsoft.com/en-us/rest/api/storageservices/operations-on-block-blobs).    - **uploadUrl** is required for file upload. Upload can be done by sending http request and specifying x-ms-blob-type header to BlockBlob.  - **completeUrl** should be used to confirm file upload and it is final request for file creation.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_write` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ### Errors    This request can return InvalidCreateFileRequest error with 422 status code. This could happen because of these reasons:    - File name contains invalid characters.  - File name's length is larger than 255 characters.  - File could be harmful. For example, executable files are not accepted.    ---
      * @summary Create file
      * @param {string} folderId Folder Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
@@ -898,7 +952,7 @@ export const FilesApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Delete a file    ### Notes    File moved to the recycle bin will be completely removed after 30 days.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
+     * ---    Delete a file    ### Notes    File moved to the recycle bin will be completely removed after 30 days.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_delete` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Delete file
      * @param {string} fileId File Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
@@ -997,7 +1051,7 @@ export const FilesApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Delete a file from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
+     * ---    Delete a file from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_delete` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Delete file from recycle bin
      * @param {string} fileId File Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
@@ -1096,18 +1150,18 @@ export const FilesApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Retrieves file    ### Notes    This endpoint returns 302 status code with Location header, which on success contains a link to the file. Redirection is not supported by developer portal and an error could be returned while using the \"Try it\" feature for this API. However, this endpoint will work if a request is sent from a different http client or by using the link specified in the response Location header.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * ---    Retrieves file    ### Notes    This endpoint returns 302 status code with Location header, which on success contains a link to the file. Redirection is not supported by developer portal and an error could be returned while using the \"Try it\" feature for this API. However, this endpoint will work if a request is sent from a different http client or by using the link specified in the response Location header.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Download file
      * @param {string} fileId File Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {'application/vnd.bentley.itwin-platform.v1+octet-stream'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+octet-stream&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     downloadFile(
       fileId: string,
       Authorization: string,
-      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+      Accept?: "application/vnd.bentley.itwin-platform.v1+octet-stream",
       options: any = {}
     ): FetchArgs {
       // verify required parameter 'fileId' is not null or undefined
@@ -1192,7 +1246,7 @@ export const FilesApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Retrieves file    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * ---    Retrieves file    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Get file
      * @param {string} fileId File Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
@@ -1288,7 +1342,7 @@ export const FilesApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Retrieves files    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * ---    Retrieves files    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Get files in folder
      * @param {string} folderId Folder Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
@@ -1396,7 +1450,7 @@ export const FilesApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Retrieves files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * ---    Retrieves files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Get folders and files in folder
      * @param {string} folderId Folder Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
@@ -1504,7 +1558,7 @@ export const FilesApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Get deleted files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * ---    Get deleted files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Get folders and files in recycle bin
      * @param {string} projectId Project Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
@@ -1613,7 +1667,7 @@ export const FilesApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Retrieves top level files and folders by project    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * ---    Retrieves top level files and folders by project    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Get top level folders and files by project
      * @param {string} projectId Project Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
@@ -1722,7 +1776,7 @@ export const FilesApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Restore deleted file from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
+     * ---    Restore deleted file from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_delete` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Restore file
      * @param {string} fileId File Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
@@ -1818,7 +1872,7 @@ export const FilesApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Finds files and folders in folder by name    ### Notes    This query supports wildcard characters in the name parameter    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * ---    Finds files and folders in folder by name    ### Notes    This query supports wildcard characters in the name parameter    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Search for folders and files in folder
      * @param {string} folderId Folder Id
      * @param {string} name Item name
@@ -1939,7 +1993,7 @@ export const FilesApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Update file    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Errors    This request can return InvalidCreateFileRequest error with 422 status code. This could happen because of these reasons:    - File name contains invalid characters.  - File name's length is larger than 255 characters.  - File could be harmful. For example, executable files are not accepted.    ---
+     * ---    Update file    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_write` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ### Errors    This request can return InvalidCreateFileRequest error with 422 status code. This could happen because of these reasons:    - File name contains invalid characters.  - File name's length is larger than 255 characters.  - File could be harmful. For example, executable files are not accepted.    ---
      * @summary Update file
      * @param {string} fileId File Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
@@ -2047,6 +2101,102 @@ export const FilesApiFetchParamCreator = function(
         options: localVarRequestOptions,
       };
     },
+    /**
+     * ---    Update file's content    ### Notes    File update is three steps operation. This request creates hyperlinks for file content update and confirmation. Next two requests need to be executed by using links from the response. Maximum file size to upload with single request is **256 MiB**. If bigger files needs to uploaded there are possibility to use Azure libraries or by uploading file with [multiple requests](https://docs.microsoft.com/en-us/rest/api/storageservices/operations-on-block-blobs).    - **uploadUrl** is required for file upload. Upload can be done by sending http request and specifying x-ms-blob-type header to BlockBlob.  - **completeUrl** should be used to confirm file upload and it is final request for file creation.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_write` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
+     * @summary Update file content
+     * @param {string} fileId File Id
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updateFileContent(
+      fileId: string,
+      Authorization: string,
+      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+      options: any = {}
+    ): FetchArgs {
+      // verify required parameter 'fileId' is not null or undefined
+      if (fileId === null || fileId === undefined) {
+        throw new RequiredError(
+          "fileId",
+          "Required parameter fileId was null or undefined when calling updateFileContent."
+        );
+      }
+      // verify required parameter 'Authorization' is not null or undefined
+      if (Authorization === null || Authorization === undefined) {
+        throw new RequiredError(
+          "Authorization",
+          "Required parameter Authorization was null or undefined when calling updateFileContent."
+        );
+      }
+      const localVarPath = `/files/{fileId}/updateContent`.replace(
+        `{${"fileId"}}`,
+        encodeURIComponent(String(fileId))
+      );
+      const localVarUrlObj = url.parse(localVarPath, true);
+      const localVarRequestOptions = Object.assign({ method: "POST" }, options);
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication apiKeyHeader required
+      if (configuration && configuration.apiKey) {
+        const localVarApiKeyValue =
+          typeof configuration.apiKey === "function"
+            ? configuration.apiKey("X-Api-Subscription-Key")
+            : configuration.apiKey;
+        localVarHeaderParameter["X-Api-Subscription-Key"] = localVarApiKeyValue;
+      }
+
+      // authentication apiKeyQuery required
+      if (configuration && configuration.apiKey) {
+        const localVarApiKeyValue =
+          typeof configuration.apiKey === "function"
+            ? configuration.apiKey("apikey")
+            : configuration.apiKey;
+        localVarQueryParameter["apikey"] = localVarApiKeyValue;
+      }
+
+      // authentication oauth2Bentley OAuth2 Service required
+      // oauth required
+      if (configuration && configuration.accessToken) {
+        const localVarAccessTokenValue =
+          typeof configuration.accessToken === "function"
+            ? configuration.accessToken("oauth2Bentley OAuth2 Service", [
+                "storage:read storage:modify",
+              ])
+            : configuration.accessToken;
+        localVarHeaderParameter["Authorization"] =
+          "Bearer " + localVarAccessTokenValue;
+      }
+
+      if (Authorization !== undefined && Authorization !== null) {
+        localVarHeaderParameter["Authorization"] = String(Authorization);
+      }
+
+      if (Accept !== undefined && Accept !== null) {
+        localVarHeaderParameter["Accept"] = String(Accept);
+      }
+
+      localVarUrlObj.query = Object.assign(
+        {},
+        localVarUrlObj.query,
+        localVarQueryParameter,
+        options.query
+      );
+      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+      delete localVarUrlObj.search;
+      localVarRequestOptions.headers = Object.assign(
+        {},
+        localVarHeaderParameter,
+        options.headers
+      );
+
+      return {
+        url: url.format(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
   };
 };
 
@@ -2057,8 +2207,8 @@ export const FilesApiFetchParamCreator = function(
 export const FilesApiFp = function(configuration?: Configuration) {
   return {
     /**
-     * ---    Complete file creation    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
-     * @summary Complete file creation
+     * ---    Complete file creation    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_write` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
+     * @summary Complete file upload
      * @param {string} fileId File Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
      * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
@@ -2070,7 +2220,7 @@ export const FilesApiFp = function(configuration?: Configuration) {
       Authorization: string,
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
       options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<FileResult> {
+    ): (fetch?: FetchAPI, basePath?: string) => Promise<FileResponse> {
       const localVarFetchArgs = FilesApiFetchParamCreator(
         configuration
       ).completeFileCreation(fileId, Authorization, Accept, options);
@@ -2091,7 +2241,7 @@ export const FilesApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Create new file    ### Notes    File creation is three steps operation. This request will create file's meta data. Next two requests need to be executed by using links from the response.    - uploadUrl is required for file upload. Upload can be done by sending http request and specifying x-ms-blob-type header to BlockBlob.  - completeUrl should be used to confirm file upload and it is final request for file creation.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Errors    This request can return InvalidCreateFileRequest error with 422 status code. This could happen because of these reasons:    - File name contains invalid characters.  - File name's length is larger than 255 characters.  - File could be harmful. For example, executable files are not accepted.    ---
+     * ---    Create new file    ### Notes    File creation is three steps operation. This request will create file's meta data. Next two requests need to be executed by using links from the response. Maximum file size to upload with single request is **256 MiB**. If bigger file needs to be uploaded there are possibility to use Azure libraries to upload file via given Azure SAS url or by uploading file with [multiple requests](https://docs.microsoft.com/en-us/rest/api/storageservices/operations-on-block-blobs).    - **uploadUrl** is required for file upload. Upload can be done by sending http request and specifying x-ms-blob-type header to BlockBlob.  - **completeUrl** should be used to confirm file upload and it is final request for file creation.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_write` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ### Errors    This request can return InvalidCreateFileRequest error with 422 status code. This could happen because of these reasons:    - File name contains invalid characters.  - File name's length is larger than 255 characters.  - File could be harmful. For example, executable files are not accepted.    ---
      * @summary Create file
      * @param {string} folderId Folder Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
@@ -2127,7 +2277,7 @@ export const FilesApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Delete a file    ### Notes    File moved to the recycle bin will be completely removed after 30 days.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
+     * ---    Delete a file    ### Notes    File moved to the recycle bin will be completely removed after 30 days.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_delete` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Delete file
      * @param {string} fileId File Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
@@ -2161,7 +2311,7 @@ export const FilesApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Delete a file from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
+     * ---    Delete a file from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_delete` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Delete file from recycle bin
      * @param {string} fileId File Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
@@ -2195,18 +2345,18 @@ export const FilesApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Retrieves file    ### Notes    This endpoint returns 302 status code with Location header, which on success contains a link to the file. Redirection is not supported by developer portal and an error could be returned while using the \"Try it\" feature for this API. However, this endpoint will work if a request is sent from a different http client or by using the link specified in the response Location header.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * ---    Retrieves file    ### Notes    This endpoint returns 302 status code with Location header, which on success contains a link to the file. Redirection is not supported by developer portal and an error could be returned while using the \"Try it\" feature for this API. However, this endpoint will work if a request is sent from a different http client or by using the link specified in the response Location header.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Download file
      * @param {string} fileId File Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {'application/vnd.bentley.itwin-platform.v1+octet-stream'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+octet-stream&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     downloadFile(
       fileId: string,
       Authorization: string,
-      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+      Accept?: "application/vnd.bentley.itwin-platform.v1+octet-stream",
       options?: any
     ): (fetch?: FetchAPI, basePath?: string) => Promise<Response> {
       const localVarFetchArgs = FilesApiFetchParamCreator(
@@ -2229,7 +2379,7 @@ export const FilesApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Retrieves file    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * ---    Retrieves file    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Get file
      * @param {string} fileId File Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
@@ -2242,7 +2392,7 @@ export const FilesApiFp = function(configuration?: Configuration) {
       Authorization: string,
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
       options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<FileResult> {
+    ): (fetch?: FetchAPI, basePath?: string) => Promise<FileResponse> {
       const localVarFetchArgs = FilesApiFetchParamCreator(
         configuration
       ).getFile(fileId, Authorization, Accept, options);
@@ -2263,7 +2413,7 @@ export const FilesApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Retrieves files    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * ---    Retrieves files    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Get files in folder
      * @param {string} folderId Folder Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
@@ -2301,7 +2451,7 @@ export const FilesApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Retrieves files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * ---    Retrieves files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Get folders and files in folder
      * @param {string} folderId Folder Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
@@ -2346,7 +2496,7 @@ export const FilesApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Get deleted files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * ---    Get deleted files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Get folders and files in recycle bin
      * @param {string} projectId Project Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
@@ -2391,7 +2541,7 @@ export const FilesApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Retrieves top level files and folders by project    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * ---    Retrieves top level files and folders by project    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Get top level folders and files by project
      * @param {string} projectId Project Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
@@ -2408,7 +2558,7 @@ export const FilesApiFp = function(configuration?: Configuration) {
       skip?: number,
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
       options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<TopItems> {
+    ): (fetch?: FetchAPI, basePath?: string) => Promise<ItemsWithFolderLink> {
       const localVarFetchArgs = FilesApiFetchParamCreator(
         configuration
       ).getTopLevelFoldersAndFilesByProject(
@@ -2436,7 +2586,7 @@ export const FilesApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Restore deleted file from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
+     * ---    Restore deleted file from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_delete` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Restore file
      * @param {string} fileId File Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
@@ -2470,7 +2620,7 @@ export const FilesApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Finds files and folders in folder by name    ### Notes    This query supports wildcard characters in the name parameter    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * ---    Finds files and folders in folder by name    ### Notes    This query supports wildcard characters in the name parameter    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Search for folders and files in folder
      * @param {string} folderId Folder Id
      * @param {string} name Item name
@@ -2518,7 +2668,7 @@ export const FilesApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Update file    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Errors    This request can return InvalidCreateFileRequest error with 422 status code. This could happen because of these reasons:    - File name contains invalid characters.  - File name's length is larger than 255 characters.  - File could be harmful. For example, executable files are not accepted.    ---
+     * ---    Update file    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_write` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ### Errors    This request can return InvalidCreateFileRequest error with 422 status code. This could happen because of these reasons:    - File name contains invalid characters.  - File name's length is larger than 255 characters.  - File could be harmful. For example, executable files are not accepted.    ---
      * @summary Update file
      * @param {string} fileId File Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
@@ -2533,10 +2683,44 @@ export const FilesApiFp = function(configuration?: Configuration) {
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
       file_update?: FileUpdate,
       options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<FileResult> {
+    ): (fetch?: FetchAPI, basePath?: string) => Promise<FileResponse> {
       const localVarFetchArgs = FilesApiFetchParamCreator(
         configuration
       ).updateFile(fileId, Authorization, Accept, file_update, options);
+      return (
+        fetch: FetchAPI = portableFetch,
+        basePath: string = BASE_PATH
+      ) => {
+        return fetch(
+          basePath + localVarFetchArgs.url,
+          localVarFetchArgs.options
+        ).then((response) => {
+          if (response.status >= 200 && response.status < 300) {
+            return response.json();
+          } else {
+            throw response;
+          }
+        });
+      };
+    },
+    /**
+     * ---    Update file's content    ### Notes    File update is three steps operation. This request creates hyperlinks for file content update and confirmation. Next two requests need to be executed by using links from the response. Maximum file size to upload with single request is **256 MiB**. If bigger files needs to uploaded there are possibility to use Azure libraries or by uploading file with [multiple requests](https://docs.microsoft.com/en-us/rest/api/storageservices/operations-on-block-blobs).    - **uploadUrl** is required for file upload. Upload can be done by sending http request and specifying x-ms-blob-type header to BlockBlob.  - **completeUrl** should be used to confirm file upload and it is final request for file creation.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_write` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
+     * @summary Update file content
+     * @param {string} fileId File Id
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updateFileContent(
+      fileId: string,
+      Authorization: string,
+      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+      options?: any
+    ): (fetch?: FetchAPI, basePath?: string) => Promise<FileUpload> {
+      const localVarFetchArgs = FilesApiFetchParamCreator(
+        configuration
+      ).updateFileContent(fileId, Authorization, Accept, options);
       return (
         fetch: FetchAPI = portableFetch,
         basePath: string = BASE_PATH
@@ -2567,8 +2751,8 @@ export const FilesApiFactory = function(
 ) {
   return {
     /**
-     * ---    Complete file creation    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
-     * @summary Complete file creation
+     * ---    Complete file creation    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_write` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
+     * @summary Complete file upload
      * @param {string} fileId File Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
      * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
@@ -2589,7 +2773,7 @@ export const FilesApiFactory = function(
       )(fetch, basePath);
     },
     /**
-     * ---    Create new file    ### Notes    File creation is three steps operation. This request will create file's meta data. Next two requests need to be executed by using links from the response.    - uploadUrl is required for file upload. Upload can be done by sending http request and specifying x-ms-blob-type header to BlockBlob.  - completeUrl should be used to confirm file upload and it is final request for file creation.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Errors    This request can return InvalidCreateFileRequest error with 422 status code. This could happen because of these reasons:    - File name contains invalid characters.  - File name's length is larger than 255 characters.  - File could be harmful. For example, executable files are not accepted.    ---
+     * ---    Create new file    ### Notes    File creation is three steps operation. This request will create file's meta data. Next two requests need to be executed by using links from the response. Maximum file size to upload with single request is **256 MiB**. If bigger file needs to be uploaded there are possibility to use Azure libraries to upload file via given Azure SAS url or by uploading file with [multiple requests](https://docs.microsoft.com/en-us/rest/api/storageservices/operations-on-block-blobs).    - **uploadUrl** is required for file upload. Upload can be done by sending http request and specifying x-ms-blob-type header to BlockBlob.  - **completeUrl** should be used to confirm file upload and it is final request for file creation.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_write` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ### Errors    This request can return InvalidCreateFileRequest error with 422 status code. This could happen because of these reasons:    - File name contains invalid characters.  - File name's length is larger than 255 characters.  - File could be harmful. For example, executable files are not accepted.    ---
      * @summary Create file
      * @param {string} folderId Folder Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
@@ -2614,7 +2798,7 @@ export const FilesApiFactory = function(
       )(fetch, basePath);
     },
     /**
-     * ---    Delete a file    ### Notes    File moved to the recycle bin will be completely removed after 30 days.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
+     * ---    Delete a file    ### Notes    File moved to the recycle bin will be completely removed after 30 days.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_delete` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Delete file
      * @param {string} fileId File Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
@@ -2636,7 +2820,7 @@ export const FilesApiFactory = function(
       )(fetch, basePath);
     },
     /**
-     * ---    Delete a file from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
+     * ---    Delete a file from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_delete` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Delete file from recycle bin
      * @param {string} fileId File Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
@@ -2658,18 +2842,18 @@ export const FilesApiFactory = function(
       )(fetch, basePath);
     },
     /**
-     * ---    Retrieves file    ### Notes    This endpoint returns 302 status code with Location header, which on success contains a link to the file. Redirection is not supported by developer portal and an error could be returned while using the \"Try it\" feature for this API. However, this endpoint will work if a request is sent from a different http client or by using the link specified in the response Location header.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * ---    Retrieves file    ### Notes    This endpoint returns 302 status code with Location header, which on success contains a link to the file. Redirection is not supported by developer portal and an error could be returned while using the \"Try it\" feature for this API. However, this endpoint will work if a request is sent from a different http client or by using the link specified in the response Location header.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Download file
      * @param {string} fileId File Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
-     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {'application/vnd.bentley.itwin-platform.v1+octet-stream'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+octet-stream&#x60; is recommended.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     downloadFile(
       fileId: string,
       Authorization: string,
-      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+      Accept?: "application/vnd.bentley.itwin-platform.v1+octet-stream",
       options?: any
     ) {
       return FilesApiFp(configuration).downloadFile(
@@ -2680,7 +2864,7 @@ export const FilesApiFactory = function(
       )(fetch, basePath);
     },
     /**
-     * ---    Retrieves file    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * ---    Retrieves file    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Get file
      * @param {string} fileId File Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
@@ -2702,7 +2886,7 @@ export const FilesApiFactory = function(
       )(fetch, basePath);
     },
     /**
-     * ---    Retrieves files    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * ---    Retrieves files    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Get files in folder
      * @param {string} folderId Folder Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
@@ -2730,7 +2914,7 @@ export const FilesApiFactory = function(
       )(fetch, basePath);
     },
     /**
-     * ---    Retrieves files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * ---    Retrieves files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Get folders and files in folder
      * @param {string} folderId Folder Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
@@ -2758,7 +2942,7 @@ export const FilesApiFactory = function(
       )(fetch, basePath);
     },
     /**
-     * ---    Get deleted files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * ---    Get deleted files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Get folders and files in recycle bin
      * @param {string} projectId Project Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
@@ -2786,7 +2970,7 @@ export const FilesApiFactory = function(
       )(fetch, basePath);
     },
     /**
-     * ---    Retrieves top level files and folders by project    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * ---    Retrieves top level files and folders by project    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Get top level folders and files by project
      * @param {string} projectId Project Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
@@ -2814,7 +2998,7 @@ export const FilesApiFactory = function(
       )(fetch, basePath);
     },
     /**
-     * ---    Restore deleted file from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
+     * ---    Restore deleted file from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_delete` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Restore file
      * @param {string} fileId File Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
@@ -2836,7 +3020,7 @@ export const FilesApiFactory = function(
       )(fetch, basePath);
     },
     /**
-     * ---    Finds files and folders in folder by name    ### Notes    This query supports wildcard characters in the name parameter    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * ---    Finds files and folders in folder by name    ### Notes    This query supports wildcard characters in the name parameter    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Search for folders and files in folder
      * @param {string} folderId Folder Id
      * @param {string} name Item name
@@ -2867,7 +3051,7 @@ export const FilesApiFactory = function(
       )(fetch, basePath);
     },
     /**
-     * ---    Update file    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Errors    This request can return InvalidCreateFileRequest error with 422 status code. This could happen because of these reasons:    - File name contains invalid characters.  - File name's length is larger than 255 characters.  - File could be harmful. For example, executable files are not accepted.    ---
+     * ---    Update file    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_write` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ### Errors    This request can return InvalidCreateFileRequest error with 422 status code. This could happen because of these reasons:    - File name contains invalid characters.  - File name's length is larger than 255 characters.  - File could be harmful. For example, executable files are not accepted.    ---
      * @summary Update file
      * @param {string} fileId File Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
@@ -2891,6 +3075,28 @@ export const FilesApiFactory = function(
         options
       )(fetch, basePath);
     },
+    /**
+     * ---    Update file's content    ### Notes    File update is three steps operation. This request creates hyperlinks for file content update and confirmation. Next two requests need to be executed by using links from the response. Maximum file size to upload with single request is **256 MiB**. If bigger files needs to uploaded there are possibility to use Azure libraries or by uploading file with [multiple requests](https://docs.microsoft.com/en-us/rest/api/storageservices/operations-on-block-blobs).    - **uploadUrl** is required for file upload. Upload can be done by sending http request and specifying x-ms-blob-type header to BlockBlob.  - **completeUrl** should be used to confirm file upload and it is final request for file creation.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_write` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
+     * @summary Update file content
+     * @param {string} fileId File Id
+     * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+     * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updateFileContent(
+      fileId: string,
+      Authorization: string,
+      Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+      options?: any
+    ) {
+      return FilesApiFp(configuration).updateFileContent(
+        fileId,
+        Authorization,
+        Accept,
+        options
+      )(fetch, basePath);
+    },
   };
 };
 
@@ -2902,8 +3108,8 @@ export const FilesApiFactory = function(
  */
 export class FilesApi extends BaseAPI {
   /**
-   * ---    Complete file creation    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
-   * @summary Complete file creation
+   * ---    Complete file creation    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_write` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
+   * @summary Complete file upload
    * @param {string} fileId File Id
    * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
    * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
@@ -2926,7 +3132,7 @@ export class FilesApi extends BaseAPI {
   }
 
   /**
-   * ---    Create new file    ### Notes    File creation is three steps operation. This request will create file's meta data. Next two requests need to be executed by using links from the response.    - uploadUrl is required for file upload. Upload can be done by sending http request and specifying x-ms-blob-type header to BlockBlob.  - completeUrl should be used to confirm file upload and it is final request for file creation.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Errors    This request can return InvalidCreateFileRequest error with 422 status code. This could happen because of these reasons:    - File name contains invalid characters.  - File name's length is larger than 255 characters.  - File could be harmful. For example, executable files are not accepted.    ---
+   * ---    Create new file    ### Notes    File creation is three steps operation. This request will create file's meta data. Next two requests need to be executed by using links from the response. Maximum file size to upload with single request is **256 MiB**. If bigger file needs to be uploaded there are possibility to use Azure libraries to upload file via given Azure SAS url or by uploading file with [multiple requests](https://docs.microsoft.com/en-us/rest/api/storageservices/operations-on-block-blobs).    - **uploadUrl** is required for file upload. Upload can be done by sending http request and specifying x-ms-blob-type header to BlockBlob.  - **completeUrl** should be used to confirm file upload and it is final request for file creation.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_write` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ### Errors    This request can return InvalidCreateFileRequest error with 422 status code. This could happen because of these reasons:    - File name contains invalid characters.  - File name's length is larger than 255 characters.  - File could be harmful. For example, executable files are not accepted.    ---
    * @summary Create file
    * @param {string} folderId Folder Id
    * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
@@ -2953,7 +3159,7 @@ export class FilesApi extends BaseAPI {
   }
 
   /**
-   * ---    Delete a file    ### Notes    File moved to the recycle bin will be completely removed after 30 days.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
+   * ---    Delete a file    ### Notes    File moved to the recycle bin will be completely removed after 30 days.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_delete` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
    * @summary Delete file
    * @param {string} fileId File Id
    * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
@@ -2977,7 +3183,7 @@ export class FilesApi extends BaseAPI {
   }
 
   /**
-   * ---    Delete a file from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
+   * ---    Delete a file from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_delete` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
    * @summary Delete file from recycle bin
    * @param {string} fileId File Id
    * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
@@ -3001,11 +3207,11 @@ export class FilesApi extends BaseAPI {
   }
 
   /**
-   * ---    Retrieves file    ### Notes    This endpoint returns 302 status code with Location header, which on success contains a link to the file. Redirection is not supported by developer portal and an error could be returned while using the \"Try it\" feature for this API. However, this endpoint will work if a request is sent from a different http client or by using the link specified in the response Location header.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+   * ---    Retrieves file    ### Notes    This endpoint returns 302 status code with Location header, which on success contains a link to the file. Redirection is not supported by developer portal and an error could be returned while using the \"Try it\" feature for this API. However, this endpoint will work if a request is sent from a different http client or by using the link specified in the response Location header.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
    * @summary Download file
    * @param {string} fileId File Id
    * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
-   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+   * @param {'application/vnd.bentley.itwin-platform.v1+octet-stream'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+octet-stream&#x60; is recommended.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FilesApi
@@ -3013,7 +3219,7 @@ export class FilesApi extends BaseAPI {
   public downloadFile(
     fileId: string,
     Authorization: string,
-    Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+    Accept?: "application/vnd.bentley.itwin-platform.v1+octet-stream",
     options?: any
   ) {
     return FilesApiFp(this.configuration).downloadFile(
@@ -3025,7 +3231,7 @@ export class FilesApi extends BaseAPI {
   }
 
   /**
-   * ---    Retrieves file    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+   * ---    Retrieves file    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
    * @summary Get file
    * @param {string} fileId File Id
    * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
@@ -3049,7 +3255,7 @@ export class FilesApi extends BaseAPI {
   }
 
   /**
-   * ---    Retrieves files    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+   * ---    Retrieves files    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
    * @summary Get files in folder
    * @param {string} folderId Folder Id
    * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
@@ -3079,7 +3285,7 @@ export class FilesApi extends BaseAPI {
   }
 
   /**
-   * ---    Retrieves files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+   * ---    Retrieves files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
    * @summary Get folders and files in folder
    * @param {string} folderId Folder Id
    * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
@@ -3109,7 +3315,7 @@ export class FilesApi extends BaseAPI {
   }
 
   /**
-   * ---    Get deleted files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+   * ---    Get deleted files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
    * @summary Get folders and files in recycle bin
    * @param {string} projectId Project Id
    * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
@@ -3139,7 +3345,7 @@ export class FilesApi extends BaseAPI {
   }
 
   /**
-   * ---    Retrieves top level files and folders by project    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+   * ---    Retrieves top level files and folders by project    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
    * @summary Get top level folders and files by project
    * @param {string} projectId Project Id
    * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
@@ -3169,7 +3375,7 @@ export class FilesApi extends BaseAPI {
   }
 
   /**
-   * ---    Restore deleted file from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
+   * ---    Restore deleted file from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_delete` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
    * @summary Restore file
    * @param {string} fileId File Id
    * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
@@ -3193,7 +3399,7 @@ export class FilesApi extends BaseAPI {
   }
 
   /**
-   * ---    Finds files and folders in folder by name    ### Notes    This query supports wildcard characters in the name parameter    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+   * ---    Finds files and folders in folder by name    ### Notes    This query supports wildcard characters in the name parameter    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
    * @summary Search for folders and files in folder
    * @param {string} folderId Folder Id
    * @param {string} name Item name
@@ -3226,7 +3432,7 @@ export class FilesApi extends BaseAPI {
   }
 
   /**
-   * ---    Update file    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Errors    This request can return InvalidCreateFileRequest error with 422 status code. This could happen because of these reasons:    - File name contains invalid characters.  - File name's length is larger than 255 characters.  - File could be harmful. For example, executable files are not accepted.    ---
+   * ---    Update file    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_write` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ### Errors    This request can return InvalidCreateFileRequest error with 422 status code. This could happen because of these reasons:    - File name contains invalid characters.  - File name's length is larger than 255 characters.  - File could be harmful. For example, executable files are not accepted.    ---
    * @summary Update file
    * @param {string} fileId File Id
    * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
@@ -3251,6 +3457,30 @@ export class FilesApi extends BaseAPI {
       options
     )(this.fetch, this.basePath);
   }
+
+  /**
+   * ---    Update file's content    ### Notes    File update is three steps operation. This request creates hyperlinks for file content update and confirmation. Next two requests need to be executed by using links from the response. Maximum file size to upload with single request is **256 MiB**. If bigger files needs to uploaded there are possibility to use Azure libraries or by uploading file with [multiple requests](https://docs.microsoft.com/en-us/rest/api/storageservices/operations-on-block-blobs).    - **uploadUrl** is required for file upload. Upload can be done by sending http request and specifying x-ms-blob-type header to BlockBlob.  - **completeUrl** should be used to confirm file upload and it is final request for file creation.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_write` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
+   * @summary Update file content
+   * @param {string} fileId File Id
+   * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
+   * @param {'application/vnd.bentley.itwin-platform.v1+json'} [Accept] Setting to &#x60;application/vnd.bentley.itwin-platform.v1+json&#x60; is recommended.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof FilesApi
+   */
+  public updateFileContent(
+    fileId: string,
+    Authorization: string,
+    Accept?: "application/vnd.bentley.itwin-platform.v1+json",
+    options?: any
+  ) {
+    return FilesApiFp(this.configuration).updateFileContent(
+      fileId,
+      Authorization,
+      Accept,
+      options
+    )(this.fetch, this.basePath);
+  }
 }
 
 /**
@@ -3262,7 +3492,7 @@ export const FoldersApiFetchParamCreator = function(
 ) {
   return {
     /**
-     * ---    Create new folder    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Errors    This request can return InvalidCreateFolderRequest error with 422 status code. This could happen because of these reasons:    - Folder name contains invalid characters.  - Folder name's length is larger than 255 characters.    ---
+     * ---    Create new folder    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_write` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ### Errors    This request can return InvalidCreateFolderRequest error with 422 status code. This could happen because of these reasons:    - Folder name contains invalid characters.  - Folder name's length is larger than 255 characters.    ---
      * @summary Create folder
      * @param {string} folderId Folder Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
@@ -3368,7 +3598,7 @@ export const FoldersApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Delete a folder    ### Notes    Folder moved to the recycle bin will be completely removed after 30 days.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
+     * ---    Delete a folder    ### Notes    Folder moved to the recycle bin will be completely removed after 30 days.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_delete` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Delete folder
      * @param {string} folderId Folder Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
@@ -3467,7 +3697,7 @@ export const FoldersApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Delete a folder from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
+     * ---    Delete a folder from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_delete` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Delete folder from recycle bin
      * @param {string} folderId Folder Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
@@ -3566,7 +3796,7 @@ export const FoldersApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Retrieves folder    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * ---    Retrieves folder    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Get folder
      * @param {string} folderId Folder Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
@@ -3662,7 +3892,7 @@ export const FoldersApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Retrieves files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * ---    Retrieves files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Get folders and files in folder
      * @param {string} folderId Folder Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
@@ -3770,7 +4000,7 @@ export const FoldersApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Get deleted files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * ---    Get deleted files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Get folders and files in recycle bin
      * @param {string} projectId Project Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
@@ -3879,7 +4109,7 @@ export const FoldersApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Retrieves folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * ---    Retrieves folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Get folders in folder
      * @param {string} folderId Folder Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
@@ -3987,7 +4217,7 @@ export const FoldersApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Retrieves top level files and folders by project    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * ---    Retrieves top level files and folders by project    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Get top level folders and files by project
      * @param {string} projectId Project Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
@@ -4096,7 +4326,7 @@ export const FoldersApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Restore deleted folder from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
+     * ---    Restore deleted folder from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_delete` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Restore folder
      * @param {string} folderId Folder Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
@@ -4192,7 +4422,7 @@ export const FoldersApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Finds files and folders in folder by name    ### Notes    This query supports wildcard characters in the name parameter    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * ---    Finds files and folders in folder by name    ### Notes    This query supports wildcard characters in the name parameter    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Search for folders and files in folder
      * @param {string} folderId Folder Id
      * @param {string} name Item name
@@ -4313,7 +4543,7 @@ export const FoldersApiFetchParamCreator = function(
       };
     },
     /**
-     * ---    Update folder    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Errors    This request can return InvalidCreateFolderRequest error with 422 status code. This could happen because of these reasons:    - Folder name contains invalid characters.  - Folder name's length is larger than 255 characters.    ---
+     * ---    Update folder    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_write` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ### Errors    This request can return InvalidCreateFolderRequest error with 422 status code. This could happen because of these reasons:    - Folder name contains invalid characters.  - Folder name's length is larger than 255 characters.    ---
      * @summary Update folder
      * @param {string} folderId Folder Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
@@ -4431,7 +4661,7 @@ export const FoldersApiFetchParamCreator = function(
 export const FoldersApiFp = function(configuration?: Configuration) {
   return {
     /**
-     * ---    Create new folder    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Errors    This request can return InvalidCreateFolderRequest error with 422 status code. This could happen because of these reasons:    - Folder name contains invalid characters.  - Folder name's length is larger than 255 characters.    ---
+     * ---    Create new folder    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_write` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ### Errors    This request can return InvalidCreateFolderRequest error with 422 status code. This could happen because of these reasons:    - Folder name contains invalid characters.  - Folder name's length is larger than 255 characters.    ---
      * @summary Create folder
      * @param {string} folderId Folder Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
@@ -4446,7 +4676,7 @@ export const FoldersApiFp = function(configuration?: Configuration) {
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
       folder_create?: FolderCreate,
       options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<FolderResult> {
+    ): (fetch?: FetchAPI, basePath?: string) => Promise<FolderResponse> {
       const localVarFetchArgs = FoldersApiFetchParamCreator(
         configuration
       ).createFolder(folderId, Authorization, Accept, folder_create, options);
@@ -4467,7 +4697,7 @@ export const FoldersApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Delete a folder    ### Notes    Folder moved to the recycle bin will be completely removed after 30 days.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
+     * ---    Delete a folder    ### Notes    Folder moved to the recycle bin will be completely removed after 30 days.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_delete` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Delete folder
      * @param {string} folderId Folder Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
@@ -4501,7 +4731,7 @@ export const FoldersApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Delete a folder from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
+     * ---    Delete a folder from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_delete` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Delete folder from recycle bin
      * @param {string} folderId Folder Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
@@ -4535,7 +4765,7 @@ export const FoldersApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Retrieves folder    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * ---    Retrieves folder    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Get folder
      * @param {string} folderId Folder Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
@@ -4548,7 +4778,7 @@ export const FoldersApiFp = function(configuration?: Configuration) {
       Authorization: string,
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
       options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<Folder> {
+    ): (fetch?: FetchAPI, basePath?: string) => Promise<FolderResponse> {
       const localVarFetchArgs = FoldersApiFetchParamCreator(
         configuration
       ).getFolder(folderId, Authorization, Accept, options);
@@ -4569,7 +4799,7 @@ export const FoldersApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Retrieves files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * ---    Retrieves files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Get folders and files in folder
      * @param {string} folderId Folder Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
@@ -4614,7 +4844,7 @@ export const FoldersApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Get deleted files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * ---    Get deleted files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Get folders and files in recycle bin
      * @param {string} projectId Project Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
@@ -4659,7 +4889,7 @@ export const FoldersApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Retrieves folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * ---    Retrieves folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Get folders in folder
      * @param {string} folderId Folder Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
@@ -4697,7 +4927,7 @@ export const FoldersApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Retrieves top level files and folders by project    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * ---    Retrieves top level files and folders by project    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Get top level folders and files by project
      * @param {string} projectId Project Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
@@ -4714,7 +4944,7 @@ export const FoldersApiFp = function(configuration?: Configuration) {
       skip?: number,
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
       options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<TopItems> {
+    ): (fetch?: FetchAPI, basePath?: string) => Promise<ItemsWithFolderLink> {
       const localVarFetchArgs = FoldersApiFetchParamCreator(
         configuration
       ).getTopLevelFoldersAndFilesByProject(
@@ -4742,7 +4972,7 @@ export const FoldersApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Restore deleted folder from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
+     * ---    Restore deleted folder from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_delete` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Restore folder
      * @param {string} folderId Folder Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
@@ -4776,7 +5006,7 @@ export const FoldersApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Finds files and folders in folder by name    ### Notes    This query supports wildcard characters in the name parameter    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * ---    Finds files and folders in folder by name    ### Notes    This query supports wildcard characters in the name parameter    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Search for folders and files in folder
      * @param {string} folderId Folder Id
      * @param {string} name Item name
@@ -4824,7 +5054,7 @@ export const FoldersApiFp = function(configuration?: Configuration) {
       };
     },
     /**
-     * ---    Update folder    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Errors    This request can return InvalidCreateFolderRequest error with 422 status code. This could happen because of these reasons:    - Folder name contains invalid characters.  - Folder name's length is larger than 255 characters.    ---
+     * ---    Update folder    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_write` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ### Errors    This request can return InvalidCreateFolderRequest error with 422 status code. This could happen because of these reasons:    - Folder name contains invalid characters.  - Folder name's length is larger than 255 characters.    ---
      * @summary Update folder
      * @param {string} folderId Folder Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
@@ -4839,7 +5069,7 @@ export const FoldersApiFp = function(configuration?: Configuration) {
       Accept?: "application/vnd.bentley.itwin-platform.v1+json",
       folder_update?: FolderUpdate,
       options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<FolderResult> {
+    ): (fetch?: FetchAPI, basePath?: string) => Promise<FolderResponse> {
       const localVarFetchArgs = FoldersApiFetchParamCreator(
         configuration
       ).updateFolder(folderId, Authorization, Accept, folder_update, options);
@@ -4873,7 +5103,7 @@ export const FoldersApiFactory = function(
 ) {
   return {
     /**
-     * ---    Create new folder    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Errors    This request can return InvalidCreateFolderRequest error with 422 status code. This could happen because of these reasons:    - Folder name contains invalid characters.  - Folder name's length is larger than 255 characters.    ---
+     * ---    Create new folder    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_write` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ### Errors    This request can return InvalidCreateFolderRequest error with 422 status code. This could happen because of these reasons:    - Folder name contains invalid characters.  - Folder name's length is larger than 255 characters.    ---
      * @summary Create folder
      * @param {string} folderId Folder Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
@@ -4898,7 +5128,7 @@ export const FoldersApiFactory = function(
       )(fetch, basePath);
     },
     /**
-     * ---    Delete a folder    ### Notes    Folder moved to the recycle bin will be completely removed after 30 days.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
+     * ---    Delete a folder    ### Notes    Folder moved to the recycle bin will be completely removed after 30 days.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_delete` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Delete folder
      * @param {string} folderId Folder Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
@@ -4920,7 +5150,7 @@ export const FoldersApiFactory = function(
       )(fetch, basePath);
     },
     /**
-     * ---    Delete a folder from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
+     * ---    Delete a folder from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_delete` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Delete folder from recycle bin
      * @param {string} folderId Folder Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
@@ -4942,7 +5172,7 @@ export const FoldersApiFactory = function(
       )(fetch, basePath);
     },
     /**
-     * ---    Retrieves folder    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * ---    Retrieves folder    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Get folder
      * @param {string} folderId Folder Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
@@ -4964,7 +5194,7 @@ export const FoldersApiFactory = function(
       )(fetch, basePath);
     },
     /**
-     * ---    Retrieves files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * ---    Retrieves files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Get folders and files in folder
      * @param {string} folderId Folder Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
@@ -4992,7 +5222,7 @@ export const FoldersApiFactory = function(
       )(fetch, basePath);
     },
     /**
-     * ---    Get deleted files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * ---    Get deleted files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Get folders and files in recycle bin
      * @param {string} projectId Project Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
@@ -5020,7 +5250,7 @@ export const FoldersApiFactory = function(
       )(fetch, basePath);
     },
     /**
-     * ---    Retrieves folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * ---    Retrieves folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Get folders in folder
      * @param {string} folderId Folder Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
@@ -5048,7 +5278,7 @@ export const FoldersApiFactory = function(
       )(fetch, basePath);
     },
     /**
-     * ---    Retrieves top level files and folders by project    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * ---    Retrieves top level files and folders by project    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Get top level folders and files by project
      * @param {string} projectId Project Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
@@ -5076,7 +5306,7 @@ export const FoldersApiFactory = function(
       )(fetch, basePath);
     },
     /**
-     * ---    Restore deleted folder from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
+     * ---    Restore deleted folder from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_delete` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Restore folder
      * @param {string} folderId Folder Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
@@ -5098,7 +5328,7 @@ export const FoldersApiFactory = function(
       )(fetch, basePath);
     },
     /**
-     * ---    Finds files and folders in folder by name    ### Notes    This query supports wildcard characters in the name parameter    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+     * ---    Finds files and folders in folder by name    ### Notes    This query supports wildcard characters in the name parameter    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
      * @summary Search for folders and files in folder
      * @param {string} folderId Folder Id
      * @param {string} name Item name
@@ -5129,7 +5359,7 @@ export const FoldersApiFactory = function(
       )(fetch, basePath);
     },
     /**
-     * ---    Update folder    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Errors    This request can return InvalidCreateFolderRequest error with 422 status code. This could happen because of these reasons:    - Folder name contains invalid characters.  - Folder name's length is larger than 255 characters.    ---
+     * ---    Update folder    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_write` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ### Errors    This request can return InvalidCreateFolderRequest error with 422 status code. This could happen because of these reasons:    - Folder name contains invalid characters.  - Folder name's length is larger than 255 characters.    ---
      * @summary Update folder
      * @param {string} folderId Folder Id
      * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
@@ -5164,7 +5394,7 @@ export const FoldersApiFactory = function(
  */
 export class FoldersApi extends BaseAPI {
   /**
-   * ---    Create new folder    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Errors    This request can return InvalidCreateFolderRequest error with 422 status code. This could happen because of these reasons:    - Folder name contains invalid characters.  - Folder name's length is larger than 255 characters.    ---
+   * ---    Create new folder    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_write` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ### Errors    This request can return InvalidCreateFolderRequest error with 422 status code. This could happen because of these reasons:    - Folder name contains invalid characters.  - Folder name's length is larger than 255 characters.    ---
    * @summary Create folder
    * @param {string} folderId Folder Id
    * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
@@ -5191,7 +5421,7 @@ export class FoldersApi extends BaseAPI {
   }
 
   /**
-   * ---    Delete a folder    ### Notes    Folder moved to the recycle bin will be completely removed after 30 days.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
+   * ---    Delete a folder    ### Notes    Folder moved to the recycle bin will be completely removed after 30 days.    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_delete` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
    * @summary Delete folder
    * @param {string} folderId Folder Id
    * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
@@ -5215,7 +5445,7 @@ export class FoldersApi extends BaseAPI {
   }
 
   /**
-   * ---    Delete a folder from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
+   * ---    Delete a folder from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_delete` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
    * @summary Delete folder from recycle bin
    * @param {string} folderId Folder Id
    * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
@@ -5239,7 +5469,7 @@ export class FoldersApi extends BaseAPI {
   }
 
   /**
-   * ---    Retrieves folder    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+   * ---    Retrieves folder    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
    * @summary Get folder
    * @param {string} folderId Folder Id
    * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
@@ -5263,7 +5493,7 @@ export class FoldersApi extends BaseAPI {
   }
 
   /**
-   * ---    Retrieves files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+   * ---    Retrieves files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
    * @summary Get folders and files in folder
    * @param {string} folderId Folder Id
    * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
@@ -5293,7 +5523,7 @@ export class FoldersApi extends BaseAPI {
   }
 
   /**
-   * ---    Get deleted files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+   * ---    Get deleted files and folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
    * @summary Get folders and files in recycle bin
    * @param {string} projectId Project Id
    * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
@@ -5323,7 +5553,7 @@ export class FoldersApi extends BaseAPI {
   }
 
   /**
-   * ---    Retrieves folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+   * ---    Retrieves folders    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
    * @summary Get folders in folder
    * @param {string} folderId Folder Id
    * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
@@ -5353,7 +5583,7 @@ export class FoldersApi extends BaseAPI {
   }
 
   /**
-   * ---    Retrieves top level files and folders by project    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+   * ---    Retrieves top level files and folders by project    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
    * @summary Get top level folders and files by project
    * @param {string} projectId Project Id
    * @param {string} Authorization OAuth access token with scope &#x60;storage:read&#x60;
@@ -5383,7 +5613,7 @@ export class FoldersApi extends BaseAPI {
   }
 
   /**
-   * ---    Restore deleted folder from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ---
+   * ---    Restore deleted folder from the recycle bin    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_delete` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
    * @summary Restore folder
    * @param {string} folderId Folder Id
    * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;
@@ -5407,7 +5637,7 @@ export class FoldersApi extends BaseAPI {
   }
 
   /**
-   * ---    Finds files and folders in folder by name    ### Notes    This query supports wildcard characters in the name parameter    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ---
+   * ---    Finds files and folders in folder by name    ### Notes    This query supports wildcard characters in the name parameter    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:read`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ---
    * @summary Search for folders and files in folder
    * @param {string} folderId Folder Id
    * @param {string} name Item name
@@ -5440,7 +5670,7 @@ export class FoldersApi extends BaseAPI {
   }
 
   /**
-   * ---    Update folder    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Errors    This request can return InvalidCreateFolderRequest error with 422 status code. This could happen because of these reasons:    - Folder name contains invalid characters.  - Folder name's length is larger than 255 characters.    ---
+   * ---    Update folder    ### Authentication    Requires `Authorization` header with valid Bearer token for scope `storage:modify`.    ### Authorization    User must be an Organization Administrator for the Organization that owns a given Project or have `storage_write` permission assigned at the Project level.    An Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.    ### Errors    This request can return InvalidCreateFolderRequest error with 422 status code. This could happen because of these reasons:    - Folder name contains invalid characters.  - Folder name's length is larger than 255 characters.    ---
    * @summary Update folder
    * @param {string} folderId Folder Id
    * @param {string} Authorization OAuth access token with scope &#x60;storage:modify&#x60;

@@ -48,6 +48,19 @@ export class StorageClient {
   }
 
   /**
+   * See {@link FilesApi.updateFileContent} for details.
+   * @param fileId File to retreive upload info
+   * @returns upload info
+   */
+  async updateFile(fileId: string) {
+    return this.filesApi.updateFileContent(
+      fileId,
+      this.accessToken,
+      "application/vnd.bentley.itwin-platform.v1+json"
+    );
+  }
+
+  /**
    * See {@link FilesApi.getFile} for details.
    * @param fileId Id of the file to retrieve.
    * @returns

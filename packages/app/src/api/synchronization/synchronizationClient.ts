@@ -2,17 +2,26 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+import { StorageClient } from "../storage/storageClient";
 import { prefixUrl } from "../useApiPrefix";
-import { BASE_PATH, DefaultApi, IModelBridgeType, Run } from "./generated";
+import {
+  BASE_PATH,
+  DefaultApi,
+  IModelBridgeType,
+  Run,
+  StorageFile,
+} from "./generated";
 
 export class SynchronizationClient {
   private DEMO_CONNECTION_NAME = "demo-portal-imodel-connection";
   private synchronizationApi: DefaultApi;
+  private storageClient: StorageClient;
   constructor(urlPrefix: string, private accessToken: string) {
     this.synchronizationApi = new DefaultApi(
       undefined,
       prefixUrl(BASE_PATH, urlPrefix)
     );
+    this.storageClient = new StorageClient(urlPrefix, accessToken);
   }
 
   /**
@@ -198,6 +207,19 @@ export class SynchronizationClient {
           )
         ).sourceFiles ?? []
       : [];
+
+    const sourceHaveUnknownFileName = (source: StorageFile) =>
+      !source.lastKnownFileName && source.storageFileId;
+
+    await Promise.all(
+      sourceFiles.filter(sourceHaveUnknownFileName).map(async (source) => {
+        if (!source.storageFileId) {
+          return;
+        }
+        const file = await this.storageClient.getFile(source.storageFileId);
+        source.lastKnownFileName = file.file?.displayName;
+      })
+    );
 
     return {
       connection: demoPortalConnection,

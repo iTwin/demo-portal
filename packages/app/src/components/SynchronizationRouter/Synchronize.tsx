@@ -74,7 +74,7 @@ export const Synchronize = ({
           {sources.length > 0 && (
             <>
               <hr />
-              <SourcesTable sources={sources} accessToken={accessToken} />
+              <SourcesTable sources={sources} />
             </>
           )}
         </LastRunContext.Provider>
