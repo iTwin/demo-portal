@@ -26,6 +26,7 @@ interface HeaderProps {
   handleLogin: () => void;
   handleLogout: () => void;
   loggedIn: boolean;
+  isLoggingIn: boolean;
   accessTokenObject?: AccessToken;
 }
 
@@ -36,6 +37,7 @@ export const Header = (props: HeaderProps) => (
 );
 
 const RoutedHeader = ({
+  isLoggingIn,
   loggedIn,
   handleLogin,
   handleLogout,
@@ -106,7 +108,7 @@ const RoutedHeader = ({
         )
       }
     >
-      {!loggedIn && (
+      {!loggedIn && !isLoggingIn && (
         <Button
           onClick={handleLogin}
           styleType={"cta"}

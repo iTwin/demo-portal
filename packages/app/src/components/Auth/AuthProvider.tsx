@@ -10,6 +10,7 @@ import AuthClient from "../../services/auth/AuthClient";
 import { ai } from "../../services/telemetry";
 
 export interface AuthContextValue {
+  isAttemptingSilentLogin: boolean;
   isAuthenticated: boolean;
   isAuthorized: boolean;
   accessToken?: AccessToken;
@@ -21,11 +22,13 @@ export interface AuthProviderProps {
 }
 
 const AuthContext = React.createContext<AuthContextValue>({
+  isAttemptingSilentLogin: true,
   isAuthenticated: false,
   isAuthorized: false,
 });
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
+  const [isAttemptingSilentLogin, setIsAttemptingSilentLogin] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(
     AuthClient.oidcClient ? AuthClient.oidcClient.isAuthorized : false
   );
@@ -36,6 +39,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   useEffect(() => {
     const initOidc = async () => {
+      if (!auth) {
+        return;
+      }
       if (!AuthClient.oidcClient && auth) {
         if (!auth.clientId) {
           throw new Error(
@@ -62,6 +68,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         setIsAuthenticated(AuthClient.oidcClient.isAuthorized);
       } catch (error) {
         // swallow the error. User can click the button to sign in
+      } finally {
+        setIsAttemptingSilentLogin(false);
       }
     };
     initOidc().catch((error) => console.error(error));
@@ -79,6 +87,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   return (
     <AuthContext.Provider
       value={{
+        isAttemptingSilentLogin,
         isAuthenticated,
         isAuthorized,
         accessToken,
