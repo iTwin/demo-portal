@@ -59,7 +59,7 @@ export const useSynchronizeFileUploader = ({
           );
         }
 
-        let isUpdating: string | undefined;
+        let storageFileIdToUpdate: string | undefined;
 
         setStatus("Validating new connection");
         const synchronization = new SynchronizationClient(
@@ -77,7 +77,7 @@ export const useSynchronizeFileUploader = ({
               fileName.toLocaleLowerCase()
           );
           if (sourceFile) {
-            isUpdating = sourceFile.storageFileId;
+            storageFileIdToUpdate = sourceFile.storageFileId;
           }
         }
 
@@ -94,9 +94,9 @@ export const useSynchronizeFileUploader = ({
 
         let fileUpload: FileUpload;
 
-        if (isUpdating) {
+        if (storageFileIdToUpdate) {
           setStatus("Getting file target");
-          fileUpload = await storage.updateFile(isUpdating);
+          fileUpload = await storage.updateFile(storageFileIdToUpdate);
         } else {
           setStatus("Creating file target");
           fileUpload = await storage.createFile(iModelFolderId, {
@@ -113,7 +113,9 @@ export const useSynchronizeFileUploader = ({
         }
         await storage.uploadFileWithProgress(uploadTarget, target, setProgress);
 
-        setStatus(`Completing file ${isUpdating ? "upload" : "creation"}`);
+        setStatus(
+          `Completing file ${storageFileIdToUpdate ? "upload" : "creation"}`
+        );
         const file = await storage.completeFileCreation(
           fileUpload._links?.completeUrl?.href
         );
@@ -123,7 +125,7 @@ export const useSynchronizeFileUploader = ({
 
         setStep(4);
         let connectionId = demoPortalConnection?.id ?? "";
-        if (!isUpdating) {
+        if (!storageFileIdToUpdate) {
           setStatus("Connecting file to iModel");
           connectionId = await synchronization.addFileToDemoConnection(
             iModelId,

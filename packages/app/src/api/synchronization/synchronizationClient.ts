@@ -211,17 +211,15 @@ export class SynchronizationClient {
     const sourceHaveUnknownFileName = (source: StorageFile) =>
       !source.lastKnownFileName && source.storageFileId;
 
-    if (sourceFiles.some(sourceHaveUnknownFileName)) {
-      await Promise.all(
-        sourceFiles.filter(sourceHaveUnknownFileName).map(async (source) => {
-          if (!source.storageFileId) {
-            return;
-          }
-          const file = await this.storageClient.getFile(source.storageFileId);
-          source.lastKnownFileName = file.file?.displayName;
-        })
-      );
-    }
+    await Promise.all(
+      sourceFiles.filter(sourceHaveUnknownFileName).map(async (source) => {
+        if (!source.storageFileId) {
+          return;
+        }
+        const file = await this.storageClient.getFile(source.storageFileId);
+        source.lastKnownFileName = file.file?.displayName;
+      })
+    );
 
     return {
       connection: demoPortalConnection,
