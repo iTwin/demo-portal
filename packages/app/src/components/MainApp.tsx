@@ -14,7 +14,12 @@ import { MainRouter } from "./MainRouter";
 
 export const MainApp = () => {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
-  const { accessToken, isAuthenticated, isAuthorized } = useAuth();
+  const {
+    accessToken,
+    isAuthenticated,
+    isAuthorized,
+    isAttemptingSilentLogin,
+  } = useAuth();
 
   const onLoginClick = async () => {
     setIsLoggingIn(true);
@@ -33,6 +38,7 @@ export const MainApp = () => {
           handleLogin={onLoginClick}
           handleLogout={onLogoutClick}
           loggedIn={isAuthenticated}
+          isLoggingIn={isAttemptingSilentLogin || isLoggingIn}
           accessTokenObject={accessToken}
         />
       }

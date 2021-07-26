@@ -66,7 +66,6 @@ class AuthClient {
 
   public static async signOut(): Promise<void> {
     await this.oidcClient.signOut(new FrontendRequestContext());
-    await this.apimClient.signOut(new FrontendRequestContext());
   }
 }
 
