@@ -8,10 +8,7 @@ import {
   SvgList,
   SvgStarHollow,
 } from "@itwin/itwinui-icons-react";
-import {
-  HorizontalTab,
-  HorizontalTabs,
-} from "@itwin/itwinui-react/esm/core/HorizontalTabs";
+import { HorizontalTab, HorizontalTabs } from "@itwin/itwinui-react";
 import { withAITracking } from "@microsoft/applicationinsights-react-js";
 import { RouteComponentProps, useLocation } from "@reach/router";
 import React, { useState } from "react";
