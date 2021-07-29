@@ -13,6 +13,7 @@ import {
   useActiveViewport,
 } from "@bentley/ui-framework";
 import { FooterIndicator } from "@bentley/ui-ninezone";
+import "@itwin/itwinui-css/css/icon.css";
 import { SvgMap } from "@itwin/itwinui-icons-react";
 import { Tooltip } from "@itwin/itwinui-react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
@@ -45,10 +46,10 @@ const BackgroundMapStatusBarItem = () => {
         <FooterIndicator isInFooterMode={true}>
           <SvgMap
             style={{
-              height: "16px",
-              opacity: bgMapOn ? 0.7 : 0.3,
+              opacity: bgMapOn ? 1 : 0.5,
               cursor: "pointer",
             }}
+            className="iui-icons-default"
           />
         </FooterIndicator>
       </div>
