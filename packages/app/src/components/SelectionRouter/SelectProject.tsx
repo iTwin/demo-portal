@@ -2,20 +2,31 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { ProjectGrid, ProjectGridProps } from "@itwin/imodel-browser-react";
+import {
+  ApiOverrides,
+  ProjectGrid,
+  ProjectGridProps,
+} from "@itwin/imodel-browser-react";
 import {
   SvgCalendar,
   SvgList,
   SvgStarHollow,
 } from "@itwin/itwinui-icons-react";
-import { HorizontalTab, HorizontalTabs } from "@itwin/itwinui-react";
+import {
+  ButtonGroup,
+  HorizontalTab,
+  HorizontalTabs,
+} from "@itwin/itwinui-react";
 import { withAITracking } from "@microsoft/applicationinsights-react-js";
 import { RouteComponentProps, useLocation } from "@reach/router";
 import React, { useState } from "react";
 
 import { useApiPrefix } from "../../api/useApiPrefix";
 import { ai, trackEvent } from "../../services/telemetry";
-import { useCreateIModelAction } from "../IModelCRUDRouter/useCreateIModelAction";
+import { useCreateIModelAction } from "../CRUDRouter/useCreateIModelAction";
+import { useCreateProjectAction } from "../CRUDRouter/useCreateProjectAction";
+import { useDeleteProjectAction } from "../CRUDRouter/useDeleteProjectAction";
+import { useEditProjectAction } from "../CRUDRouter/useEditProjectAction";
 import "./SelectProject.scss";
 
 export interface SelectProjectProps
@@ -60,32 +71,59 @@ const SelectProject = ({
     }
   }, [location.search, navigate, projectType]);
   const { createAction } = useCreateIModelAction({ navigate });
+  const { createIconButton } = useCreateProjectAction({ navigate });
+  const { editAction } = useEditProjectAction({ navigate });
+  const { deleteDialog, deleteAction, refreshKey } = useDeleteProjectAction({
+    accessToken,
+  });
+
+  const projectActions = React.useMemo(() => {
+    return [createAction, editAction, deleteAction];
+  }, [createAction, editAction, deleteAction]);
+
   const serverEnvironmentPrefix = useApiPrefix();
+  const apiOverrides = React.useMemo<ApiOverrides>(
+    () => ({ serverEnvironmentPrefix }),
+    [serverEnvironmentPrefix]
+  );
   return (
-    <div className="scrolling-tab-container">
-      <HorizontalTabs
-        labels={tabsWithIcons}
-        onTabSelected={setProjectType}
-        activeIndex={projectType}
-        type={"borderless"}
-        contentClassName="scrolling-tab-content grid-holding-tab"
-        tabsClassName="grid-holding-tabs"
-      >
-        <ProjectGrid
-          accessToken={accessToken}
-          requestType={
-            projectType === 0 ? "favorites" : projectType === 1 ? "recents" : ""
-          }
-          onThumbnailClick={(project) => {
-            trackEvent("ProjectClicked", { project: project.id });
-            navigate?.(`project/${project.id}`);
-          }}
-          projectActions={[createAction]}
-          apiOverrides={{ serverEnvironmentPrefix }}
-          {...gridProps}
-        />
-      </HorizontalTabs>
-    </div>
+    <>
+      <div className="scrolling-tab-container">
+        <HorizontalTabs
+          labels={tabsWithIcons}
+          onTabSelected={setProjectType}
+          activeIndex={projectType}
+          type={"borderless"}
+          contentClassName=" grid-holding-tab"
+          tabsClassName="grid-holding-tabs"
+        >
+          <div className={"title-section"}>
+            <ButtonGroup>{createIconButton}</ButtonGroup>
+          </div>
+          <div className={"scrolling-tab-content"}>
+            <ProjectGrid
+              accessToken={accessToken}
+              requestType={
+                projectType === 0
+                  ? "favorites"
+                  : projectType === 1
+                  ? "recents"
+                  : ""
+              }
+              onThumbnailClick={(project) => {
+                trackEvent("ProjectClicked", { project: project.id });
+                navigate?.(`project/${project.id}`);
+              }}
+              projectActions={projectActions}
+              apiOverrides={apiOverrides}
+              key={refreshKey}
+              {...gridProps}
+            />
+          </div>
+        </HorizontalTabs>
+      </div>
+      {deleteDialog}
+    </>
   );
 };
 

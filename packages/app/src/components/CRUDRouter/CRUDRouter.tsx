@@ -7,14 +7,21 @@ import React from "react";
 
 import { IModelCreate } from "./IModelCreate";
 import { IModelEdit } from "./IModelEdit";
+import { ProjectCreate } from "./ProjectCreate";
+import { ProjectEdit } from "./ProjectEdit";
 
-interface IModelCRUDRouterProps extends RouteComponentProps {
+interface CRUDRouterProps extends RouteComponentProps {
   accessToken: string;
 }
 
-export const IModelCRUDRouter = ({ accessToken }: IModelCRUDRouterProps) => {
+export const CRUDRouter = ({ accessToken }: CRUDRouterProps) => {
   return (
     <Router className={"full-height-container"}>
+      <ProjectCreate accessToken={accessToken} path="create-project" />
+      <ProjectEdit
+        accessToken={accessToken}
+        path="project/:projectId/edit-project"
+      />
       <IModelCreate
         accessToken={accessToken}
         path="project/:projectId/create-imodel"

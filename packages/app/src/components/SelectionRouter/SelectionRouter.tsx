@@ -5,7 +5,7 @@
 import { Redirect, RouteComponentProps, Router } from "@reach/router";
 import React, { ComponentPropsWithoutRef } from "react";
 
-import { IModelCRUDRouter } from "../IModelCRUDRouter/IModelCRUDRouter";
+import { CRUDRouter } from "../CRUDRouter/CRUDRouter";
 import SelectIModel from "./SelectIModel";
 import SelectProject from "./SelectProject";
 
@@ -34,7 +34,7 @@ export const SelectionRouter = ({
         to={"../../../project/:projectId/"}
         noThrow={true}
       />
-      <IModelCRUDRouter accessToken={accessToken} path="*" />
+      <CRUDRouter accessToken={accessToken} path="*" />
     </Router>
   );
 };
