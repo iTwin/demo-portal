@@ -58,6 +58,9 @@ export const useSynchronizeFileUploader = ({
             "This file type is not supported, current file support are .dgn, .rvt, .nwd and .ifc"
           );
         }
+        if (target.size === 0) {
+          throw new Error("Empty file will not be uploaded");
+        }
 
         let storageFileIdToUpdate: string | undefined;
 
