@@ -8,7 +8,7 @@ import {
   SvgList,
   SvgStarHollow,
 } from "@itwin/itwinui-icons-react";
-import { HorizontalTabs } from "@itwin/itwinui-react";
+import { HorizontalTab, HorizontalTabs } from "@itwin/itwinui-react";
 import { withAITracking } from "@microsoft/applicationinsights-react-js";
 import { RouteComponentProps, useLocation } from "@reach/router";
 import React, { useState } from "react";
@@ -24,6 +24,20 @@ export interface SelectProjectProps
 }
 
 const PROJECT_TYPE_MAP = ["", "?recents", "?myprojects"];
+
+const tabsWithIcons = [
+  <HorizontalTab
+    key="favorite"
+    label="Favorite projects"
+    startIcon={<SvgStarHollow />}
+  />,
+  <HorizontalTab
+    key="recents"
+    label="Recent projects"
+    startIcon={<SvgCalendar />}
+  />,
+  <HorizontalTab key="all" label="My projects" startIcon={<SvgList />} />,
+];
 
 const SelectProject = ({
   accessToken,
@@ -50,20 +64,7 @@ const SelectProject = ({
   return (
     <div className="scrolling-tab-container">
       <HorizontalTabs
-        labels={[
-          <span className={"tab-with-icon"} key="favorite">
-            <SvgStarHollow />
-            <span>Favorite projects</span>
-          </span>,
-          <span className={"tab-with-icon"} key={"recents"}>
-            <SvgCalendar />
-            <span>Recent projects</span>
-          </span>,
-          <span className={"tab-with-icon"} key={"all"}>
-            <SvgList />
-            <span>My projects</span>
-          </span>,
-        ]}
+        labels={tabsWithIcons}
         onTabSelected={setProjectType}
         activeIndex={projectType}
         type={"borderless"}
