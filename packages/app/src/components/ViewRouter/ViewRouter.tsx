@@ -9,6 +9,7 @@ import React from "react";
 import { useConfig } from "../../config/ConfigProvider";
 import AuthClient from "../../services/auth/AuthClient";
 import { SelectionRouter } from "../SelectionRouter/SelectionRouter";
+import { SimpleBgMapToggleProvider } from "./UiProviders/BackgroundMap";
 
 const useThemeWatcher = () => {
   const [theme, setTheme] = React.useState(() =>
@@ -49,6 +50,7 @@ const View = (props: ViewProps) => {
       authConfig={{ oidcClient: AuthClient.oidcClient }}
       theme={useThemeWatcher()}
       backend={{ buddiRegion }}
+      uiProviders={[new SimpleBgMapToggleProvider()]}
     />
   );
 };
