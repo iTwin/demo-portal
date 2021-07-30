@@ -44,10 +44,13 @@ const RoutedHeader = ({
   accessTokenObject,
   navigate,
 }: RouteComponentProps<HeaderProps>) => {
-  const [theme, setTheme] = React.useState<ThemeType>("light");
+  const [theme, setTheme] = React.useState<ThemeType>(
+    (localStorage.getItem("THEME") as ThemeType) ?? "light"
+  );
   useTheme(theme);
   React.useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("THEME", theme);
   }, [theme]);
   const { section, projectId, iModelId } = useCommonPathPattern();
   const slimMatch = !!useMatch("/view/project/:projectId/imodel/:iModelId");
