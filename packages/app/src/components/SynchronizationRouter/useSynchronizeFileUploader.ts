@@ -1,6 +1,8 @@
 /*---------------------------------------------------------------------------------------------
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
+ *
+ * This code is for demonstration purposes and should not be considered production ready.
  *--------------------------------------------------------------------------------------------*/
 import { Alert } from "@itwin/itwinui-react";
 import React, { ComponentPropsWithoutRef } from "react";
@@ -138,7 +140,6 @@ export const useSynchronizeFileUploader = ({
           );
         }
 
-        //Disabled at the moment, the connection is not "Working" at this point, owner need to be updated.
         setStatus("Running the connection");
         const runStatus = await synchronization.runConnection(connectionId);
         if (runStatus.status === 303) {

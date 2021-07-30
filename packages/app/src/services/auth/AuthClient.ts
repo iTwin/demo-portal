@@ -1,6 +1,8 @@
 /*---------------------------------------------------------------------------------------------
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
+ *
+ * This code is for demonstration purposes and should not be considered production ready.
  *--------------------------------------------------------------------------------------------*/
 import {
   BrowserAuthorizationClient,
@@ -33,7 +35,6 @@ class AuthClient {
     const redirectUri = `${window.location.origin}/signin-callback`;
     const postSignoutRedirectUri = window.location.origin;
 
-    // authority is optional and will default to Production IMS
     const oidcConfiguration: BrowserAuthorizationClientConfiguration = {
       clientId,
       redirectUri,

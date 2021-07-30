@@ -1,3 +1,7 @@
+# Forking disclaimer
+
+This repository is NOT intended to be a starter template to create an iTwin Platform based application. It can be freely forked in order to review and experiment with an already working site, however, it should not be considered production ready or that it offer support other than the really specific demonstration scenarios.
+
 # iTwin Demo Portal
 
 Copyright © Bentley Systems, Incorporated. All rights reserved.
