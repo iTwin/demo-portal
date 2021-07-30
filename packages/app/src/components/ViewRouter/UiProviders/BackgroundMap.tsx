@@ -46,8 +46,9 @@ const BackgroundMapStatusBarItem = () => {
         <FooterIndicator isInFooterMode={true}>
           <SvgMap
             style={{
-              opacity: bgMapOn ? 1 : 0.5,
+              opacity: bgMapOn ? 0.85 : 0.5,
               cursor: "pointer",
+              fill: "currentColor",
             }}
             className="iui-icons-default"
           />
@@ -57,8 +58,8 @@ const BackgroundMapStatusBarItem = () => {
   );
 };
 
-export class BackgroundMapsProvider implements UiItemsProvider {
-  public readonly id = "BackgroundMapsProvider";
+export class SimpleBgMapToggleProvider implements UiItemsProvider {
+  public readonly id = "SimpleBgMapToggleProvider";
 
   public provideStatusBarItems(
     _stageId: string,
