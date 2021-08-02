@@ -1,6 +1,6 @@
 # Forking disclaimer
 
-This sample application is intended to be used as an example of several possible workflows that you can achieve using the iTwin Platform. The source code is provided AS IS, without warranty of any kind with the intent being to provide inspiration and guidance. It should not be used as the basis of a production application, and it is NOT production ready.
+This sample application is intended to be used as an example of several possible workflows that you can achieve using the iTwin Platform. The source code is provided AS IS, without warranty of any kind, with the intent being to provide inspiration and guidance. It should not be used as the basis of a production application, and it is NOT production ready.
 
 # iTwin Demo Portal
 
