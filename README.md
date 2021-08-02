@@ -1,6 +1,6 @@
 # Forking disclaimer
 
-This repository is NOT intended to be a starter template to create an iTwin Platform based application. It can be freely forked in order to review and experiment with an already working site, however, it should not be considered production ready or that it offer support other than the really specific demonstration scenarios.
+This sample application is intended to be used as an example of several possible workflows that you can achieve using the iTwin Platform. The source code is provided AS IS, without warranty of any kind with the intent being to provide inspiration and guidance. It should not be used as the basis of a production application, and it is NOT production ready.
 
 # iTwin Demo Portal
 
