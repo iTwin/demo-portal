@@ -43,10 +43,7 @@ const BackgroundMapStatusBarItem = () => {
       content={bgMapOn ? "Disable background map" : "Enable background map"}
     >
       <div ref={target} onClick={onChange}>
-        <FooterIndicator
-          isInFooterMode={true}
-          style={{ paddingRight: "5px", paddingLeft: "25px" }}
-        >
+        <FooterIndicator isInFooterMode={true} style={{ paddingLeft: "40px" }}>
           <SvgMap
             style={{
               opacity: bgMapOn ? 0.85 : 0.5,
