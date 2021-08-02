@@ -39,11 +39,14 @@ const BackgroundMapStatusBarItem = () => {
 
   return (
     <Tooltip
-      placement="auto"
+      placement="top"
       content={bgMapOn ? "Disable background map" : "Enable background map"}
     >
       <div ref={target} onClick={onChange}>
-        <FooterIndicator isInFooterMode={true}>
+        <FooterIndicator
+          isInFooterMode={true}
+          style={{ paddingRight: "5px", paddingLeft: "25px" }}
+        >
           <SvgMap
             style={{
               opacity: bgMapOn ? 0.85 : 0.5,
@@ -71,7 +74,7 @@ export class SimpleBgMapToggleProvider implements UiItemsProvider {
         StatusBarItemUtilities.createStatusBarItem(
           "BackgroundMaps.StatusBarItem",
           StatusBarSection.Right,
-          10,
+          15,
           <BackgroundMapStatusBarItem />
         )
       );
