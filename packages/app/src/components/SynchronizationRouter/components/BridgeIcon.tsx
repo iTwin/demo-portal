@@ -5,6 +5,7 @@
 import React from "react";
 
 import { IModelBridgeType } from "../../../api/synchronization/generated";
+import { ReactComponent as SvgDwg } from "../../../svg/autocad.svg";
 import { ReactComponent as SvgDgn } from "../../../svg/dgndocument.svg";
 import { ReactComponent as SvgDocument } from "../../../svg/document.svg";
 import { ReactComponent as SvgIfcIcon } from "../../../svg/ifcicon.svg";
@@ -26,4 +27,6 @@ export const BridgeIcon = ({ bridgeType }: BridgeIconProps) =>
         <SvgIfcIcon className={"icon-in-document"} />
       </div>
     ),
+    [IModelBridgeType.DWG]: <SvgDwg title={"DWG"} />,
+    [IModelBridgeType.NotSet]: null,
   }[bridgeType ?? IModelBridgeType.NotSet]);

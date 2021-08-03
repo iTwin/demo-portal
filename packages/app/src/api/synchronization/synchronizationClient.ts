@@ -51,6 +51,7 @@ export class SynchronizationClient {
       rvt: IModelBridgeType.REVIT,
       nwd: IModelBridgeType.NWD,
       ifc: IModelBridgeType.IFC,
+      dwg: IModelBridgeType.DWG,
     } as { [extension: string]: IModelBridgeType })[
       fileName.split(".").reverse()[0]
     ];
