@@ -21,6 +21,7 @@ export const TileDropTarget = ({ isDisabled = false }: TileDropTargetProps) => (
         <BridgeIcon bridgeType={IModelBridgeType.REVIT} />
         <BridgeIcon bridgeType={IModelBridgeType.NWD} />
         <BridgeIcon bridgeType={IModelBridgeType.IFC} />
+        <BridgeIcon bridgeType={IModelBridgeType.DWG} />
       </div>
     )}
     {isDisabled ? (
