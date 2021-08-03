@@ -16,12 +16,27 @@ export class SynchronizationClient {
   private DEMO_CONNECTION_NAME = "demo-portal-imodel-connection";
   private synchronizationApi: DefaultApi;
   private storageClient: StorageClient;
+  private static _supportedFileExtensions = [
+    ".dgn",
+    ".rvt",
+    ".ifc",
+    ".nwd",
+    ".dwg",
+  ];
+
   constructor(urlPrefix: string, private accessToken: string) {
     this.synchronizationApi = new DefaultApi(
       undefined,
       prefixUrl(BASE_PATH, urlPrefix)
     );
     this.storageClient = new StorageClient(urlPrefix, accessToken);
+  }
+
+  /**
+   * list of supported file extensions
+   */
+  public static get supportedFileExtensions() {
+    return this._supportedFileExtensions;
   }
 
   /**
@@ -51,6 +66,7 @@ export class SynchronizationClient {
       rvt: IModelBridgeType.REVIT,
       nwd: IModelBridgeType.NWD,
       ifc: IModelBridgeType.IFC,
+      dwg: IModelBridgeType.DWG,
     } as { [extension: string]: IModelBridgeType })[
       fileName.split(".").reverse()[0]
     ];

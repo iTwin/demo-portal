@@ -55,7 +55,9 @@ export const useSynchronizeFileUploader = ({
         const bridgeType = SynchronizationClient.getBridgeType(fileName);
         if (!bridgeType) {
           throw new Error(
-            "This file type is not supported, current file support are .dgn, .rvt, .nwd and .ifc"
+            `This file type is not supported, current file support are: ${SynchronizationClient.supportedFileExtensions.join(
+              ", "
+            )}`
           );
         }
         if (target.size === 0) {
