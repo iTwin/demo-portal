@@ -16,7 +16,13 @@ export class SynchronizationClient {
   private DEMO_CONNECTION_NAME = "demo-portal-imodel-connection";
   private synchronizationApi: DefaultApi;
   private storageClient: StorageClient;
-  private static _supportedFileExtensions: string[];
+  private static _supportedFileExtensions = [
+    ".dgn",
+    ".rvt",
+    ".ifc",
+    ".nwd",
+    ".dwg",
+  ];
 
   constructor(urlPrefix: string, private accessToken: string) {
     this.synchronizationApi = new DefaultApi(
@@ -24,13 +30,6 @@ export class SynchronizationClient {
       prefixUrl(BASE_PATH, urlPrefix)
     );
     this.storageClient = new StorageClient(urlPrefix, accessToken);
-    SynchronizationClient._supportedFileExtensions = [
-      ".dgn",
-      ".rvt",
-      ".ifc",
-      ".nwd",
-      ".dwg",
-    ];
   }
 
   /**
