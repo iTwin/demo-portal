@@ -1,6 +1,8 @@
 /*---------------------------------------------------------------------------------------------
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
+ *
+ * This code is for demonstration purposes and should not be considered production ready.
  *--------------------------------------------------------------------------------------------*/
 import {
   Alert,
@@ -11,6 +13,7 @@ import {
 } from "@itwin/itwinui-react";
 import React, { ComponentPropsWithoutRef } from "react";
 
+import { SynchronizationClient } from "../../../api/synchronization/synchronizationClient";
 import { useSynchronizeFileUploader } from "../useSynchronizeFileUploader";
 import "./UploadPanel.scss";
 
@@ -110,7 +113,7 @@ export const UploadPanel = ({
       {state !== "Working" && (
         <FileUpload onFileDropped={uploadAndRefresh}>
           <FileUploadTemplate
-            acceptType={".dgn,.rvt,.ifc,.nwd"}
+            acceptType={SynchronizationClient.supportedFileExtensions.join(",")}
             acceptMultiple={false}
             onChange={(e) => uploadAndRefresh(e?.target?.files)}
           />

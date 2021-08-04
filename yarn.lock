@@ -1806,7 +1806,7 @@
   resolved "https://registry.yarnpkg.com/@itwin/itwinui-icons-react/-/itwinui-icons-react-0.1.0.tgz#812bf14c090d7c5a412e9a678781b5a793966ca9"
   integrity sha512-zD11tk6ze8ObJD30l5TOSjQq7giNOwqqLNSqATWSjyiuYnnNlxm80ApKXFfzo+j3hnLg4mQvwhzDPyyMIYzHEw==
 
-"@itwin/itwinui-icons-react@^1.1.1", "@itwin/itwinui-icons-react@^1.1.2", "@itwin/itwinui-icons-react@^1.2.0":
+"@itwin/itwinui-icons-react@^1.1.1", "@itwin/itwinui-icons-react@^1.2.0":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@itwin/itwinui-icons-react/-/itwinui-icons-react-1.2.0.tgz#82c6f6896639990c31ee806ee2af6a9ed23856fd"
   integrity sha512-yeBIJPWli/iLKaTLmhsd7ZOn9bMRouN3dGHggJjBjAsgJNNtahbfB/NfOS17DcN6Ejt4Z70VAzMdpwzJ/34CKA==
