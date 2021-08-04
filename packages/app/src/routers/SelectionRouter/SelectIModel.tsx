@@ -87,7 +87,7 @@ const SelectIModel = ({
   );
 
   return (
-    <div className="scrolling-tab-container">
+    <div className="scrolling-tab-container select-imodel">
       <div className={"title-section"}>
         <SelectIModelTitle accessToken={accessToken} projectId={projectId} />
         <ButtonGroup>{createIconButton}</ButtonGroup>

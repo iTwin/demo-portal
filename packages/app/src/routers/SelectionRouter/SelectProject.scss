@@ -6,8 +6,36 @@
  *--------------------------------------------------------------------------------------------*/
 @import "@itwin/itwinui-css/scss/variables";
 
-.title-section {
-  margin: 10px calc(var(--responsive-grid-margin, 64px) - 3px);
+.select-project {
+  .title-section {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+    margin: 10px calc(var(--responsive-grid-margin, 64px) - 3px);
+    justify-content: space-between;
+    flex-wrap: wrap-reverse;
+
+    .inline-input-with-button {
+      display: flex;
+      flex-direction: row;
+
+      .iui-input-container.iui-inline > .iui-input:last-child {
+        min-width: 300px;
+        padding-right: 61px;
+      }
+
+      .iui-button {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        margin-left: -50px;
+      }
+    }
+
+    .iui-input-container.iui-inline {
+      margin: 0;
+    }
+  }
 }
 
 .scrolling-tab-container {
