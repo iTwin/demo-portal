@@ -1,6 +1,8 @@
 /*---------------------------------------------------------------------------------------------
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
+ *
+ * This code is for demonstration purposes and should not be considered production ready.
  *--------------------------------------------------------------------------------------------*/
 import { StorageClient } from "../storage/storageClient";
 import { prefixUrl } from "../useApiPrefix";
@@ -16,12 +18,27 @@ export class SynchronizationClient {
   private DEMO_CONNECTION_NAME = "demo-portal-imodel-connection";
   private synchronizationApi: DefaultApi;
   private storageClient: StorageClient;
+  private static _supportedFileExtensions = [
+    ".dgn",
+    ".rvt",
+    ".ifc",
+    ".nwd",
+    ".dwg",
+  ];
+
   constructor(urlPrefix: string, private accessToken: string) {
     this.synchronizationApi = new DefaultApi(
       undefined,
       prefixUrl(BASE_PATH, urlPrefix)
     );
     this.storageClient = new StorageClient(urlPrefix, accessToken);
+  }
+
+  /**
+   * list of supported file extensions
+   */
+  public static get supportedFileExtensions() {
+    return this._supportedFileExtensions;
   }
 
   /**
@@ -51,6 +68,7 @@ export class SynchronizationClient {
       rvt: IModelBridgeType.REVIT,
       nwd: IModelBridgeType.NWD,
       ifc: IModelBridgeType.IFC,
+      dwg: IModelBridgeType.DWG,
     } as { [extension: string]: IModelBridgeType })[
       fileName.split(".").reverse()[0]
     ];
@@ -93,9 +111,7 @@ export class SynchronizationClient {
   }
 
   /**
-   * Until API is fixed so task.sourceFileId actually returns a source.id, we need to guess
-   * which one it is. So far, the order are the same, except the jobs are by bridgeType
-   * (So, if 2 file, one revit, and one MSTN, both will have task index 0 in their respective jobs...)
+   * Retrieve the task information based on the storageFileId associated to the task
    * @param run Last run details fetched from getRun or getRuns api.
    * @param storageFileId Storage file Id
    * @returns Task info

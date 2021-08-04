@@ -1,6 +1,8 @@
 /*---------------------------------------------------------------------------------------------
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
+ *
+ * This code is for demonstration purposes and should not be considered production ready.
  *--------------------------------------------------------------------------------------------*/
 import { ProjectFull } from "@itwin/imodel-browser-react";
 import React from "react";
@@ -52,7 +54,7 @@ const localCache: {
 } = {};
 
 /**
- * Generic hook to get json data results, expects request to http://developer.bentley.com/...
+ * Generic hook to get json data results, expects request to http://api.bentley.com/...
  */
 export const useApiData: <T>(
   options: ApiDataHookOptions

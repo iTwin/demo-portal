@@ -1,6 +1,8 @@
 /*---------------------------------------------------------------------------------------------
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
+ *
+ * This code is for demonstration purposes and should not be considered production ready.
  *--------------------------------------------------------------------------------------------*/
 import { UserInfo } from "@bentley/itwin-client";
 import { ReactPlugin } from "@microsoft/applicationinsights-react-js";
@@ -50,8 +52,6 @@ class TelemetryService {
   };
 
   private _userDataTelemetryInitializer = (envelope: ITelemetryItem) => {
-    // Ensure that users' email addresses are added to calls to the telemetry service.
-    // We do already set the ims id but we need to have more visibility into usage in our dashboards.
     envelope.data = envelope.data ?? {};
     (envelope.data as any).user = (envelope.data as any).user ?? {};
     (envelope.data as any).user.email = this._userInfo?.email?.id ?? "No Email";

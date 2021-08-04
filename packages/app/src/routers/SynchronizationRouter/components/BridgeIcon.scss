@@ -1,0 +1,19 @@
+/*---------------------------------------------------------------------------------------------
+ * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
+ * See LICENSE.md in the project root for license terms and full copyright notice.
+ *
+ * This code is for demonstration purposes and should not be considered production ready.
+ *--------------------------------------------------------------------------------------------*/
+.composite-document-icon {
+  position: relative;
+
+  .icon-in-document {
+    position: absolute;
+    height: 18px;
+    width: 18px;
+    top: 8px;
+    left: 6px;
+    fill: white; // these icons are not themed, so this overlay is always white, we'll need a proper icon
+    color: white;
+  }
+}

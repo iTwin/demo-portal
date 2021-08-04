@@ -1,0 +1,43 @@
+/*---------------------------------------------------------------------------------------------
+ * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
+ * See LICENSE.md in the project root for license terms and full copyright notice.
+ *
+ * This code is for demonstration purposes and should not be considered production ready.
+ *--------------------------------------------------------------------------------------------*/
+@import "@itwin/itwinui-css/scss/variables";
+
+.tile-drop-target {
+  @include iui-blur(6);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  pointer-events: none;
+  display: flex;
+  place-content: center;
+  place-items: center;
+  flex-direction: column;
+  gap: 11px;
+  @include themed() {
+    border: 2px solid t(iui-color-background-5);
+  }
+
+  .tile-upload-options {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 12px;
+
+    > * {
+      width: 32px;
+      height: 32px;
+    }
+  }
+
+  .tile-upload-icon {
+    width: 64px;
+    height: 64px;
+    fill: currentColor;
+  }
+}
