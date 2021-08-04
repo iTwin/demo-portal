@@ -39,10 +39,16 @@ const useUpdateIModelLoadingStyler = (loading: boolean) => {
 export const IModelEdit = ({ accessToken, iModelId = "" }: EditProps) => {
   const {
     results: { iModel },
+    refreshData,
   } = useApiData<GetIModelResult>({
+    noAutoFetch: true,
     accessToken,
     url: `https://api.bentley.com/imodels/${iModelId}`,
   });
+  React.useEffect(() => {
+    // Always get up to date data;
+    refreshData();
+  }, [refreshData]);
   const navigate = useNavigate();
   const goBack = () => navigate?.(-1);
   const { ref } = useUpdateIModelLoadingStyler(!iModel);
