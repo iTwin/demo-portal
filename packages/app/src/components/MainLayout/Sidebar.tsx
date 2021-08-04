@@ -4,15 +4,7 @@
  *
  * This code is for demonstration purposes and should not be considered production ready.
  *--------------------------------------------------------------------------------------------*/
-import {
-  Svg3D,
-  SvgCloud,
-  SvgCompare,
-  SvgDatabase,
-  SvgFlag,
-  SvgReports,
-  SvgSync,
-} from "@itwin/itwinui-icons-react";
+import { Svg3D, SvgFlag, SvgSync } from "@itwin/itwinui-icons-react";
 import { SidenavButton, SideNavigation } from "@itwin/itwinui-react";
 import { RouteComponentProps, Router } from "@reach/router";
 import React from "react";
@@ -61,38 +53,6 @@ export const RoutedSidebar = ({ navigate }: RouteComponentProps) => {
           isActive={section === "manage-versions"}
         >
           Manage Versions
-        </SidenavButton>,
-        <SidenavButton
-          key="compare"
-          startIcon={<SvgCompare />}
-          onClick={() => navigate?.(`/compare${selectionPath}`)}
-          isActive={section === "compare"}
-        >
-          Compare Versions
-        </SidenavButton>,
-        <SidenavButton
-          key="query"
-          startIcon={<SvgDatabase />}
-          onClick={() => navigate?.(`/query${selectionPath}`)}
-          isActive={section === "query"}
-        >
-          Query iModel
-        </SidenavButton>,
-        <SidenavButton
-          key="report"
-          startIcon={<SvgReports />}
-          onClick={() => navigate?.(`/report${selectionPath}`)}
-          isActive={section === "report"}
-        >
-          Generate Report
-        </SidenavButton>,
-        <SidenavButton
-          key="aiml"
-          startIcon={<SvgCloud />}
-          onClick={() => navigate?.(`/ai-ml${selectionPath}`)}
-          isActive={section === "ai-ml"}
-        >
-          Artificial Intelligence - Machine Learning
         </SidenavButton>,
       ]}
     />

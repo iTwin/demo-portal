@@ -9,7 +9,6 @@ import React, { useMemo } from "react";
 
 import { useAuth } from "../components/Auth/AuthProvider";
 import { ManageVersionsRouter } from "./ManageVersionsRouter/ManageVersionsRouter";
-import { StayTunedRouter } from "./StayTunedRouter/StayTunedRouter";
 import { SynchronizationRouter } from "./SynchronizationRouter/SynchronizationRouter";
 import { ViewRouter } from "./ViewRouter/ViewRouter";
 
@@ -29,14 +28,6 @@ export const MainRouter = () => {
       <ManageVersionsRouter
         path="manage-versions/*"
         accessToken={accessTokenStr}
-      />
-      <StayTunedRouter path="validate/*" featureName={"Validate iModel"} />
-      <StayTunedRouter path="compare/*" featureName={"Version Compare"} />
-      <StayTunedRouter path="query/*" featureName={"Query"} />
-      <StayTunedRouter path="report/*" featureName={"Report"} />
-      <StayTunedRouter
-        path="ai-ml/*"
-        featureName={"Artifical Intelligence - Machine Learning"}
       />
       <Redirect noThrow={true} from="/" to="view" default={true} />
     </Router>
