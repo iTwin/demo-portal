@@ -1,6 +1,8 @@
 /*---------------------------------------------------------------------------------------------
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
+ *
+ * This code is for demonstration purposes and should not be considered production ready.
  *--------------------------------------------------------------------------------------------*/
 import { StorageClient } from "../storage/storageClient";
 import { prefixUrl } from "../useApiPrefix";
@@ -109,9 +111,7 @@ export class SynchronizationClient {
   }
 
   /**
-   * Until API is fixed so task.sourceFileId actually returns a source.id, we need to guess
-   * which one it is. So far, the order are the same, except the jobs are by bridgeType
-   * (So, if 2 file, one revit, and one MSTN, both will have task index 0 in their respective jobs...)
+   * Retrieve the task information based on the storageFileId associated to the task
    * @param run Last run details fetched from getRun or getRuns api.
    * @param storageFileId Storage file Id
    * @returns Task info

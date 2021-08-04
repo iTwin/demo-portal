@@ -1,13 +1,15 @@
 /*---------------------------------------------------------------------------------------------
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
+ *
+ * This code is for demonstration purposes and should not be considered production ready.
  *--------------------------------------------------------------------------------------------*/
 import { LDUser } from "launchdarkly-js-sdk-common";
 import { LDProvider, useFlags } from "launchdarkly-react-client-sdk";
 import React, { useMemo } from "react";
-import { useAuth } from "../Auth/AuthProvider";
 
 import { useConfig } from "../../config/ConfigProvider";
+import { useAuth } from "../Auth/AuthProvider";
 import { DemoFlagSet } from "./ldFlagList";
 
 export const useDemoFlags = () => {
