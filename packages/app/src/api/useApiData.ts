@@ -94,9 +94,9 @@ export const useApiData: <T>(
           })
           .then((result) => {
             if (prefixedUrl) {
-              const FIVE_SEC_IN_MILLISECONDS = 5 * 1000;
+              const FIVE_MIN_IN_MILLISECONDS = 5 * 60 * 1000;
               localCache[prefixedUrl] = {
-                exp: Date.now() + FIVE_SEC_IN_MILLISECONDS,
+                exp: Date.now() + FIVE_MIN_IN_MILLISECONDS,
                 data: result,
               };
             }
