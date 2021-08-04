@@ -6,18 +6,22 @@
  *--------------------------------------------------------------------------------------------*/
 import {
   ApiOverrides,
+  ProjectFull,
   ProjectGrid,
   ProjectGridProps,
 } from "@itwin/imodel-browser-react";
 import {
   SvgCalendar,
   SvgList,
+  SvgSearch,
   SvgStarHollow,
 } from "@itwin/itwinui-icons-react";
 import {
   ButtonGroup,
   HorizontalTab,
   HorizontalTabs,
+  IconButton,
+  LabeledInput,
 } from "@itwin/itwinui-react";
 import { withAITracking } from "@microsoft/applicationinsights-react-js";
 import { RouteComponentProps, useLocation } from "@reach/router";
@@ -83,14 +87,20 @@ const SelectProject = ({
     return [createAction, editAction, deleteAction];
   }, [createAction, editAction, deleteAction]);
 
+  const [searchValue, setSearchValue] = React.useState("");
+  const [searchParam, setSearchParam] = React.useState("");
+  const startSearch = React.useCallback(() => {
+    setSearchParam(!searchValue ? "" : `?$search=${searchValue}`);
+  }, [searchValue]);
+
   const serverEnvironmentPrefix = useApiPrefix();
-  const apiOverrides = React.useMemo<ApiOverrides>(
+  const apiOverrides = React.useMemo<ApiOverrides<ProjectFull[]>>(
     () => ({ serverEnvironmentPrefix }),
     [serverEnvironmentPrefix]
   );
   return (
     <>
-      <div className="scrolling-tab-container">
+      <div className="scrolling-tab-container select-project">
         <HorizontalTabs
           labels={tabsWithIcons}
           onTabSelected={setProjectType}
@@ -101,6 +111,34 @@ const SelectProject = ({
         >
           <div className={"title-section"}>
             <ButtonGroup>{createIconButton}</ButtonGroup>
+            {projectType === 2 && (
+              <div className={"inline-input-with-button"}>
+                <LabeledInput
+                  label={"Search"}
+                  placeholder={"Will search in name or number"}
+                  displayStyle={"inline"}
+                  value={searchValue}
+                  onChange={(event) => {
+                    const {
+                      target: { value },
+                    } = event;
+                    setSearchValue(value);
+                  }}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter") {
+                      startSearch();
+                    }
+                    if (event.key === "Escape") {
+                      setSearchValue("");
+                      setSearchParam("");
+                    }
+                  }}
+                />
+                <IconButton onClick={startSearch}>
+                  <SvgSearch />
+                </IconButton>
+              </div>
+            )}
           </div>
           <div className={"scrolling-tab-content"}>
             <ProjectGrid
@@ -110,7 +148,7 @@ const SelectProject = ({
                   ? "favorites"
                   : projectType === 1
                   ? "recents"
-                  : ""
+                  : (searchParam as any) ?? ""
               }
               onThumbnailClick={(project) => {
                 trackEvent("ProjectClicked", { project: project.id });
@@ -119,6 +157,7 @@ const SelectProject = ({
               projectActions={projectActions}
               apiOverrides={apiOverrides}
               key={refreshKey}
+              stringsOverrides={{ noIModels: "No projects found" } as any}
               {...gridProps}
             />
           </div>
