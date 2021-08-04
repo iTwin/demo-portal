@@ -1,40 +1,42 @@
 /*---------------------------------------------------------------------------------------------
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
+ *
+ * This code is for demonstration purposes and should not be considered production ready.
  *--------------------------------------------------------------------------------------------*/
 import { ProjectFull } from "@itwin/imodel-browser-react";
 import { toaster } from "@itwin/itwinui-react";
 import React from "react";
 
-import { BaseProjectPage } from "../base-project/BaseProject";
+import { BaseProject, BaseProjectPage } from "../base-project/BaseProject";
 
-export type CreateProjectProps = {
+export type UpdateProjectProps = {
   /** Bearer access token with scope `projects:modify`. */
   accessToken: string;
   /** Object that configures different overrides for the API. */
   apiOverrides?: { serverEnvironmentPrefix?: "dev" | "qa" | "" };
   /** Callback on canceled action. */
   onClose?: () => void;
-  /** Callback on failed create. */
+  /** Callback on failed update. */
   onError?: (
     error: { error: { code?: string; message?: string } } | any
   ) => void;
-  /** Callback on successful create. */
-  onSuccess?: (createdProject: { project: ProjectFull }) => void;
+  /** Callback on successful update. */
+  onSuccess?: (updatedProjet: { project: ProjectFull }) => void;
   /** Object of string overrides. */
   stringsOverrides?: {
-    /** Displayed after successful create. */
+    /** Displayed after successful update. */
     successMessage?: string;
-    /** Displayed after failed create. */
+    /** Displayed after failed update. */
     errorMessage?: string;
     /** Displayed after failed create because of the duplicate name or number. */
     errorMessageProjectExists?: string;
     /** The title of the page. */
     titleString?: string;
     /** iModel name property. */
-    nameString?: string;
+    displayNameString?: string;
     /** iModel description property. */
-    descriptionString?: string;
+    projectNumberString?: string;
     /** Confirm button string. */
     confirmButton?: string;
     /** Cancel button string. */
@@ -44,9 +46,13 @@ export type CreateProjectProps = {
     /** Error message when description is too long. */
     projectNumberTooLong?: string;
   };
+  /** iModel id to update. */
+  projectId: string;
+  /** Initial iModel data. */
+  initialProject: BaseProject;
 };
 
-export function CreateProject(props: CreateProjectProps) {
+export function UpdateProject(props: UpdateProjectProps) {
   const {
     accessToken,
     apiOverrides = { serverEnvironmentPrefix: "" },
@@ -54,27 +60,31 @@ export function CreateProject(props: CreateProjectProps) {
     onError,
     onSuccess,
     stringsOverrides,
+    projectId,
+    initialProject,
   } = props;
   const [isLoading, setIsLoading] = React.useState(false);
 
   const updatedStrings = {
-    successMessage: "Project created successfully.",
-    errorMessage: "Could not create a project. Please try again later.",
+    successMessage: "Project updated successfully.",
+    errorMessage: "Could not update a project. Please try again later.",
     errorMessageProjectExists:
       "Project with the same name or number already exists.",
+    titleString: "Update a project",
+    confirmButton: "Update",
     ...stringsOverrides,
   };
 
-  const createProject = async (project: {
+  const updateProject = async (project: {
     displayName: string;
     projectNumber: string;
   }) => {
     setIsLoading(true);
     try {
-      const projectsUrl = `https://${apiOverrides?.serverEnvironmentPrefix &&
-        `${apiOverrides.serverEnvironmentPrefix}-`}api.bentley.com/projects`;
-      const response = await fetch(projectsUrl, {
-        method: "POST",
+      const projectUrl = `https://${apiOverrides?.serverEnvironmentPrefix &&
+        `${apiOverrides.serverEnvironmentPrefix}-`}api.bentley.com/projects/${projectId}`;
+      const response = await fetch(projectUrl, {
+        method: "PATCH",
         headers: {
           Authorization: `${accessToken}`,
           Prefer: "return=representation",
@@ -90,28 +100,12 @@ export function CreateProject(props: CreateProjectProps) {
         error = { ...error, ...responseBody };
         throw error;
       } else {
-        const createdProject: { project: ProjectFull } = await response.json();
-        const recentsUrl = `https://${apiOverrides?.serverEnvironmentPrefix &&
-          `${apiOverrides.serverEnvironmentPrefix}-`}api.bentley.com/projects/recents/${
-          createdProject.project.id
-        }`;
-        await fetch(recentsUrl, {
-          method: "POST",
-          headers: {
-            Authorization: `${accessToken}`,
-          },
-        }).catch(() => {
-          console.error(
-            `Adding ${createdProject.project.displayName} to recent failed`
-          );
-          //* swallow error if this fails, project was still created and is available. *//
-        });
-
+        const updatedProject = await response.json();
         setIsLoading(false);
         toaster.positive(updatedStrings.successMessage, {
           hasCloseButton: true,
         });
-        onSuccess?.(createdProject);
+        onSuccess?.(updatedProject);
       }
     } catch (err) {
       error(err);
@@ -126,6 +120,7 @@ export function CreateProject(props: CreateProjectProps) {
       error?.error?.code === "ProjectExists"
         ? updatedStrings.errorMessageProjectExists
         : updatedStrings.errorMessage;
+
     toaster.negative(errorString, { hasCloseButton: true });
     onError?.(error);
   };
@@ -135,8 +130,9 @@ export function CreateProject(props: CreateProjectProps) {
       <BaseProjectPage
         stringsOverrides={updatedStrings}
         isLoading={isLoading}
-        onActionClick={createProject}
+        onActionClick={updateProject}
         onClose={onClose}
+        initialProject={initialProject}
       />
     </>
   );

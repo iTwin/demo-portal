@@ -7,7 +7,7 @@
 import { Redirect, Router } from "@reach/router";
 import React, { useMemo } from "react";
 
-import { useAuth } from "./Auth/AuthProvider";
+import { useAuth } from "../components/Auth/AuthProvider";
 import { ManageVersionsRouter } from "./ManageVersionsRouter/ManageVersionsRouter";
 import { StayTunedRouter } from "./StayTunedRouter/StayTunedRouter";
 import { SynchronizationRouter } from "./SynchronizationRouter/SynchronizationRouter";

@@ -15,17 +15,17 @@ import { RouteComponentProps } from "@reach/router";
 import React from "react";
 
 import { useApiPrefix } from "../../api/useApiPrefix";
+import { useDemoFlags } from "../../components/LaunchDarkly/LaunchDarklyProvider";
 import { ai, trackEvent } from "../../services/telemetry";
 import { useCreateIModelAction } from "../CRUDRouter/useCreateIModelAction";
 import { useDeleteIModelAction } from "../CRUDRouter/useDeleteIModelAction";
 import { useEditIModelAction } from "../CRUDRouter/useEditIModelAction";
-import { useDemoFlags } from "../LaunchDarkly/LaunchDarklyProvider";
 import { useManageVersionsIModelAction } from "../ManageVersionsRouter/useManageVersionsIModelAction";
 import { useSynchronizationCards } from "../SynchronizationRouter/useSynchronizationCards";
 import { useSynchronizeIModelAction } from "../SynchronizationRouter/useSynchronizeIModelAction";
 import { useViewIModelAction } from "../ViewRouter/useViewIModelAction";
+import { SelectIModelTitle } from "./components/SelectIModelTitle";
 import "./SelectIModel.scss";
-import { SelectIModelTitle } from "./SelectIModelTitle";
 
 type IModelRouteProps = RouteComponentProps<
   IModelGridProps & {
