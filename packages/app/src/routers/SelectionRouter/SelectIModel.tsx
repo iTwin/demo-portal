@@ -4,24 +4,28 @@
  *
  * This code is for demonstration purposes and should not be considered production ready.
  *--------------------------------------------------------------------------------------------*/
-import { IModelGrid, IModelGridProps } from "@itwin/imodel-browser-react";
+import {
+  ApiOverrides,
+  IModelGrid,
+  IModelGridProps,
+} from "@itwin/imodel-browser-react";
 import { ButtonGroup } from "@itwin/itwinui-react";
 import { withAITracking } from "@microsoft/applicationinsights-react-js";
 import { RouteComponentProps } from "@reach/router";
 import React from "react";
 
 import { useApiPrefix } from "../../api/useApiPrefix";
+import { useDemoFlags } from "../../components/LaunchDarkly/LaunchDarklyProvider";
 import { ai, trackEvent } from "../../services/telemetry";
-import { useCreateIModelAction } from "../IModelCRUDRouter/useCreateIModelAction";
-import { useDeleteIModelAction } from "../IModelCRUDRouter/useDeleteIModelAction";
-import { useEditIModelAction } from "../IModelCRUDRouter/useEditIModelAction";
-import { useDemoFlags } from "../LaunchDarkly/LaunchDarklyProvider";
+import { useCreateIModelAction } from "../CRUDRouter/useCreateIModelAction";
+import { useDeleteIModelAction } from "../CRUDRouter/useDeleteIModelAction";
+import { useEditIModelAction } from "../CRUDRouter/useEditIModelAction";
 import { useManageVersionsIModelAction } from "../ManageVersionsRouter/useManageVersionsIModelAction";
 import { useSynchronizationCards } from "../SynchronizationRouter/useSynchronizationCards";
 import { useSynchronizeIModelAction } from "../SynchronizationRouter/useSynchronizeIModelAction";
 import { useViewIModelAction } from "../ViewRouter/useViewIModelAction";
+import { SelectIModelTitle } from "./components/SelectIModelTitle";
 import "./SelectIModel.scss";
-import { SelectIModelTitle } from "./SelectIModelTitle";
 
 type IModelRouteProps = RouteComponentProps<
   IModelGridProps & {
@@ -52,16 +56,35 @@ const SelectIModel = ({
   const { viewAction } = useViewIModelAction();
   const serverEnvironmentPrefix = useApiPrefix();
   const flags = useDemoFlags();
-  const actions: any[] = [
-    viewAction,
-    editAction,
-    synchronizeAction,
-    manageVersionsAction,
-  ];
 
-  if (flags["delete-imodel"]) {
-    actions.push(deleteAction);
-  }
+  const iModelActions = React.useMemo(() => {
+    const actions: any[] = [
+      viewAction,
+      editAction,
+      synchronizeAction,
+      manageVersionsAction,
+    ];
+
+    if (flags["delete-imodel"]) {
+      actions.push(deleteAction);
+    }
+    return actions.filter(
+      (action) => !hideActions?.includes(action.key as any)
+    );
+  }, [
+    deleteAction,
+    editAction,
+    flags,
+    hideActions,
+    manageVersionsAction,
+    synchronizeAction,
+    viewAction,
+  ]);
+
+  const apiOverrides = React.useMemo<ApiOverrides>(
+    () => ({ serverEnvironmentPrefix }),
+    [serverEnvironmentPrefix]
+  );
 
   return (
     <div className="scrolling-tab-container">
@@ -79,10 +102,8 @@ const SelectIModel = ({
             trackEvent("iModelClicked", { iModel: imodel.id });
             navigate?.(`imodel/${imodel.id}`);
           }}
-          iModelActions={actions.filter(
-            (action) => !hideActions?.includes(action.key as any)
-          )}
-          apiOverrides={{ serverEnvironmentPrefix }}
+          iModelActions={iModelActions}
+          apiOverrides={apiOverrides}
           {...rest}
         />
         {deleteDialog}

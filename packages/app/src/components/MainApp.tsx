@@ -7,12 +7,12 @@
 import { ErrorPage } from "@itwin/itwinui-react";
 import React, { useState } from "react";
 
+import { MainRouter } from "../routers/MainRouter";
 import AuthClient from "../services/auth/AuthClient";
 import { useAuth } from "./Auth/AuthProvider";
 import { Header } from "./Header/Header";
 import MainContainer from "./MainLayout/MainContainer";
 import { Sidebar } from "./MainLayout/Sidebar";
-import { MainRouter } from "./MainRouter";
 
 export const MainApp = () => {
   const [isLoggingIn, setIsLoggingIn] = useState(false);

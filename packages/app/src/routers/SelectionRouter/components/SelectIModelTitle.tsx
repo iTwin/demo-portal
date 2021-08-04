@@ -8,7 +8,7 @@ import { ProjectFull } from "@itwin/imodel-browser-react";
 import { Title } from "@itwin/itwinui-react";
 import React from "react";
 
-import { useApiData } from "../../api/useApiData";
+import { useApiData } from "../../../api/useApiData";
 
 interface GetProjectResult {
   project?: ProjectFull;
