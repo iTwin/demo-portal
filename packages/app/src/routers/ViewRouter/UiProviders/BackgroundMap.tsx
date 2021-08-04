@@ -41,7 +41,7 @@ const BackgroundMapStatusBarItem = () => {
 
   return (
     <Tooltip
-      placement="auto"
+      placement="top"
       content={bgMapOn ? "Disable background map" : "Enable background map"}
     >
       <div ref={target} onClick={onChange}>
@@ -73,7 +73,7 @@ export class SimpleBgMapToggleProvider implements UiItemsProvider {
         StatusBarItemUtilities.createStatusBarItem(
           "BackgroundMaps.StatusBarItem",
           StatusBarSection.Right,
-          10,
+          15,
           <BackgroundMapStatusBarItem />
         )
       );
