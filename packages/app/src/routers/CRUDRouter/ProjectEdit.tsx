@@ -39,16 +39,10 @@ const useUpdateProjectLoadingStyler = (loading: boolean) => {
 export const ProjectEdit = ({ accessToken, projectId = "" }: EditProps) => {
   const {
     results: { project },
-    refreshData,
   } = useApiData<GetIModelResult>({
-    noAutoFetch: true,
     accessToken,
     url: `https://api.bentley.com/projects/${projectId}`,
   });
-  React.useEffect(() => {
-    // Always get up to date data;
-    refreshData();
-  }, [refreshData]);
   const navigate = useNavigate();
   const goBack = () => navigate?.(-1);
   const { ref } = useUpdateProjectLoadingStyler(!project);
