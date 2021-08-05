@@ -49,7 +49,7 @@ const View = (props: ViewProps) => {
     <Viewer
       contextId={props.projectId ?? ""}
       iModelId={props.iModelId ?? ""}
-      authConfig={{ oidcClient: AuthClient.oidcClient }}
+      authConfig={{ oidcClient: AuthClient.client }}
       theme={useThemeWatcher()}
       backend={{ buddiRegion }}
       uiProviders={[new SimpleBgMapToggleProvider()]}

@@ -5,7 +5,6 @@
  * This code is for demonstration purposes and should not be considered production ready.
  *--------------------------------------------------------------------------------------------*/
 interface DemoPortalAuthConfig {
-  authority: string;
   apimAuthority: string;
   clientId: string;
   whitelistedIds: string;
@@ -46,10 +45,6 @@ export const getConfig = async (): Promise<DemoPortalConfig> => {
         "",
     },
     auth: {
-      authority:
-        fetchedConfig?.envConfig?.auth?.authority ??
-        process.env.IMJS_AUTH_CLIENT_AUTHORITY ??
-        "https://imsoidc.bentley.com",
       apimAuthority:
         fetchedConfig?.envConfig?.auth?.apimAuthority ??
         process.env.IMJS_AUTH_CLIENT_APIM_AUTHORITY ??

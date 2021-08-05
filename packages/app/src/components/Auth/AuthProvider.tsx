@@ -32,7 +32,7 @@ const AuthContext = React.createContext<AuthContextValue>({
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isAttemptingSilentLogin, setIsAttemptingSilentLogin] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(
-    AuthClient.oidcClient ? AuthClient.oidcClient.isAuthorized : false
+    AuthClient.client ? AuthClient.client.isAuthorized : false
   );
   const [accessToken, setAccessToken] = useState<AccessToken>();
   const [userInfo, setUserInfo] = useState<UserInfo>();
@@ -44,30 +44,27 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       if (!auth) {
         return;
       }
-      if (!AuthClient.oidcClient && auth) {
+      if (!AuthClient.client && auth) {
         if (!auth.clientId) {
           throw new Error(
             "Please add a valid client ID in the .env.local file and restart the application"
           );
         }
-        await AuthClient.initializeOidc(
-          auth.clientId,
-          auth.authority,
-          auth.apimAuthority
-        );
-        AuthClient.apimClient.onUserStateChanged.addListener((token) => {
-          setIsAuthenticated(token?.isExpired(0) ?? false);
-          setAccessToken(token);
-          const userInfo = token?.getUserInfo();
-          setUserInfo(userInfo);
-          ai.updateUserInfo(userInfo);
-        });
+        await AuthClient.initialize(auth.clientId, auth.apimAuthority);
       }
+
+      AuthClient.client.onUserStateChanged.addListener((token) => {
+        setIsAuthenticated(token?.isExpired(0) ?? false);
+        setAccessToken(token);
+        const userInfo = token?.getUserInfo();
+        setUserInfo(userInfo);
+        ai.updateUserInfo(userInfo);
+      });
 
       try {
         // attempt silent signin
         await AuthClient.signInSilent();
-        setIsAuthenticated(AuthClient.oidcClient.isAuthorized);
+        setIsAuthenticated(AuthClient.client.isAuthorized);
       } catch (error) {
         // swallow the error. User can click the button to sign in
       } finally {
