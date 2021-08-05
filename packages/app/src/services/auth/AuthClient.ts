@@ -18,23 +18,20 @@ class AuthClient {
     clientId: string,
     authority: string
   ): BrowserAuthorizationClient {
-    if (this._client) {
-      return this._client;
+    if (!this._client) {
+      const scope = process.env.IMJS_AUTH_CLIENT_SCOPES ?? "";
+      const redirectUri = `${window.location.origin}/signin-callback`;
+      const postSignoutRedirectUri = window.location.origin;
+
+      this._client = new BrowserAuthorizationClient({
+        clientId,
+        redirectUri,
+        postSignoutRedirectUri,
+        scope,
+        responseType: "code",
+        authority,
+      });
     }
-
-    const scope = process.env.IMJS_AUTH_CLIENT_SCOPES ?? "";
-    const redirectUri = `${window.location.origin}/signin-callback`;
-    const postSignoutRedirectUri = window.location.origin;
-
-    this._client = new BrowserAuthorizationClient({
-      clientId,
-      redirectUri,
-      postSignoutRedirectUri,
-      scope,
-      responseType: "code",
-      authority,
-    });
-
     return this._client;
   }
 
