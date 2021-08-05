@@ -87,12 +87,12 @@ const SelectIModel = ({
   );
 
   return (
-    <div className="scrolling-tab-container select-imodel">
-      <div className={"title-section"}>
+    <div className="idp-scrolling-container select-imodel">
+      <div className={"idp-content-margins"}>
         <SelectIModelTitle accessToken={accessToken} projectId={projectId} />
         <ButtonGroup>{createIconButton}</ButtonGroup>
       </div>
-      <div className="scrolling-tab-content">
+      <div className="idp-scrolling-content">
         <IModelGrid
           useIndividualState={useSynchronizationCards}
           key={refreshKey}

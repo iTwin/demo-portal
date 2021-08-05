@@ -47,8 +47,8 @@ export const Synchronize = ({
   React.useEffect(() => void fetchSources(), [fetchSources]);
 
   return (
-    <div className="scrolling-tab-container">
-      <div className="title-section">
+    <div className="idp-scrolling-container">
+      <div className="idp-content-margins">
         <div
           style={{
             display: "flex",
@@ -66,7 +66,7 @@ export const Synchronize = ({
           onSuccess={fetchSources}
         />
       </div>
-      <div className="scrolling-tab-content title-section">
+      <div className="idp-scrolling-content idp-content-margins">
         <LastRunContext.Provider value={lastRunResults}>
           <ConnectionsTable
             accessToken={accessToken}

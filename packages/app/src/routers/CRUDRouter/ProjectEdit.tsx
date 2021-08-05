@@ -48,19 +48,21 @@ export const ProjectEdit = ({ accessToken, projectId = "" }: EditProps) => {
   const { ref } = useUpdateProjectLoadingStyler(!project);
   const serverEnvironmentPrefix = useApiPrefix();
   return (
-    <div ref={ref}>
-      <UpdateProject
-        key={project?.id}
-        accessToken={accessToken}
-        projectId={projectId}
-        initialProject={{
-          displayName: project?.displayName ?? "",
-          projectNumber: project?.projectNumber ?? "",
-        }}
-        onClose={goBack}
-        onSuccess={goBack}
-        apiOverrides={{ serverEnvironmentPrefix }}
-      />
+    <div ref={ref} className={"idp-scrolling-iac-dialog"}>
+      <div className={"idp-content-margins"}>
+        <UpdateProject
+          key={project?.id}
+          accessToken={accessToken}
+          projectId={projectId}
+          initialProject={{
+            displayName: project?.displayName ?? "",
+            projectNumber: project?.projectNumber ?? "",
+          }}
+          onClose={goBack}
+          onSuccess={goBack}
+          apiOverrides={{ serverEnvironmentPrefix }}
+        />
+      </div>
     </div>
   );
 };
