@@ -18,15 +18,17 @@ export const ProjectCreate = ({ accessToken }: CreateProps) => {
   const goBack = () => navigate?.(-1);
   const serverEnvironmentPrefix = useApiPrefix();
   return (
-    <div>
-      <CreateProject
-        accessToken={accessToken}
-        onClose={goBack}
-        onSuccess={(project) => {
-          void navigate(`project/${project.project.id}`);
-        }}
-        apiOverrides={{ serverEnvironmentPrefix }}
-      />
+    <div className={"idp-scrolling-iac-dialog"}>
+      <div className={"idp-content-margins"}>
+        <CreateProject
+          accessToken={accessToken}
+          onClose={goBack}
+          onSuccess={(project) => {
+            void navigate(`project/${project.project.id}`);
+          }}
+          apiOverrides={{ serverEnvironmentPrefix }}
+        />
+      </div>
     </div>
   );
 };

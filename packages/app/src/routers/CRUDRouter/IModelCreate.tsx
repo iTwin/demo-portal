@@ -19,14 +19,16 @@ export const IModelCreate = ({ accessToken, projectId = "" }: CreateProps) => {
   const goBack = () => navigate?.(-1);
   const serverEnvironmentPrefix = useApiPrefix();
   return (
-    <div>
-      <CreateIModel
-        accessToken={accessToken}
-        projectId={projectId}
-        onClose={goBack}
-        onSuccess={goBack}
-        apiOverrides={{ serverEnvironmentPrefix }}
-      />
+    <div className={"idp-scrolling-iac-dialog"}>
+      <div className={"idp-content-margins"}>
+        <CreateIModel
+          accessToken={accessToken}
+          projectId={projectId}
+          onClose={goBack}
+          onSuccess={goBack}
+          apiOverrides={{ serverEnvironmentPrefix }}
+        />
+      </div>
     </div>
   );
 };
