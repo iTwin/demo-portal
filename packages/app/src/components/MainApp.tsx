@@ -4,6 +4,7 @@
  *
  * This code is for demonstration purposes and should not be considered production ready.
  *--------------------------------------------------------------------------------------------*/
+import { FillCentered } from "@bentley/ui-core";
 import { ErrorPage } from "@itwin/itwinui-react";
 import React, { useState } from "react";
 
@@ -47,7 +48,7 @@ export const MainApp = () => {
       sidebar={<Sidebar />}
     >
       {isLoggingIn ? (
-        <span>"Logging in...."</span>
+        <FillCentered>{"Logging in...."}</FillCentered>
       ) : (
         isAuthenticated &&
         (isAuthorized ? <MainRouter /> : <ErrorPage errorType="401" />)

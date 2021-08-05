@@ -38,15 +38,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const { auth } = useConfig();
 
   useEffect(() => {
-    const updateAuthContext = (token?: AccessToken) => {
-      setIsAuthenticated(token?.isExpired(0) ?? false);
-      setAccessToken(token);
-      const userInfo = token?.getUserInfo();
-      setUserInfo(userInfo);
-      ai.updateUserInfo(userInfo);
-    };
-
-    const initOidc = async () => {
+    const initAuth = async () => {
       if (!auth) {
         return;
       }
@@ -56,16 +48,21 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
             "Please add a valid client ID in the .env.local file and restart the application"
           );
         }
-        await AuthClient.initialize(auth.clientId, auth.authority);
+        const client = AuthClient.initialize(auth.clientId, auth.authority);
+        client.onUserStateChanged.addListener((token?: AccessToken) => {
+          setIsAuthenticated(token?.isExpired(0) ?? false);
+          setAccessToken(token);
+          const userInfo = token?.getUserInfo();
+          setUserInfo(userInfo);
+          ai.updateUserInfo(userInfo);
+        });
       }
-
-      AuthClient.client.onUserStateChanged.addListener(updateAuthContext);
 
       try {
         // attempt silent signin
         await AuthClient.signInSilent();
         // await AuthClient.signIn();
-        setIsAuthenticated(AuthClient.client.isAuthorized);
+        setIsAuthenticated(AuthClient.client?.isAuthorized ?? false);
       } catch (error) {
         // swallow the error. User can click the button to sign in
       } finally {
@@ -73,21 +70,12 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       }
     };
 
-    initOidc().catch(console.error);
+    initAuth().catch(console.error);
 
     return () => {
-      AuthClient.client?.onUserStateChanged.removeListener(updateAuthContext);
+      AuthClient.dispose();
     };
   }, [auth]);
-
-  useEffect(() => {
-    const silentRenew = async () => {
-      await AuthClient.signInSilent();
-    };
-    if (AuthClient.client && !isAuthenticated) {
-      silentRenew().catch(console.error);
-    }
-  }, [isAuthenticated]);
 
   const isAuthorized = useMemo(() => {
     if (auth?.whitelistedIds && userInfo?.organization?.id) {

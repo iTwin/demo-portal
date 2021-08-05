@@ -8,18 +8,18 @@ import { BrowserAuthorizationClient } from "@bentley/frontend-authorization-clie
 import { FrontendRequestContext } from "@bentley/imodeljs-frontend";
 
 class AuthClient {
-  private static _client: BrowserAuthorizationClient;
+  private static _client?: BrowserAuthorizationClient;
 
-  public static get client(): BrowserAuthorizationClient {
+  public static get client(): BrowserAuthorizationClient | undefined {
     return this._client;
   }
 
-  public static async initialize(
+  public static initialize(
     clientId: string,
     authority: string
-  ): Promise<void> {
+  ): BrowserAuthorizationClient {
     if (this._client) {
-      return;
+      return this._client;
     }
 
     const scope = process.env.IMJS_AUTH_CLIENT_SCOPES ?? "";
@@ -34,18 +34,24 @@ class AuthClient {
       responseType: "code",
       authority,
     });
+
+    return this._client;
   }
 
   public static async signIn(): Promise<void> {
-    await this.client.signIn(new FrontendRequestContext());
+    await this.client?.signIn(new FrontendRequestContext());
   }
 
   public static async signInSilent(): Promise<void> {
-    await this.client.signInSilent(new FrontendRequestContext());
+    await this.client?.signInSilent(new FrontendRequestContext());
   }
 
   public static async signOut(): Promise<void> {
-    await this.client.signOut(new FrontendRequestContext());
+    await this.client?.signOut(new FrontendRequestContext());
+  }
+
+  public static dispose(): void {
+    this._client = undefined;
   }
 }
 
