@@ -39,28 +39,36 @@ const useUpdateProjectLoadingStyler = (loading: boolean) => {
 export const ProjectEdit = ({ accessToken, projectId = "" }: EditProps) => {
   const {
     results: { project },
+    refreshData,
   } = useApiData<GetIModelResult>({
     accessToken,
     url: `https://api.bentley.com/projects/${projectId}`,
   });
   const navigate = useNavigate();
   const goBack = () => navigate?.(-1);
+  const refreshAndGoBack = React.useCallback(async () => {
+    await refreshData();
+    navigate?.(-1);
+  }, [refreshData, navigate]);
+
   const { ref } = useUpdateProjectLoadingStyler(!project);
   const serverEnvironmentPrefix = useApiPrefix();
   return (
-    <div ref={ref}>
-      <UpdateProject
-        key={project?.id}
-        accessToken={accessToken}
-        projectId={projectId}
-        initialProject={{
-          displayName: project?.displayName ?? "",
-          projectNumber: project?.projectNumber ?? "",
-        }}
-        onClose={goBack}
-        onSuccess={goBack}
-        apiOverrides={{ serverEnvironmentPrefix }}
-      />
+    <div ref={ref} className={"idp-scrolling-iac-dialog"}>
+      <div className={"idp-content-margins"}>
+        <UpdateProject
+          key={project?.id}
+          accessToken={accessToken}
+          projectId={projectId}
+          initialProject={{
+            displayName: project?.displayName ?? "",
+            projectNumber: project?.projectNumber ?? "",
+          }}
+          onClose={goBack}
+          onSuccess={refreshAndGoBack}
+          apiOverrides={{ serverEnvironmentPrefix }}
+        />
+      </div>
     </div>
   );
 };

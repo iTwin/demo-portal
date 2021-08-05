@@ -39,28 +39,35 @@ const useUpdateIModelLoadingStyler = (loading: boolean) => {
 export const IModelEdit = ({ accessToken, iModelId = "" }: EditProps) => {
   const {
     results: { iModel },
+    refreshData,
   } = useApiData<GetIModelResult>({
     accessToken,
     url: `https://api.bentley.com/imodels/${iModelId}`,
   });
   const navigate = useNavigate();
   const goBack = () => navigate?.(-1);
+  const refreshAndGoBack = React.useCallback(async () => {
+    await refreshData();
+    navigate?.(-1);
+  }, [refreshData, navigate]);
   const { ref } = useUpdateIModelLoadingStyler(!iModel);
   const serverEnvironmentPrefix = useApiPrefix();
   return (
-    <div ref={ref}>
-      <UpdateIModel
-        key={iModel?.id}
-        accessToken={accessToken}
-        imodelId={iModelId}
-        initialIModel={{
-          name: iModel?.displayName ?? "",
-          description: iModel?.description ?? "",
-        }}
-        onClose={goBack}
-        onSuccess={goBack}
-        apiOverrides={{ serverEnvironmentPrefix }}
-      />
+    <div ref={ref} className={"idp-scrolling-iac-dialog"}>
+      <div className={"idp-content-margins"}>
+        <UpdateIModel
+          key={iModel?.id}
+          accessToken={accessToken}
+          imodelId={iModelId}
+          initialIModel={{
+            name: iModel?.displayName ?? "",
+            description: iModel?.description ?? "",
+          }}
+          onClose={goBack}
+          onSuccess={refreshAndGoBack}
+          apiOverrides={{ serverEnvironmentPrefix }}
+        />
+      </div>
     </div>
   );
 };

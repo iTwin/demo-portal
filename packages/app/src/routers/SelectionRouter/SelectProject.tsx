@@ -100,16 +100,16 @@ const SelectProject = ({
   );
   return (
     <>
-      <div className="scrolling-tab-container select-project">
+      <div className="idp-scrolling-container select-project">
         <HorizontalTabs
           labels={tabsWithIcons}
           onTabSelected={setProjectType}
           activeIndex={projectType}
           type={"borderless"}
-          contentClassName=" grid-holding-tab"
+          contentClassName="grid-holding-tab"
           tabsClassName="grid-holding-tabs"
         >
-          <div className={"title-section"}>
+          <div className={"title-section idp-content-margins"}>
             <ButtonGroup>{createIconButton}</ButtonGroup>
             {projectType === 2 && (
               <div className={"inline-input-with-button"}>
@@ -140,7 +140,7 @@ const SelectProject = ({
               </div>
             )}
           </div>
-          <div className={"scrolling-tab-content"}>
+          <div className={"idp-scrolling-content"}>
             <ProjectGrid
               accessToken={accessToken}
               requestType={
