@@ -26,16 +26,14 @@ class AuthClient {
     const redirectUri = `${window.location.origin}/signin-callback`;
     const postSignoutRedirectUri = window.location.origin;
 
-    if (!this._client) {
-      this._client = new BrowserAuthorizationClient({
-        clientId,
-        redirectUri,
-        postSignoutRedirectUri,
-        scope,
-        responseType: "code",
-        authority,
-      });
-    }
+    this._client = new BrowserAuthorizationClient({
+      clientId,
+      redirectUri,
+      postSignoutRedirectUri,
+      scope,
+      responseType: "code",
+      authority,
+    });
   }
 
   public static async signIn(): Promise<void> {

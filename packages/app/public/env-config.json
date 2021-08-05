@@ -2,7 +2,7 @@
   "//At Dev Time, all elements are expected to be null and will be filled by octopus": "",
   "envConfig": {
     "auth": {
-      "apimAuthority": null,
+      "authority": null,
       "clientId": null,
       "whitelistedIds": null
     },
