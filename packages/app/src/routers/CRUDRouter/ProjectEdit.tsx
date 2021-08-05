@@ -39,12 +39,18 @@ const useUpdateProjectLoadingStyler = (loading: boolean) => {
 export const ProjectEdit = ({ accessToken, projectId = "" }: EditProps) => {
   const {
     results: { project },
+    refreshData,
   } = useApiData<GetIModelResult>({
     accessToken,
     url: `https://api.bentley.com/projects/${projectId}`,
   });
   const navigate = useNavigate();
   const goBack = () => navigate?.(-1);
+  const refreshAndGoBack = React.useCallback(async () => {
+    await refreshData();
+    navigate?.(-1);
+  }, [refreshData, navigate]);
+
   const { ref } = useUpdateProjectLoadingStyler(!project);
   const serverEnvironmentPrefix = useApiPrefix();
   return (
@@ -58,7 +64,7 @@ export const ProjectEdit = ({ accessToken, projectId = "" }: EditProps) => {
           projectNumber: project?.projectNumber ?? "",
         }}
         onClose={goBack}
-        onSuccess={goBack}
+        onSuccess={refreshAndGoBack}
         apiOverrides={{ serverEnvironmentPrefix }}
       />
     </div>
