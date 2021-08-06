@@ -4,10 +4,8 @@
  *
  * This code is for demonstration purposes and should not be considered production ready.
  *--------------------------------------------------------------------------------------------*/
-import { AccessToken } from "@bentley/itwin-client";
 import { SvgImodelHollow, SvgMoon, SvgSun } from "@itwin/itwinui-icons-react";
 import {
-  Button,
   Header as IuiHeader,
   HeaderBreadcrumbs,
   HeaderLogo,
@@ -18,34 +16,21 @@ import {
 import { RouteComponentProps, Router, useMatch } from "@reach/router";
 import React from "react";
 
+import AuthClient from "../../services/auth/AuthClient";
 import { spreadIf } from "../../utils";
+import { useAuth } from "../Auth/AuthProvider";
 import { useCommonPathPattern } from "../MainLayout/useCommonPathPattern";
 import { HeaderUserIcon } from "./HeaderUserIcon";
 import { IModelHeaderButton } from "./IModelHeaderButton";
 import { ProjectHeaderButton } from "./ProjectHeaderButton";
 
-interface HeaderProps {
-  handleLogin: () => void;
-  handleLogout: () => void;
-  loggedIn: boolean;
-  isLoggingIn: boolean;
-  accessTokenObject?: AccessToken;
-}
-
-export const Header = (props: HeaderProps) => (
+export const Header = () => (
   <Router>
-    <RoutedHeader {...props} default={true} />
+    <RoutedHeader default={true} />
   </Router>
 );
 
-const RoutedHeader = ({
-  isLoggingIn,
-  loggedIn,
-  handleLogin,
-  handleLogout,
-  accessTokenObject,
-  navigate,
-}: RouteComponentProps<HeaderProps>) => {
+const RoutedHeader = ({ navigate }: RouteComponentProps) => {
   const [theme, setTheme] = React.useState<ThemeType>(
     (localStorage.getItem("THEME") as ThemeType) ?? "light"
   );
@@ -54,8 +39,15 @@ const RoutedHeader = ({
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem("THEME", theme);
   }, [theme]);
+
   const { section, projectId, iModelId } = useCommonPathPattern();
   const slimMatch = !!useMatch("/view/project/:projectId/imodel/:iModelId");
+
+  const { accessToken, isAuthenticated } = useAuth();
+
+  const handleLogout = async () => {
+    await AuthClient.signOut();
+  };
 
   return (
     <IuiHeader
@@ -69,23 +61,23 @@ const RoutedHeader = ({
         <HeaderBreadcrumbs
           items={[
             ...spreadIf(
-              loggedIn && projectId && (
+              isAuthenticated && projectId && (
                 <ProjectHeaderButton
                   key="project"
                   projectId={projectId}
                   section={section}
-                  accessToken={accessTokenObject?.toTokenString()}
+                  accessToken={accessToken?.toTokenString()}
                   isActive={!iModelId}
                 />
               )
             ),
             ...spreadIf(
-              loggedIn && iModelId && (
+              isAuthenticated && iModelId && (
                 <IModelHeaderButton
                   key="iModel"
                   iModelId={iModelId}
                   projectId={projectId}
-                  accessToken={accessTokenObject?.toTokenString()}
+                  accessToken={accessToken?.toTokenString()}
                   section={section}
                 />
               )
@@ -105,27 +97,13 @@ const RoutedHeader = ({
         </IconButton>,
       ]}
       userIcon={
-        loggedIn && (
+        isAuthenticated && (
           <HeaderUserIcon
-            accessTokenObject={accessTokenObject}
+            accessTokenObject={accessToken}
             handleLogout={handleLogout}
           />
         )
       }
-    >
-      {!loggedIn && !isLoggingIn && (
-        <Button
-          onClick={handleLogin}
-          styleType={"cta"}
-          disabled={loggedIn}
-          style={{
-            height: 38,
-            maxHeight: "calc(100% - 4px)",
-          }}
-        >
-          {"Sign In"}
-        </Button>
-      )}
-    </IuiHeader>
+    />
   );
 };
