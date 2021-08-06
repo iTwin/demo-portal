@@ -37,7 +37,6 @@ describe("UpdateProject", () => {
         accessToken="dd"
         projectId="de47c5ad-5657-42b8-a2bc-f2b8bf84cd4b"
         onSuccess={successMock}
-        apiOverrides={{ serverEnvironmentPrefix: "dev" }}
         initialProject={{
           displayName: "Initial name",
           projectNumber: "Initial number",
@@ -53,7 +52,7 @@ describe("UpdateProject", () => {
     const updateButton = getByText("Update");
     await act(async () => updateButton.click());
     expect(fetchMock).toHaveBeenCalledWith(
-      "https://dev-api.bentley.com/projects/de47c5ad-5657-42b8-a2bc-f2b8bf84cd4b",
+      "https://api.bentley.com/projects/de47c5ad-5657-42b8-a2bc-f2b8bf84cd4b",
       {
         method: "PATCH",
         headers: { Authorization: "dd", Prefer: "return=representation" },
@@ -83,7 +82,6 @@ describe("UpdateProject", () => {
         accessToken="dd"
         projectId="de47c5ad-5657-42b8-a2bc-f2b8bf84cd4b"
         onError={errorMock}
-        apiOverrides={{ serverEnvironmentPrefix: "dev" }}
         initialProject={{
           displayName: "Initial name",
           projectNumber: "Initial number",
@@ -99,7 +97,7 @@ describe("UpdateProject", () => {
     const updateButton = getByText("Update");
     await act(async () => updateButton.click());
     expect(fetchMock).toHaveBeenCalledWith(
-      "https://dev-api.bentley.com/projects/de47c5ad-5657-42b8-a2bc-f2b8bf84cd4b",
+      "https://api.bentley.com/projects/de47c5ad-5657-42b8-a2bc-f2b8bf84cd4b",
       {
         method: "PATCH",
         headers: { Authorization: "dd", Prefer: "return=representation" },
@@ -129,7 +127,6 @@ describe("UpdateProject", () => {
         accessToken="dd"
         projectId="de47c5ad-5657-42b8-a2bc-f2b8bf84cd4b"
         onError={errorMock}
-        apiOverrides={{ serverEnvironmentPrefix: "dev" }}
         initialProject={{
           displayName: "Initial name",
           projectNumber: "Initial number",
@@ -145,7 +142,7 @@ describe("UpdateProject", () => {
     const updateButton = getByText("Update");
     await act(async () => updateButton.click());
     expect(fetchMock).toHaveBeenCalledWith(
-      "https://dev-api.bentley.com/projects/de47c5ad-5657-42b8-a2bc-f2b8bf84cd4b",
+      "https://api.bentley.com/projects/de47c5ad-5657-42b8-a2bc-f2b8bf84cd4b",
       {
         method: "PATCH",
         headers: { Authorization: "dd", Prefer: "return=representation" },

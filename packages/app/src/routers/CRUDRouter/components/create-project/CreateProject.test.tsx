@@ -33,11 +33,7 @@ describe("CreateProject", () => {
     toaster.positive = jest.fn();
 
     const { getByText, container } = render(
-      <CreateProject
-        accessToken="dd"
-        onSuccess={successMock}
-        apiOverrides={{ serverEnvironmentPrefix: "dev" }}
-      />
+      <CreateProject accessToken="dd" onSuccess={successMock} />
     );
 
     const name = container.querySelector(
@@ -52,17 +48,14 @@ describe("CreateProject", () => {
 
     const createButton = getByText("Create");
     await act(async () => createButton.click());
-    expect(fetchMock).toHaveBeenCalledWith(
-      "https://dev-api.bentley.com/projects",
-      {
-        method: "POST",
-        headers: { Authorization: "dd", Prefer: "return=representation" },
-        body: JSON.stringify({
-          displayName: "Some name",
-          projectNumber: "Some number",
-        }),
-      }
-    );
+    expect(fetchMock).toHaveBeenCalledWith("https://api.bentley.com/projects", {
+      method: "POST",
+      headers: { Authorization: "dd", Prefer: "return=representation" },
+      body: JSON.stringify({
+        displayName: "Some name",
+        projectNumber: "Some number",
+      }),
+    });
     expect(successMock).toHaveBeenCalledWith(mockedProject);
     expect(toaster.positive).toHaveBeenCalledWith(
       "Project created successfully.",
@@ -79,11 +72,7 @@ describe("CreateProject", () => {
     toaster.negative = jest.fn();
 
     const { getByText, container } = render(
-      <CreateProject
-        accessToken="dd"
-        onError={errorMock}
-        apiOverrides={{ serverEnvironmentPrefix: "dev" }}
-      />
+      <CreateProject accessToken="dd" onError={errorMock} />
     );
 
     const name = container.querySelector(
@@ -98,17 +87,14 @@ describe("CreateProject", () => {
 
     const createButton = getByText("Create");
     await act(async () => createButton.click());
-    expect(fetchMock).toHaveBeenCalledWith(
-      "https://dev-api.bentley.com/projects",
-      {
-        method: "POST",
-        headers: { Authorization: "dd", Prefer: "return=representation" },
-        body: JSON.stringify({
-          displayName: "Some name",
-          projectNumber: "Some number",
-        }),
-      }
-    );
+    expect(fetchMock).toHaveBeenCalledWith("https://api.bentley.com/projects", {
+      method: "POST",
+      headers: { Authorization: "dd", Prefer: "return=representation" },
+      body: JSON.stringify({
+        displayName: "Some name",
+        projectNumber: "Some number",
+      }),
+    });
     expect(errorMock).toHaveBeenCalledWith(error);
     expect(
       toaster.negative
@@ -125,11 +111,7 @@ describe("CreateProject", () => {
     toaster.negative = jest.fn();
 
     const { getByText, container } = render(
-      <CreateProject
-        accessToken="dd"
-        onError={errorMock}
-        apiOverrides={{ serverEnvironmentPrefix: "dev" }}
-      />
+      <CreateProject accessToken="dd" onError={errorMock} />
     );
 
     const name = container.querySelector(
@@ -144,17 +126,14 @@ describe("CreateProject", () => {
 
     const createButton = getByText("Create");
     await act(async () => createButton.click());
-    expect(fetchMock).toHaveBeenCalledWith(
-      "https://dev-api.bentley.com/projects",
-      {
-        method: "POST",
-        headers: { Authorization: "dd", Prefer: "return=representation" },
-        body: JSON.stringify({
-          displayName: "Some name",
-          projectNumber: "Some number",
-        }),
-      }
-    );
+    expect(fetchMock).toHaveBeenCalledWith("https://api.bentley.com/projects", {
+      method: "POST",
+      headers: { Authorization: "dd", Prefer: "return=representation" },
+      body: JSON.stringify({
+        displayName: "Some name",
+        projectNumber: "Some number",
+      }),
+    });
     expect(errorMock).toHaveBeenCalledWith(error);
     expect(
       toaster.negative
