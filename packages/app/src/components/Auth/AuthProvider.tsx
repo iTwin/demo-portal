@@ -31,31 +31,25 @@ const AuthContext = React.createContext<AuthContextValue>({
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isAttemptingSilentLogin, setIsAttemptingSilentLogin] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(
-    AuthClient.oidcClient ? AuthClient.oidcClient.isAuthorized : false
-  );
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [accessToken, setAccessToken] = useState<AccessToken>();
   const [userInfo, setUserInfo] = useState<UserInfo>();
 
   const { auth } = useConfig();
 
   useEffect(() => {
-    const initOidc = async () => {
+    const initAuth = async () => {
       if (!auth) {
         return;
       }
-      if (!AuthClient.oidcClient && auth) {
+      if (!AuthClient.client) {
         if (!auth.clientId) {
           throw new Error(
             "Please add a valid client ID in the .env.local file and restart the application"
           );
         }
-        await AuthClient.initializeOidc(
-          auth.clientId,
-          auth.authority,
-          auth.apimAuthority
-        );
-        AuthClient.apimClient.onUserStateChanged.addListener((token) => {
+        const client = AuthClient.initialize(auth.clientId, auth.authority);
+        client.onUserStateChanged.addListener((token?: AccessToken) => {
           setIsAuthenticated(token?.isExpired(0) ?? false);
           setAccessToken(token);
           const userInfo = token?.getUserInfo();
@@ -67,14 +61,19 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       try {
         // attempt silent signin
         await AuthClient.signInSilent();
-        setIsAuthenticated(AuthClient.oidcClient.isAuthorized);
+        setIsAuthenticated(AuthClient.client?.isAuthorized ?? false);
       } catch (error) {
         // swallow the error. User can click the button to sign in
       } finally {
         setIsAttemptingSilentLogin(false);
       }
     };
-    initOidc().catch((error) => console.error(error));
+
+    initAuth().catch(console.error);
+
+    return () => {
+      AuthClient.dispose();
+    };
   }, [auth]);
 
   const isAuthorized = useMemo(() => {

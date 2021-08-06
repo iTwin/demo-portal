@@ -3,7 +3,6 @@
   "envConfig": {
     "auth": {
       "authority": null,
-      "apimAuthority": null,
       "clientId": null,
       "whitelistedIds": null
     },
