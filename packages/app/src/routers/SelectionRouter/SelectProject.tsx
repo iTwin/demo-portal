@@ -90,7 +90,7 @@ const SelectProject = ({
   const [searchValue, setSearchValue] = React.useState("");
   const [searchParam, setSearchParam] = React.useState("");
   const startSearch = React.useCallback(() => {
-    setSearchParam(!searchValue ? "" : `?$search=${searchValue}`);
+    setSearchParam(searchValue);
   }, [searchValue]);
 
   const serverEnvironmentPrefix = useApiPrefix();
@@ -111,34 +111,32 @@ const SelectProject = ({
         >
           <div className={"title-section idp-content-margins"}>
             <ButtonGroup>{createIconButton}</ButtonGroup>
-            {projectType === 2 && (
-              <div className={"inline-input-with-button"}>
-                <LabeledInput
-                  label={"Search"}
-                  placeholder={"Will search in name or number"}
-                  displayStyle={"inline"}
-                  value={searchValue}
-                  onChange={(event) => {
-                    const {
-                      target: { value },
-                    } = event;
-                    setSearchValue(value);
-                  }}
-                  onKeyDown={(event) => {
-                    if (event.key === "Enter") {
-                      startSearch();
-                    }
-                    if (event.key === "Escape") {
-                      setSearchValue("");
-                      setSearchParam("");
-                    }
-                  }}
-                />
-                <IconButton onClick={startSearch}>
-                  <SvgSearch />
-                </IconButton>
-              </div>
-            )}
+            <div className={"inline-input-with-button"}>
+              <LabeledInput
+                label={"Search"}
+                placeholder={"Will search in name or number"}
+                displayStyle={"inline"}
+                value={searchValue}
+                onChange={(event) => {
+                  const {
+                    target: { value },
+                  } = event;
+                  setSearchValue(value);
+                }}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    startSearch();
+                  }
+                  if (event.key === "Escape") {
+                    setSearchValue("");
+                    setSearchParam("");
+                  }
+                }}
+              />
+              <IconButton onClick={startSearch}>
+                <SvgSearch />
+              </IconButton>
+            </div>
           </div>
           <div className={"idp-scrolling-content"}>
             <ProjectGrid
@@ -148,12 +146,13 @@ const SelectProject = ({
                   ? "favorites"
                   : projectType === 1
                   ? "recents"
-                  : (searchParam as any) ?? ""
+                  : ""
               }
               onThumbnailClick={(project) => {
                 trackEvent("ProjectClicked", { project: project.id });
                 navigate?.(`project/${project.id}`);
               }}
+              filterOptions={searchParam}
               projectActions={projectActions}
               apiOverrides={apiOverrides}
               key={refreshKey}

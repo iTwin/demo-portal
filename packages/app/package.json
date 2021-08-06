@@ -31,7 +31,7 @@
     "@bentley/webgl-compatibility": "^2.6.4",
     "@itwin/create-imodel-react": "^0.2.1",
     "@itwin/delete-imodel-react": "^0.2.0",
-    "@itwin/imodel-browser-react": "^0.10.3",
+    "@itwin/imodel-browser-react": "^0.11.0",
     "@itwin/itwinui-css": "^0.18.1",
     "@itwin/itwinui-icons-react": "^1.2.0",
     "@itwin/itwinui-react": "^1.12.0",
