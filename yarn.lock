@@ -1776,13 +1776,13 @@
     react-transition-group "4.1.1"
     sanitize-html "^2.3.1"
 
-"@itwin/imodel-browser-react@^0.10.3":
-  version "0.10.3"
-  resolved "https://registry.yarnpkg.com/@itwin/imodel-browser-react/-/imodel-browser-react-0.10.3.tgz#cf6980fdb22d32b27a8f23f88079ab38a4809781"
-  integrity sha512-bciGqjHtEV6l8rfOC4iiFNvpw+TLr4XP37g4Eo87wTospRXILpfn1R7BSKl/MSxQOcev2zjhR/wSB6nffU6q5w==
+"@itwin/imodel-browser-react@^0.11.0":
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/@itwin/imodel-browser-react/-/imodel-browser-react-0.11.0.tgz#d15158b53b404a4ca626c6a26d167712b2d78583"
+  integrity sha512-7pwc00PFbdTJ89nxH/X+hLKrrIh+mgo7A3nzlE4UGiRCRl1dvh+z0imWj1Ey0Jr7735G3b6TQqyasTYsJUID1A==
   dependencies:
     "@bentley/icons-generic-webfont" "^1.0.34"
-    "@itwin/itwinui-react" "^1.6.0"
+    "@itwin/itwinui-react" "^1.11.0"
     classnames "^2.2.6"
     react-intersection-observer "^8.31.1"
 
@@ -1795,6 +1795,11 @@
   version "0.24.4"
   resolved "https://registry.yarnpkg.com/@itwin/itwinui-css/-/itwinui-css-0.24.4.tgz#4c868677178db52fc1218084dad0c49d5c8c57e1"
   integrity sha512-ndvF4HnNhPewb6hUxG4S4848awjp9MHI/AziDghYkoUybIO83TfdrD6NDDfUUzImnyNTdnvaa9SlIV54Harq8A==
+
+"@itwin/itwinui-css@^0.24.7":
+  version "0.24.7"
+  resolved "https://registry.yarnpkg.com/@itwin/itwinui-css/-/itwinui-css-0.24.7.tgz#6be2e922eddacd520d33bd0b1ccb51d17cdfa261"
+  integrity sha512-5HJNGUNtnL7NMhtv5THmlx3LGoF+M+kwftEUhl9zxfvVS2nXkn3pY1dunXt8MESANcV91rQmOfJrSyXDdd6A/A==
 
 "@itwin/itwinui-css@^0.9.0":
   version "0.9.0"
@@ -1815,6 +1820,20 @@
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@itwin/itwinui-illustrations-react/-/itwinui-illustrations-react-1.0.2.tgz#4b1f04a1c331937ec501dde3a25275bb2d995cec"
   integrity sha512-sgBmBBOGOLNPuT/G700iQqlPB/QRBBWczSkVZJ7mpCZaktMfJxX2SH1NhUUpJ4emf20dsLEeAo62Gz7ek7DMkA==
+
+"@itwin/itwinui-react@^1.11.0":
+  version "1.14.1"
+  resolved "https://registry.yarnpkg.com/@itwin/itwinui-react/-/itwinui-react-1.14.1.tgz#ee43507744ae465e45315a6aeed41660eebfa446"
+  integrity sha512-FmlkmGAuQHQG7Zn0D3Dcg4P3ZwskqH5RAJ9DhawzydaQka5vjYSv7O+G6oXusfMRe1vIrbmCid1A2EZBzSwYng==
+  dependencies:
+    "@itwin/itwinui-css" "^0.24.7"
+    "@itwin/itwinui-icons-react" "^1.1.1"
+    "@itwin/itwinui-illustrations-react" "^1.0.1"
+    "@tippyjs/react" "^4.2.5"
+    "@types/react-table" "^7.0.18"
+    classnames "^2.2.6"
+    react-table "^7.1.0"
+    react-transition-group "^4.1.1"
 
 "@itwin/itwinui-react@^1.12.0":
   version "1.12.0"
