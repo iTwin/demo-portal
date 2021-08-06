@@ -20,9 +20,14 @@ export type CreateTypeFromInterface<Interface> = {
 };
 
 /**
- * Convert a "PascalCase" value to its corresponding "Pascal Case" string
+ * Convert a "PascalCase" value to its corresponding "Pascal case." string
  * @param text PascalCase string
  * @returns Pascal Case string
  */
-export const pascalCaseToSentence = (text?: string) =>
-  text?.replace(/([A-Z])/g, " $1").trim();
+export const pascalCaseToSentenceCase = (text?: string) => {
+  const str = text
+    ?.replace(/([A-Z])/g, " $1")
+    .trim()
+    .toLowerCase();
+  return str ? str.charAt(0).toUpperCase() + str.slice(1) : undefined;
+};

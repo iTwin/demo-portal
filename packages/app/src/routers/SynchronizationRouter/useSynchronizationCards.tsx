@@ -23,7 +23,7 @@ import {
 } from "../../api/synchronization/generated";
 import { SynchronizationClient } from "../../api/synchronization/synchronizationClient";
 import { useApiPrefix } from "../../api/useApiPrefix";
-import { pascalCaseToSentence } from "../../utils";
+import { pascalCaseToSentenceCase } from "../../utils";
 import { DetailedStatus } from "./components/DetailedStatus";
 import { TileDropTarget } from "./components/TileDropTarget";
 import { useSynchronizeFileUploader } from "./useSynchronizeFileUploader";
@@ -144,7 +144,7 @@ export const useSynchronizationCards: UseIndividualState = (
         const runInfo = interpretRunInfo(lastRunResults);
         setConnectionStatus(
           <DetailedStatus
-            text={`${runInfo.time} ${pascalCaseToSentence(
+            text={`${runInfo.time} ${pascalCaseToSentenceCase(
               runInfo.status?.toString()
             )}`}
             altIcon={runInfo.icon}

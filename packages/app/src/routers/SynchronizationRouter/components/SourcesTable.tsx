@@ -9,7 +9,10 @@ import React from "react";
 
 import { StorageFile } from "../../../api/synchronization/generated";
 import { SynchronizationClient } from "../../../api/synchronization/synchronizationClient";
-import { CreateTypeFromInterface, pascalCaseToSentence } from "../../../utils";
+import {
+  CreateTypeFromInterface,
+  pascalCaseToSentenceCase,
+} from "../../../utils";
 import { LastRunContext } from "../Synchronize";
 import { BridgeIcon } from "./BridgeIcon";
 import { SkeletonCell } from "./SkeletonCell";
@@ -58,7 +61,7 @@ export const SourcesTable = ({ sources }: SourcesTableProps) => {
                   lastRunResults,
                   props.value
                 );
-                display = pascalCaseToSentence(task?.state) ?? "";
+                display = pascalCaseToSentenceCase(task?.state) ?? "";
               }
               if (!display && !props.row.original.lastKnownFileName) {
                 display = "Connection must be run after uploading the file";
