@@ -26,7 +26,8 @@ export const MainApp = () => {
 
   const onLoginClick = async () => {
     setIsLoggingIn(true);
-    await AuthClient.signIn();
+    // await AuthClient.signIn();
+    await AuthClient.signInSilent();
   };
 
   const onLogoutClick = async () => {

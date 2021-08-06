@@ -49,8 +49,12 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
           );
         }
         const client = AuthClient.initialize(auth.clientId, auth.authority);
+        client.setAdvancedSettings({
+          accessTokenExpiringNotificationTime: 58 * 60,
+          silent_redirect_uri: `${window.location.origin}/silentauth`,
+        });
         client.onUserStateChanged.addListener((token?: AccessToken) => {
-          setIsAuthenticated(token?.isExpired(0) ?? false);
+          setIsAuthenticated(token?.isExpired(58 * 60) ?? false);
           setAccessToken(token);
           const userInfo = token?.getUserInfo();
           setUserInfo(userInfo);
@@ -61,10 +65,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       try {
         // attempt silent signin
         await AuthClient.signInSilent();
-        setIsAuthenticated(AuthClient.client?.isAuthorized ?? false);
       } catch (error) {
         // swallow the error. User can click the button to sign in
+        await AuthClient.signIn();
       } finally {
+        setIsAuthenticated(AuthClient.client?.isAuthorized ?? false);
         setIsAttemptingSilentLogin(false);
       }
     };
@@ -75,6 +80,15 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       AuthClient.dispose();
     };
   }, [auth]);
+
+  // useEffect(() => {
+  //   const silentRenew = async () => {
+  //     await AuthClient.signInSilent();
+  //   };
+  //   if (AuthClient.client && !isAuthenticated) {
+  //     silentRenew().catch(console.error);
+  //   }
+  // }, [isAuthenticated]);
 
   const isAuthorized = useMemo(() => {
     if (auth?.whitelistedIds && userInfo?.organization?.id) {
