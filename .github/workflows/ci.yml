@@ -39,6 +39,8 @@ jobs:
         IMJS_BUDDI_REGION: ${{ secrets.IMJS_BUDDI_REGION }}
         IMJS_APP_INSIGHTS_KEY: ${{ secrets.IMJS_APP_INSIGHTS_KEY }}
 
+    - run: yarn test
+
     - run: yarn optest:ci
       env:
         BROWSER: ${{ secrets.BROWSER }}

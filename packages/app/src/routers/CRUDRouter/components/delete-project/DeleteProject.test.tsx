@@ -39,7 +39,6 @@ describe("DeleteProject", () => {
     const { getByText } = render(
       <DeleteProject
         project={{ id: "111", displayName: "test project" }}
-        apiOverrides={{ serverEnvironmentPrefix: "dev" }}
         accessToken="dd"
         onSuccess={successMock}
       />
@@ -48,7 +47,7 @@ describe("DeleteProject", () => {
     const button = getByText("Yes") as HTMLButtonElement;
     await act(async () => button.click());
     expect(fetchMock).toHaveBeenCalledWith(
-      "https://dev-api.bentley.com/projects/111",
+      "https://api.bentley.com/projects/111",
       {
         method: "DELETE",
         headers: { Authorization: "dd" },
