@@ -6,7 +6,7 @@ This sample application is intended to be used as an example of several possible
 
 Copyright © Bentley Systems, Incorporated. All rights reserved.
 
-The iTwin Demo Portal is a demonstration of some of the features of the [iTwin Platform](https://developer.bentley.com/).
+The iTwin Demo Portal is a demonstration of some of the features of the [iTwin Platform](https://developer.bentley.com/itwinplatform/).
 
 ## Environment Variables
 
@@ -16,7 +16,7 @@ Prior to running the app, add a valid clientId in `packages/app/.env.local` file
 IMJS_AUTH_CLIENT_CLIENT_ID="spa-xxxx"
 ```
 
-This client Id can be created by going to [developer.bentley.com/register](https://developer.bentley.com/register/). The application should have the Visualization, Data Management, Synchronization and Administration API associations and at least have `http://localhost:3000/signin-callback` as a redirect url.
+This client Id can be created by going to the [registration page](https://developer.bentley.com/register/). The application should have the Visualization, Data Management, Synchronization and Administration API associations and at least have `http://localhost:3000/signin-callback` as a redirect url.
 
 ## Available Scripts
 
@@ -56,3 +56,31 @@ Your app is ready to be deployed!
 5. `yarn` (same as `yarn install`)
 6. `yarn start` (Takes a few minutes to start)
 7. Browse to [`http://localhost:3000`](http://localhost:3000) (Should open automatically)
+
+## Learn more
+
+### Get started
+
+[Web application quick start](https://developer.bentley.com/tutorials/web-application-quick-start/)
+
+### Get accredited
+
+[iTwin developer accreditation](https://developer.bentley.com/accreditation/)
+
+### iTwin Platform APIs used by iTwin Demo Portal
+
+- [Visualization](https://developer.bentley.com/api-groups/visualization/apis/visualization/)
+
+- [Data Management - iModels](https://developer.bentley.com/api-groups/data-management/apis/imodels/)
+
+- [Data Management - Storage](https://developer.bentley.com/api-groups/data-management/apis/storage/)
+
+- [Synchronization](https://developer.bentley.com/api-groups/synchronization/apis/synchronization/)
+
+- [Administration - Projects](https://developer.bentley.com/api-groups/administration/apis/projects/)
+
+### Starter templates
+
+- [iTwin Web Viewer](https://github.com/iTwin/viewer/tree/master/packages/modules/cra-template-web-viewer)
+
+- [iTwin Desktop Viewer](https://github.com/iTwin/viewer/tree/master/packages/modules/cra-template-desktop-viewer)
