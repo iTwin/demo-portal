@@ -6,7 +6,7 @@ This sample application is intended to be used as an example of several possible
 
 Copyright © Bentley Systems, Incorporated. All rights reserved.
 
-The iTwin Demo Portal is a demonstration of some of the features of the [iTwin Platform](https://developer.bentley.com/itwinplatform/).
+The iTwin Demo Portal is a demonstration of some of the services provided by the [iTwin Platform](https://developer.bentley.com/itwinplatform/).
 
 ## Environment Variables
 
