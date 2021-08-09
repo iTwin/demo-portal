@@ -4,16 +4,19 @@
  *
  * This code is for demonstration purposes and should not be considered production ready.
  *--------------------------------------------------------------------------------------------*/
+import { AccessToken } from "@bentley/itwin-client";
 import { Redirect, Router } from "@reach/router";
 import React, { useMemo } from "react";
 
-import { useAuth } from "../components/Auth/AuthProvider";
 import { ManageVersionsRouter } from "./ManageVersionsRouter/ManageVersionsRouter";
 import { SynchronizationRouter } from "./SynchronizationRouter/SynchronizationRouter";
 import { ViewRouter } from "./ViewRouter/ViewRouter";
 
-export const MainRouter = () => {
-  const { accessToken } = useAuth();
+interface MainRouterProps {
+  accessToken?: AccessToken;
+}
+
+export const MainRouter = ({ accessToken }: MainRouterProps) => {
   const accessTokenStr = useMemo(() => {
     return accessToken?.toTokenString() ?? "";
   }, [accessToken]);

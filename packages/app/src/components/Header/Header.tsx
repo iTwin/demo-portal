@@ -7,7 +7,6 @@
 import { AccessToken } from "@bentley/itwin-client";
 import { SvgImodelHollow, SvgMoon, SvgSun } from "@itwin/itwinui-icons-react";
 import {
-  Button,
   Header as IuiHeader,
   HeaderBreadcrumbs,
   HeaderLogo,
@@ -25,11 +24,9 @@ import { IModelHeaderButton } from "./IModelHeaderButton";
 import { ProjectHeaderButton } from "./ProjectHeaderButton";
 
 interface HeaderProps {
-  handleLogin: () => void;
+  isAuthenticated: boolean;
+  accessToken?: AccessToken;
   handleLogout: () => void;
-  loggedIn: boolean;
-  isLoggingIn: boolean;
-  accessTokenObject?: AccessToken;
 }
 
 export const Header = (props: HeaderProps) => (
@@ -39,11 +36,9 @@ export const Header = (props: HeaderProps) => (
 );
 
 const RoutedHeader = ({
-  isLoggingIn,
-  loggedIn,
-  handleLogin,
+  isAuthenticated,
+  accessToken,
   handleLogout,
-  accessTokenObject,
   navigate,
 }: RouteComponentProps<HeaderProps>) => {
   const [theme, setTheme] = React.useState<ThemeType>(
@@ -54,6 +49,7 @@ const RoutedHeader = ({
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem("THEME", theme);
   }, [theme]);
+
   const { section, projectId, iModelId } = useCommonPathPattern();
   const slimMatch = !!useMatch("/view/project/:projectId/imodel/:iModelId");
 
@@ -69,23 +65,23 @@ const RoutedHeader = ({
         <HeaderBreadcrumbs
           items={[
             ...spreadIf(
-              loggedIn && projectId && (
+              isAuthenticated && projectId && (
                 <ProjectHeaderButton
                   key="project"
                   projectId={projectId}
                   section={section}
-                  accessToken={accessTokenObject?.toTokenString()}
+                  accessToken={accessToken?.toTokenString()}
                   isActive={!iModelId}
                 />
               )
             ),
             ...spreadIf(
-              loggedIn && iModelId && (
+              isAuthenticated && iModelId && (
                 <IModelHeaderButton
                   key="iModel"
                   iModelId={iModelId}
                   projectId={projectId}
-                  accessToken={accessTokenObject?.toTokenString()}
+                  accessToken={accessToken?.toTokenString()}
                   section={section}
                 />
               )
@@ -105,27 +101,13 @@ const RoutedHeader = ({
         </IconButton>,
       ]}
       userIcon={
-        loggedIn && (
+        isAuthenticated && (
           <HeaderUserIcon
-            accessTokenObject={accessTokenObject}
+            accessTokenObject={accessToken}
             handleLogout={handleLogout}
           />
         )
       }
-    >
-      {!loggedIn && !isLoggingIn && (
-        <Button
-          onClick={handleLogin}
-          styleType={"cta"}
-          disabled={loggedIn}
-          style={{
-            height: 38,
-            maxHeight: "calc(100% - 4px)",
-          }}
-        >
-          {"Sign In"}
-        </Button>
-      )}
-    </IuiHeader>
+    />
   );
 };

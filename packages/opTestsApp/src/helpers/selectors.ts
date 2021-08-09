@@ -33,14 +33,6 @@ export const OIDC: OIDCSelectors = {
   },
 };
 
-export interface BaseSelectors {
-  signInButton: string;
-}
-
-export const Base: BaseSelectors = {
-  signInButton: "text='Sign In'",
-};
-
 export interface HomeSelectors {
   icon: string;
   Portal: string;

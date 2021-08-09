@@ -5,18 +5,18 @@
  * This code is for demonstration purposes and should not be considered production ready.
  *--------------------------------------------------------------------------------------------*/
 import { AccessToken, UserInfo } from "@bentley/itwin-client";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 import { useConfig } from "../../config/ConfigProvider";
 import AuthClient from "../../services/auth/AuthClient";
 import { ai } from "../../services/telemetry";
 
 export interface AuthContextValue {
-  isAttemptingSilentLogin: boolean;
   isAuthenticated: boolean;
   isAuthorized: boolean;
   accessToken?: AccessToken;
   userInfo?: UserInfo;
+  signOut: () => void;
 }
 
 export interface AuthProviderProps {
@@ -24,13 +24,14 @@ export interface AuthProviderProps {
 }
 
 const AuthContext = React.createContext<AuthContextValue>({
-  isAttemptingSilentLogin: true,
   isAuthenticated: false,
   isAuthorized: false,
+  signOut: async () => {
+    await AuthClient.signOut();
+  },
 });
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [isAttemptingSilentLogin, setIsAttemptingSilentLogin] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [accessToken, setAccessToken] = useState<AccessToken>();
   const [userInfo, setUserInfo] = useState<UserInfo>();
@@ -61,11 +62,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       try {
         // attempt silent signin
         await AuthClient.signInSilent();
-        setIsAuthenticated(AuthClient.client?.isAuthorized ?? false);
       } catch (error) {
-        // swallow the error. User can click the button to sign in
+        // if silent sign in fails, have user manually sign in
+        await AuthClient.signIn();
       } finally {
-        setIsAttemptingSilentLogin(false);
+        setIsAuthenticated(AuthClient.client?.isAuthorized ?? false);
       }
     };
 
@@ -77,22 +78,29 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, [auth]);
 
   const isAuthorized = useMemo(() => {
-    if (auth?.whitelistedIds && userInfo?.organization?.id) {
-      const whitelist = auth.whitelistedIds.split(" ");
-      const orgId = userInfo.organization?.id;
-      return whitelist.includes(orgId);
+    if (auth?.whitelistedIds) {
+      if (userInfo?.organization?.id) {
+        const whitelist = auth.whitelistedIds.split(" ");
+        const orgId = userInfo.organization?.id;
+        return whitelist.includes(orgId);
+      }
+      return false;
     }
-    return false;
+    return true;
   }, [auth, userInfo]);
+
+  const signOut = useCallback(async () => {
+    await AuthClient.signOut();
+  }, []);
 
   return (
     <AuthContext.Provider
       value={{
-        isAttemptingSilentLogin,
         isAuthenticated,
         isAuthorized,
         accessToken,
         userInfo,
+        signOut,
       }}
     >
       {children}
