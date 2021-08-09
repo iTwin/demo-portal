@@ -78,12 +78,15 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, [auth]);
 
   const isAuthorized = useMemo(() => {
-    if (auth?.whitelistedIds && userInfo?.organization?.id) {
-      const whitelist = auth.whitelistedIds.split(" ");
-      const orgId = userInfo.organization?.id;
-      return whitelist.includes(orgId);
+    if (auth?.whitelistedIds) {
+      if (userInfo?.organization?.id) {
+        const whitelist = auth.whitelistedIds.split(" ");
+        const orgId = userInfo.organization?.id;
+        return whitelist.includes(orgId);
+      }
+      return false;
     }
-    return false;
+    return true;
   }, [auth, userInfo]);
 
   const signOut = useCallback(async () => {
