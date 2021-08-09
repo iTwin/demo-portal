@@ -22,7 +22,7 @@ export type CreateTypeFromInterface<Interface> = {
 /**
  * Convert a "PascalCase" value to its corresponding "Pascal case." string
  * @param text PascalCase string
- * @returns Pascal Case string
+ * @returns Sentence case string
  */
 export const pascalCaseToSentenceCase = (text?: string) => {
   const str = text
