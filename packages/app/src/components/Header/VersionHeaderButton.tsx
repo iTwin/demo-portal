@@ -4,6 +4,7 @@
  *
  * This code is for demonstration purposes and should not be considered production ready.
  *--------------------------------------------------------------------------------------------*/
+import { SvgFlag } from "@itwin/itwinui-icons-react";
 import { HeaderButton } from "@itwin/itwinui-react";
 import { useNavigate } from "@reach/router";
 import classNames from "classnames";
@@ -51,6 +52,7 @@ export const VersionHeaderButton = ({
       }
       className={classNames(!namedVersion && "iui-skeleton")}
       isActive={!!namedVersion?.displayName}
+      startIcon={<SvgFlag />}
     />
   ) : null;
 };
