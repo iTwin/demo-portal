@@ -20,7 +20,10 @@ import {
 } from "../../../api/synchronization/generated";
 import { SynchronizationClient } from "../../../api/synchronization/synchronizationClient";
 import { useApiPrefix } from "../../../api/useApiPrefix";
-import { CreateTypeFromInterface } from "../../../utils";
+import {
+  CreateTypeFromInterface,
+  pascalCaseToSentenceCase,
+} from "../../../utils";
 import { LastRunContext } from "../Synchronize";
 import { interpretRunInfo } from "../useSynchronizeInfo";
 import "./ConnectionsTable.scss";
@@ -62,9 +65,9 @@ export const ConnectionsTable = ({
                       <div className={"status-cell"}>
                         {run?.state && run.result && runInfo.icon}
                         {runInfo.time}{" "}
-                        {runInfo.status ?? (
-                          <Body isSkeleton={true}>Fetching...</Body>
-                        )}
+                        {pascalCaseToSentenceCase(
+                          runInfo.status?.toString()
+                        ) ?? <Body isSkeleton={true}>Fetching...</Body>}
                       </div>
                     </SkeletonCell>
                   );

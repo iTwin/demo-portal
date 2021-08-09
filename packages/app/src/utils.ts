@@ -18,3 +18,16 @@ export const spreadIf: <T>(addIfTrue: T | Falsy) => [T] | [] = (addIfTrue) =>
 export type CreateTypeFromInterface<Interface> = {
   [Property in keyof Interface]: Interface[Property];
 };
+
+/**
+ * Convert a "PascalCase" value to its corresponding "Pascal case." string
+ * @param text PascalCase string
+ * @returns Sentence case string
+ */
+export const pascalCaseToSentenceCase = (text?: string) => {
+  const str = text
+    ?.replace(/([A-Z])/g, " $1")
+    .trim()
+    .toLowerCase();
+  return str ? str.charAt(0).toUpperCase() + str.slice(1) : undefined;
+};
