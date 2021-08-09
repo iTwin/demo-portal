@@ -14,12 +14,21 @@ import MainContainer from "./MainLayout/MainContainer";
 import { Sidebar } from "./MainLayout/Sidebar";
 
 export const MainApp = () => {
-  const { isAuthenticated, isAuthorized } = useAuth();
+  const { isAuthenticated, isAuthorized, accessToken } = useAuth();
 
   return (
-    <MainContainer header={<Header />} sidebar={<Sidebar />}>
+    <MainContainer
+      header={
+        <Header isAuthenticated={isAuthenticated} accessToken={accessToken} />
+      }
+      sidebar={<Sidebar />}
+    >
       {isAuthenticated &&
-        (isAuthorized ? <MainRouter /> : <ErrorPage errorType="401" />)}
+        (isAuthorized ? (
+          <MainRouter accessToken={accessToken} />
+        ) : (
+          <ErrorPage errorType="401" />
+        ))}
     </MainContainer>
   );
 };

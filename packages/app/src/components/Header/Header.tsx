@@ -4,6 +4,7 @@
  *
  * This code is for demonstration purposes and should not be considered production ready.
  *--------------------------------------------------------------------------------------------*/
+import { AccessToken } from "@bentley/itwin-client";
 import { SvgImodelHollow, SvgMoon, SvgSun } from "@itwin/itwinui-icons-react";
 import {
   Header as IuiHeader,
@@ -18,19 +19,27 @@ import React from "react";
 
 import AuthClient from "../../services/auth/AuthClient";
 import { spreadIf } from "../../utils";
-import { useAuth } from "../Auth/AuthProvider";
 import { useCommonPathPattern } from "../MainLayout/useCommonPathPattern";
 import { HeaderUserIcon } from "./HeaderUserIcon";
 import { IModelHeaderButton } from "./IModelHeaderButton";
 import { ProjectHeaderButton } from "./ProjectHeaderButton";
 
-export const Header = () => (
+interface HeaderProps {
+  isAuthenticated: boolean;
+  accessToken?: AccessToken;
+}
+
+export const Header = (props: HeaderProps) => (
   <Router>
-    <RoutedHeader default={true} />
+    <RoutedHeader {...props} default={true} />
   </Router>
 );
 
-const RoutedHeader = ({ navigate }: RouteComponentProps) => {
+const RoutedHeader = ({
+  isAuthenticated,
+  accessToken,
+  navigate,
+}: RouteComponentProps<HeaderProps>) => {
   const [theme, setTheme] = React.useState<ThemeType>(
     (localStorage.getItem("THEME") as ThemeType) ?? "light"
   );
@@ -43,11 +52,9 @@ const RoutedHeader = ({ navigate }: RouteComponentProps) => {
   const { section, projectId, iModelId } = useCommonPathPattern();
   const slimMatch = !!useMatch("/view/project/:projectId/imodel/:iModelId");
 
-  const { accessToken, isAuthenticated } = useAuth();
-
-  const handleLogout = async () => {
+  const handleLogout = React.useCallback(async () => {
     await AuthClient.signOut();
-  };
+  }, []);
 
   return (
     <IuiHeader

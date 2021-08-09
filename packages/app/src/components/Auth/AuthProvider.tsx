@@ -59,7 +59,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         // attempt silent signin
         await AuthClient.signInSilent();
       } catch (error) {
-        // swallow the error. User can click the button to sign in
+        // if silent sign in fails, have user manually sign in
         await AuthClient.signIn();
       } finally {
         setIsAuthenticated(AuthClient.client?.isAuthorized ?? false);

@@ -32,7 +32,7 @@ class AuthClient {
         authority,
       });
       this._client.setAdvancedSettings({
-        silent_redirect_uri: `${window.location.origin}/silentauth`,
+        silent_redirect_uri: redirectUri,
       });
     }
     return this._client;
