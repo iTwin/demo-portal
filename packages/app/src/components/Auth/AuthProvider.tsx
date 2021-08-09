@@ -5,7 +5,7 @@
  * This code is for demonstration purposes and should not be considered production ready.
  *--------------------------------------------------------------------------------------------*/
 import { AccessToken, UserInfo } from "@bentley/itwin-client";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 import { useConfig } from "../../config/ConfigProvider";
 import AuthClient from "../../services/auth/AuthClient";
@@ -16,6 +16,7 @@ export interface AuthContextValue {
   isAuthorized: boolean;
   accessToken?: AccessToken;
   userInfo?: UserInfo;
+  signOut: () => void;
 }
 
 export interface AuthProviderProps {
@@ -25,6 +26,9 @@ export interface AuthProviderProps {
 const AuthContext = React.createContext<AuthContextValue>({
   isAuthenticated: false,
   isAuthorized: false,
+  signOut: async () => {
+    await AuthClient.signOut();
+  },
 });
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
@@ -82,6 +86,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     return false;
   }, [auth, userInfo]);
 
+  const signOut = useCallback(async () => {
+    await AuthClient.signOut();
+  }, []);
+
   return (
     <AuthContext.Provider
       value={{
@@ -89,6 +97,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         isAuthorized,
         accessToken,
         userInfo,
+        signOut,
       }}
     >
       {children}

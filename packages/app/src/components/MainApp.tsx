@@ -14,12 +14,16 @@ import MainContainer from "./MainLayout/MainContainer";
 import { Sidebar } from "./MainLayout/Sidebar";
 
 export const MainApp = () => {
-  const { isAuthenticated, isAuthorized, accessToken } = useAuth();
+  const { isAuthenticated, isAuthorized, accessToken, signOut } = useAuth();
 
   return (
     <MainContainer
       header={
-        <Header isAuthenticated={isAuthenticated} accessToken={accessToken} />
+        <Header
+          isAuthenticated={isAuthenticated}
+          accessToken={accessToken}
+          handleLogout={signOut}
+        />
       }
       sidebar={<Sidebar />}
     >

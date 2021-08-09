@@ -17,7 +17,6 @@ import {
 import { RouteComponentProps, Router, useMatch } from "@reach/router";
 import React from "react";
 
-import AuthClient from "../../services/auth/AuthClient";
 import { spreadIf } from "../../utils";
 import { useCommonPathPattern } from "../MainLayout/useCommonPathPattern";
 import { HeaderUserIcon } from "./HeaderUserIcon";
@@ -27,6 +26,7 @@ import { ProjectHeaderButton } from "./ProjectHeaderButton";
 interface HeaderProps {
   isAuthenticated: boolean;
   accessToken?: AccessToken;
+  handleLogout: () => void;
 }
 
 export const Header = (props: HeaderProps) => (
@@ -38,6 +38,7 @@ export const Header = (props: HeaderProps) => (
 const RoutedHeader = ({
   isAuthenticated,
   accessToken,
+  handleLogout,
   navigate,
 }: RouteComponentProps<HeaderProps>) => {
   const [theme, setTheme] = React.useState<ThemeType>(
@@ -51,10 +52,6 @@ const RoutedHeader = ({
 
   const { section, projectId, iModelId } = useCommonPathPattern();
   const slimMatch = !!useMatch("/view/project/:projectId/imodel/:iModelId");
-
-  const handleLogout = React.useCallback(async () => {
-    await AuthClient.signOut();
-  }, []);
 
   return (
     <IuiHeader
