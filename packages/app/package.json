@@ -28,7 +28,7 @@
     "@bentley/ui-framework": "^2.19.3",
     "@bentley/ui-ninezone": "^2.19.3",
     "@bentley/webgl-compatibility": "^2.19.3",
-    "@itwin/create-imodel-react": "^0.2.1",
+    "@itwin/create-imodel-react": "^0.4.1",
     "@itwin/delete-imodel-react": "^0.2.0",
     "@itwin/imodel-browser-react": "^0.11.0",
     "@itwin/itwinui-css": "^0.18.1",
