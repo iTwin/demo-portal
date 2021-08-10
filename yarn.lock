@@ -1866,14 +1866,14 @@
     react-table "^7.1.0"
     react-transition-group "^4.1.1"
 
-"@itwin/manage-versions-react@^0.5.0":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@itwin/manage-versions-react/-/manage-versions-react-0.5.0.tgz#d517f110112db8524957f94a4d0f769f512e6844"
-  integrity sha512-EwToBiZOs5EuiNgAaBQYPkLFGCrqG3wCIYii73E6t8cLFJ+lpFJt6PGbwrPvdQ8c3QFNXCsnN2FzRKi3SxZmrg==
+"@itwin/manage-versions-react@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@itwin/manage-versions-react/-/manage-versions-react-0.7.0.tgz#de95bcb4e7195d8a9c3562b036dc594b615daa8b"
+  integrity sha512-i1ZFLOLeByJK6/k45X75DGOR77dSye/Nnumu4oKcAodPKh7fqPpVXJ3Iw79HKWs1He84d3+YvAyXU4swSQQumA==
   dependencies:
     "@itwin/itwinui-css" "^0.9.0"
     "@itwin/itwinui-icons-react" "^1.2.0"
-    "@itwin/itwinui-react" "^1.6.0"
+    "@itwin/itwinui-react" "^1.11.0"
     classnames "^2.2.6"
 
 "@itwin/viewer-react@1.2.0":

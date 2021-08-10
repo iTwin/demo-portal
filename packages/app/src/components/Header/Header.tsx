@@ -22,6 +22,7 @@ import { useCommonPathPattern } from "../MainLayout/useCommonPathPattern";
 import { HeaderUserIcon } from "./HeaderUserIcon";
 import { IModelHeaderButton } from "./IModelHeaderButton";
 import { ProjectHeaderButton } from "./ProjectHeaderButton";
+import { VersionHeaderButton } from "./VersionHeaderButton";
 
 interface HeaderProps {
   isAuthenticated: boolean;
@@ -51,7 +52,14 @@ const RoutedHeader = ({
   }, [theme]);
 
   const { section, projectId, iModelId } = useCommonPathPattern();
-  const slimMatch = !!useMatch("/view/project/:projectId/imodel/:iModelId");
+  const versionMatch = useMatch(
+    "/:section/project/:projectId/imodel/:iModelId/version/:versionId"
+  );
+
+  const slimMatch = [
+    !!useMatch("/view/project/:projectId/imodel/:iModelId"),
+    !!useMatch("/view/project/:projectId/imodel/:iModelId/version/:versionId"),
+  ].includes(true);
 
   return (
     <IuiHeader
@@ -81,6 +89,18 @@ const RoutedHeader = ({
                   key="iModel"
                   iModelId={iModelId}
                   projectId={projectId}
+                  accessToken={accessToken?.toTokenString()}
+                  section={section}
+                />
+              )
+            ),
+            ...spreadIf(
+              isAuthenticated && iModelId && section === "view" && (
+                <VersionHeaderButton
+                  key="version"
+                  iModelId={iModelId}
+                  projectId={projectId}
+                  versionId={versionMatch?.versionId}
                   accessToken={accessToken?.toTokenString()}
                   section={section}
                 />

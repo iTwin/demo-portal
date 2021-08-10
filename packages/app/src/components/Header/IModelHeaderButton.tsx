@@ -41,7 +41,7 @@ export const IModelHeaderButton = ({
       description={iModel?.description}
       onClick={() => navigate(`/${section}/project/${projectId}`)}
       className={classNames(!iModel && "iui-skeleton")}
-      isActive={!!iModel?.displayName}
+      isActive={!!iModel?.displayName && section !== "view"}
       startIcon={
         !!iModel?.displayName ? (
           <IModelThumbnail

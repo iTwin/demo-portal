@@ -58,15 +58,16 @@ const localCache: {
  */
 export const useApiData: <T>(
   options: ApiDataHookOptions
-) => { results: T; refreshData(): (() => void) | undefined } = ({
-  noAutoFetch,
-  accessToken,
-  url,
-  headers,
-}) => {
+) => {
+  results: T;
+  refreshData(): (() => void) | undefined;
+  state: undefined | Error | "done";
+} = ({ noAutoFetch, accessToken, url, headers }) => {
   const [results, setResults] = React.useState<any>({});
+  const [state, setState] = React.useState<undefined | Error | "done">();
   const prefixedUrl = usePrefixedUrl(url);
   const refreshData = React.useCallback(() => {
+    setState(undefined);
     if (!accessToken || !prefixedUrl) {
       setResults({});
       return;
@@ -109,6 +110,7 @@ export const useApiData: <T>(
         ?.then((result) => {
           if (!abortController.signal.aborted) {
             setResults(result);
+            setState("done");
           }
         })
         .catch((e) => {
@@ -117,10 +119,12 @@ export const useApiData: <T>(
             return;
           }
           setResults({});
+          setState(e);
           console.error(e);
         });
     } else {
       setResults(localCache[prefixedUrl]?.data);
+      setState("done");
     }
     return () => {
       abortController.abort();
@@ -131,10 +135,11 @@ export const useApiData: <T>(
       const cache = localCache[prefixedUrl ?? ""];
       if (cache?.exp && cache?.exp > Date.now()) {
         setResults(cache.data);
+        setState("done");
         return;
       }
       return refreshData();
     }
   }, [noAutoFetch, refreshData, prefixedUrl]);
-  return { results, refreshData };
+  return { results, refreshData, state };
 };

@@ -8,6 +8,7 @@ import { Viewer } from "@itwin/web-viewer-react";
 import { RouteComponentProps, Router } from "@reach/router";
 import React from "react";
 
+import { useApiData } from "../../api/useApiData";
 import { useConfig } from "../../config/ConfigProvider";
 import AuthClient from "../../services/auth/AuthClient";
 import { SelectionRouter } from "../SelectionRouter/SelectionRouter";
@@ -36,8 +37,10 @@ const useThemeWatcher = () => {
   return theme;
 };
 export interface ViewProps extends RouteComponentProps {
+  accessToken?: string;
   projectId?: string;
   iModelId?: string;
+  versionId?: string;
 }
 const View = (props: ViewProps) => {
   (window as any).ITWIN_VIEWER_HOME = window.location.origin;
@@ -45,16 +48,26 @@ const View = (props: ViewProps) => {
   const buddiRegion = config.buddi?.region
     ? parseInt(config.buddi.region)
     : undefined;
-  return (
+  const {
+    results: { namedVersion: fetchedVersion },
+    state,
+  } = useApiData<{ namedVersion: { changesetId: string } }>({
+    accessToken: props.versionId ? props.accessToken : undefined,
+    url: `https://api.bentley.com/imodels/${props.iModelId}/namedversions/${props.versionId}`,
+  });
+  const theme = useThemeWatcher();
+  const changesetId = props.versionId ? fetchedVersion?.changesetId : undefined;
+  return state || !props.versionId ? (
     <Viewer
+      changeSetId={changesetId}
       contextId={props.projectId ?? ""}
       iModelId={props.iModelId ?? ""}
       authConfig={{ oidcClient: AuthClient.client }}
-      theme={useThemeWatcher()}
+      theme={theme}
       backend={{ buddiRegion }}
       uiProviders={[new SimpleBgMapToggleProvider()]}
     />
-  );
+  ) : null;
 };
 
 interface ViewRouterProps extends RouteComponentProps {
@@ -70,6 +83,10 @@ export const ViewRouter = ({ accessToken }: ViewRouterProps) => {
         hideIModelActions={["view"]}
       />
       <View path="project/:projectId/imodel/:iModelId" />
+      <View
+        path="project/:projectId/imodel/:iModelId/version/:versionId"
+        accessToken={accessToken}
+      />
     </Router>
   );
 };
