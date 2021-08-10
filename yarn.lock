@@ -1747,13 +1747,13 @@
   resolved "https://registry.yarnpkg.com/@istanbuljs/schema/-/schema-0.1.3.tgz#e45e384e4b8ec16bce2fd903af78450f6bf7ec98"
   integrity sha512-ZXRY4jNvVgSVQ8DL3LTcakaAtXwTVUxE81hslsyD2AtoXW/wVob10HkOJ1X/pAlcI7D+2YoZKg5do8G/w6RYgA==
 
-"@itwin/create-imodel-react@^0.2.1":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@itwin/create-imodel-react/-/create-imodel-react-0.2.1.tgz#3a7b34753767e0e6310820c0a2f3765ff7fe73f3"
-  integrity sha512-/tdcKvfSXZnTWXm5es2OYGLyN127wme4+LdVICoP+pgi/WzgL1jMMzPCpPnayHQFw+rDxa+XOUE5k94ZBr3d7w==
+"@itwin/create-imodel-react@^0.4.1":
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/@itwin/create-imodel-react/-/create-imodel-react-0.4.1.tgz#b908e8c0233b3558d6810aaac50c889570298fa8"
+  integrity sha512-3Ev0JjzAYxVJlGUZS7EtFqeKlzrbXqJ/zJ11v9uES5lJEVLLmTrN7WZoshXYEq5VxBqCcOiXTFZdpiFCatjdtw==
   dependencies:
     "@itwin/itwinui-css" "^0.9.0"
-    "@itwin/itwinui-react" "^1.6.0"
+    "@itwin/itwinui-react" "^1.11.0"
 
 "@itwin/delete-imodel-react@^0.2.0":
   version "0.2.0"
