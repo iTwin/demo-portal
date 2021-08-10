@@ -50,23 +50,24 @@ const View = (props: ViewProps) => {
     : undefined;
   const {
     results: { namedVersion: fetchedVersion },
+    state,
   } = useApiData<{ namedVersion: { changesetId: string } }>({
     accessToken: props.versionId ? props.accessToken : undefined,
     url: `https://api.bentley.com/imodels/${props.iModelId}/namedversions/${props.versionId}`,
   });
-
+  const theme = useThemeWatcher();
   const changesetId = props.versionId ? fetchedVersion?.changesetId : undefined;
-  return (
+  return state || !props.versionId ? (
     <Viewer
       changeSetId={changesetId}
       contextId={props.projectId ?? ""}
       iModelId={props.iModelId ?? ""}
       authConfig={{ oidcClient: AuthClient.client }}
-      theme={useThemeWatcher()}
+      theme={theme}
       backend={{ buddiRegion }}
       uiProviders={[new SimpleBgMapToggleProvider()]}
     />
-  );
+  ) : null;
 };
 
 interface ViewRouterProps extends RouteComponentProps {
@@ -82,7 +83,10 @@ export const ViewRouter = ({ accessToken }: ViewRouterProps) => {
         hideIModelActions={["view"]}
       />
       <View path="project/:projectId/imodel/:iModelId" />
-      <View path="project/:projectId/imodel/:iModelId/version/:versionId" />
+      <View
+        path="project/:projectId/imodel/:iModelId/version/:versionId"
+        accessToken={accessToken}
+      />
     </Router>
   );
 };
