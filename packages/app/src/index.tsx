@@ -4,6 +4,7 @@
  *
  * This code is for demonstration purposes and should not be considered production ready.
  *--------------------------------------------------------------------------------------------*/
+import { Logger, LogLevel } from "@bentley/bentleyjs-core";
 import { BrowserAuthorizationCallbackHandler } from "@bentley/frontend-authorization-client";
 import React from "react";
 import ReactDOM from "react-dom";
@@ -11,6 +12,10 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import "./index.scss";
 import * as serviceWorker from "./serviceWorker";
+
+console.count("index.tsx");
+Logger.initializeToConsole();
+Logger.setLevel("frontend-authorization-client.Authorization", LogLevel.Info);
 
 // Do not render full application if we are handling OIDC callback
 const redirectUrl = new URL(`${window.location.origin}/signin-callback`);

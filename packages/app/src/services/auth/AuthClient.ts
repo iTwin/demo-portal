@@ -32,7 +32,8 @@ class AuthClient {
         authority,
       });
       this._client.setAdvancedSettings({
-        silent_redirect_uri: redirectUri,
+        // silent_redirect_uri: redirectUri,
+        accessTokenExpiringNotificationTime: 58 * 60,
       });
     }
     return this._client;
