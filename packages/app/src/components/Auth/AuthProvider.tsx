@@ -32,7 +32,6 @@ const AuthContext = React.createContext<AuthContextValue>({
 });
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [accessToken, setAccessToken] = useState<AccessToken>();
   const [userInfo, setUserInfo] = useState<UserInfo>();
 
@@ -51,7 +50,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         }
         const client = AuthClient.initialize(auth.clientId, auth.authority);
         client.onUserStateChanged.addListener((token?: AccessToken) => {
-          setIsAuthenticated(token?.isExpired(0) ?? false);
           setAccessToken(token);
           const userInfo = token?.getUserInfo();
           setUserInfo(userInfo);
@@ -65,8 +63,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       } catch (error) {
         // if silent sign in fails, have user manually sign in
         await AuthClient.signIn();
-      } finally {
-        setIsAuthenticated(AuthClient.client?.isAuthorized ?? false);
       }
     };
 
@@ -96,7 +92,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   return (
     <AuthContext.Provider
       value={{
-        isAuthenticated,
+        isAuthenticated: !!accessToken,
         isAuthorized,
         accessToken,
         userInfo,

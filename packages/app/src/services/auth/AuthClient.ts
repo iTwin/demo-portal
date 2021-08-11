@@ -31,9 +31,6 @@ class AuthClient {
         responseType: "code",
         authority,
       });
-      this._client.setAdvancedSettings({
-        silent_redirect_uri: redirectUri,
-      });
     }
     return this._client;
   }
