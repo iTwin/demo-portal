@@ -51,10 +51,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         }
         const client = AuthClient.initialize(auth.clientId, auth.authority);
         client.onUserStateChanged.addListener((token?: AccessToken) => {
-          console.count("onUserStateChanged");
-          const isAuthd = token?.isExpired(0) ?? false;
-          console.log(isAuthd);
-
           setIsAuthenticated(!!token);
           setAccessToken(token);
           const userInfo = token?.getUserInfo();
