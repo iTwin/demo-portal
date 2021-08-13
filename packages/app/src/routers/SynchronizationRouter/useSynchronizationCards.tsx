@@ -18,8 +18,8 @@ import React, { ComponentPropsWithoutRef } from "react";
 import { useInView } from "react-intersection-observer";
 
 import {
-  ExecutionResult,
-  ExecutionState,
+  ExecutionResultSynchronizationAPI,
+  ExecutionStateSynchronizationAPI,
 } from "../../api/synchronization/generated";
 import { SynchronizationClient } from "../../api/synchronization/synchronizationClient";
 import { useApiPrefix } from "../../api/useApiPrefix";
@@ -114,8 +114,8 @@ export const useSynchronizationCards: UseIndividualState = (
       );
     } else if (lastRunResults) {
       if (
-        lastRunResults.state === ExecutionState.Completed &&
-        lastRunResults.result !== ExecutionResult.Error &&
+        lastRunResults.state === ExecutionStateSynchronizationAPI.Completed &&
+        lastRunResults.result !== ExecutionResultSynchronizationAPI.Error &&
         sourceFiles?.some(
           ({ storageFileId }) =>
             !SynchronizationClient.getTaskInfoFromRun(

@@ -6,7 +6,7 @@
  *--------------------------------------------------------------------------------------------*/
 import React from "react";
 
-import { IModelBridgeType } from "../../../api/synchronization/generated";
+import { ConnectorTypeSynchronizationAPI } from "../../../api/synchronization/generated";
 import { ReactComponent as SvgDwg } from "../../../svg/autocad.svg";
 import { ReactComponent as SvgDgn } from "../../../svg/dgndocument.svg";
 import { ReactComponent as SvgDocument } from "../../../svg/document.svg";
@@ -16,19 +16,19 @@ import { ReactComponent as SvgNwd } from "../../../svg/unknowndocument.svg";
 import "./BridgeIcon.scss";
 
 interface BridgeIconProps {
-  bridgeType?: IModelBridgeType;
+  bridgeType?: ConnectorTypeSynchronizationAPI;
 }
 export const BridgeIcon = ({ bridgeType }: BridgeIconProps) =>
   ({
-    [IModelBridgeType.MSTN]: <SvgDgn title={"MSTN"} />,
-    [IModelBridgeType.REVIT]: <SvgRevit title={"Revit"} />,
-    [IModelBridgeType.NWD]: <SvgNwd title={"Nwd"} />,
-    [IModelBridgeType.IFC]: (
+    [ConnectorTypeSynchronizationAPI.MSTN]: <SvgDgn title={"MSTN"} />,
+    [ConnectorTypeSynchronizationAPI.REVIT]: <SvgRevit title={"Revit"} />,
+    [ConnectorTypeSynchronizationAPI.NWD]: <SvgNwd title={"Nwd"} />,
+    [ConnectorTypeSynchronizationAPI.IFC]: (
       <div className={"composite-document-icon"} title={"Ifc"}>
         <SvgDocument />
         <SvgIfcIcon className={"icon-in-document"} />
       </div>
     ),
-    [IModelBridgeType.DWG]: <SvgDwg title={"DWG"} />,
-    [IModelBridgeType.NotSet]: null,
-  }[bridgeType ?? IModelBridgeType.NotSet]);
+    [ConnectorTypeSynchronizationAPI.DWG]: <SvgDwg title={"DWG"} />,
+    [ConnectorTypeSynchronizationAPI.NotSet]: null,
+  }[bridgeType ?? ConnectorTypeSynchronizationAPI.NotSet]);

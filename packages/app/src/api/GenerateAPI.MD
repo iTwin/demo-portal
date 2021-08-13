@@ -1,8 +1,10 @@
-# Generate API from exported api.json files (OpenAPI V2 Json)
+# Generate API from exported api.json files (OpenAPI V3 Json)
 
 As the API are being actively developed and still in tech preview, some files are not ready to be used as is by code generators and need adjustments so the generators can be used against them.
 
-After Exporting the OpenAPI v2 (json) file "xxx.json" (if the API changes),
+After Exporting the OpenAPI v3 (json) file "xxx.json" (if the API changes),
+
+Note that `storage` is mature enough and no longer needs adjustments, the file can be used directly in step 5. (Keep the latest used file in the repo)
 
 1. Compare current "xxxOriginal.json" file with "xxxAdjusted.json" (right-click and "Select for compare" in VSCode)
 
@@ -15,7 +17,7 @@ After Exporting the OpenAPI v2 (json) file "xxx.json" (if the API changes),
 5. From the root folder (or adapt the `${PWD}/packages/app/src/api` part if you prefer), run the following command (don't forget to replace the `xxx` part and start docker before... :) )
 
 ```ps
-docker run --rm -v "${PWD}/packages/app/src/api/xxx:/local" swaggerapi/swagger-codegen-cli generate -i /local/openapi/xxxAdjusted.json -l typescript-fetch -o /local/generated --additional-properties=supportsES6=true,modelPropertyNaming=original
+docker run --rm -v "${PWD}/packages/app/src/api/xxx:/local" swaggerapi/swagger-codegen-cli-v3 generate -i /local/openapi/xxxAdjusted.json -l typescript-fetch -o /local/generated --disable-examples --additional-properties=typescriptThreePlus=true,withoutRuntimeChecks=true,modelPropertyNaming=original --model-name-suffix XxxAPI
 ```
 
 6. After the command ran successfully, update the file `packages/app/src/api/xxx/generated/api.ts` with these 2 additional lines on top of the file:
@@ -40,11 +42,11 @@ and `export` the `BASE_PATH` in it (Required for environment awareness):
 ### Storage
 
 ```ps
-docker run --rm -v "${PWD}/packages/app/src/api/storage:/local" swaggerapi/swagger-codegen-cli generate -i /local/openapi/storageAdjusted.json -l typescript-fetch -o /local/generated --additional-properties=supportsES6=true,modelPropertyNaming=original
+docker run --rm -v "${PWD}/packages/app/src/api/storage:/local" swaggerapi/swagger-codegen-cli-v3 generate -i /local/openapi/storage.json -l typescript-fetch -o /local/generated --disable-examples --additional-properties=typescriptThreePlus=true,withoutRuntimeChecks=true,modelPropertyNaming=original --model-name-suffix StorageAPI
 ```
 
 ### Synchronization
 
 ```ps
-docker run --rm -v "${PWD}/packages/app/src/api/synchronization:/local" swaggerapi/swagger-codegen-cli generate -i /local/openapi/synchronizationAdjusted.json -l typescript-fetch -o /local/generated --additional-properties=supportsES6=true,modelPropertyNaming=original
+docker run --rm -v "${PWD}/packages/app/src/api/synchronization:/local" swaggerapi/swagger-codegen-cli-v3 generate -i /local/openapi/synchronizationAdjusted.json -l typescript-fetch -o /local/generated --disable-examples --additional-properties=typescriptThreePlus=true,withoutRuntimeChecks=true,modelPropertyNaming=original --model-name-suffix SynchronizationAPI
 ```

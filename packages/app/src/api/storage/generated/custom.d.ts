@@ -4,5 +4,5 @@
  *
  * This code is for demonstration purposes and should not be considered production ready.
  *--------------------------------------------------------------------------------------------*/
-declare module "portable-fetch";
+declare module "isomorphic-fetch";
 declare module "url";

@@ -7,7 +7,7 @@
 import { SvgRemove, SvgUpload } from "@itwin/itwinui-icons-react";
 import React from "react";
 
-import { IModelBridgeType } from "../../../api/synchronization/generated";
+import { ConnectorTypeSynchronizationAPI } from "../../../api/synchronization/generated";
 import { BridgeIcon } from "./BridgeIcon";
 import "./TileDropTarget.scss";
 
@@ -19,11 +19,11 @@ export const TileDropTarget = ({ isDisabled = false }: TileDropTargetProps) => (
   <div className={"tile-drop-target"}>
     {!isDisabled && (
       <div className={"tile-upload-options"}>
-        <BridgeIcon bridgeType={IModelBridgeType.MSTN} />
-        <BridgeIcon bridgeType={IModelBridgeType.REVIT} />
-        <BridgeIcon bridgeType={IModelBridgeType.NWD} />
-        <BridgeIcon bridgeType={IModelBridgeType.IFC} />
-        <BridgeIcon bridgeType={IModelBridgeType.DWG} />
+        <BridgeIcon bridgeType={ConnectorTypeSynchronizationAPI.MSTN} />
+        <BridgeIcon bridgeType={ConnectorTypeSynchronizationAPI.REVIT} />
+        <BridgeIcon bridgeType={ConnectorTypeSynchronizationAPI.NWD} />
+        <BridgeIcon bridgeType={ConnectorTypeSynchronizationAPI.IFC} />
+        <BridgeIcon bridgeType={ConnectorTypeSynchronizationAPI.DWG} />
       </div>
     )}
     {isDisabled ? (

@@ -7,7 +7,7 @@
 import { Alert } from "@itwin/itwinui-react";
 import React, { ComponentPropsWithoutRef } from "react";
 
-import { FileUpload } from "../../api/storage/generated";
+import { FileUploadStorageAPI } from "../../api/storage/generated";
 import { StorageClient } from "../../api/storage/storageClient";
 import { SynchronizationClient } from "../../api/synchronization/synchronizationClient";
 import { useApiPrefix } from "../../api/useApiPrefix";
@@ -94,12 +94,12 @@ export const useSynchronizeFileUploader = ({
         const demoFolderId = await storage.getDemoFolderId(projectId, true);
         setStatus("Validating iModel file share");
         const iModelFolderId = await storage.getIModelFolderId(
-          demoFolderId,
+          demoFolderId ?? "",
           iModelId,
           true
         );
 
-        let fileUpload: FileUpload;
+        let fileUpload: FileUploadStorageAPI;
 
         if (storageFileIdToUpdate) {
           setStatus("Getting file target");

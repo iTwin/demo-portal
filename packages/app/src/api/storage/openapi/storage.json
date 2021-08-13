@@ -1,0 +1,2952 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Storage",
+    "description": "Storage API allowing quick files managing",
+    "version": "v1"
+  },
+  "servers": [
+    {
+      "url": "https://api.bentley.com/storage"
+    }
+  ],
+  "paths": {
+    "/recycleBin/folders/{folderId}/restore": {
+      "post": {
+        "tags": ["Folders"],
+        "summary": "Restore folder",
+        "description": "---\r\n\r\nRestore deleted folder from the recycle bin\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `storage:modify`.\r\n\r\n### Authorization\r\n\r\nUser must be an Organization Administrator for the Organization that owns a given Project or have `storage_delete` permission assigned at the Project level.\r\n\r\nAn Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.\r\n\r\n---",
+        "operationId": "restore-folder",
+        "parameters": [
+          {
+            "name": "folderId",
+            "in": "path",
+            "description": "Folder Id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `storage:modify`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "A folder was restored successfully."
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "404": {
+            "description": "Folder cannot be found.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "FolderNotFound",
+                    "message": "Requested folder not available."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/files/{fileId}": {
+      "delete": {
+        "tags": ["Files"],
+        "summary": "Delete file",
+        "description": "---\r\n\r\nDelete a file\r\n\r\n### Notes\r\n\r\nFile moved to the recycle bin will be completely removed after 30 days.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `storage:modify`.\r\n\r\n### Authorization\r\n\r\nUser must be an Organization Administrator for the Organization that owns a given Project or have `storage_delete` permission assigned at the Project level.\r\n\r\nAn Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.\r\n\r\n---",
+        "operationId": "delete-file",
+        "parameters": [
+          {
+            "name": "fileId",
+            "in": "path",
+            "description": "File Id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `storage:modify`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "A file was deleted successfully."
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "404": {
+            "description": "File cannot be found.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "FileNotFound",
+                    "message": "Requested file not available."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Files"],
+        "summary": "Update file",
+        "description": "---\r\n\r\nUpdate file\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `storage:modify`.\r\n\r\n### Authorization\r\n\r\nUser must be an Organization Administrator for the Organization that owns a given Project or have `storage_write` permission assigned at the Project level.\r\n\r\nAn Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.\r\n\r\n### Errors\r\n\r\nThis request can return InvalidCreateFileRequest error with 422 status code. This could happen because of these reasons:\r\n\r\n- File name contains invalid characters.\r\n- File name's length is larger than 255 characters.\r\n- File could be harmful. For example, executable files are not accepted.\r\n\r\n---\r\n",
+        "operationId": "update-file",
+        "parameters": [
+          {
+            "name": "fileId",
+            "in": "path",
+            "description": "File Id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `storage:modify`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/file-update"
+              },
+              "example": {
+                "displayName": "test.txt",
+                "description": "test file"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/file-response"
+                },
+                "example": {
+                  "file": {
+                    "id": "TYJsPN0xtkWId0yUrXkS5pN5AQzuullIkxz5aDnDJSI",
+                    "displayName": "test.txt",
+                    "description": "test file",
+                    "path": "folderName/test.txt",
+                    "size": 8,
+                    "lastModifiedByDisplayName": "Bob User",
+                    "createdDateTime": "2020-05-03T11:05:11.0133549+00:00",
+                    "lastModifiedDateTime": "2021-05-15T12:07:06.7841448+00:00",
+                    "parentFolderId": "TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s",
+                    "_links": {
+                      "createdBy": {
+                        "href": "https://api.bentley.com/projects/6959daff-27f5-4b87-96ea-9917daa3a8ff/members/1140f95b-1ba0-49d9-bbf4-b53e54d80387"
+                      },
+                      "lastModifiedBy": {
+                        "href": "https://api.bentley.com/projects/6959daff-27f5-4b87-96ea-9917daa3a8ff/members/1140f95b-1ba0-49d9-bbf4-b53e54d80387"
+                      },
+                      "parentFolder": {
+                        "href": "https://api.bentley.com/storage/folders/TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "404": {
+            "description": "File cannot be found.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "FileNotFound",
+                    "message": "Requested file not available."
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid request to update a file. Make sure that a valid file ID and file details were passed in.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "InvalidStorageRequest",
+                    "message": "The request to update file was invalid. Please see the API Reference for possible reasons."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Files"],
+        "summary": "Get file",
+        "description": "---\r\n\r\nRetrieves file\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `storage:read`.\r\n\r\n### Authorization\r\n\r\nUser must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.\r\n\r\nAn Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.\r\n\r\n---",
+        "operationId": "get-file",
+        "parameters": [
+          {
+            "name": "fileId",
+            "in": "path",
+            "description": "File Id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `storage:read`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/file-response"
+                },
+                "example": {
+                  "file": {
+                    "id": "TYJsPN0xtkWId0yUrXkS5pN5AQzuullIkxz5aDnDJSI",
+                    "displayName": "file.txt",
+                    "description": "test file",
+                    "path": "folderName/file.txt",
+                    "size": 1,
+                    "lastModifiedByDisplayName": "Bob User",
+                    "createdDateTime": "2020-05-03T11:05:11.0133549+00:00",
+                    "lastModifiedDateTime": "2020-05-03T11:05:11.0133549+00:00",
+                    "parentFolderId": "TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s",
+                    "_links": {
+                      "createdBy": {
+                        "href": "https://api.bentley.com/projects/6959daff-27f5-4b87-96ea-9917daa3a8ff/members/1140f95b-1ba0-49d9-bbf4-b53e54d80387"
+                      },
+                      "lastModifiedBy": {
+                        "href": "https://api.bentley.com/projects/6959daff-27f5-4b87-96ea-9917daa3a8ff/members/1140f95b-1ba0-49d9-bbf4-b53e54d80387"
+                      },
+                      "parentFolder": {
+                        "href": "https://api.bentley.com/storage/folders/TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "404": {
+            "description": "File cannot be found.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "FileNotFound",
+                    "message": "Requested file not available."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/recycleBin/folders/{folderId}": {
+      "delete": {
+        "tags": ["Folders"],
+        "summary": "Delete folder from recycle bin",
+        "description": "---\r\n\r\nDelete a folder from the recycle bin\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `storage:modify`.\r\n\r\n### Authorization\r\n\r\nUser must be an Organization Administrator for the Organization that owns a given Project or have `storage_delete` permission assigned at the Project level.\r\n\r\nAn Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.\r\n\r\n---",
+        "operationId": "delete-folder-from-recycle-bin",
+        "parameters": [
+          {
+            "name": "folderId",
+            "in": "path",
+            "description": "Folder Id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `storage:modify`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "A folder was deleted successfully."
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "404": {
+            "description": "Folder cannot be found.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "FolderNotFound",
+                    "message": "Requested folder not available."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/recycleBin/files/{fileId}/restore": {
+      "post": {
+        "tags": ["Files"],
+        "summary": "Restore file",
+        "description": "---\r\n\r\nRestore deleted file from the recycle bin\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `storage:modify`.\r\n\r\n### Authorization\r\n\r\nUser must be an Organization Administrator for the Organization that owns a given Project or have `storage_delete` permission assigned at the Project level.\r\n\r\nAn Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.\r\n\r\n---",
+        "operationId": "restore-file",
+        "parameters": [
+          {
+            "name": "fileId",
+            "in": "path",
+            "description": "File Id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `storage:modify`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "A file was restored successfully."
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "404": {
+            "description": "File cannot be found.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "FileNotFound",
+                    "message": "Requested file not available."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/folders/{folderId}": {
+      "delete": {
+        "tags": ["Folders"],
+        "summary": "Delete folder",
+        "description": "---\r\n\r\nDelete a folder\r\n\r\n### Notes\r\n\r\nFolder moved to the recycle bin will be completely removed after 30 days.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `storage:modify`.\r\n\r\n### Authorization\r\n\r\nUser must be an Organization Administrator for the Organization that owns a given Project or have `storage_delete` permission assigned at the Project level.\r\n\r\nAn Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.\r\n\r\n---",
+        "operationId": "delete-folder",
+        "parameters": [
+          {
+            "name": "folderId",
+            "in": "path",
+            "description": "Folder Id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `storage:modify`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "A folder was deleted successfully."
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "404": {
+            "description": "Folder cannot be found.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "FolderNotFound",
+                    "message": "Requested folder not available."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Folders"],
+        "summary": "Update folder",
+        "description": "---\r\n\r\nUpdate folder\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `storage:modify`.\r\n\r\n### Authorization\r\n\r\nUser must be an Organization Administrator for the Organization that owns a given Project or have `storage_write` permission assigned at the Project level.\r\n\r\nAn Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.\r\n\r\n### Errors\r\n\r\nThis request can return InvalidCreateFolderRequest error with 422 status code. This could happen because of these reasons:\r\n\r\n- Folder name contains invalid characters.\r\n- Folder name's length is larger than 255 characters.\r\n\r\n---",
+        "operationId": "update-folder",
+        "parameters": [
+          {
+            "name": "folderId",
+            "in": "path",
+            "description": "Folder Id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `storage:modify`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/folder-update"
+              },
+              "example": {
+                "displayName": "test",
+                "description": "test folder"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/folder-response"
+                },
+                "example": {
+                  "folder": {
+                    "id": "TYJsPN0xtkWId0yUrXkS5pN5AQzuullIkxz5aDnDJSI",
+                    "displayName": "test",
+                    "description": "test folder",
+                    "path": "folderName/test",
+                    "lastModifiedByDisplayName": "Bob User",
+                    "createdDateTime": "2020-05-03T11:05:11.0133549+00:00",
+                    "lastModifiedDateTime": "2021-05-15T12:07:06.7841448+00:00",
+                    "parentFolderId": "TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s",
+                    "_links": {
+                      "createdBy": {
+                        "href": "https://api.bentley.com/projects/6959daff-27f5-4b87-96ea-9917daa3a8ff/members/1140f95b-1ba0-49d9-bbf4-b53e54d80387"
+                      },
+                      "lastModifiedBy": {
+                        "href": "https://api.bentley.com/projects/6959daff-27f5-4b87-96ea-9917daa3a8ff/members/1140f95b-1ba0-49d9-bbf4-b53e54d80387"
+                      },
+                      "parentFolder": {
+                        "href": "https://api.bentley.com/storage/folders/TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "404": {
+            "description": "Parent folder cannot be found.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "FolderNotFound",
+                    "message": "Requested folder not available."
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid request to update a folder. Make sure that a valid folder ID and folder details were passed in.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "InvalidStorageRequest",
+                    "message": "The request to update folder was invalid. Please see the API Reference for possible reasons."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Folders"],
+        "summary": "Get folder",
+        "description": "---\r\n\r\nRetrieves folder\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `storage:read`.\r\n\r\n### Authorization\r\n\r\nUser must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.\r\n\r\nAn Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.\r\n\r\n---",
+        "operationId": "get-folder",
+        "parameters": [
+          {
+            "name": "folderId",
+            "in": "path",
+            "description": "Folder Id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `storage:read`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/folder-response"
+                },
+                "example": {
+                  "folder": {
+                    "id": "TYJsPN0xtkWId0yUrXkS5pN5AQzuullIkxz5aDnDJSI",
+                    "displayName": "test",
+                    "description": "test folder",
+                    "path": "folderName/test",
+                    "lastModifiedByDisplayName": "Bob User",
+                    "createdDateTime": "2020-05-03T11:05:11.0133549+00:00",
+                    "lastModifiedDateTime": "2020-05-03T11:05:11.0133549+00:00",
+                    "parentFolderId": "TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s",
+                    "_links": {
+                      "createdBy": {
+                        "href": "https://api.bentley.com/projects/6959daff-27f5-4b87-96ea-9917daa3a8ff/members/1140f95b-1ba0-49d9-bbf4-b53e54d80387"
+                      },
+                      "lastModifiedBy": {
+                        "href": "https://api.bentley.com/projects/6959daff-27f5-4b87-96ea-9917daa3a8ff/members/1140f95b-1ba0-49d9-bbf4-b53e54d80387"
+                      },
+                      "parentFolder": {
+                        "href": "https://api.bentley.com/storage/folders/TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "404": {
+            "description": "Folder cannot be found.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "FolderNotFound",
+                    "message": "Requested folder not available."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/files/{fileId}/download": {
+      "get": {
+        "tags": ["Files"],
+        "summary": "Download file",
+        "description": "---\r\n\r\nRetrieves file\r\n\r\n### Notes\r\n\r\nThis endpoint returns 302 status code with Location header, which on success contains a link to the file. Redirection is not supported by developer portal and an error could be returned while using the \"Try it\" feature for this API. However, this endpoint will work if a request is sent from a different http client or by using the link specified in the response Location header.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `storage:read`.\r\n\r\n### Authorization\r\n\r\nUser must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.\r\n\r\nAn Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.\r\n\r\n---",
+        "operationId": "download-file",
+        "parameters": [
+          {
+            "name": "fileId",
+            "in": "path",
+            "description": "File Id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `storage:read`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+octet-stream` is recommended.",
+            "schema": {
+              "enum": [
+                "application/vnd.bentley.itwin-platform.v1+octet-stream"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "Found"
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "404": {
+            "description": "File cannot be found.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "FileNotFound",
+                    "message": "Requested file not available."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/recycleBin/files/{fileId}": {
+      "delete": {
+        "tags": ["Files"],
+        "summary": "Delete file from recycle bin",
+        "description": "---\r\n\r\nDelete a file from the recycle bin\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `storage:modify`.\r\n\r\n### Authorization\r\n\r\nUser must be an Organization Administrator for the Organization that owns a given Project or have `storage_delete` permission assigned at the Project level.\r\n\r\nAn Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.\r\n\r\n---",
+        "operationId": "delete-file-from-recycle-bin",
+        "parameters": [
+          {
+            "name": "fileId",
+            "in": "path",
+            "description": "File Id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `storage:modify`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "A file was deleted successfully."
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "404": {
+            "description": "File cannot be found.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "FileNotFound",
+                    "message": "Requested file not available."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/folders/{folderId}/files": {
+      "post": {
+        "tags": ["Files"],
+        "summary": "Create file",
+        "description": "---\r\n\r\nCreate new file\r\n\r\n### Notes\r\n\r\nFile creation is three steps operation. This request will create file's meta data. Next two requests need to be executed by using links from the response. Maximum file size to upload with single request is **256 MiB**. If bigger file needs to be uploaded there are possibility to use Azure libraries to upload file via given Azure SAS url or by uploading file with [multiple requests](https://docs.microsoft.com/en-us/rest/api/storageservices/operations-on-block-blobs).\r\n\r\n- **uploadUrl** is required for file upload. Upload can be done by sending http request and specifying x-ms-blob-type header to BlockBlob.\r\n- **completeUrl** should be used to confirm file upload and it is final request for file creation.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `storage:modify`.\r\n\r\n### Authorization\r\n\r\nUser must be an Organization Administrator for the Organization that owns a given Project or have `storage_write` permission assigned at the Project level.\r\n\r\nAn Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.\r\n\r\n### Errors\r\n\r\nThis request can return InvalidCreateFileRequest error with 422 status code. This could happen because of these reasons:\r\n\r\n- File name contains invalid characters.\r\n- File name's length is larger than 255 characters.\r\n- File could be harmful. For example, executable files are not accepted.\r\n\r\n---",
+        "operationId": "create-file",
+        "parameters": [
+          {
+            "name": "folderId",
+            "in": "path",
+            "description": "Folder Id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `storage:modify`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/file-create"
+              },
+              "example": {
+                "displayName": "test.txt",
+                "description": "test file"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/file-upload"
+                },
+                "example": {
+                  "_links": {
+                    "completeUrl": {
+                      "href": "https://api.bentley.com/storage/files/TYJsPN0xtkWId0yUrXkS5pN5AQzuullIkxz5aDnDJSI/complete"
+                    },
+                    "uploadUrl": {
+                      "href": "https://projectshareprodeussa01.blob.core.windows.net/azuresqldbecpluginstorage/ProjectShare/File/b6145b7f-fee9-4a13-b1e4-5d061970373e?sv=2017-04-17&sr=b&sig=4NfdEriAONQhbHGkrTAL4bNMzjW8Qm5l%2FoEPiSQl%2BPo%3D&se=2020-10-19T15:12:51Z&sp=rw&rscd=attachment%3B%20filename%3D%22test.txt%22&userid=b905387c-a685-4d27-aab7-468c9ff0c9a6"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "404": {
+            "description": "Parent folder cannot be found.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "FolderNotFound",
+                    "message": "Requested folder not available."
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid request to create a file. Make sure that a valid file ID and file details were passed in.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "InvalidStorageRequest",
+                    "message": "The request to create file was invalid. Please see the API Reference for possible reasons."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Files"],
+        "summary": "Get files in folder",
+        "description": "---\r\n\r\nRetrieves files\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `storage:read`.\r\n\r\n### Authorization\r\n\r\nUser must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.\r\n\r\nAn Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.\r\n\r\n---",
+        "operationId": "get-files-in-folder",
+        "parameters": [
+          {
+            "name": "folderId",
+            "in": "path",
+            "description": "Folder Id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `storage:read`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/files"
+                },
+                "example": {
+                  "files": [
+                    {
+                      "id": "TYJsPN0xtkWId0yUrXkS5pN5AQzuullIkxz5aDnDJSI",
+                      "displayName": "test.txt",
+                      "description": "test file",
+                      "path": "folderName/test.txt",
+                      "size": 1,
+                      "lastModifiedByDisplayName": "Bob User",
+                      "createdDateTime": "2020-05-03T11:05:11.0133549+00:00",
+                      "lastModifiedDateTime": "2020-05-03T11:05:11.0133549+00:00",
+                      "parentFolderId": "TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s",
+                      "_links": {
+                        "createdBy": {
+                          "href": "https://api.bentley.com/projects/6959daff-27f5-4b87-96ea-9917daa3a8ff/members/1140f95b-1ba0-49d9-bbf4-b53e54d80387"
+                        },
+                        "lastModifiedBy": {
+                          "href": "https://api.bentley.com/projects/6959daff-27f5-4b87-96ea-9917daa3a8ff/members/1140f95b-1ba0-49d9-bbf4-b53e54d80387"
+                        },
+                        "parentFolder": {
+                          "href": "https://api.bentley.com/storage/folders/TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s"
+                        }
+                      }
+                    },
+                    {
+                      "id": "TYJsPN0xtkWId0yUrXkS5s4FlCroosBMlyDhZZmlzoc",
+                      "displayName": "test2.txt",
+                      "description": "test file 2",
+                      "path": "folderName/test2.txt",
+                      "size": 1,
+                      "lastModifiedByDisplayName": "Bob User",
+                      "createdDateTime": "2020-05-03T11:05:12.0133549+00:00",
+                      "lastModifiedDateTime": "2020-05-03T11:05:12.0133549+00:00",
+                      "parentFolderId": "TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s",
+                      "_links": {
+                        "createdBy": {
+                          "href": "https://api.bentley.com/projects/6959daff-27f5-4b87-96ea-9917daa3a8ff/members/1140f95b-1ba0-49d9-bbf4-b53e54d80387"
+                        },
+                        "lastModifiedBy": {
+                          "href": "https://api.bentley.com/projects/6959daff-27f5-4b87-96ea-9917daa3a8ff/members/1140f95b-1ba0-49d9-bbf4-b53e54d80387"
+                        },
+                        "parentFolder": {
+                          "href": "https://api.bentley.com/storage/folders/TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s"
+                        }
+                      }
+                    }
+                  ],
+                  "_links": {
+                    "self": {
+                      "href": "https://api.bentley.com/storage/folders/TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s/files?$skip=4&$top=2"
+                    },
+                    "prev": {
+                      "href": "https://api.bentley.com/storage/folders/TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s/files?$skip=2&$top=2"
+                    },
+                    "next": {
+                      "href": "https://api.bentley.com/storage/folders/TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s/files?$skip=6&$top=2"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "404": {
+            "description": "Folder cannot be found.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "FolderNotFound",
+                    "message": "Requested folder not available."
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid request to get files in folder",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "InvalidStorageRequest",
+                    "message": "Page size is over 1000 items limit."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/recycleBin": {
+      "get": {
+        "tags": ["Folders", "Files"],
+        "summary": "Get folders and files in recycle bin",
+        "description": "---\r\n\r\nGet deleted files and folders\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `storage:read`.\r\n\r\n### Authorization\r\n\r\nUser must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.\r\n\r\nAn Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.\r\n\r\n---",
+        "operationId": "get-folders-and-files-in-recycle-bin",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "query",
+            "description": "Project Id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `storage:read`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/items"
+                },
+                "example": {
+                  "items": [
+                    {
+                      "type": "folder",
+                      "id": "TYJsPN0xtkWId0yUrXkS5pN5AQzuullIkxz5aDnDJSI",
+                      "displayName": "test",
+                      "description": "test folder",
+                      "path": "folderName/test",
+                      "lastModifiedByDisplayName": "Bob User",
+                      "createdDateTime": "2020-05-03T11:05:11.0133549+00:00",
+                      "lastModifiedDateTime": "2020-05-03T11:05:11.0133549+00:00",
+                      "parentFolderId": "TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s",
+                      "_links": {
+                        "createdBy": {
+                          "href": "https://api.bentley.com/projects/6959daff-27f5-4b87-96ea-9917daa3a8ff/members/1140f95b-1ba0-49d9-bbf4-b53e54d80387"
+                        },
+                        "lastModifiedBy": {
+                          "href": "https://api.bentley.com/projects/6959daff-27f5-4b87-96ea-9917daa3a8ff/members/1140f95b-1ba0-49d9-bbf4-b53e54d80387"
+                        },
+                        "parentFolder": {
+                          "href": "https://api.bentley.com/storage/folders/TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s"
+                        }
+                      }
+                    },
+                    {
+                      "type": "file",
+                      "id": "TYJsPN0xtkWId0yUrXkS5s4FlCroosBMlyDhZZmlzoc",
+                      "displayName": "test2.txt",
+                      "description": "test file 2",
+                      "path": "folderName/test2.txt",
+                      "size": 1,
+                      "lastModifiedByDisplayName": "Bob User",
+                      "createdDateTime": "2020-05-03T11:05:12.0133549+00:00",
+                      "lastModifiedDateTime": "2020-05-03T11:05:12.0133549+00:00",
+                      "parentFolderId": "TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s",
+                      "_links": {
+                        "createdBy": {
+                          "href": "https://api.bentley.com/projects/6959daff-27f5-4b87-96ea-9917daa3a8ff/members/1140f95b-1ba0-49d9-bbf4-b53e54d80387"
+                        },
+                        "lastModifiedBy": {
+                          "href": "https://api.bentley.com/projects/6959daff-27f5-4b87-96ea-9917daa3a8ff/members/1140f95b-1ba0-49d9-bbf4-b53e54d80387"
+                        },
+                        "parentFolder": {
+                          "href": "https://api.bentley.com/storage/folders/TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s"
+                        }
+                      }
+                    }
+                  ],
+                  "_links": {
+                    "self": {
+                      "href": "https://api.bentley.com/storage/recycleBin?projectId=6959daff-27f5-4b87-96ea-9917daa3a8ff&$skip=4&$top=2"
+                    },
+                    "prev": {
+                      "href": "https://api.bentley.com/storage/recycleBin?projectId=6959daff-27f5-4b87-96ea-9917daa3a8ff&$skip=2&$top=2"
+                    },
+                    "next": {
+                      "href": "https://api.bentley.com/storage/recycleBin?projectId=6959daff-27f5-4b87-96ea-9917daa3a8ff&$skip=6&$top=2"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "422": {
+            "description": "Invalid request to get folders and files in recycle bin",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "InvalidStorageRequest",
+                    "message": "Page size is over 1000 items limit."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "tags": ["Folders", "Files"],
+        "summary": "Get top level folders and files by project",
+        "description": "---\r\n\r\nRetrieves top level files and folders by project\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `storage:read`.\r\n\r\n### Authorization\r\n\r\nUser must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.\r\n\r\nAn Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.\r\n\r\n---",
+        "operationId": "get-top-level-folders-and-files-by-project",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "query",
+            "description": "Project Id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `storage:read`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/items-with-folder-link"
+                },
+                "example": {
+                  "items": [
+                    {
+                      "type": "folder",
+                      "id": "TYJsPN0xtkWId0yUrXkS5pN5AQzuullIkxz5aDnDJSI",
+                      "displayName": "test",
+                      "description": "test folder",
+                      "path": "folderName/test",
+                      "lastModifiedByDisplayName": "Bob User",
+                      "createdDateTime": "2020-05-03T11:05:11.0133549+00:00",
+                      "lastModifiedDateTime": "2020-05-03T11:05:11.0133549+00:00",
+                      "parentFolderId": "TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s",
+                      "_links": {
+                        "createdBy": {
+                          "href": "https://api.bentley.com/projects/6959daff-27f5-4b87-96ea-9917daa3a8ff/members/1140f95b-1ba0-49d9-bbf4-b53e54d80387"
+                        },
+                        "lastModifiedBy": {
+                          "href": "https://api.bentley.com/projects/6959daff-27f5-4b87-96ea-9917daa3a8ff/members/1140f95b-1ba0-49d9-bbf4-b53e54d80387"
+                        },
+                        "parentFolder": {
+                          "href": "https://api.bentley.com/storage/folders/TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s"
+                        }
+                      }
+                    },
+                    {
+                      "type": "file",
+                      "id": "TYJsPN0xtkWId0yUrXkS5s4FlCroosBMlyDhZZmlzoc",
+                      "displayName": "test2.txt",
+                      "description": "test file 2",
+                      "path": "folderName/test2.txt",
+                      "size": 1,
+                      "lastModifiedByDisplayName": "Bob User",
+                      "createdDateTime": "2020-05-03T11:05:12.0133549+00:00",
+                      "lastModifiedDateTime": "2020-05-03T11:05:12.0133549+00:00",
+                      "parentFolderId": "TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s",
+                      "_links": {
+                        "createdBy": {
+                          "href": "https://api.bentley.com/projects/6959daff-27f5-4b87-96ea-9917daa3a8ff/members/1140f95b-1ba0-49d9-bbf4-b53e54d80387"
+                        },
+                        "lastModifiedBy": {
+                          "href": "https://api.bentley.com/projects/6959daff-27f5-4b87-96ea-9917daa3a8ff/members/1140f95b-1ba0-49d9-bbf4-b53e54d80387"
+                        },
+                        "parentFolder": {
+                          "href": "https://api.bentley.com/storage/folders/TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s"
+                        }
+                      }
+                    }
+                  ],
+                  "_links": {
+                    "self": {
+                      "href": "https://api.bentley.com/storage?projectId=6959daff-27f5-4b87-96ea-9917daa3a8ff&$skip=4&$top=2"
+                    },
+                    "prev": {
+                      "href": "https://api.bentley.com/storage?projectId=6959daff-27f5-4b87-96ea-9917daa3a8ff&$skip=2&$top=2"
+                    },
+                    "next": {
+                      "href": "https://api.bentley.com/storage?projectId=6959daff-27f5-4b87-96ea-9917daa3a8ff&$skip=6&$top=2"
+                    },
+                    "folder": {
+                      "href": "https://api.bentley.com/storage/folders/TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "422": {
+            "description": "Invalid request to get top level folders and files",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "InvalidStorageRequest",
+                    "message": "Page size is over 1000 items limit."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/folders/{folderId}/search": {
+      "get": {
+        "tags": ["Folders", "Files"],
+        "summary": "Search for folders and files in folder",
+        "description": "---\r\n\r\nFinds files and folders in folder by name\r\n\r\n### Notes\r\n\r\nThis query supports wildcard characters in the name parameter\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `storage:read`.\r\n\r\n### Authorization\r\n\r\nUser must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.\r\n\r\nAn Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.\r\n\r\n---",
+        "operationId": "search-for-folders-and-files-in-folder",
+        "parameters": [
+          {
+            "name": "folderId",
+            "in": "path",
+            "description": "Folder Id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Item name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `storage:read`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/items"
+                },
+                "example": {
+                  "items": [
+                    {
+                      "type": "folder",
+                      "id": "TYJsPN0xtkWId0yUrXkS5pN5AQzuullIkxz5aDnDJSI",
+                      "displayName": "test",
+                      "description": "test folder/test",
+                      "path": "folderName/",
+                      "lastModifiedByDisplayName": "Bob User",
+                      "createdDateTime": "2020-05-03T11:05:11.0133549+00:00",
+                      "lastModifiedDateTime": "2020-05-03T11:05:11.0133549+00:00",
+                      "parentFolderId": "TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s",
+                      "_links": {
+                        "createdBy": {
+                          "href": "https://api.bentley.com/projects/6959daff-27f5-4b87-96ea-9917daa3a8ff/members/1140f95b-1ba0-49d9-bbf4-b53e54d80387"
+                        },
+                        "lastModifiedBy": {
+                          "href": "https://api.bentley.com/projects/6959daff-27f5-4b87-96ea-9917daa3a8ff/members/1140f95b-1ba0-49d9-bbf4-b53e54d80387"
+                        },
+                        "parentFolder": {
+                          "href": "https://api.bentley.com/storage/folders/TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s"
+                        }
+                      }
+                    },
+                    {
+                      "type": "file",
+                      "id": "TYJsPN0xtkWId0yUrXkS5adTiHezskHPazRaHzjaBzd",
+                      "displayName": "test3.txt",
+                      "description": "test file 3",
+                      "path": "folderName/folderName2/test3.txt",
+                      "size": 1,
+                      "lastModifiedByDisplayName": "Bob User",
+                      "createdDateTime": "2020-05-03T11:05:12.0133549+00:00",
+                      "lastModifiedDateTime": "2020-05-03T11:05:12.0133549+00:00",
+                      "parentFolderId": "TYJsPN0xtkWId0yUrXkS5b1DUGcZLLeJfkqBVUAsaYj",
+                      "_links": {
+                        "createdBy": {
+                          "href": "https://api.bentley.com/projects/6959daff-27f5-4b87-96ea-9917daa3a8ff/members/1140f95b-1ba0-49d9-bbf4-b53e54d80387"
+                        },
+                        "lastModifiedBy": {
+                          "href": "https://api.bentley.com/projects/6959daff-27f5-4b87-96ea-9917daa3a8ff/members/1140f95b-1ba0-49d9-bbf4-b53e54d80387"
+                        },
+                        "parentFolder": {
+                          "href": "https://api.bentley.com/storage/folders/TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s"
+                        }
+                      }
+                    }
+                  ],
+                  "_links": {
+                    "self": {
+                      "href": "https://api.bentley.com/storage/folders/TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s/search?name=search-string&$skip=4&$top=2"
+                    },
+                    "prev": {
+                      "href": "https://api.bentley.com/storage/folders/TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s/search?name=search-string&$skip=2&$top=2"
+                    },
+                    "next": {
+                      "href": "https://api.bentley.com/storage/folders/TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s/search?name=search-string&$skip=6&$top=2"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "404": {
+            "description": "Folder cannot be found.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "FolderNotFound",
+                    "message": "Requested folder not available."
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid request to search for folders and files",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "InvalidStorageRequest",
+                    "message": "Page size is over 1000 items limit."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/files/{fileId}/complete": {
+      "post": {
+        "tags": ["Files"],
+        "summary": "Complete file upload",
+        "description": "---\r\n\r\nComplete file creation\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `storage:modify`.\r\n\r\n### Authorization\r\n\r\nUser must be an Organization Administrator for the Organization that owns a given Project or have `storage_write` permission assigned at the Project level.\r\n\r\nAn Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.\r\n\r\n---\r\n",
+        "operationId": "complete-file-creation",
+        "parameters": [
+          {
+            "name": "fileId",
+            "in": "path",
+            "description": "File Id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `storage:modify`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/file-response"
+                },
+                "example": {
+                  "file": {
+                    "id": "TYJsPN0xtkWId0yUrXkS5pN5AQzuullIkxz5aDnDJSI",
+                    "displayName": "test.txt",
+                    "description": "test file",
+                    "path": "folderName/test.txt",
+                    "size": 8,
+                    "lastModifiedByDisplayName": "Bob User",
+                    "createdDateTime": "2020-05-03T11:05:11.0133549+00:00",
+                    "lastModifiedDateTime": "2020-05-03T11:05:11.0133549+00:00",
+                    "parentFolderId": "TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s",
+                    "_links": {
+                      "createdBy": {
+                        "href": "https://api.bentley.com/projects/6959daff-27f5-4b87-96ea-9917daa3a8ff/members/1140f95b-1ba0-49d9-bbf4-b53e54d80387"
+                      },
+                      "lastModifiedBy": {
+                        "href": "https://api.bentley.com/projects/6959daff-27f5-4b87-96ea-9917daa3a8ff/members/1140f95b-1ba0-49d9-bbf4-b53e54d80387"
+                      },
+                      "parentFolder": {
+                        "href": "https://api.bentley.com/storage/folders/TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "404": {
+            "description": "File cannot be found.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "FileNotFound",
+                    "message": "Requested file not available."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/files/{fileId}/updateContent": {
+      "post": {
+        "tags": ["Files"],
+        "summary": "Update file content",
+        "description": "---\r\n\r\nUpdate file's content\r\n\r\n### Notes\r\n\r\nFile update is three steps operation. This request creates hyperlinks for file content update and confirmation. Next two requests need to be executed by using links from the response. Maximum file size to upload with single request is **256 MiB**. If bigger files needs to uploaded there are possibility to use Azure libraries or by uploading file with [multiple requests](https://docs.microsoft.com/en-us/rest/api/storageservices/operations-on-block-blobs).\r\n\r\n- **uploadUrl** is required for file upload. Upload can be done by sending http request and specifying x-ms-blob-type header to BlockBlob.\r\n- **completeUrl** should be used to confirm file upload and it is final request for file creation.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `storage:modify`.\r\n\r\n### Authorization\r\n\r\nUser must be an Organization Administrator for the Organization that owns a given Project or have `storage_write` permission assigned at the Project level.\r\n\r\nAn Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.\r\n\r\n---",
+        "operationId": "update-file-content",
+        "parameters": [
+          {
+            "name": "fileId",
+            "in": "path",
+            "description": "File Id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `storage:modify`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Accepted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/file-upload"
+                },
+                "example": {
+                  "_links": {
+                    "completeUrl": {
+                      "href": "https://api.bentley.com/storage/files/TYJsPN0xtkWId0yUrXkS5pN5AQzuullIkxz5aDnDJSI/complete"
+                    },
+                    "uploadUrl": {
+                      "href": "https://projectshareprodeussa01.blob.core.windows.net/azuresqldbecpluginstorage/ProjectShare/File/b6145b7f-fee9-4a13-b1e4-5d061970373e?sv=2017-04-17&sr=b&sig=4NfdEriAONQhbHGkrTAL4bNMzjW8Qm5l%2FoEPiSQl%2BPo%3D&se=2020-10-19T15:12:51Z&sp=rw&rscd=attachment%3B%20filename%3D%22test.txt%22&userid=b905387c-a685-4d27-aab7-468c9ff0c9a6"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "404": {
+            "description": "File cannot be found.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "FileNotFound",
+                    "message": "Requested file not available."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/folders/{folderId}/list": {
+      "get": {
+        "tags": ["Folders", "Files"],
+        "summary": "Get folders and files in folder",
+        "description": "---\r\n\r\nRetrieves files and folders\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `storage:read`.\r\n\r\n### Authorization\r\n\r\nUser must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.\r\n\r\nAn Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.\r\n\r\n---",
+        "operationId": "get-folders-and-files-in-folder",
+        "parameters": [
+          {
+            "name": "folderId",
+            "in": "path",
+            "description": "Folder Id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `storage:read`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/items"
+                },
+                "example": {
+                  "items": [
+                    {
+                      "type": "folder",
+                      "id": "TYJsPN0xtkWId0yUrXkS5pN5AQzuullIkxz5aDnDJSI",
+                      "displayName": "test",
+                      "description": "test folder",
+                      "path": "folderName/test",
+                      "lastModifiedByDisplayName": "Bob User",
+                      "createdDateTime": "2020-05-03T11:05:11.0133549+00:00",
+                      "lastModifiedDateTime": "2020-05-03T11:05:11.0133549+00:00",
+                      "parentFolderId": "TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s",
+                      "_links": {
+                        "createdBy": {
+                          "href": "https://api.bentley.com/projects/6959daff-27f5-4b87-96ea-9917daa3a8ff/members/1140f95b-1ba0-49d9-bbf4-b53e54d80387"
+                        },
+                        "lastModifiedBy": {
+                          "href": "https://api.bentley.com/projects/6959daff-27f5-4b87-96ea-9917daa3a8ff/members/1140f95b-1ba0-49d9-bbf4-b53e54d80387"
+                        },
+                        "parentFolder": {
+                          "href": "https://api.bentley.com/storage/folders/TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s"
+                        }
+                      }
+                    },
+                    {
+                      "type": "file",
+                      "id": "TYJsPN0xtkWId0yUrXkS5s4FlCroosBMlyDhZZmlzoc",
+                      "displayName": "test2.txt",
+                      "description": "test file 2",
+                      "path": "folderName/test2.txt",
+                      "size": 1,
+                      "lastModifiedByDisplayName": "Bob User",
+                      "createdDateTime": "2020-05-03T11:05:12.0133549+00:00",
+                      "lastModifiedDateTime": "2020-05-03T11:05:12.0133549+00:00",
+                      "parentFolderId": "TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s",
+                      "_links": {
+                        "createdBy": {
+                          "href": "https://api.bentley.com/projects/6959daff-27f5-4b87-96ea-9917daa3a8ff/members/1140f95b-1ba0-49d9-bbf4-b53e54d80387"
+                        },
+                        "lastModifiedBy": {
+                          "href": "https://api.bentley.com/projects/6959daff-27f5-4b87-96ea-9917daa3a8ff/members/1140f95b-1ba0-49d9-bbf4-b53e54d80387"
+                        },
+                        "parentFolder": {
+                          "href": "https://api.bentley.com/storage/folders/TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s"
+                        }
+                      }
+                    }
+                  ],
+                  "_links": {
+                    "self": {
+                      "href": "https://api.bentley.com/storage/folders/TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s/list?$skip=4&$top=2"
+                    },
+                    "prev": {
+                      "href": "https://api.bentley.com/storage/folders/TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s/list?$skip=2&$top=2"
+                    },
+                    "next": {
+                      "href": "https://api.bentley.com/storage/folders/TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s/list?$skip=6&$top=2"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "404": {
+            "description": "Folder cannot be found.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "FolderNotFound",
+                    "message": "Requested folder not available."
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid request to get projects",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "InvalidStorageRequest",
+                    "message": "Page size is over 1000 items limit."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/folders/{folderId}/folders": {
+      "get": {
+        "tags": ["Folders"],
+        "summary": "Get folders in folder",
+        "description": "---\r\n\r\nRetrieves folders\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `storage:read`.\r\n\r\n### Authorization\r\n\r\nUser must be an Organization Administrator for the Organization that owns a given Project or have `storage_read` permission assigned at the Project level.\r\n\r\nAn Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.\r\n\r\n---",
+        "operationId": "get-folders-in-folder",
+        "parameters": [
+          {
+            "name": "folderId",
+            "in": "path",
+            "description": "Folder Id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `storage:read`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/folders"
+                },
+                "example": {
+                  "folders": [
+                    {
+                      "id": "TYJsPN0xtkWId0yUrXkS5pN5AQzuullIkxz5aDnDJSI",
+                      "displayName": "test",
+                      "description": "test folder",
+                      "path": "folderName/",
+                      "lastModifiedByDisplayName": "Bob User",
+                      "createdDateTime": "2020-05-03T11:05:11.0133549+00:00",
+                      "lastModifiedDateTime": "2020-05-03T11:05:11.0133549+00:00",
+                      "parentFolderId": "TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s",
+                      "_links": {
+                        "createdBy": {
+                          "href": "https://api.bentley.com/projects/6959daff-27f5-4b87-96ea-9917daa3a8ff/members/1140f95b-1ba0-49d9-bbf4-b53e54d80387"
+                        },
+                        "lastModifiedBy": {
+                          "href": "https://api.bentley.com/projects/6959daff-27f5-4b87-96ea-9917daa3a8ff/members/1140f95b-1ba0-49d9-bbf4-b53e54d80387"
+                        },
+                        "parentFolder": {
+                          "href": "https://api.bentley.com/storage/folders/TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s"
+                        }
+                      }
+                    },
+                    {
+                      "id": "TYJsPN0xtkWId0yUrXkS5s4FlCroosBMlyDhZZmlzoc",
+                      "displayName": "test 2",
+                      "description": "test folder 2",
+                      "path": "folderName/",
+                      "lastModifiedByDisplayName": "Bob User",
+                      "createdDateTime": "2020-05-03T11:05:12.0133549+00:00",
+                      "lastModifiedDateTime": "2020-05-03T11:05:12.0133549+00:00",
+                      "parentFolderId": "TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s",
+                      "_links": {
+                        "createdBy": {
+                          "href": "https://api.bentley.com/projects/6959daff-27f5-4b87-96ea-9917daa3a8ff/members/1140f95b-1ba0-49d9-bbf4-b53e54d80387"
+                        },
+                        "lastModifiedBy": {
+                          "href": "https://api.bentley.com/projects/6959daff-27f5-4b87-96ea-9917daa3a8ff/members/1140f95b-1ba0-49d9-bbf4-b53e54d80387"
+                        },
+                        "parentFolder": {
+                          "href": "https://api.bentley.com/storage/folders/TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s"
+                        }
+                      }
+                    }
+                  ],
+                  "_links": {
+                    "self": {
+                      "href": "https://api.bentley.com/storage/folders/TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s/folders?$skip=4&$top=2"
+                    },
+                    "prev": {
+                      "href": "https://api.bentley.com/storage/folders/TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s/folders?$skip=2&$top=2"
+                    },
+                    "next": {
+                      "href": "https://api.bentley.com/storage/folders/TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s/folders?$skip=6&$top=2"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "404": {
+            "description": "Folder cannot be found.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "FolderNotFound",
+                    "message": "Requested folder not available."
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid request to get folders in folder",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "InvalidStorageRequest",
+                    "message": "Page size is over 1000 items limit."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Folders"],
+        "summary": "Create folder",
+        "description": "---\r\n\r\nCreate new folder\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `storage:modify`.\r\n\r\n### Authorization\r\n\r\nUser must be an Organization Administrator for the Organization that owns a given Project or have `storage_write` permission assigned at the Project level.\r\n\r\nAn Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.\r\n\r\n### Errors\r\n\r\nThis request can return InvalidCreateFolderRequest error with 422 status code. This could happen because of these reasons:\r\n\r\n- Folder name contains invalid characters.\r\n- Folder name's length is larger than 255 characters.\r\n\r\n---",
+        "operationId": "create-folder",
+        "parameters": [
+          {
+            "name": "folderId",
+            "in": "path",
+            "description": "Folder Id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `storage:modify`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/folder-create"
+              },
+              "example": {
+                "displayName": "test",
+                "description": "test folder"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/folder-response"
+                },
+                "example": {
+                  "folder": {
+                    "id": "TYJsPN0xtkWId0yUrXkS5pN5AQzuullIkxz5aDnDJSI",
+                    "displayName": "test",
+                    "description": "test folder",
+                    "path": "folderName/test",
+                    "lastModifiedByDisplayName": "Bob User",
+                    "createdDateTime": "2020-05-03T11:05:11.0133549+00:00",
+                    "lastModifiedDateTime": "2020-05-03T11:05:11.0133549+00:00",
+                    "parentFolderId": "TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s",
+                    "_links": {
+                      "createdBy": {
+                        "href": "https://api.bentley.com/projects/6959daff-27f5-4b87-96ea-9917daa3a8ff/members/1140f95b-1ba0-49d9-bbf4-b53e54d80387"
+                      },
+                      "lastModifiedBy": {
+                        "href": "https://api.bentley.com/projects/6959daff-27f5-4b87-96ea-9917daa3a8ff/members/1140f95b-1ba0-49d9-bbf4-b53e54d80387"
+                      },
+                      "parentFolder": {
+                        "href": "https://api.bentley.com/storage/folders/TYJsPN0xtkWId0yUrXkS5g0CIYaGZLxEozrWBCOcS_s"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "404": {
+            "description": "Parent folder cannot be found.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "FolderNotFound",
+                    "message": "Requested folder not available."
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid request to create a folder. Make sure that a valid folder ID and folder details were passed in.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "InvalidStorageRequest",
+                    "message": "The request to create folder was invalid. Please see the API Reference for possible reasons."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "minimal-error": {
+        "title": "minimal error",
+        "type": "object",
+        "properties": {
+          "self": {
+            "$ref": "#/components/schemas/error"
+          }
+        },
+        "description": "Minimal error representation."
+      },
+      "error": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Error message."
+          },
+          "code": {
+            "type": "string",
+            "description": "Error code."
+          }
+        },
+        "description": "Error representation."
+      },
+      "links-paging-with-folder-link": {
+        "title": "links (paging with folder link)",
+        "type": "object",
+        "properties": {
+          "self": {
+            "$ref": "#/components/schemas/link"
+          },
+          "next": {
+            "$ref": "#/components/schemas/link"
+          },
+          "prev": {
+            "$ref": "#/components/schemas/link"
+          },
+          "folder": {
+            "$ref": "#/components/schemas/link"
+          }
+        },
+        "description": "URLs for redoing the current request, getting to the previous or next page of results, if applicable containg, and retrieving root folder."
+      },
+      "links-paging": {
+        "title": "links (paging)",
+        "type": "object",
+        "properties": {
+          "self": {
+            "$ref": "#/components/schemas/link"
+          },
+          "next": {
+            "$ref": "#/components/schemas/link"
+          },
+          "prev": {
+            "$ref": "#/components/schemas/link"
+          }
+        },
+        "description": "URLs for redoing the current request, getting to the previous or next page of results, if applicable containg."
+      },
+      "links-item": {
+        "title": "links (item)",
+        "type": "object",
+        "properties": {
+          "createdBy": {
+            "$ref": "#/components/schemas/link"
+          },
+          "lastModifiedBy": {
+            "$ref": "#/components/schemas/link"
+          },
+          "parentFolder": {
+            "$ref": "#/components/schemas/link"
+          }
+        },
+        "description": "URLs for accessing users' details and parent folder."
+      },
+      "link": {
+        "type": "object",
+        "properties": {
+          "href": {
+            "type": "string",
+            "description": "Hyperlink to the specific entity."
+          }
+        },
+        "description": "Hyperlink container."
+      },
+      "folder-response": {
+        "title": "folder (response)",
+        "type": "object",
+        "properties": {
+          "folder": {
+            "$ref": "#/components/schemas/folder"
+          }
+        },
+        "description": "Retrieved folder response containing folder."
+      },
+      "folder": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique Identifier of the folder."
+          },
+          "displayName": {
+            "type": "string",
+            "description": "Display name of the folder."
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the folder."
+          },
+          "path": {
+            "type": "string",
+            "description": "Absolute path to the folder."
+          },
+          "lastModifiedByDisplayName": {
+            "type": "string",
+            "description": "Display name of the user who modified folder last."
+          },
+          "createdDateTime": {
+            "type": "string",
+            "description": "Date when the folder was created."
+          },
+          "lastModifiedDateTime": {
+            "type": "string",
+            "description": "Date when the folder was last time modified."
+          },
+          "parentFolderId": {
+            "type": "string",
+            "description": "Unique Identifier of the parent folder."
+          },
+          "_links": {
+            "$ref": "#/components/schemas/links-item"
+          }
+        },
+        "description": "Full representation of the folder."
+      },
+      "folder-typed": {
+        "title": "folder (typed)",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique Identifier of the folder."
+          },
+          "type": {
+            "enum": ["folder"],
+            "type": "string",
+            "description": "Identification of the folder entity."
+          },
+          "displayName": {
+            "type": "string",
+            "description": "Display name of the folder."
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the folder."
+          },
+          "path": {
+            "type": "string",
+            "description": "Absolute path to the folder."
+          },
+          "lastModifiedByDisplayName": {
+            "type": "string",
+            "description": "Display name of the user who modified folder last."
+          },
+          "createdDateTime": {
+            "type": "string",
+            "description": "Date when the folder was created."
+          },
+          "lastModifiedDateTime": {
+            "type": "string",
+            "description": "Date when the folder was last time modified."
+          },
+          "parentFolderId": {
+            "type": "string",
+            "description": "Unique Identifier of the parent folder."
+          },
+          "_links": {
+            "$ref": "#/components/schemas/links-item"
+          }
+        },
+        "description": "Full representation of the folder with folder type."
+      },
+      "folder-create": {
+        "title": "folder (create)",
+        "required": ["displayName"],
+        "type": "object",
+        "properties": {
+          "displayName": {
+            "type": "string",
+            "description": "Display name of the folder."
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the folder."
+          }
+        },
+        "description": "Model for folder creation."
+      },
+      "folder-update": {
+        "title": "folder (update)",
+        "type": "object",
+        "properties": {
+          "displayName": {
+            "type": "string",
+            "description": "Display name of the folder."
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the folder."
+          }
+        },
+        "description": "Model for folder update."
+      },
+      "folders": {
+        "type": "object",
+        "properties": {
+          "folders": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/folder"
+            },
+            "description": "List of folders."
+          },
+          "_links": {
+            "$ref": "#/components/schemas/links-paging"
+          }
+        },
+        "description": "List of folders."
+      },
+      "file-response": {
+        "title": "file (response)",
+        "type": "object",
+        "properties": {
+          "file": {
+            "$ref": "#/components/schemas/file"
+          }
+        },
+        "description": "Retrieved file response containing file."
+      },
+      "file": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique Identifier of the file."
+          },
+          "displayName": {
+            "type": "string",
+            "description": "Display name of the file."
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the file."
+          },
+          "path": {
+            "type": "string",
+            "description": "Absolute path to the file."
+          },
+          "size": {
+            "type": "integer",
+            "description": "Size to the file in bytes."
+          },
+          "lastModifiedByDisplayName": {
+            "type": "string",
+            "description": "Display name of the user who modified file last."
+          },
+          "createdDateTime": {
+            "type": "string",
+            "description": "Date when the file was created."
+          },
+          "lastModifiedDateTime": {
+            "type": "string",
+            "description": "Date when the file was last time modified."
+          },
+          "parentFolderId": {
+            "type": "string",
+            "description": "Unique Identifier of the parent folder."
+          },
+          "_links": {
+            "$ref": "#/components/schemas/links-item"
+          }
+        }
+      },
+      "file-typed": {
+        "title": "file (typed)",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique Identifier of the file."
+          },
+          "type": {
+            "enum": ["file"],
+            "type": "string",
+            "description": "Identification of the file entity."
+          },
+          "displayName": {
+            "type": "string",
+            "description": "Display name of the file."
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the file."
+          },
+          "path": {
+            "type": "string",
+            "description": "Absolute path to the file."
+          },
+          "size": {
+            "type": "integer",
+            "description": "Size to the file in bytes."
+          },
+          "lastModifiedByDisplayName": {
+            "type": "string",
+            "description": "Display name of the user who modified file last."
+          },
+          "createdDateTime": {
+            "type": "string",
+            "description": "Date when the file was created."
+          },
+          "lastModifiedDateTime": {
+            "type": "string",
+            "description": "Date when the file was last time modified."
+          },
+          "parentFolderId": {
+            "type": "string",
+            "description": "Unique Identifier of the parent folder."
+          },
+          "_links": {
+            "$ref": "#/components/schemas/links-item"
+          }
+        }
+      },
+      "file-create": {
+        "title": "file (create)",
+        "required": ["displayName"],
+        "type": "object",
+        "properties": {
+          "displayName": {
+            "type": "string",
+            "description": "Display name of the file."
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the file."
+          }
+        },
+        "description": "Model for file creation."
+      },
+      "file-update": {
+        "title": "file (update)",
+        "type": "object",
+        "properties": {
+          "displayName": {
+            "type": "string",
+            "description": "Display name of the file."
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the file."
+          }
+        },
+        "description": "Model for file update."
+      },
+      "file-upload": {
+        "title": "file-upload",
+        "type": "object",
+        "properties": {
+          "_links": {
+            "$ref": "#/components/schemas/links-upload"
+          }
+        },
+        "description": "Model for file upload."
+      },
+      "links-upload": {
+        "title": "links (upload)",
+        "type": "object",
+        "properties": {
+          "uploadUrl": {
+            "$ref": "#/components/schemas/link"
+          },
+          "completeUrl": {
+            "$ref": "#/components/schemas/link"
+          }
+        },
+        "description": "Hyperlinks for further file upload and confirmation."
+      },
+      "files": {
+        "type": "object",
+        "properties": {
+          "files": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/file"
+            }
+          },
+          "_links": {
+            "$ref": "#/components/schemas/links-paging"
+          }
+        },
+        "description": "List of files."
+      },
+      "items": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/folder-typed"
+                },
+                {
+                  "$ref": "#/components/schemas/file-typed"
+                }
+              ]
+            },
+            "description": "List of folders and files."
+          },
+          "_links": {
+            "$ref": "#/components/schemas/links-paging"
+          }
+        },
+        "description": "List of folders and files."
+      },
+      "items-with-folder-link": {
+        "title": "items (with folder link)",
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/folder-typed"
+                },
+                {
+                  "$ref": "#/components/schemas/file-typed"
+                }
+              ]
+            }
+          },
+          "_links": {
+            "$ref": "#/components/schemas/links-paging-with-folder-link"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "apiKeyHeader": {
+        "type": "apiKey",
+        "name": "X-Api-Subscription-Key",
+        "in": "header"
+      },
+      "apiKeyQuery": {
+        "type": "apiKey",
+        "name": "apikey",
+        "in": "query"
+      }
+    }
+  },
+  "security": [
+    {
+      "apiKeyHeader": []
+    },
+    {
+      "apiKeyQuery": []
+    }
+  ]
+}

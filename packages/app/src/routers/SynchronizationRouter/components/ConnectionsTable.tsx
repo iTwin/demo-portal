@@ -15,8 +15,8 @@ import {
 import React, { useContext } from "react";
 
 import {
-  Connection,
-  ExecutionState,
+  ConnectionSynchronizationAPI,
+  ExecutionStateSynchronizationAPI,
 } from "../../../api/synchronization/generated";
 import { SynchronizationClient } from "../../../api/synchronization/synchronizationClient";
 import { useApiPrefix } from "../../../api/useApiPrefix";
@@ -32,7 +32,7 @@ import { SkeletonCell } from "./SkeletonCell";
 interface ConnectionsTableProps {
   refreshCallback: () => void;
   accessToken: string;
-  connections: Connection[];
+  connections: ConnectionSynchronizationAPI[];
 }
 
 export const ConnectionsTable = ({
@@ -43,7 +43,7 @@ export const ConnectionsTable = ({
   const urlPrefix = useApiPrefix();
   const lastRun = React.useContext(LastRunContext);
   return (
-    <Table<CreateTypeFromInterface<Connection>>
+    <Table<CreateTypeFromInterface<ConnectionSynchronizationAPI>>
       data={connections}
       columns={React.useMemo(
         () => [
@@ -52,7 +52,8 @@ export const ConnectionsTable = ({
             columns: [
               {
                 Header:
-                  !lastRun || lastRun.state === ExecutionState.Completed
+                  !lastRun ||
+                  lastRun.state === ExecutionStateSynchronizationAPI.Completed
                     ? "Last synchronization result"
                     : "Synchronization status",
                 accessor: "_links",
@@ -99,7 +100,8 @@ export const ConnectionsTable = ({
                           title={"Run connection"}
                           disabled={
                             lastRun &&
-                            lastRun.state !== ExecutionState.Completed
+                            lastRun.state !==
+                              ExecutionStateSynchronizationAPI.Completed
                           }
                         >
                           <SvgPlay />

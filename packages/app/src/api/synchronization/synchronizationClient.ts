@@ -8,10 +8,12 @@ import { StorageClient } from "../storage/storageClient";
 import { prefixUrl } from "../useApiPrefix";
 import {
   BASE_PATH,
+  ConnectionsPreferReturnRepresentationSynchronizationAPI,
+  ConnectorTypeSynchronizationAPI,
   DefaultApi,
-  IModelBridgeType,
-  Run,
-  StorageFile,
+  RunSynchronizationAPI,
+  StorageFilePreferReturnRepresentationSynchronizationAPI,
+  StorageFileSynchronizationAPI,
 } from "./generated";
 
 export class SynchronizationClient {
@@ -64,12 +66,12 @@ export class SynchronizationClient {
    */
   static getBridgeType(fileName: string) {
     return ({
-      dgn: IModelBridgeType.MSTN,
-      rvt: IModelBridgeType.REVIT,
-      nwd: IModelBridgeType.NWD,
-      ifc: IModelBridgeType.IFC,
-      dwg: IModelBridgeType.DWG,
-    } as { [extension: string]: IModelBridgeType })[
+      dgn: ConnectorTypeSynchronizationAPI.MSTN,
+      rvt: ConnectorTypeSynchronizationAPI.REVIT,
+      nwd: ConnectorTypeSynchronizationAPI.NWD,
+      ifc: ConnectorTypeSynchronizationAPI.IFC,
+      dwg: ConnectorTypeSynchronizationAPI.DWG,
+    } as { [extension: string]: ConnectorTypeSynchronizationAPI })[
       fileName.split(".").reverse()[0]
     ];
   }
@@ -116,7 +118,10 @@ export class SynchronizationClient {
    * @param storageFileId Storage file Id
    * @returns Task info
    */
-  static getTaskInfoFromRun(run: Run, storageFileId: string | undefined) {
+  static getTaskInfoFromRun(
+    run: RunSynchronizationAPI,
+    storageFileId: string | undefined
+  ) {
     if (!storageFileId) {
       return;
     }
@@ -198,7 +203,7 @@ export class SynchronizationClient {
    * @returns
    */
   async getDemoConnectionAndSourceFiles(iModelId: string) {
-    const connections = await this.synchronizationApi.getConnections(
+    const connections = (await this.synchronizationApi.getConnections(
       iModelId,
       this.accessToken,
       undefined,
@@ -207,24 +212,23 @@ export class SynchronizationClient {
       {
         headers: { Prefer: "return=representation" },
       }
-    );
+    )) as ConnectionsPreferReturnRepresentationSynchronizationAPI;
     const demoPortalConnection = connections.connections?.find(
       (connection) => connection.displayName === this.DEMO_CONNECTION_NAME
     );
     const sourceFiles = demoPortalConnection?.id
-      ? (
-          await this.synchronizationApi.getStorageConnectionSourcefiles(
-            demoPortalConnection.id,
-            this.accessToken,
-            "application/vnd.bentley.itwin-platform.v1+json",
-            {
-              headers: { Prefer: "return=representation" },
-            }
-          )
-        ).sourceFiles ?? []
+      ? ((await this.synchronizationApi.getStorageConnectionSourcefiles(
+          demoPortalConnection.id,
+          this.accessToken,
+          "application/vnd.bentley.itwin-platform.v1+json",
+          {
+            headers: { Prefer: "return=representation" },
+          }
+        )) as StorageFilePreferReturnRepresentationSynchronizationAPI)
+          .sourceFiles ?? []
       : [];
 
-    const sourceHaveUnknownFileName = (source: StorageFile) =>
+    const sourceHaveUnknownFileName = (source: StorageFileSynchronizationAPI) =>
       !source.lastKnownFileName && source.storageFileId;
 
     await Promise.all(
@@ -258,14 +262,13 @@ export class SynchronizationClient {
     iModelId: string,
     demoConnectionId: string | undefined,
     fileId: string,
-    bridgeType: IModelBridgeType
+    bridgeType: ConnectorTypeSynchronizationAPI
   ) {
     if (!demoConnectionId) {
       const {
         connection,
       } = await this.synchronizationApi.createStorageConnection(
         this.accessToken,
-        "application/vnd.bentley.itwin-platform.v1+json",
         {
           iModelId,
           displayName: this.DEMO_CONNECTION_NAME,
@@ -275,7 +278,8 @@ export class SynchronizationClient {
               connectorType: bridgeType,
             },
           ],
-        }
+        },
+        "application/vnd.bentley.itwin-platform.v1+json"
       );
       if (!connection?.id) {
         throw new Error("Connection creation failed");
@@ -285,11 +289,11 @@ export class SynchronizationClient {
     const addedFile = await this.synchronizationApi.addStorageConnectionSourcefile(
       demoConnectionId,
       this.accessToken,
-      "application/vnd.bentley.itwin-platform.v1+json",
       {
         storageFileId: fileId,
         connectorType: bridgeType,
-      }
+      },
+      "application/vnd.bentley.itwin-platform.v1+json"
     );
     if (!addedFile.sourceFile?.id) {
       throw new Error("Updating creation failed");
