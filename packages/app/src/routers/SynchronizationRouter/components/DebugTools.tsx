@@ -34,10 +34,10 @@ export const DebugTools = ({ iModelId, projectId }: DebugToolsProps) => {
             `https://${
               urlPrefix ? urlPrefix + "-" : ""
             }connect-itwinbridgeportal.bentley.com/${projectId}/${iModelId}`,
-            "bridgeportal"
+            "synchronizerportal"
           );
         }}
-        title={"Temporary debug tool: Open Bridge portal"}
+        title={"Temporary debug tool: Open iTwin Synchronizer Portal"}
       >
         <div>
           <SvgSync className={"sync-in-window"} />
