@@ -54,8 +54,8 @@ export const useSynchronizeFileUploader = ({
         }
         const target = fileList[0];
         const fileName = target?.name;
-        const bridgeType = SynchronizationClient.getBridgeType(fileName);
-        if (!bridgeType) {
+        const connectorType = SynchronizationClient.getConnectorType(fileName);
+        if (!connectorType) {
           throw new Error(
             `This file type is not supported, current file support are: ${SynchronizationClient.supportedFileExtensions.join(
               ", "
@@ -138,7 +138,7 @@ export const useSynchronizeFileUploader = ({
             iModelId,
             demoPortalConnection?.id,
             file.file.id,
-            bridgeType
+            connectorType
           );
         }
 

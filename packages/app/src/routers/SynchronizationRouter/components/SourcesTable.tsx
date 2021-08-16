@@ -14,7 +14,7 @@ import {
   pascalCaseToSentenceCase,
 } from "../../../utils";
 import { LastRunContext } from "../Synchronize";
-import { BridgeIcon } from "./BridgeIcon";
+import { ConnectorIcon } from "./ConnectorIcon";
 import { SkeletonCell } from "./SkeletonCell";
 
 interface SourcesTableProps {
@@ -40,7 +40,7 @@ export const SourcesTable = ({ sources }: SourcesTableProps) => {
                       flex: "1 1 auto",
                     }}
                   >
-                    <BridgeIcon bridgeType={props.value} />
+                    <ConnectorIcon connectorType={props.value} />
                   </div>
                 </SkeletonCell>
               );

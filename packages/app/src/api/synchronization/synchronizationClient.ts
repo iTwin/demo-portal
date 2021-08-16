@@ -60,11 +60,11 @@ export class SynchronizationClient {
   }
 
   /**
-   * Will derive a bridge type based on the file name extension, or undefined if not supported
+   * Will derive a connector type based on the file name extension, or undefined if not supported
    * @param fileName File name to compare
-   * @returns Bridge type, or undefined if file name not supported.
+   * @returns Connector type, or undefined if file name not supported.
    */
-  static getBridgeType(fileName: string) {
+  static getConnectorType(fileName: string) {
     return ({
       dgn: ConnectorTypeSynchronizationAPI.MSTN,
       rvt: ConnectorTypeSynchronizationAPI.REVIT,
@@ -254,7 +254,7 @@ export class SynchronizationClient {
    * @param iModelId iModel to associate this connection to.
    * @param demoConnectionId existing demo portal connection (can be empty/undefined)
    * @param fileId ID of a file in the storage API.
-   * @param bridgeType IModel bridge type
+   * @param connectorType IModel connector type
    * @param email Connection owner email (only used for initial creation, if empty)
    * @returns
    */
@@ -262,7 +262,7 @@ export class SynchronizationClient {
     iModelId: string,
     demoConnectionId: string | undefined,
     fileId: string,
-    bridgeType: ConnectorTypeSynchronizationAPI
+    connectorType: ConnectorTypeSynchronizationAPI
   ) {
     if (!demoConnectionId) {
       const {
@@ -275,7 +275,7 @@ export class SynchronizationClient {
           sourceFiles: [
             {
               storageFileId: fileId,
-              connectorType: bridgeType,
+              connectorType: connectorType,
             },
           ],
         },
@@ -291,7 +291,7 @@ export class SynchronizationClient {
       this.accessToken,
       {
         storageFileId: fileId,
-        connectorType: bridgeType,
+        connectorType: connectorType,
       },
       "application/vnd.bentley.itwin-platform.v1+json"
     );

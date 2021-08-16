@@ -13,12 +13,12 @@ import { ReactComponent as SvgDocument } from "../../../svg/document.svg";
 import { ReactComponent as SvgIfcIcon } from "../../../svg/ifcicon.svg";
 import { ReactComponent as SvgRevit } from "../../../svg/revitdocument.svg";
 import { ReactComponent as SvgNwd } from "../../../svg/unknowndocument.svg";
-import "./BridgeIcon.scss";
+import "./ConnectorIcon.scss";
 
-interface BridgeIconProps {
-  bridgeType?: ConnectorTypeSynchronizationAPI;
+interface ConnectorIconProps {
+  connectorType?: ConnectorTypeSynchronizationAPI;
 }
-export const BridgeIcon = ({ bridgeType }: BridgeIconProps) =>
+export const ConnectorIcon = ({ connectorType }: ConnectorIconProps) =>
   ({
     [ConnectorTypeSynchronizationAPI.MSTN]: <SvgDgn title={"MSTN"} />,
     [ConnectorTypeSynchronizationAPI.REVIT]: <SvgRevit title={"Revit"} />,
@@ -31,4 +31,4 @@ export const BridgeIcon = ({ bridgeType }: BridgeIconProps) =>
     ),
     [ConnectorTypeSynchronizationAPI.DWG]: <SvgDwg title={"DWG"} />,
     [ConnectorTypeSynchronizationAPI.NotSet]: null,
-  }[bridgeType ?? ConnectorTypeSynchronizationAPI.NotSet]);
+  }[connectorType ?? ConnectorTypeSynchronizationAPI.NotSet]);
