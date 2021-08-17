@@ -8,7 +8,7 @@ import { Title } from "@itwin/itwinui-react";
 import { RouteComponentProps } from "@reach/router";
 import React from "react";
 
-import { Run } from "../../api/synchronization/generated";
+import { RunSynchronizationAPI } from "../../api/synchronization/generated";
 import { spreadIf } from "../../utils";
 import { ConnectionsTable } from "./components/ConnectionsTable";
 import { DebugTools } from "./components/DebugTools";
@@ -17,7 +17,9 @@ import { SourcesTable } from "./components/SourcesTable";
 import { UploadPanel } from "./components/UploadPanel";
 import { useSynchronizeInfo } from "./useSynchronizeInfo";
 
-export const LastRunContext = React.createContext<Run | undefined>(undefined);
+export const LastRunContext = React.createContext<
+  RunSynchronizationAPI | undefined
+>(undefined);
 export interface SynchronizeProps extends RouteComponentProps {
   projectId?: string;
   iModelId?: string;

@@ -7,23 +7,23 @@
 import { Table } from "@itwin/itwinui-react";
 import React from "react";
 
-import { StorageFile } from "../../../api/synchronization/generated";
+import { StorageFileSynchronizationAPI } from "../../../api/synchronization/generated";
 import { SynchronizationClient } from "../../../api/synchronization/synchronizationClient";
 import {
   CreateTypeFromInterface,
   pascalCaseToSentenceCase,
 } from "../../../utils";
 import { LastRunContext } from "../Synchronize";
-import { BridgeIcon } from "./BridgeIcon";
+import { ConnectorIcon } from "./ConnectorIcon";
 import { SkeletonCell } from "./SkeletonCell";
 
 interface SourcesTableProps {
-  sources: StorageFile[];
+  sources: StorageFileSynchronizationAPI[];
 }
 
 export const SourcesTable = ({ sources }: SourcesTableProps) => {
   return (
-    <Table<CreateTypeFromInterface<StorageFile>>
+    <Table<CreateTypeFromInterface<StorageFileSynchronizationAPI>>
       data={sources}
       columns={React.useMemo(
         () => [
@@ -40,7 +40,7 @@ export const SourcesTable = ({ sources }: SourcesTableProps) => {
                       flex: "1 1 auto",
                     }}
                   >
-                    <BridgeIcon bridgeType={props.value} />
+                    <ConnectorIcon connectorType={props.value} />
                   </div>
                 </SkeletonCell>
               );

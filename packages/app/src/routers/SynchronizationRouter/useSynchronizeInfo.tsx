@@ -8,11 +8,11 @@ import { ProgressRadial } from "@itwin/itwinui-react";
 import React from "react";
 
 import {
-  Connection,
-  ExecutionResult,
-  ExecutionState,
-  Run,
-  StorageFile,
+  ConnectionSynchronizationAPI,
+  ExecutionResultSynchronizationAPI,
+  ExecutionStateSynchronizationAPI,
+  RunSynchronizationAPI,
+  StorageFileSynchronizationAPI,
 } from "../../api/synchronization/generated";
 import { SynchronizationClient } from "../../api/synchronization/synchronizationClient";
 import { useApiPrefix } from "../../api/useApiPrefix";
@@ -20,9 +20,13 @@ import { useApiPrefix } from "../../api/useApiPrefix";
 export const useSynchronizeInfo = (iModelId: string, accessToken: string) => {
   const urlPrefix = useApiPrefix();
 
-  const [connection, setConnection] = React.useState<Connection>();
+  const [connection, setConnection] = React.useState<
+    ConnectionSynchronizationAPI
+  >();
 
-  const [lastRunResults, setLastRunResults] = React.useState<Run>();
+  const [lastRunResults, setLastRunResults] = React.useState<
+    RunSynchronizationAPI
+  >();
   const fetchRunResults = React.useCallback(
     async (connectionId: string, runId: string) => {
       const client = new SynchronizationClient(urlPrefix, accessToken);
@@ -33,7 +37,7 @@ export const useSynchronizeInfo = (iModelId: string, accessToken: string) => {
   );
 
   React.useEffect(() => {
-    if (lastRunResults?.state !== ExecutionState.Completed) {
+    if (lastRunResults?.state !== ExecutionStateSynchronizationAPI.Completed) {
       const timeout = setTimeout(async () => {
         if (!lastRunResults?.connectionId || !lastRunResults.id) {
           return;
@@ -44,7 +48,9 @@ export const useSynchronizeInfo = (iModelId: string, accessToken: string) => {
     }
   }, [accessToken, fetchRunResults, lastRunResults, urlPrefix]);
 
-  const [sourceFiles, setSourceFiles] = React.useState<StorageFile[]>();
+  const [sourceFiles, setSourceFiles] = React.useState<
+    StorageFileSynchronizationAPI[]
+  >();
   const fetchSources = React.useCallback(async () => {
     setLastRunResults(undefined);
     if (!accessToken || !iModelId) {
@@ -76,28 +82,28 @@ export const useSynchronizeInfo = (iModelId: string, accessToken: string) => {
   };
 };
 
-export const interpretRunInfo = (run: Run | undefined) => {
+export const interpretRunInfo = (run: RunSynchronizationAPI | undefined) => {
   const time = run
     ? SynchronizationClient.formatSynchronizationLatestDate(run, "now", " -")
     : "";
   const status = run
-    ? run.state === ExecutionState.Completed
+    ? run.state === ExecutionStateSynchronizationAPI.Completed
       ? run.result
       : run.state
     : "Never ran";
   const displayState =
     !run || !run.state || !run.result
       ? undefined
-      : run.state !== ExecutionState.Completed
+      : run.state !== ExecutionStateSynchronizationAPI.Completed
       ? "working"
       : {
-          [ExecutionResult.Canceled]: "warning",
-          [ExecutionResult.Error]: "negative",
-          [ExecutionResult.PartialSuccess]: "positive",
-          [ExecutionResult.Skipped]: "warning",
-          [ExecutionResult.Success]: "positive",
-          [ExecutionResult.TimedOut]: "negative",
-          [ExecutionResult.Undetermined]: "",
+          [ExecutionResultSynchronizationAPI.Cancelled]: "warning",
+          [ExecutionResultSynchronizationAPI.Error]: "negative",
+          [ExecutionResultSynchronizationAPI.PartialSuccess]: "positive",
+          [ExecutionResultSynchronizationAPI.Skipped]: "warning",
+          [ExecutionResultSynchronizationAPI.Success]: "positive",
+          [ExecutionResultSynchronizationAPI.TimedOut]: "negative",
+          [ExecutionResultSynchronizationAPI.Undetermined]: "",
         }[run.result];
 
   const radialIndeterminate = displayState === "warning" ? false : true;

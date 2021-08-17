@@ -7,7 +7,7 @@
 import { Alert } from "@itwin/itwinui-react";
 import React, { ComponentPropsWithoutRef } from "react";
 
-import { FileUpload } from "../../api/storage/generated";
+import { FileUploadStorageAPI } from "../../api/storage/generated";
 import { StorageClient } from "../../api/storage/storageClient";
 import { SynchronizationClient } from "../../api/synchronization/synchronizationClient";
 import { useApiPrefix } from "../../api/useApiPrefix";
@@ -54,8 +54,8 @@ export const useSynchronizeFileUploader = ({
         }
         const target = fileList[0];
         const fileName = target?.name;
-        const bridgeType = SynchronizationClient.getBridgeType(fileName);
-        if (!bridgeType) {
+        const connectorType = SynchronizationClient.getConnectorType(fileName);
+        if (!connectorType) {
           throw new Error(
             `This file type is not supported, current file support are: ${SynchronizationClient.supportedFileExtensions.join(
               ", "
@@ -94,12 +94,12 @@ export const useSynchronizeFileUploader = ({
         const demoFolderId = await storage.getDemoFolderId(projectId, true);
         setStatus("Validating iModel file share");
         const iModelFolderId = await storage.getIModelFolderId(
-          demoFolderId,
+          demoFolderId ?? "",
           iModelId,
           true
         );
 
-        let fileUpload: FileUpload;
+        let fileUpload: FileUploadStorageAPI;
 
         if (storageFileIdToUpdate) {
           setStatus("Getting file target");
@@ -138,7 +138,7 @@ export const useSynchronizeFileUploader = ({
             iModelId,
             demoPortalConnection?.id,
             file.file.id,
-            bridgeType
+            connectorType
           );
         }
 

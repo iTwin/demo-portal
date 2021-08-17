@@ -6,29 +6,29 @@
  *--------------------------------------------------------------------------------------------*/
 import React from "react";
 
-import { IModelBridgeType } from "../../../api/synchronization/generated";
+import { ConnectorTypeSynchronizationAPI } from "../../../api/synchronization/generated";
 import { ReactComponent as SvgDwg } from "../../../svg/autocad.svg";
 import { ReactComponent as SvgDgn } from "../../../svg/dgndocument.svg";
 import { ReactComponent as SvgDocument } from "../../../svg/document.svg";
 import { ReactComponent as SvgIfcIcon } from "../../../svg/ifcicon.svg";
 import { ReactComponent as SvgRevit } from "../../../svg/revitdocument.svg";
 import { ReactComponent as SvgNwd } from "../../../svg/unknowndocument.svg";
-import "./BridgeIcon.scss";
+import "./ConnectorIcon.scss";
 
-interface BridgeIconProps {
-  bridgeType?: IModelBridgeType;
+interface ConnectorIconProps {
+  connectorType?: ConnectorTypeSynchronizationAPI;
 }
-export const BridgeIcon = ({ bridgeType }: BridgeIconProps) =>
+export const ConnectorIcon = ({ connectorType }: ConnectorIconProps) =>
   ({
-    [IModelBridgeType.MSTN]: <SvgDgn title={"MSTN"} />,
-    [IModelBridgeType.REVIT]: <SvgRevit title={"Revit"} />,
-    [IModelBridgeType.NWD]: <SvgNwd title={"Nwd"} />,
-    [IModelBridgeType.IFC]: (
+    [ConnectorTypeSynchronizationAPI.MSTN]: <SvgDgn title={"MSTN"} />,
+    [ConnectorTypeSynchronizationAPI.REVIT]: <SvgRevit title={"Revit"} />,
+    [ConnectorTypeSynchronizationAPI.NWD]: <SvgNwd title={"Nwd"} />,
+    [ConnectorTypeSynchronizationAPI.IFC]: (
       <div className={"composite-document-icon"} title={"Ifc"}>
         <SvgDocument />
         <SvgIfcIcon className={"icon-in-document"} />
       </div>
     ),
-    [IModelBridgeType.DWG]: <SvgDwg title={"DWG"} />,
-    [IModelBridgeType.NotSet]: null,
-  }[bridgeType ?? IModelBridgeType.NotSet]);
+    [ConnectorTypeSynchronizationAPI.DWG]: <SvgDwg title={"DWG"} />,
+    [ConnectorTypeSynchronizationAPI.NotSet]: null,
+  }[connectorType ?? ConnectorTypeSynchronizationAPI.NotSet]);

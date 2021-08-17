@@ -7,7 +7,7 @@
 import { prefixUrl } from "../useApiPrefix";
 import {
   BASE_PATH,
-  FileCreate,
+  FileCreateStorageAPI,
   FilesApi,
   FilesApiFp,
   FoldersApi,
@@ -40,12 +40,12 @@ export class StorageClient {
    * @param fileSpec
    * @returns
    */
-  async createFile(folderId: string, fileSpec: FileCreate) {
+  async createFile(folderId: string, fileSpec: FileCreateStorageAPI) {
     return this.filesApi.createFile(
       folderId,
       this.accessToken,
-      "application/vnd.bentley.itwin-platform.v1+json",
-      fileSpec
+      fileSpec,
+      "application/vnd.bentley.itwin-platform.v1+json"
     );
   }
 
@@ -189,12 +189,12 @@ export class StorageClient {
       const namedFolder = await this.foldersApi.createFolder(
         folderId,
         this.accessToken,
-        "application/vnd.bentley.itwin-platform.v1+json",
         {
           displayName: folderName,
           description:
             "Folder used by the Demo portal to store iModel automatic iModel creation",
-        }
+        },
+        "application/vnd.bentley.itwin-platform.v1+json"
       );
       namedFolderId = namedFolder.folder?.id ?? "";
     }
