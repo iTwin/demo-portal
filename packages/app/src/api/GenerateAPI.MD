@@ -39,6 +39,12 @@ and `export` the `BASE_PATH` in it (Required for environment awareness):
 
 ## Ready to go command lines
 
+### Projects
+
+```ps
+docker run --rm -v "${PWD}/packages/app/src/api/projects:/local" swaggerapi/swagger-codegen-cli-v3 generate -i /local/openapi/projectsAdjusted.json -l typescript-fetch -o /local/generated --disable-examples --additional-properties=typescriptThreePlus=true,withoutRuntimeChecks=true,modelPropertyNaming=original --model-name-suffix ProjectsAPI
+```
+
 ### Storage
 
 ```ps

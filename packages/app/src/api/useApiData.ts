@@ -88,6 +88,7 @@ export const useApiData: <T>(
             if (response.ok) {
               return response.json();
             } else {
+              localCache[prefixedUrl] = {};
               return response.text().then((errorText) => {
                 throw new Error(errorText);
               });

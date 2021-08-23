@@ -17,7 +17,9 @@ type SkeletonCellProps = PropsWithChildren<{
 }>;
 export const SkeletonCell = (props: SkeletonCellProps) => {
   if (Object.keys(props.row.original).length !== 0) {
-    return props.children ?? props.value;
+    return (props.children ?? (
+      <span title={props.value}>{props.value}</span>
+    )) as React.ReactElement;
   }
   return <Body isSkeleton={true}>Fetching</Body>;
 };

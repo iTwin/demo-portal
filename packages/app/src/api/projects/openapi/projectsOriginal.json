@@ -1,0 +1,3248 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Projects",
+    "description": "Interact with your projects.\r\n\r\nView, update, create, and delete projects.\r\n",
+    "version": "v1"
+  },
+  "servers": [
+    {
+      "url": "https://api.bentley.com/projects"
+    }
+  ],
+  "paths": {
+    "/favorites/{id}": {
+      "post": {
+        "tags": ["Project Favorites"],
+        "summary": "Add project to my favorites",
+        "description": "---\r\n\r\nAdd a project to my favorites list.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `projects:modify`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n---\r\n",
+        "operationId": "add-project-to-my-favorites",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The project ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `projects:modify`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "statusCode": 401,
+                  "message": "Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The user has insufficient permissions for the requested operation.",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "404": {
+            "description": "This response indicates that specified project was not found.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "ProjectNotFound",
+                    "message": "Requested project not available."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": "TooManyRequests",
+                  "message": "More requests were received than the subscription rate-limit allows."
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Project Favorites"],
+        "summary": "Remove project from my favorites",
+        "description": "---\r\n\r\nRemove a project to my favorites list.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `projects:modify`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n---\r\n",
+        "operationId": "remove-project-from-my-favorites",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The project ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `projects:modify`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "statusCode": 401,
+                  "message": "Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "This response indicates that specified project was not found.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "ProjectNotFound",
+                    "message": "Requested project not available."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": "TooManyRequests",
+                  "message": "More requests were received than the subscription rate-limit allows."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/recents/{id}": {
+      "post": {
+        "tags": ["Project Recents"],
+        "summary": "Add project to my recents",
+        "description": "---\r\n\r\nAdds a project to my recently used projects list. No more than 25 projects are stored in the recently used list. Older ones are removed to make room for new ones.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `projects:modify`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n---",
+        "operationId": "add-project-to-my-recents",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The project ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `projects:modify`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "statusCode": 401,
+                  "message": "Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The user has insufficient permissions for the requested operation.",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "404": {
+            "description": "This response indicates that specified project was not found.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "ProjectNotFound",
+                    "message": "Requested project not available."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": "TooManyRequests",
+                  "message": "More requests were received than the subscription rate-limit allows."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{id}/members/{memberId}": {
+      "delete": {
+        "tags": ["Project Users"],
+        "summary": "Remove project team member",
+        "description": "---\r\n\r\nRemove the specified project team member.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `projects:modify`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n### Authorization\r\n\r\nUser must be an Organization Administrator for the Organization that owns a given Project or have `administration_remove_member` permission assigned at the Project level.\r\n\r\nAn Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.\r\n\r\n---\r\n",
+        "operationId": "remove-project-team-member",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Project ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "memberId",
+            "in": "path",
+            "description": "Project team member ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `projects:modify`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Specified project team member was successfully removed."
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "statusCode": 401,
+                  "message": "Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "This response indicates that project with specified ID was not found.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "ProjectNotFound",
+                    "message": "Requested project not available."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": "TooManyRequests",
+                  "message": "More requests were received than the subscription rate-limit allows."
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Project Users"],
+        "summary": "Update project team member roles",
+        "description": "---\r\n\r\nUpdate project team member roles\r\n\r\n### Notes\r\n\r\nThe PATCH body MUST include the roleIds property, which MUST be defined as an array of role IDs that will be assigned to new team member.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `projects:modify`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n### Authorization\r\n\r\nUser must be an Organization Administrator for the Organization that owns a given Project or have `administration_invite_member` permission assigned at the Project level.\r\n\r\nAn Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.\r\n\r\n---\r\n",
+        "operationId": "update-project-team-member-roles",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The project ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "memberId",
+            "in": "path",
+            "description": "Project team member ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `projects:modify`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/team-member-roles-update"
+              },
+              "example": {
+                "roleIds": [
+                  "e968b640-02c4-41ef-b4f0-935918a82af3",
+                  "63e3533c-eb6d-48ee-a2b3-3a6c724340f2"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/team-member"
+                },
+                "example": {
+                  "member": {
+                    "userId": "69e0284a-1331-4462-9c83-9cdbe2bdaa7f",
+                    "email": "Thomas.Wilson@org.com",
+                    "givenName": "Thomas",
+                    "surname": "Wilson",
+                    "organization": "Organization Corp.",
+                    "roles": ["Read Access", "Write Access"]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "statusCode": 401,
+                  "message": "Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The user has insufficient permissions for the requested operation.",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "404": {
+            "description": "This response indicates that project, team member or some of the roles with specified IDs were not found.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "TeamMemberNotFound",
+                    "message": "Requested team member not available."
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid request to update team member roles. Request payload might be missing some of the required properties.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "MissingRequestBody",
+                    "message": "Required property 'roleIds' is missing in the request body."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": "TooManyRequests",
+                  "message": "More requests were received than the subscription rate-limit allows."
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Project Users"],
+        "summary": "Get project team member details",
+        "description": "---\r\n\r\nRetrieves detailed information of specific team member for a specified project.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `projects:read`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n### Authorization\r\n\r\nUser must be an Organization Administrator for the Organization that owns a given project or be a project team member.\r\n\r\nAn Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.\r\n\r\n---",
+        "operationId": "get-project-team-member-details",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": ""
+            }
+          },
+          {
+            "name": "memberId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": ""
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `projects:read`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/team-member"
+                },
+                "example": {
+                  "member": {
+                    "userId": "69e0284a-1331-4462-9c83-9cdbe2bdaa7f",
+                    "email": "Thomas.Wilson@org.com",
+                    "givenName": "Thomas",
+                    "surname": "Wilson",
+                    "organization": "Organization Corp.",
+                    "roles": ["Read Access", "Write Access"]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "statusCode": 401,
+                  "message": "Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "This response indicates that project or team member with specified ID was not found.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "TeamMemberNotFound",
+                    "message": "Requested team member not available."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": "TooManyRequests",
+                  "message": "More requests were received than the subscription rate-limit allows."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{id}/roles/{roleId}": {
+      "delete": {
+        "tags": ["Project Roles"],
+        "summary": "Delete project role",
+        "description": "---\r\n\r\nDelete the specified project role.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `projects:modify`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n### Authorization\r\n\r\nUser must be an Organization Administrator for the Organization that owns a given Project or have `administration_manage_roles` permission assigned at the Project level.\r\n\r\nAn Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.\r\n\r\n---\r\n",
+        "operationId": "delete-project-role",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Project ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "roleId",
+            "in": "path",
+            "description": "Project role ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `projects:modify`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "statusCode": 401,
+                  "message": "Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The user has insufficient permissions for the requested operation.",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "404": {
+            "description": "This response indicates that project or project role with specified ID was not found.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "ProjectNotFound",
+                    "message": "Requested project not available."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": "TooManyRequests",
+                  "message": "More requests were received than the subscription rate-limit allows."
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Project Roles"],
+        "summary": "Update project role",
+        "description": "---\r\n\r\nUpdate the specified project role.\r\n\r\n### Notes\r\n\r\nTo assign permissions to a role PATCH body MUST include an array of permissions. If a user is not Organization Administrator permissions that could be assigned to the role\r\nare limited to permissions the user has on a project.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `projects:modify`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n### Authorization\r\n\r\nUser must be an Organization Administrator for the Organization that owns a given Project or have `administration_manage_roles` permission assigned at the Project level.\r\n\r\nAn Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.\r\n\r\n---",
+        "operationId": "update-project-role",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The project ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "roleId",
+            "in": "path",
+            "description": "Project role ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `projects:modify`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "A project role instance with the fields that should be updated.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/role-update"
+              },
+              "example": {
+                "displayName": "New role name",
+                "description": "An example project role",
+                "permissions": ["administration_manage_roles"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Role"
+                },
+                "example": {
+                  "role": {
+                    "id": "752b5a3d-b9f2-4845-824a-99dd310b4898",
+                    "displayName": "Project Reader",
+                    "description": "An example project role",
+                    "permissions": ["administration_manage_roles"]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "statusCode": 401,
+                  "message": "Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The user has insufficient permissions for the requested operation.",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "404": {
+            "description": "This response indicates that project or role with specified ID was not found.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "RoleNotFound",
+                    "message": "Requested role not available."
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid request to create new project role. Request payload might be missing some of the required properties.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "MissingRequestBody",
+                    "message": "No body was found in the request"
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": "TooManyRequests",
+                  "message": "More requests were received than the subscription rate-limit allows."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{id}": {
+      "delete": {
+        "tags": ["Projects"],
+        "summary": "Delete project",
+        "description": "---\r\n\r\nDelete the specified project.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `projects:modify`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n### Authorization\r\nIf a user is affiliated with an Organization, then the user must be an Organization Administrator in order to delete a project that is owned by the Organization.  \r\nExample: john.doe@starkindustries.com is an Organization Administrator that works for Stark Industries that has an account with Bentley. John will be able to delete any project that belongs to Stark Industries. \r\n\r\nAn Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.\r\n\r\nA user that is not affiliated with an Organization can delete projects that are owned by the user account.  \r\nExample: jane.doe@gmail.com is an independent contractor that does not have an account with Bentley. Jane will be able to delete any project that belongs to Jane. Jane owns any project that she created.\r\n\r\n---\r\n",
+        "operationId": "delete-project",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Project id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `projects:modify`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "statusCode": 401,
+                  "message": "Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The user has insufficient permissions for the requested operation.",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "404": {
+            "description": "This response indicates that project with specified ID was not found.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "ProjectNotFound",
+                    "message": "Requested project not available."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": "TooManyRequests",
+                  "message": "More requests were received than the subscription rate-limit allows."
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Projects"],
+        "summary": "Update project",
+        "description": "---\r\n\r\nUpdate the specified project.\r\n\r\nFor updates, all properties are optional. The request payload only needs to contain the properties that you would like to update. \r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `projects:modify`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n### Authorization\r\nIf a user is affiliated with an Organization, then the user must be an Organization Administrator in order to update a project that is owned by the Organization.  \r\nExample: john.doe@starkindustries.com is an Organization Administrator that works for Stark Industries that has an account with Bentley. John will be able to update any project that belongs to Stark Industries. \r\n\r\nAn Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.\r\n\r\nA user that is not affiliated with an Organization can update projects that are owned by the user account.  \r\nExample: jane.doe@gmail.com is an independent contractor that does not have an account with Bentley. Jane will be able to update any project that belong to Jane. Jane owns any project that she created.\r\n\r\n---\r\n",
+        "operationId": "update-project",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The project ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `projects:modify`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "A project instance with the fields that should be updated.  ReadOnly fields should not be included.  ",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/project-update"
+              },
+              "example": {
+                "displayName": "my project",
+                "projectNumber": "project 2",
+                "geographicLocation": "Exton, PA, USA",
+                "latitude": "40.032970",
+                "longitude": "-75.631538",
+                "timeZone": "Eastern Standard Time",
+                "billingCountry": "US",
+                "status": "active",
+                "allowExternalTeamMembers": true
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                },
+                "example": {
+                  "project": {
+                    "id": "dc914a84-e0c9-40e2-9d14-faf5ed84147f",
+                    "displayName": "White River",
+                    "projectNumber": "00001-ds-3902795",
+                    "registrationDateTime": "2016-01-18T21:03:00.3704659+00:00",
+                    "registeredBy": "66624686-8056-4af7-94ad-b1d3ef776f43",
+                    "geographicLocation": "Kansas City",
+                    "latitude": "-18.123",
+                    "longitude": "45.985",
+                    "timeZone": "Central Standard Time",
+                    "dataCenterLocation": "East US",
+                    "billingCountry": "ZZ",
+                    "status": "active",
+                    "allowExternalTeamMembers": false,
+                    "_links": {
+                      "storage": {
+                        "href": "https://api.bentley.com/storage/folders/hEqR3Mng4kCdFPr17YQUfw"
+                      },
+                      "forms": {
+                        "href": "https://api.bentley.com/forms?projectId=dc914a84-e0c9-40e2-9d14-faf5ed84147f"
+                      },
+                      "issues": {
+                        "href": "https://api.bentley.com/issues?projectId=dc914a84-e0c9-40e2-9d14-faf5ed84147f"
+                      },
+                      "imodels": {
+                        "href": "https://api.bentley.com/imodels?projectId=dc914a84-e0c9-40e2-9d14-faf5ed84147f"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "statusCode": 401,
+                  "message": "Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The user has insufficient permissions for the requested operation.",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "404": {
+            "description": "This response indicates that one of the associated entities could not be found.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "projectNotFound",
+                    "message": "Requested project not available."
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid request to update a project.  Review the 'Field Values' section near the top of this page.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "InvalidUpdateProjectRequest",
+                    "message": "Cannot update project",
+                    "details": [
+                      {
+                        "code": "InvalidValue",
+                        "message": "Status must be one of:  active, inactive, trial",
+                        "target": "status"
+                      },
+                      {
+                        "code": "InvalidValue",
+                        "message": "Latitude value must be within range:  -90 to 90",
+                        "target": "latitude"
+                      },
+                      {
+                        "code": "InvalidValue",
+                        "message": "Longitude value must be within range:  -180 to 180",
+                        "target": "longitude"
+                      },
+                      {
+                        "code": "InvalidValue",
+                        "message": "The billing country specified is not valid",
+                        "target": "billingCountry"
+                      },
+                      {
+                        "code": "InvalidValue",
+                        "message": "Display Name cannot be more than 255 characters",
+                        "target": "displayName"
+                      },
+                      {
+                        "code": "InvalidValue",
+                        "message": "Project Number cannot be more than 255 characters",
+                        "target": "projectNumber"
+                      },
+                      {
+                        "code": "InvalidValue",
+                        "message": "Geographic Location cannot be more than 255 characters",
+                        "target": "geographicLocation"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": "TooManyRequests",
+                  "message": "More requests were received than the subscription rate-limit allows."
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Projects"],
+        "summary": "Get project",
+        "description": "---\r\n\r\nGets the details of the specified project.  \r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `projects:read`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n### Authorization\r\n\r\nUser must be an Organization Administrator for the Organization that owns the specified project or be a project team member.\r\n\r\nAn Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.\r\n\r\n---\r\n",
+        "operationId": "get-project",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The project ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `projects:read`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                },
+                "example": {
+                  "project": {
+                    "id": "dc914a84-e0c9-40e2-9d14-faf5ed84147f",
+                    "displayName": "White River",
+                    "projectNumber": "00001-ds-3902795",
+                    "registrationDateTime": "2016-01-18T21:03:00.3704659+00:00",
+                    "registeredBy": "abcd0123-e24a-4b35-9faf-f4f5f6f7f8f9",
+                    "geographicLocation": "Kansas City",
+                    "latitude": "",
+                    "longitude": "",
+                    "timeZone": "Central Standard Time",
+                    "dataCenterLocation": "East US",
+                    "billingCountry": "ZZ",
+                    "status": "active",
+                    "allowExternalTeamMembers": false,
+                    "_links": {
+                      "storage": {
+                        "href": "https://api.bentley.com/storage/folders/hEqR3Mng4kCdFPr17YQUfw"
+                      },
+                      "forms": {
+                        "href": "https://api.bentley.com/forms?projectId=dc914a84-e0c9-40e2-9d14-faf5ed84147f"
+                      },
+                      "issues": {
+                        "href": "https://api.bentley.com/issues?projectId=dc914a84-e0c9-40e2-9d14-faf5ed84147f"
+                      },
+                      "imodels": {
+                        "href": "https://api.bentley.com/imodels?projectId=dc914a84-e0c9-40e2-9d14-faf5ed84147f"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "statusCode": 401,
+                  "message": "Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "This response indicates that the specified project was not found.",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": "TooManyRequests",
+                  "message": "More requests were received than the subscription rate-limit allows."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{id}/members": {
+      "post": {
+        "tags": ["Project Users"],
+        "summary": "Add project team member",
+        "description": "---\r\n\r\nAdd new project team member\r\n\r\n### Notes\r\n\r\nThe POST body MUST include either a *userId* property or an *e-mail* property.\r\n\r\nWhen adding members by ids, the POST body MAY include the roleIds property, which MUST be defined as an array of role IDs that will be assigned to new team member.\r\n\r\nWhen adding members by names, the POST body MAY include the roleNames property, which MUST be defined as an array of role names that will be assigned to new team member.\r\n\r\nWhen adding members *Team Member* role will be assigned to all members. *Team Member* role grants member write access to Storage and Forms APIs. *Team Member* can be removed from any member if access to Storage and Forms APIs is not desired. \r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `projects:modify`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n### Authorization\r\n\r\nUser must be an Organization Administrator for the Organization that owns a given Project or have `administration_invite_member` permission assigned at the Project level.\r\n\r\nAn Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.\r\n\r\n---\r\n",
+        "operationId": "add-project-team-member",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The project ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `projects:modify`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json;ids": {
+              "schema": {
+                "$ref": "#/components/schemas/team-member-add-by-ids"
+              },
+              "example": {
+                "userId": "550f29a9-d641-4c93-a4d8-1f351887c2b7",
+                "roleIds": [
+                  "5b529c0d-c3e8-485f-b895-dfb8507b47bb",
+                  "344b801f-5881-4d3f-a327-1027c2bcda85"
+                ]
+              }
+            },
+            "application/json;names": {
+              "schema": {
+                "$ref": "#/components/schemas/team-member-add-by-names"
+              },
+              "example": {
+                "email": "John.Doe@bentley.com",
+                "roleNames": ["Project Role 1", "Project Role 2"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Project team member was successfully added.",
+            "headers": {
+              "Location": {
+                "description": "Location to added team member's details ",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "statusCode": 401,
+                  "message": "Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The user has insufficient permissions for the requested operation.",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "404": {
+            "description": "This response indicates that project or some of the roles with specified ID were not found.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "ProjectNotFound",
+                    "message": "Requested project not available."
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Invalid request to add new project team member. Team member already exists in project.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "TeamMemberExists",
+                    "message": "Team member '364332ad-2b18-4c72-a4a7-773075c6d30c' already exists in project '1b7410a8-f273-48c7-8d6c-2689e8daeb75'."
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid request to add new project team member. Request payload might be missing some of the required properties.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "InvalidMemberRequest",
+                    "message": "Cannot add team member to project.",
+                    "details": [
+                      {
+                        "code": "MissingRequiredProperty",
+                        "message": "Either a userId or an user email must be provided"
+                      },
+                      {
+                        "code": "MissingRequiredProperty",
+                        "message": "Either a list of roleIds (with userId) or roleNames (with email) must be provided"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": "TooManyRequests",
+                  "message": "More requests were received than the subscription rate-limit allows."
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Project Users"],
+        "summary": "Get project team members",
+        "description": "---\r\n\r\nRetrieves a list of team members and their roles assigned to a specified project.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `projects:read`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n### Authorization\r\n\r\nUser must be an Organization Administrator for the Organization that owns a given project or be a project team member.\r\n\r\nAn Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.\r\n\r\n---",
+        "operationId": "get-project-team-members",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The project ID",
+            "required": true,
+            "schema": {
+              "type": ""
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.",
+            "schema": {
+              "type": "int"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result. Value must be less or equal to 100.",
+            "schema": {
+              "type": "int"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `projects:read`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/team-members"
+                },
+                "example": {
+                  "members": [
+                    {
+                      "userId": "99cf5e21-735c-4598-99eb-fe3940f96353",
+                      "email": "John.Johnson@org.com",
+                      "givenName": "John",
+                      "surname": "Johnson",
+                      "organization": "Organization Corp.",
+                      "roles": ["Read Access", "Write Access"]
+                    },
+                    {
+                      "userId": "25407933-cad2-41a2-acf4-5a074c83046b",
+                      "email": "Maria.Miller@org.com",
+                      "givenName": "Maria",
+                      "surname": "Miller",
+                      "organization": "Organization Corp.",
+                      "roles": ["Read Access"]
+                    }
+                  ],
+                  "_links": {
+                    "next": {
+                      "href": "https://api.bentley.com/projects/806b19d5-c037-48a4-aa98-e297c81453f1/member?$skip=2&$top=2"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "statusCode": 401,
+                  "message": "Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "This response indicates that project with specified ID was not found.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "ProjectNotFound",
+                    "message": "Requested project not available."
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid request to get project team members.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "InvalidProjectTeamMembersRequest",
+                    "message": "Page size is over 100 items limit."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": "TooManyRequests",
+                  "message": "More requests were received than the subscription rate-limit allows."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/recents": {
+      "get": {
+        "tags": ["Project Recents"],
+        "summary": "Get my recently used projects",
+        "description": "---\r\n\r\nRetrieves a list of recently used projects for the logged in user. The user is determined by the authentication token.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `projects:read`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n### Response\r\n\r\nBy default, each project in the returned list of projects will have only the project id, display name and project number.\r\n\r\nA full representation of each project can be returned by specifying the *prefer* header that includes a value of *return=representation*.\r\n\r\n---\r\n",
+        "operationId": "get-my-recently-used-projects",
+        "parameters": [
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "Prefer",
+            "in": "header",
+            "description": "Indicates a level of details in the response. Valid values are 'return=representation' or 'return=minimal'. The default is 'return=minimal'.",
+            "schema": {
+              "enum": ["return=minimal", "return=representation"],
+              "type": "string",
+              "default": "return=minimal"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `projects:read`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json;minimal": {
+                "schema": {
+                  "$ref": "#/components/schemas/projects-prefer-return-minimal"
+                },
+                "example": {
+                  "projects": [
+                    {
+                      "id": "dc914a84-e0c9-40e2-9d14-faf5ed84147f",
+                      "displayName": "White River",
+                      "projectNumber": "00001-ds-3902795"
+                    },
+                    {
+                      "id": "dd50fa65-ff23-4778-831b-c2caa5471a97",
+                      "displayName": "Battle Creek 3",
+                      "projectNumber": "f7sa7fas89d"
+                    }
+                  ],
+                  "_links": {
+                    "self": {
+                      "href": "https://api.bentley.com/projects?$skip=0&$top=100"
+                    },
+                    "prev": {
+                      "href": "https://api.bentley.com/projects?$skip=0&$top=100"
+                    },
+                    "next": {
+                      "href": "https://api.bentley.com/projects?$skip=100&$top=100"
+                    }
+                  }
+                }
+              },
+              "application/json;representation": {
+                "schema": {
+                  "$ref": "#/components/schemas/projects-prefer-return-representation"
+                },
+                "example": {
+                  "projects": [
+                    {
+                      "id": "dc914a84-e0c9-40e2-9d14-faf5ed84147f",
+                      "displayName": "White River",
+                      "projectNumber": "00001-ds-3902795",
+                      "registrationDateTime": "2016-01-18T21:03:00.3704659+00:00",
+                      "registeredBy": "abcd0123-e24a-4b35-9faf-f4f5f6f7f8f9",
+                      "geographicLocation": "Kansas City",
+                      "latitude": "",
+                      "longitude": "",
+                      "timeZone": "Central Standard Time",
+                      "dataCenterLocation": "East US",
+                      "billingCountry": "ZZ",
+                      "status": "active",
+                      "allowExternalTeamMembers": false,
+                      "_links": {
+                        "storage": {
+                          "href": "https://api.bentley.com/storage/folders/hEqR3Mng4kCdFPr17YQUfw"
+                        },
+                        "forms": {
+                          "href": "https://api.bentley.com/forms?projectId=dc914a84-e0c9-40e2-9d14-faf5ed84147f"
+                        },
+                        "issues": {
+                          "href": "https://api.bentley.com/issues?projectId=dc914a84-e0c9-40e2-9d14-faf5ed84147f"
+                        },
+                        "imodels": {
+                          "href": "https://api.bentley.com/imodels?projectId=dc914a84-e0c9-40e2-9d14-faf5ed84147f"
+                        }
+                      }
+                    },
+                    {
+                      "id": "dd50fa65-ff23-4778-831b-c2caa5471a97",
+                      "displayName": "Battle Creek 3",
+                      "projectNumber": "f7sa7fas89d",
+                      "registrationDateTime": "2016-01-12T16:28:02.3869006+00:00",
+                      "registeredBy": "abcd0123-e24a-4b35-9faf-f4f5f6f7f8f9",
+                      "geographicLocation": "Las Vegas, NV",
+                      "latitude": "",
+                      "longitude": "",
+                      "timeZone": "Pacific Standard Time",
+                      "dataCenterLocation": "East US",
+                      "billingCountry": "ZZ",
+                      "status": "active",
+                      "allowExternalTeamMembers": false,
+                      "_links": {
+                        "storage": {
+                          "href": "https://api.bentley.com/storage/folders/R36McEfpdUa30xgNcW6bZkd"
+                        },
+                        "forms": {
+                          "href": "https://api.bentley.com/forms?projectId=dd50fa65-ff23-4778-831b-c2caa5471a97"
+                        },
+                        "issues": {
+                          "href": "https://api.bentley.com/issues?projectId=dd50fa65-ff23-4778-831b-c2caa5471a97"
+                        },
+                        "imodels": {
+                          "href": "https://api.bentley.com/imodels?projectId=dd50fa65-ff23-4778-831b-c2caa5471a97"
+                        }
+                      }
+                    }
+                  ],
+                  "_links": {
+                    "self": {
+                      "href": "https://api.bentley.com/projects?$skip=0&$top=100"
+                    },
+                    "prev": {
+                      "href": "https://api.bentley.com/projects?$skip=0&$top=100"
+                    },
+                    "next": {
+                      "href": "https://api.bentley.com/projects?$skip=100&$top=100"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "statusCode": 401,
+                  "message": "Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint."
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid request to get projects",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "InvalidGetMyProjectsRequest",
+                    "message": "Page size is over 1000 items limit."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": "TooManyRequests",
+                  "message": "More requests were received than the subscription rate-limit allows."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{id}/permissions": {
+      "get": {
+        "tags": ["Project Users"],
+        "summary": "Get member permissions",
+        "description": "---\r\n\r\nRetrieves a list of permissions the user has for a specified project.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `projects:read`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n---",
+        "operationId": "get-user-permissions",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The project ID",
+            "required": true,
+            "schema": {
+              "type": ""
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `projects:read`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Permissions"
+                },
+                "example": {
+                  "permissions": ["administration_invite_member"]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "statusCode": 401,
+                  "message": "Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "This response indicates that project with specified ID was not found.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "projectNotFound",
+                    "message": "Requested project not available."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": "TooManyRequests",
+                  "message": "More requests were received than the subscription rate-limit allows."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{id}/roles": {
+      "post": {
+        "tags": ["Project Roles"],
+        "summary": "Create project role",
+        "description": "---\r\n\r\nCreate new project role.\r\n\r\n### Notes\r\n\r\n- The POST body MUST include the displayName property.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `projects:modify`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n### Authorization\r\n\r\nUser must be an Organization Administrator for the Organization that owns a given Project or have `administration_manage_roles` permission assigned at the Project level.\r\n\r\nAn Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.\r\n\r\n---\r\n",
+        "operationId": "create-project-role",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The project ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `projects:modify`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/role-create"
+              },
+              "example": {
+                "displayName": "Project Role",
+                "description": "An example project role"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Project role was created successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Role"
+                },
+                "example": {
+                  "role": {
+                    "id": "faa3dca1-a901-4659-9da1-d9f29ddcc288",
+                    "displayName": "Project Role",
+                    "description": "An example project role"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "statusCode": 401,
+                  "message": "Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The user has insufficient permissions for the requested operation.",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "404": {
+            "description": "This response indicates that project or template role was not found.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "ProjectNotFound",
+                    "message": "Requested project not available."
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid request to create new project role. Make sure request had required properties and does not pass in readonly properties.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "InvalidProjectRoleRequest",
+                    "message": "Cannot create project role",
+                    "details": [
+                      {
+                        "code": "MissingRequiredProperty",
+                        "message": "Required property 'displayName' is missing in the request body."
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": "TooManyRequests",
+                  "message": "More requests were received than the subscription rate-limit allows."
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Project Roles"],
+        "summary": "Get project roles",
+        "description": "---\r\n\r\nRetrieves a list of available user roles that are defined for a specified project.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `projects:read`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n### Authorization\r\n\r\nUser must be an Organization Administrator for the Organization that owns a given Project or have `administration_manage_roles` permission assigned at the Project level.\r\n\r\nAn Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.\r\n\r\n---",
+        "operationId": "get-project-roles",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The project ID",
+            "required": true,
+            "schema": {
+              "type": ""
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `projects:read`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Roles"
+                },
+                "example": {
+                  "roles": [
+                    {
+                      "id": "752b5a3d-b9f2-4845-824a-99dd310b4898",
+                      "displayName": "Project Reader",
+                      "description": "Project Reader description"
+                    },
+                    {
+                      "id": "ce5399cc-088c-4c48-9f7b-0bff2d72fc25",
+                      "displayName": "Project Contributor",
+                      "description": "Project Contributor description"
+                    }
+                  ],
+                  "_links": {
+                    "self": {
+                      "href": "https://api.bentley.com/projects?$skip=0&$top=100"
+                    },
+                    "prev": {
+                      "href": "https://api.bentley.com/projects?$skip=0&$top=100"
+                    },
+                    "next": {
+                      "href": "https://api.bentley.com/projects?$skip=100&$top=100"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "statusCode": 401,
+                  "message": "Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "This response indicates that specified project was not found.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "ProjectNotFound",
+                    "message": "Requested project not available."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": "TooManyRequests",
+                  "message": "More requests were received than the subscription rate-limit allows."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/": {
+      "post": {
+        "tags": ["Projects"],
+        "summary": "Create project",
+        "description": "---\r\n\r\nCreate a new project\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `projects:modify`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n### Authorization\r\nIf a user is affiliated with an Organization, then the user must be an Organization Administrator in order to create a project.  The new project will be owned by the Organization.   \r\nExample: john.doe@starkindustries.com is an Organization Administrator that works for Stark Industries that has an account with Bentley. John will be able to create projects and those projects will belong to Stark Industries. John and any other Organization Administrator for Stark Industries will be able to update or delete the project.\r\n\r\nAn Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.\r\n\r\nAny user that is not affiliated with an Organization can create a project. The new project will be owned by the user account.   \r\nExample: jane.doe@gmail.com is an independent contractor that does not have an account with Bentley. Jane will be able to create projects and those projects will belong to Jane. Only Jane will be able to update or delete the project.\r\n\r\n---\r\n",
+        "operationId": "create-project",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `projects:modify`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/project-create"
+              },
+              "example": {
+                "displayName": "my project 2",
+                "projectNumber": "project #",
+                "geographicLocation": "Exton, PA, USA",
+                "latitude": "40.032970",
+                "longitude": "-75.631538",
+                "timeZone": "Eastern Standard Time",
+                "billingCountry": "US",
+                "status": "active",
+                "allowExternalTeamMembers": true
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Project successfully created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                },
+                "example": {
+                  "project": {
+                    "id": "dc914a84-e0c9-40e2-9d14-faf5ed84147f",
+                    "displayName": "White River",
+                    "projectNumber": "00001-ds-3902795",
+                    "registrationDateTime": "2016-01-18T21:03:00.3704659+00:00",
+                    "registeredBy": "abcd0123-e24a-4b35-9faf-f4f5f6f7f8f9",
+                    "geographicLocation": "Kansas City",
+                    "latitude": "-18.123",
+                    "longitude": "45.985",
+                    "timeZone": "Central Standard Time",
+                    "dataCenterLocation": "East US",
+                    "billingCountry": "ZZ",
+                    "status": "active",
+                    "allowExternalTeamMembers": false,
+                    "_links": {
+                      "storage": {
+                        "href": "https://api.bentley.com/storage/folders/hEqR3Mng4kCdFPr17YQUfw"
+                      },
+                      "forms": {
+                        "href": "https://api.bentley.com/forms?projectId=dc914a84-e0c9-40e2-9d14-faf5ed84147f"
+                      },
+                      "issues": {
+                        "href": "https://api.bentley.com/issues?projectId=dc914a84-e0c9-40e2-9d14-faf5ed84147f"
+                      },
+                      "imodels": {
+                        "href": "https://api.bentley.com/imodels?projectId=dc914a84-e0c9-40e2-9d14-faf5ed84147f"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "statusCode": 401,
+                  "message": "Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "DuplicateProject",
+                    "message": "A project with this name or number already exists"
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid request to create a project.  Review the 'Field Values' section near the top of this page.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "InvalidCreateProjectRequest",
+                    "message": "Cannot create project",
+                    "details": [
+                      {
+                        "code": "MissingRequiredProperty",
+                        "message": "A property required to create a project is missing.",
+                        "target": "displayName"
+                      },
+                      {
+                        "code": "MissingRequiredProperty",
+                        "message": "A property required to create a project is missing.",
+                        "target": "projectNumber"
+                      },
+                      {
+                        "code": "InvalidValue",
+                        "message": "Status must be one of:  active, inactive, trial",
+                        "target": "status"
+                      },
+                      {
+                        "code": "InvalidValue",
+                        "message": "Latitude value must be within range:  -90 to 90",
+                        "target": "latitude"
+                      },
+                      {
+                        "code": "InvalidValue",
+                        "message": "Longitude value must be within range:  -180 to 180",
+                        "target": "longitude"
+                      },
+                      {
+                        "code": "InvalidValue",
+                        "message": "The billing country specified is not valid",
+                        "target": "billingCountry"
+                      },
+                      {
+                        "code": "InvalidValue",
+                        "message": "Display Name cannot be more than 255 characters",
+                        "target": "displayName"
+                      },
+                      {
+                        "code": "InvalidValue",
+                        "message": "Project Number cannot be more than 255 characters",
+                        "target": "projectNumber"
+                      },
+                      {
+                        "code": "InvalidValue",
+                        "message": "Geographic Location cannot be more than 255 characters",
+                        "target": "geographicLocation"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": "TooManyRequests",
+                  "message": "More requests were received than the subscription rate-limit allows."
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Projects"],
+        "summary": "Get my projects",
+        "description": "---\r\n\r\nRetrieves a list of projects that can be accessed by the loggged in user. The user is determined by the authentication token. See the Authorization section for information on how access rights are determined.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `projects:read`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n### Authorization\r\n\r\nUser must be an Organization Administrator for the Organization that owns a given project or be a project team member.\r\n\r\nAn Organization Administrator must have at least one of the following roles assigned in User Management: Account Administrator, Co-Administrator, or CONNECT Services Administrator. For more information about User Management please visit our Bentley Communities [Licensing, Cloud, and Web Services](https://communities.bentley.com/communities/other_communities/licensing_cloud_and_web_services/w/wiki/50711/user-management-2-0) wiki page.\r\n\r\n### Response\r\n\r\nBy default, each project in the returned list of projects will have only the project id, display name and project number.\r\n\r\nA full representation of each project can be returned by specifying the *prefer* header that includes a value of *return=representation*.\r\n\r\n---\r\n",
+        "operationId": "my-projects",
+        "parameters": [
+          {
+            "name": "projectNumber",
+            "in": "query",
+            "description": "Find all projects with the exact projectNumber specified. Cannot be used at the same time as the $search parameter.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "displayName",
+            "in": "query",
+            "description": "Find all projects with the exact displayName specified. Cannot be used at the same time as the $search parameter.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$search",
+            "in": "query",
+            "description": "Find all projects that have the search string anywhere in the projectNumber or displayName. Cannot be used at the same time as the projectNumber or displayName parameters.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "Prefer",
+            "in": "header",
+            "description": "Indicates a level of details in the response. Valid values are 'return=representation' or 'return=minimal'. The default is 'return=minimal'.",
+            "schema": {
+              "enum": ["return=minimal", "return=representation"],
+              "type": "string",
+              "default": "return=minimal"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `projects:read`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json;minimal": {
+                "schema": {
+                  "$ref": "#/components/schemas/projects-prefer-return-minimal"
+                },
+                "example": {
+                  "projects": [
+                    {
+                      "id": "dc914a84-e0c9-40e2-9d14-faf5ed84147f",
+                      "displayName": "White River",
+                      "projectNumber": "00001-ds-3902795"
+                    },
+                    {
+                      "id": "dd50fa65-ff23-4778-831b-c2caa5471a97",
+                      "displayName": "Battle Creek 3",
+                      "projectNumber": "f7sa7fas89d"
+                    }
+                  ],
+                  "_links": {
+                    "self": {
+                      "href": "https://api.bentley.com/projects?$skip=0&$top=100"
+                    },
+                    "prev": {
+                      "href": "https://api.bentley.com/projects?$skip=0&$top=100"
+                    },
+                    "next": {
+                      "href": "https://api.bentley.com/projects?$skip=100&$top=100"
+                    }
+                  }
+                }
+              },
+              "application/json;representation": {
+                "schema": {
+                  "$ref": "#/components/schemas/projects-prefer-return-representation"
+                },
+                "example": {
+                  "projects": [
+                    {
+                      "id": "dc914a84-e0c9-40e2-9d14-faf5ed84147f",
+                      "displayName": "White River",
+                      "projectNumber": "00001-ds-3902795",
+                      "registrationDateTime": "2016-01-18T21:03:00.3704659+00:00",
+                      "registeredBy": "abcd0123-e24a-4b35-9faf-f4f5f6f7f8f9",
+                      "geographicLocation": "Kansas City",
+                      "latitude": "",
+                      "longitude": "",
+                      "timeZone": "Central Standard Time",
+                      "dataCenterLocation": "East US",
+                      "billingCountry": "ZZ",
+                      "status": "active",
+                      "allowExternalTeamMembers": false,
+                      "_links": {
+                        "storage": {
+                          "href": "https://api.bentley.com/storage/folders/hEqR3Mng4kCdFPr17YQUfw"
+                        },
+                        "forms": {
+                          "href": "https://api.bentley.com/forms?projectId=dc914a84-e0c9-40e2-9d14-faf5ed84147f"
+                        },
+                        "issues": {
+                          "href": "https://api.bentley.com/issues?projectId=dc914a84-e0c9-40e2-9d14-faf5ed84147f"
+                        },
+                        "imodels": {
+                          "href": "https://api.bentley.com/imodels?projectId=dc914a84-e0c9-40e2-9d14-faf5ed84147f"
+                        }
+                      }
+                    },
+                    {
+                      "id": "dd50fa65-ff23-4778-831b-c2caa5471a97",
+                      "displayName": "Battle Creek 3",
+                      "projectNumber": "f7sa7fas89d",
+                      "registrationDateTime": "2016-01-12T16:28:02.3869006+00:00",
+                      "registeredBy": "abcd0123-e24a-4b35-9faf-f4f5f6f7f8f9",
+                      "geographicLocation": "Las Vegas, NV",
+                      "latitude": "",
+                      "longitude": "",
+                      "timeZone": "Pacific Standard Time",
+                      "dataCenterLocation": "East US",
+                      "billingCountry": "ZZ",
+                      "status": "active",
+                      "allowExternalTeamMembers": false,
+                      "_links": {
+                        "storage": {
+                          "href": "https://api.bentley.com/storage/folders/R36McEfpdUa30xgNcW6bZkd"
+                        },
+                        "forms": {
+                          "href": "https://api.bentley.com/forms?projectId=dd50fa65-ff23-4778-831b-c2caa5471a97"
+                        },
+                        "issues": {
+                          "href": "https://api.bentley.com/issues?projectId=dd50fa65-ff23-4778-831b-c2caa5471a97"
+                        },
+                        "imodels": {
+                          "href": "https://api.bentley.com/imodels?projectId=dd50fa65-ff23-4778-831b-c2caa5471a97"
+                        }
+                      }
+                    }
+                  ],
+                  "_links": {
+                    "self": {
+                      "href": "https://api.bentley.com/projects?$skip=0&$top=100"
+                    },
+                    "prev": {
+                      "href": "https://api.bentley.com/projects?$skip=0&$top=100"
+                    },
+                    "next": {
+                      "href": "https://api.bentley.com/projects?$skip=100&$top=100"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "statusCode": 401,
+                  "message": "Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint."
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid request to get projects",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "InvalidGetMyProjectsRequest",
+                    "message": "Page size is over 1000 items limit."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": "TooManyRequests",
+                  "message": "More requests were received than the subscription rate-limit allows."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/favorites": {
+      "get": {
+        "tags": ["Project Favorites"],
+        "summary": "Get my favorite projects",
+        "description": "---\r\n\r\nRetrieves a list of favorite projects for the logged in user. The user is determined by the authentication token.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `projects:read`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n### Response\r\n\r\nBy default, each project in the returned list of projects will have only the project id, display name and project number.\r\n\r\nA full representation of each project can be returned by specifying the *prefer* header that includes a value of *return=representation*.\r\n\r\n---\r\n",
+        "operationId": "get-my-favorite-projects",
+        "parameters": [
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "The [$top](https://www.odata.org/getting-started/basic-tutorial/#topskip) system query option requests the number of items in the queried collection to be included in the result.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "The [$skip](https://www.odata.org/getting-started/basic-tutorial/#topskip) query option requests the number of items in the queried collection that are to be skipped and not included in the result.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "Prefer",
+            "in": "header",
+            "description": "Indicates a level of details in the response. Valid values are 'return=representation' or 'return=minimal'. The default is 'return=minimal'.",
+            "schema": {
+              "enum": ["return=minimal", "return=representation"],
+              "type": "string",
+              "default": "return=minimal"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `projects:read`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json;minimal": {
+                "schema": {
+                  "$ref": "#/components/schemas/projects-prefer-return-minimal"
+                },
+                "example": {
+                  "projects": [
+                    {
+                      "id": "dc914a84-e0c9-40e2-9d14-faf5ed84147f",
+                      "displayName": "White River",
+                      "projectNumber": "00001-ds-3902795"
+                    },
+                    {
+                      "id": "dd50fa65-ff23-4778-831b-c2caa5471a97",
+                      "displayName": "Battle Creek 3",
+                      "projectNumber": "f7sa7fas89d"
+                    }
+                  ],
+                  "_links": {
+                    "self": {
+                      "href": "https://api.bentley.com/projects?$skip=0&$top=100"
+                    },
+                    "prev": {
+                      "href": "https://api.bentley.com/projects?$skip=0&$top=100"
+                    },
+                    "next": {
+                      "href": "https://api.bentley.com/projects?$skip=100&$top=100"
+                    }
+                  }
+                }
+              },
+              "application/json;representation": {
+                "schema": {
+                  "$ref": "#/components/schemas/projects-prefer-return-representation"
+                },
+                "example": {
+                  "projects": [
+                    {
+                      "id": "dc914a84-e0c9-40e2-9d14-faf5ed84147f",
+                      "displayName": "White River",
+                      "projectNumber": "00001-ds-3902795",
+                      "registrationDateTime": "2016-01-18T21:03:00.3704659+00:00",
+                      "registeredBy": "abcd0123-e24a-4b35-9faf-f4f5f6f7f8f9",
+                      "geographicLocation": "Kansas City",
+                      "latitude": "",
+                      "longitude": "",
+                      "timeZone": "Central Standard Time",
+                      "dataCenterLocation": "East US",
+                      "billingCountry": "ZZ",
+                      "status": "active",
+                      "allowExternalTeamMembers": false,
+                      "_links": {
+                        "storage": {
+                          "href": "https://api.bentley.com/storage/folders/hEqR3Mng4kCdFPr17YQUfw"
+                        },
+                        "forms": {
+                          "href": "https://api.bentley.com/forms?projectId=dc914a84-e0c9-40e2-9d14-faf5ed84147f"
+                        },
+                        "issues": {
+                          "href": "https://api.bentley.com/issues?projectId=dc914a84-e0c9-40e2-9d14-faf5ed84147f"
+                        },
+                        "imodels": {
+                          "href": "https://api.bentley.com/imodels?projectId=dc914a84-e0c9-40e2-9d14-faf5ed84147f"
+                        }
+                      }
+                    },
+                    {
+                      "id": "dd50fa65-ff23-4778-831b-c2caa5471a97",
+                      "displayName": "Battle Creek 3",
+                      "projectNumber": "f7sa7fas89d",
+                      "registrationDateTime": "2016-01-12T16:28:02.3869006+00:00",
+                      "registeredBy": "abcd0123-e24a-4b35-9faf-f4f5f6f7f8f9",
+                      "geographicLocation": "Las Vegas, NV",
+                      "latitude": "",
+                      "longitude": "",
+                      "timeZone": "Pacific Standard Time",
+                      "dataCenterLocation": "East US",
+                      "billingCountry": "ZZ",
+                      "status": "active",
+                      "allowExternalTeamMembers": false,
+                      "_links": {
+                        "storage": {
+                          "href": "https://api.bentley.com/storage/folders/R36McEfpdUa30xgNcW6bZkd"
+                        },
+                        "forms": {
+                          "href": "https://api.bentley.com/forms?projectId=dd50fa65-ff23-4778-831b-c2caa5471a97"
+                        },
+                        "issues": {
+                          "href": "https://api.bentley.com/issues?projectId=dd50fa65-ff23-4778-831b-c2caa5471a97"
+                        },
+                        "imodels": {
+                          "href": "https://api.bentley.com/imodels?projectId=dd50fa65-ff23-4778-831b-c2caa5471a97"
+                        }
+                      }
+                    }
+                  ],
+                  "_links": {
+                    "self": {
+                      "href": "https://api.bentley.com/projects?$skip=0&$top=100"
+                    },
+                    "prev": {
+                      "href": "https://api.bentley.com/projects?$skip=0&$top=100"
+                    },
+                    "next": {
+                      "href": "https://api.bentley.com/projects?$skip=100&$top=100"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "statusCode": 401,
+                  "message": "Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint."
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid request to get projects",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": {
+                    "code": "InvalidGetMyProjectsRequest",
+                    "message": "Page size is over 1000 items limit."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": "TooManyRequests",
+                  "message": "More requests were received than the subscription rate-limit allows."
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "team-member": {
+        "title": "Team Member",
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "description": "The user Id in Identity Management System."
+          },
+          "email": {
+            "type": "string",
+            "description": "User email."
+          },
+          "givenName": {
+            "type": "string",
+            "description": "User given name."
+          },
+          "surname": {
+            "type": "string",
+            "description": "User surname."
+          },
+          "organization": {
+            "type": "string",
+            "description": "Organization user is member of in Identity Management System."
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of role names."
+          }
+        }
+      },
+      "team-members": {
+        "title": "Team Members",
+        "type": "object",
+        "properties": {
+          "members": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/team-member"
+            },
+            "description": "List of team members."
+          },
+          "_links": {
+            "$ref": "#/components/schemas/Links"
+          }
+        }
+      },
+      "Role": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The role id."
+          },
+          "name": {
+            "type": "string",
+            "description": "The display name for the role."
+          },
+          "description": {
+            "type": "string",
+            "description": "The description for the role."
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of permissions assigned to the role."
+          }
+        }
+      },
+      "Roles": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Role"
+            },
+            "description": "List of roles."
+          }
+        }
+      },
+      "project-summary": {
+        "title": "Project (summary)",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The Project Id."
+          },
+          "displayName": {
+            "type": "string",
+            "description": "The display name for the project."
+          },
+          "projectNumber": {
+            "type": "string",
+            "description": "The unique number or code for the project. This is the value that uniquely identifies the project within your organization."
+          }
+        },
+        "description": "Minimal representation of a project that contains only id, displayName and projectNumber."
+      },
+      "Project": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The Project Id."
+          },
+          "displayName": {
+            "type": "string",
+            "description": "The display name for the project."
+          },
+          "projectNumber": {
+            "type": "string",
+            "description": "The unique number or code for the project. This is the value that uniquely identifies the project within your organization."
+          },
+          "registrationDateTime": {
+            "type": "string",
+            "description": "The date that the project was created."
+          },
+          "registeredBy": {
+            "type": "string",
+            "description": "The Id of the user the created the project."
+          },
+          "geographicLocation": {
+            "type": "string",
+            "description": "The address or text description of the location of the project."
+          },
+          "latitude": {
+            "type": "string",
+            "description": "The latitude in degrees from -90 to 90."
+          },
+          "longitude": {
+            "type": "string",
+            "description": "The latitude in degrees from -180 to 180."
+          },
+          "timeZone": {
+            "type": "string",
+            "description": "The timezone that is being used on the project."
+          },
+          "dataCenterLocation": {
+            "type": "string",
+            "description": "The data center where the project data will be stored."
+          },
+          "billingCountry": {
+            "type": "string",
+            "description": "The ISO-3166 country code representing the billing country for this project."
+          },
+          "status": {
+            "$ref": "#/components/schemas/ProjectStatus"
+          },
+          "allowExternalTeamMembers": {
+            "type": "boolean",
+            "description": "If false, then only users from the organization that owns the project can be given access to the project. If true, then users from external organizations can be given access to the project."
+          },
+          "_links": {
+            "$ref": "#/components/schemas/project-links"
+          }
+        },
+        "description": "Full representation of a project."
+      },
+      "projects-prefer-return-minimal": {
+        "title": "Projects (prefer return=minimal)",
+        "type": "object",
+        "properties": {
+          "projects": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/project-summary"
+            },
+            "description": "A list of projects in the minimal representation format."
+          }
+        },
+        "description": "A list of projects in the minimal representation format."
+      },
+      "projects-prefer-return-representation": {
+        "title": "Projects (prefer return=representation)",
+        "type": "object",
+        "properties": {
+          "projects": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Project"
+            },
+            "description": "A list of projects in the full representation format."
+          }
+        },
+        "description": "A list of projects in the full representation format."
+      },
+      "Errors": {
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {}
+          }
+        }
+      },
+      "Links": {
+        "type": "object",
+        "properties": {
+          "next": {
+            "$ref": "#/components/schemas/Link"
+          }
+        }
+      },
+      "Link": {
+        "type": "object",
+        "properties": {
+          "href": {
+            "type": "string",
+            "description": "Hyperlink container."
+          }
+        },
+        "description": "Hyperlink container."
+      },
+      "team-member-add-by-ids": {
+        "title": "Team Member (add by IDs)",
+        "required": ["userId"],
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "description": "ID of user to add.  If used, cannot pass email or roleNames."
+          },
+          "roleIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "An array of role IDs that will be assigned to new team member."
+          }
+        }
+      },
+      "team-member-add-by-names": {
+        "title": "Team Member (add by names)",
+        "required": ["email"],
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "Email address of the user to add.  If used, cannot pass userId or roleIds."
+          },
+          "roleNames": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "An array of role names that will be assigned to new team member"
+          }
+        }
+      },
+      "team-member-roles-update": {
+        "title": "Team Member Roles (update)",
+        "required": ["roleIds"],
+        "type": "object",
+        "properties": {
+          "roleIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of role ids."
+          }
+        }
+      },
+      "role-create": {
+        "title": "Role (create)",
+        "required": ["displayName"],
+        "type": "object",
+        "properties": {
+          "displayName": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "role-update": {
+        "title": "Role (update)",
+        "type": "object",
+        "properties": {
+          "displayName": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "project-links": {
+        "title": "Project Links",
+        "type": "object",
+        "properties": {
+          "storage": {
+            "$ref": "#/components/schemas/Link"
+          },
+          "forms": {
+            "$ref": "#/components/schemas/Link"
+          },
+          "issues": {
+            "$ref": "#/components/schemas/Link"
+          },
+          "imodels": {
+            "$ref": "#/components/schemas/Link"
+          }
+        },
+        "description": "Hyperlinks to related data for this project."
+      },
+      "project-create": {
+        "title": "Project (create)",
+        "required": ["displayName", "projectNumber"],
+        "type": "object",
+        "properties": {
+          "displayName": {
+            "type": "string",
+            "description": "A display name for the project. Max Length: 255 characters"
+          },
+          "projectNumber": {
+            "type": "string",
+            "description": "A unique number or code for the project. This is the value that uniquely identifies the project within your organization. Max Length: 255 characters"
+          },
+          "geographicLocation": {
+            "type": "string",
+            "description": "The address or text description of the location of the project. Max Length: 255 characters"
+          },
+          "latitude": {
+            "type": "string",
+            "description": "The latitude in degrees from -90 to 90"
+          },
+          "longitude": {
+            "type": "string",
+            "description": "The latitude in degrees from -180 to 180"
+          },
+          "timeZone": {
+            "type": "string",
+            "description": "The timezone that is being used on the project. This should be any Id returned from System.TimeZoneInfo.GetSystemTimeZones()"
+          },
+          "billingCountry": {
+            "type": "string",
+            "description": "A valid ISO-3166 country code. Max Length: 2 characters. The default value is ZZ."
+          },
+          "status": {
+            "$ref": "#/components/schemas/ProjectStatus"
+          },
+          "allowExternalTeamMembers": {
+            "type": "boolean",
+            "description": "If false, then only users from the organization that owns the project can be given access to the project. If true, then users from external organizations can be given access to the project. Users can be given access by using the 'Add project team member' API. The default value is false."
+          }
+        },
+        "description": "Properties of the project to be created."
+      },
+      "ProjectStatus": {
+        "title": "Project Status",
+        "enum": ["active", "inactive", "trial"],
+        "type": "string",
+        "description": "One of 'active', 'inactive', 'trial'"
+      },
+      "project-update": {
+        "title": "Project (update)",
+        "type": "object",
+        "properties": {
+          "displayName": {
+            "type": "string",
+            "description": "A display name for the project. Max Length: 255 characters"
+          },
+          "projectNumber": {
+            "type": "string",
+            "description": "A unique number or code for the project. This is the value that uniquely identifies the project within your organization. Max Length: 255 characters"
+          },
+          "geographicLocation": {
+            "type": "string",
+            "description": "The address or text description of the location of the project. Max Length: 255 characters"
+          },
+          "latitude": {
+            "type": "string",
+            "description": "The latitude in degrees from -90 to 90"
+          },
+          "longitude": {
+            "type": "string",
+            "description": "The latitude in degrees from -180 to 180"
+          },
+          "timeZone": {
+            "type": "string",
+            "description": "The timezone that is being used on the project. This should be any Id returned from System.TimeZoneInfo.GetSystemTimeZones()"
+          },
+          "billingCountry": {
+            "type": "string",
+            "description": "A valid ISO-3166 country code. Max Length: 2 characters"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ProjectStatus"
+          },
+          "allowExternalTeamMembers": {
+            "type": "boolean",
+            "description": "If false, then only users from the organization that owns the project can be given access to the project. If true, then users from external organizations can be given access to the project. Users can be given access by using the 'Add project team member' API. The default value is false."
+          }
+        },
+        "description": "Properties of the project to be updated."
+      },
+      "Permissions": {
+        "title": "Permissions",
+        "type": "object",
+        "properties": {
+          "permissions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "description": "List of permission user has on a given project"
+      }
+    },
+    "securitySchemes": {
+      "apiKeyHeader": {
+        "type": "apiKey",
+        "name": "X-Api-Subscription-Key",
+        "in": "header"
+      },
+      "apiKeyQuery": {
+        "type": "apiKey",
+        "name": "apikey",
+        "in": "query"
+      }
+    }
+  },
+  "security": [
+    {
+      "apiKeyHeader": []
+    },
+    {
+      "apiKeyQuery": []
+    }
+  ]
+}

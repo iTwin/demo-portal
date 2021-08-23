@@ -33,6 +33,7 @@ import { useCreateIModelAction } from "../CRUDRouter/useCreateIModelAction";
 import { useCreateProjectAction } from "../CRUDRouter/useCreateProjectAction";
 import { useDeleteProjectAction } from "../CRUDRouter/useDeleteProjectAction";
 import { useEditProjectAction } from "../CRUDRouter/useEditProjectAction";
+import { useMembersProjectAction } from "../MembersRouter/useMembersProjectAction";
 import "./SelectProject.scss";
 
 export interface SelectProjectProps
@@ -82,10 +83,11 @@ const SelectProject = ({
   const { deleteDialog, deleteAction, refreshKey } = useDeleteProjectAction({
     accessToken,
   });
+  const { membersAction } = useMembersProjectAction();
 
   const projectActions = React.useMemo(() => {
-    return [createAction, editAction, deleteAction];
-  }, [createAction, editAction, deleteAction]);
+    return [createAction, editAction, membersAction, deleteAction];
+  }, [createAction, editAction, membersAction, deleteAction]);
 
   const [searchValue, setSearchValue] = React.useState("");
   const [searchParam, setSearchParam] = React.useState("");

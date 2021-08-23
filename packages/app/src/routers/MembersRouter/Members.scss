@@ -1,0 +1,33 @@
+/*---------------------------------------------------------------------------------------------
+ * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
+ * See LICENSE.md in the project root for license terms and full copyright notice.
+ *
+ * This code is for demonstration purposes and should not be considered production ready.
+ *--------------------------------------------------------------------------------------------*/
+.members-management {
+  .input-with-button {
+    display: flex;
+
+    .iui-input-container > .iui-input {
+      min-width: 300px;
+      padding-right: 61px;
+    }
+
+    .iui-button {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      margin-left: -50px;
+      margin-top: 25px;
+    }
+  }
+
+  .iui-cell {
+    overflow: hidden;
+
+    span {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+  }
+}
