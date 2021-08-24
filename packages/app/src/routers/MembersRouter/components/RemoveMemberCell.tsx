@@ -25,35 +25,29 @@ export const RemoveMemberCell = ({
   onSuccess,
 }: RemoveMemberCellProps) => {
   const urlPrefix = useApiPrefix();
+  const [working, setWorking] = React.useState(false);
   const removeUser = React.useCallback(async () => {
     if (!projectId) {
       return;
     }
+    setWorking(true);
     const client = new ProjectsClient(urlPrefix, accessToken);
     try {
       await client.removeProjectMember(projectId, userId);
       await onSuccess();
     } catch (error) {
-      throw await client.extractAPIErrorMessage(error);
+      toaster.negative(await client.extractAPIErrorMessage(error), {
+        hasCloseButton: true,
+      });
     }
+    setWorking(false);
   }, [projectId, urlPrefix, accessToken, onSuccess, userId]);
-  const [working, setWorking] = React.useState(false);
   return (
     <IconButton
       styleType="borderless"
       title="Remove member"
       disabled={working}
-      onClick={() => {
-        setWorking(true);
-        removeUser()
-          .then(() => void setWorking(false))
-          .catch((error) => {
-            toaster.negative(error, {
-              hasCloseButton: true,
-            });
-            setWorking(false);
-          });
-      }}
+      onClick={removeUser}
     >
       <SvgRemove />
     </IconButton>
