@@ -61,6 +61,10 @@ const RoutedHeader = ({
     !!useMatch("/view/project/:projectId/imodel/:iModelId/version/:versionId"),
   ].includes(true);
 
+  const showProjectButton = isAuthenticated && projectId;
+  const showIModelButton = isAuthenticated && iModelId && section !== "members";
+  const showVersionButton = isAuthenticated && iModelId && section === "view";
+
   return (
     <IuiHeader
       appLogo={
@@ -73,18 +77,18 @@ const RoutedHeader = ({
         <HeaderBreadcrumbs
           items={[
             ...spreadIf(
-              isAuthenticated && projectId && (
+              showProjectButton && (
                 <ProjectHeaderButton
                   key="project"
                   projectId={projectId}
                   section={section}
                   accessToken={accessToken?.toTokenString()}
-                  isActive={!iModelId}
+                  isActive={!iModelId || section === "members"}
                 />
               )
             ),
             ...spreadIf(
-              isAuthenticated && iModelId && (
+              showIModelButton && (
                 <IModelHeaderButton
                   key="iModel"
                   iModelId={iModelId}
@@ -95,7 +99,7 @@ const RoutedHeader = ({
               )
             ),
             ...spreadIf(
-              isAuthenticated && iModelId && section === "view" && (
+              showVersionButton && (
                 <VersionHeaderButton
                   key="version"
                   iModelId={iModelId}

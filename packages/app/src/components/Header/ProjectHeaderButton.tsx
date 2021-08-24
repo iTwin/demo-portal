@@ -38,6 +38,51 @@ export const ProjectHeaderButton = ({
     accessToken,
     url: `https://api.bentley.com/projects/recents?$top=5`,
   });
+  const menuItemsObject = !!project?.displayName
+    ? {
+        menuItems: (close: () => void) => [
+          ...(projects?.map((project) => (
+            <MenuItem
+              key={project.id}
+              onClick={() => {
+                close();
+                void navigate(`/${section}/project/${project.id}`);
+              }}
+            >
+              {project.displayName}
+            </MenuItem>
+          )) ?? []),
+          <MenuItem
+            key={"favorites"}
+            onClick={() => {
+              close();
+              void navigate(`/${section}`);
+            }}
+            className={"select-other-project"}
+          >
+            All favorite projects...
+          </MenuItem>,
+          <MenuItem
+            key={"recents"}
+            onClick={() => {
+              close();
+              void navigate(`/${section}?recents`);
+            }}
+          >
+            All recent projects...
+          </MenuItem>,
+          <MenuItem
+            key={"others"}
+            onClick={() => {
+              close();
+              void navigate(`/${section}?myprojects`);
+            }}
+          >
+            All my projects...
+          </MenuItem>,
+        ],
+      }
+    : {};
   return (
     <HeaderButton
       key="project"
@@ -45,51 +90,7 @@ export const ProjectHeaderButton = ({
       description={project?.projectNumber}
       className={classNames(!project && "iui-skeleton")}
       isActive={!!project?.displayName && isActive}
-      menuItems={
-        !!project?.displayName
-          ? (close) => [
-              ...(projects?.map((project) => (
-                <MenuItem
-                  key={project.id}
-                  onClick={() => {
-                    close();
-                    void navigate(`/${section}/project/${project.id}`);
-                  }}
-                >
-                  {project.displayName}
-                </MenuItem>
-              )) ?? []),
-              <MenuItem
-                key={"favorites"}
-                onClick={() => {
-                  close();
-                  void navigate(`/${section}`);
-                }}
-                className={"select-other-project"}
-              >
-                All favorite projects...
-              </MenuItem>,
-              <MenuItem
-                key={"recents"}
-                onClick={() => {
-                  close();
-                  void navigate(`/${section}?recents`);
-                }}
-              >
-                All recent projects...
-              </MenuItem>,
-              <MenuItem
-                key={"others"}
-                onClick={() => {
-                  close();
-                  void navigate(`/${section}?myprojects`);
-                }}
-              >
-                All my projects...
-              </MenuItem>,
-            ]
-          : undefined
-      }
+      {...menuItemsObject}
     />
   );
 };

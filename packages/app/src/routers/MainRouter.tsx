@@ -9,6 +9,7 @@ import { Redirect, Router } from "@reach/router";
 import React, { useMemo } from "react";
 
 import { ManageVersionsRouter } from "./ManageVersionsRouter/ManageVersionsRouter";
+import { MembersRouter } from "./MembersRouter/MembersRouter";
 import { SynchronizationRouter } from "./SynchronizationRouter/SynchronizationRouter";
 import { ViewRouter } from "./ViewRouter/ViewRouter";
 
@@ -32,6 +33,7 @@ export const MainRouter = ({ accessToken }: MainRouterProps) => {
         path="manage-versions/*"
         accessToken={accessTokenStr}
       />
+      <MembersRouter path="members/*" accessToken={accessTokenStr} />
       <Redirect noThrow={true} from="/" to="view" default={true} />
     </Router>
   );
