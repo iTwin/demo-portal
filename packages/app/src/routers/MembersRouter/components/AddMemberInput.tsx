@@ -42,8 +42,8 @@ export const AddMemberInput = ({
     const client = new ProjectsClient(urlPrefix, accessToken);
     try {
       await client.addProjectMember(projectId, newMember);
-      setEmail("");
       await onSuccess();
+      setEmail("");
     } catch (error) {
       toaster.negative(await client.extractAPIErrorMessage(error), {
         hasCloseButton: true,
