@@ -16,6 +16,8 @@ import {
   StorageFileSynchronizationAPI,
 } from "./generated";
 
+const ACCEPT = "application/vnd.bentley.itwin-platform.v1+json";
+
 export class SynchronizationClient {
   private DEMO_CONNECTION_NAME = "demo-portal-imodel-connection";
   private synchronizationApi: DefaultApi;
@@ -145,7 +147,7 @@ export class SynchronizationClient {
       this.accessToken,
       undefined,
       undefined,
-      "application/vnd.bentley.itwin-platform.v1+json",
+      ACCEPT,
       {
         headers: {
           Prefer: "return=representation",
@@ -167,7 +169,7 @@ export class SynchronizationClient {
       this.accessToken,
       undefined,
       undefined,
-      "application/vnd.bentley.itwin-platform.v1+json"
+      ACCEPT
     );
   }
 
@@ -180,7 +182,7 @@ export class SynchronizationClient {
     return this.synchronizationApi.deleteStorageConnection(
       connectionId,
       this.accessToken,
-      "application/vnd.bentley.itwin-platform.v1+json"
+      ACCEPT
     );
   }
 
@@ -193,7 +195,20 @@ export class SynchronizationClient {
     return this.synchronizationApi.runStorageConnection(
       connectionId,
       this.accessToken,
-      "application/vnd.bentley.itwin-platform.v1+json"
+      ACCEPT
+    );
+  }
+
+  /**
+   * See {@link DefaultApi.getAuthorizationInformation} for details.
+   * @param redirectUrl
+   * @returns
+   */
+  async getAuthorization(redirectUrl: string) {
+    return this.synchronizationApi.getAuthorizationInformation(
+      redirectUrl,
+      this.accessToken,
+      ACCEPT
     );
   }
 
@@ -208,7 +223,7 @@ export class SynchronizationClient {
       this.accessToken,
       undefined,
       undefined,
-      "application/vnd.bentley.itwin-platform.v1+json",
+      ACCEPT,
       {
         headers: { Prefer: "return=representation" },
       }
@@ -220,7 +235,7 @@ export class SynchronizationClient {
       ? ((await this.synchronizationApi.getStorageConnectionSourcefiles(
           demoPortalConnection.id,
           this.accessToken,
-          "application/vnd.bentley.itwin-platform.v1+json",
+          ACCEPT,
           {
             headers: { Prefer: "return=representation" },
           }
@@ -279,7 +294,7 @@ export class SynchronizationClient {
             },
           ],
         },
-        "application/vnd.bentley.itwin-platform.v1+json"
+        ACCEPT
       );
       if (!connection?.id) {
         throw new Error("Connection creation failed");
@@ -293,7 +308,7 @@ export class SynchronizationClient {
         storageFileId: fileId,
         connectorType: connectorType,
       },
-      "application/vnd.bentley.itwin-platform.v1+json"
+      ACCEPT
     );
     if (!addedFile.sourceFile?.id) {
       throw new Error("Updating creation failed");

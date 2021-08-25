@@ -30,4 +30,8 @@
   height: 100%;
   overflow: auto;
   width: 100%;
+
+  > .iui-text-block {
+    margin: 0;
+  }
 }

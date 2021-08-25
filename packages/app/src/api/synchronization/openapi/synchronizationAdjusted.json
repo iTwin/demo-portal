@@ -597,7 +597,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AuthorizationInformation"
+                  "$ref": "#/components/schemas/authorization-information-response"
                 },
                 "example": ""
               }
@@ -1488,6 +1488,15 @@
           },
           "_links": {
             "$ref": "#/components/schemas/authorization-information-links"
+          }
+        }
+      },
+      "authorization-information-response": {
+        "title": "AuthorizationInformation Response",
+        "type": "object",
+        "properties": {
+          "authorizationInformation": {
+            "$ref": "#/components/schemas/AuthorizationInformation"
           }
         }
       },

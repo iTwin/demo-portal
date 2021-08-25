@@ -4,7 +4,8 @@
  *
  * This code is for demonstration purposes and should not be considered production ready.
  *--------------------------------------------------------------------------------------------*/
-import { ErrorPage } from "@itwin/itwinui-react";
+import { IncludePrefix } from "@bentley/itwin-client";
+import { ErrorPage, Text } from "@itwin/itwinui-react";
 import React from "react";
 
 import { MainRouter } from "../routers/MainRouter";
@@ -12,6 +13,7 @@ import { useAuth } from "./Auth/AuthProvider";
 import { Header } from "./Header/Header";
 import MainContainer from "./MainLayout/MainContainer";
 import { Sidebar } from "./MainLayout/Sidebar";
+import { SynchronizationAPIProvider } from "./Synchronization/SynchronizationAPIProvider";
 
 export const MainApp = () => {
   const { isAuthenticated, isAuthorized, accessToken, signOut } = useAuth();
@@ -27,12 +29,19 @@ export const MainApp = () => {
       }
       sidebar={<Sidebar />}
     >
-      {isAuthenticated &&
-        (isAuthorized ? (
-          <MainRouter accessToken={accessToken} />
+      {isAuthenticated ? (
+        isAuthorized ? (
+          <SynchronizationAPIProvider
+            accessToken={accessToken?.toTokenString(IncludePrefix.Yes) ?? ""}
+          >
+            <MainRouter accessToken={accessToken} />
+          </SynchronizationAPIProvider>
         ) : (
           <ErrorPage errorType="401" />
-        ))}
+        )
+      ) : (
+        <Text isSkeleton={true} />
+      )}
     </MainContainer>
   );
 };
