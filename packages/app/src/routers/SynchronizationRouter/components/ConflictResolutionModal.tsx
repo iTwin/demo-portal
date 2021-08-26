@@ -74,7 +74,7 @@ export const ConflictResolutionModal = ({
       <div className={"conflict-resolution-modal"}>
         <span>A file with the same name exists:</span>
         <div className={"file-description"} style={{ flexDirection: "row" }}>
-          {<ConnectorIcon connectorType={sourceFile?.connectorType} />}
+          <ConnectorIcon connectorType={sourceFile?.connectorType} />
           <div style={{ flexDirection: "column" }}>
             <Text isSkeleton={isLoading} as={"div"}>
               {storageFile?.displayName}
