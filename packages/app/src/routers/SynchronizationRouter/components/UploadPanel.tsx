@@ -45,6 +45,7 @@ export const UploadPanel = ({
     state,
     step,
     resetUploader,
+    conflictResolutionModalNode,
   } = useSynchronizeFileUploader({
     iModelId,
     projectId,
@@ -119,6 +120,7 @@ export const UploadPanel = ({
           />
         </FileUpload>
       )}
+      {conflictResolutionModalNode}
     </>
   );
 };
