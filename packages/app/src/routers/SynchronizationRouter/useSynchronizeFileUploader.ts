@@ -11,11 +11,13 @@ import { FileUploadStorageAPI } from "../../api/storage/generated";
 import { StorageClient } from "../../api/storage/storageClient";
 import { SynchronizationClient } from "../../api/synchronization/synchronizationClient";
 import { useApiPrefix } from "../../api/useApiPrefix";
+import { useSynchronizeFileConflictResolver } from "./useSynchronizeFileConflictResolver";
 
 interface ConnectionFileUploaderOptions {
   projectId: string;
   iModelId: string;
   accessToken: string;
+  iModelName?: string;
 }
 
 export const getAlertType = (state: string) =>
@@ -30,12 +32,17 @@ export const useSynchronizeFileUploader = ({
   projectId,
   iModelId,
   accessToken = "",
+  iModelName,
 }: ConnectionFileUploaderOptions) => {
   const urlPrefix = useApiPrefix();
   const [step, setStep] = React.useState(0);
   const [status, setStatus] = React.useState<string | undefined>();
   const [progress, setProgress] = React.useState(0);
   const [state, setState] = React.useState<"Success" | "Error" | "Working">();
+  const {
+    conflictResolutionModalNode,
+    openConflictResolutionModal,
+  } = useSynchronizeFileConflictResolver(accessToken, iModelName);
 
   const uploadFiles = React.useCallback(
     async (fileList: FileList, onSuccess?: () => void) => {
@@ -84,7 +91,17 @@ export const useSynchronizeFileUploader = ({
               fileName.toLocaleLowerCase()
           );
           if (sourceFile) {
-            storageFileIdToUpdate = sourceFile.storageFileId;
+            try {
+              const conflictOperation = await openConflictResolutionModal(
+                sourceFile
+              );
+              if (conflictOperation === "Update") {
+                storageFileIdToUpdate = sourceFile.storageFileId;
+              }
+            } catch (error) {
+              resetUploader();
+              return;
+            }
           }
         }
 
@@ -171,7 +188,7 @@ export const useSynchronizeFileUploader = ({
         setState("Error");
       }
     },
-    [accessToken, iModelId, projectId, urlPrefix]
+    [accessToken, iModelId, openConflictResolutionModal, projectId, urlPrefix]
   );
   const resetUploader = () => {
     setStep(0);
@@ -179,5 +196,13 @@ export const useSynchronizeFileUploader = ({
     setProgress(0);
     setState(undefined);
   };
-  return { uploadFiles, status, progress, state, step, resetUploader };
+  return {
+    uploadFiles,
+    status,
+    progress,
+    state,
+    step,
+    resetUploader,
+    conflictResolutionModalNode,
+  };
 };

@@ -54,10 +54,12 @@ export const useSynchronizationCards: UseIndividualState = (
     status,
     uploadFiles,
     resetUploader,
+    conflictResolutionModalNode,
   } = useSynchronizeFileUploader({
     accessToken: accessToken ?? "",
     iModelId: iModelId,
     projectId: projectId ?? "",
+    iModelName: iModel.displayName,
   });
 
   const { ref: inViewRef, inView } = useInView({ triggerOnce: true });
@@ -83,13 +85,19 @@ export const useSynchronizationCards: UseIndividualState = (
   }, [accessToken, connectionId, fetchSources, urlPrefix]);
 
   const lastRunId = lastRunResults?.id;
+  const lastRunState = lastRunResults?.state;
   const [preUploadRunId, setPreUploadRunId] = React.useState(lastRunId);
   React.useEffect(() => {
-    if (preUploadRunId !== lastRunId) {
+    if (
+      lastRunId &&
+      (preUploadRunId !== lastRunId ||
+        lastRunState !== ExecutionStateSynchronizationAPI.Completed) &&
+      state === "Success"
+    ) {
       resetUploader();
       setPreUploadRunId(lastRunId);
     }
-  }, [lastRunId, preUploadRunId, resetUploader]);
+  }, [lastRunId, lastRunState, preUploadRunId, resetUploader, state]);
 
   const [count, setCount] = React.useState<string | undefined>("--");
   React.useEffect(() => {
@@ -179,7 +187,6 @@ export const useSynchronizationCards: UseIndividualState = (
     }
   }, [
     count,
-    fetchSources,
     lastRunResults,
     progress,
     runConnection,
@@ -200,6 +207,11 @@ export const useSynchronizationCards: UseIndividualState = (
 
   return {
     tileProps: {
+      onMouseEnter: () => {
+        if (active) {
+          setActive(false);
+        }
+      },
       onDragOver: (e: any) => {
         e.stopPropagation();
         e.preventDefault();
@@ -243,10 +255,13 @@ export const useSynchronizationCards: UseIndividualState = (
       ),
       className: classnames("tile-with-status", active && "hollow-shell"),
       children: (
-        <div className={"tile-status"} ref={inViewRef}>
-          {connectionStatus}
-          {active && <TileDropTarget isDisabled={state === "Working"} />}
-        </div>
+        <>
+          <div className={"tile-status"} ref={inViewRef}>
+            {connectionStatus}
+            {active && <TileDropTarget isDisabled={state === "Working"} />}
+          </div>
+          {conflictResolutionModalNode}
+        </>
       ),
     },
   } as any;

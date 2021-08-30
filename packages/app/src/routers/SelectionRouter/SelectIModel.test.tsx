@@ -14,6 +14,8 @@ import React from "react";
 
 import SelectIModel from "./SelectIModel";
 
+jest.mock("byte-size", () => jest.fn(() => ""));
+
 it("should have tiles with 'View' option", () => {
   Object.defineProperty(window, "IntersectionObserver", {
     writable: true,
