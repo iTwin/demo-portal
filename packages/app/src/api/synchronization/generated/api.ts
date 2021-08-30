@@ -108,6 +108,19 @@ export interface AuthorizationInformationLinksSynchronizationAPI {
 /**
  *
  * @export
+ * @interface AuthorizationInformationResponseSynchronizationAPI
+ */
+export interface AuthorizationInformationResponseSynchronizationAPI {
+  /**
+   *
+   * @type {AuthorizationInformationSynchronizationAPI}
+   * @memberof AuthorizationInformationResponseSynchronizationAPI
+   */
+  authorizationInformation?: AuthorizationInformationSynchronizationAPI;
+}
+/**
+ *
+ * @export
  * @interface AuthorizationInformationSynchronizationAPI
  */
 export interface AuthorizationInformationSynchronizationAPI {
@@ -2208,7 +2221,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
     ): (
       fetch?: FetchAPI,
       basePath?: string
-    ) => Promise<AuthorizationInformationSynchronizationAPI> {
+    ) => Promise<AuthorizationInformationResponseSynchronizationAPI> {
       const localVarFetchArgs = DefaultApiFetchParamCreator(
         configuration
       ).getAuthorizationInformation(
