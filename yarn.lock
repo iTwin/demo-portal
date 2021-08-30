@@ -1375,9 +1375,9 @@
   integrity sha512-OmgCbtXXlNurCdV26EI4LmlpJHfwTpuikeemsrcGnbVMEgjSGdKEhNYzs2B7wLeQ357BTnt0lSS64R1TKTutTw==
 
 "@bentley/property-grid-react@^2.2.1":
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/@bentley/property-grid-react/-/property-grid-react-2.2.1.tgz#a515e4484a597690c24d6141e5dcd57582597c7b"
-  integrity sha512-Sfbz4+MJhQA9AYxz4yGwjDqOTVKePRITjqbtHovq33w9dPUaev5QtW7wIXwAWm9dQK8WHVtm40Gx3CuOZ7HAqg==
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/@bentley/property-grid-react/-/property-grid-react-2.2.2.tgz#9bda83e88cb9bfe2263c120e0d7045f7d97fe386"
+  integrity sha512-TfXFr3QMV9hLJBsYYTkOfSawfCpMFMLtVQ2PQ/M76Ez1fO6mLZyNwni2FTYEgefbiQ64ChC+2ml0QezVmwbSMA==
   dependencies:
     classnames "^2.3.1"
     i18next "^10.2.2"
