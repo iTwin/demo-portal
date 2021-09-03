@@ -793,7 +793,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Role"
+                  "$ref": "#/components/schemas/role-response"
                 },
                 "example": {
                   "role": {
@@ -1948,7 +1948,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Role"
+                  "$ref": "#/components/schemas/role-response"
                 },
                 "example": {
                   "role": {
@@ -2849,6 +2849,14 @@
           }
         }
       },
+      "role-response": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "$ref": "#/components/schemas/Role"
+          }
+        }
+      },
       "Role": {
         "type": "object",
         "properties": {
@@ -2856,7 +2864,7 @@
             "type": "string",
             "description": "The role id."
           },
-          "name": {
+          "displayName": {
             "type": "string",
             "description": "The display name for the role."
           },
@@ -2876,12 +2884,15 @@
       "Roles": {
         "type": "object",
         "properties": {
-          "value": {
+          "roles": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Role"
             },
             "description": "List of roles."
+          },
+          "_links": {
+            "$ref": "#/components/schemas/Links"
           }
         }
       },
