@@ -30,11 +30,17 @@
     width: 100%;
     margin-bottom: $iui-xl;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     margin-top: $iui-m;
 
-    > :first-child {
-      margin-right: $iui-m;
+    > div {
+      display: flex;
+      justify-content: center;
+
+      > :first-child {
+        margin-right: $iui-m;
+      }
     }
   }
 

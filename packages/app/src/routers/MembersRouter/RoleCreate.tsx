@@ -8,6 +8,7 @@ import { RouteComponentProps, useNavigate } from "@reach/router";
 import React from "react";
 
 import { CreateRole } from "./components/create-role/CreateRole";
+import "./RoleBase.scss";
 import { useRoleConfig } from "./useRoleConfig";
 
 interface CreateProps extends RouteComponentProps {
@@ -18,7 +19,7 @@ export const RoleCreate = ({ accessToken, projectId = "" }: CreateProps) => {
   const navigate = useNavigate();
   const goBack = () => navigate?.(-1);
   return (
-    <div className={"idp-scrolling-iac-dialog"}>
+    <div className={"idp-scrolling-role-base"}>
       <div className={"idp-content-margins"}>
         <CreateRole
           accessToken={accessToken}

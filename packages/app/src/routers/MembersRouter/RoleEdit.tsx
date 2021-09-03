@@ -10,6 +10,7 @@ import React from "react";
 import { RolesProjectsAPI } from "../../api/projects/generated";
 import { useApiData } from "../../api/useApiData";
 import { UpdateRole } from "./components/update-role/UpdateRole";
+import "./RoleBase.scss";
 import { useRoleConfig } from "./useRoleConfig";
 
 interface EditProps extends RouteComponentProps {
@@ -24,7 +25,7 @@ const useUpdateRoleLoadingStyler = (loading: boolean) => {
   React.useEffect(() => {
     ref.current
       ?.querySelectorAll(
-        ".iui-input[name=displayName], .iui-input[name=description]"
+        ".iui-input[name=displayName], .iui-input[name=description], .iui-checkbox .iui-label"
       )
       .forEach((element) =>
         element.classList[loading ? "add" : "remove"]("iui-skeleton")
@@ -61,9 +62,9 @@ export const RoleEdit = ({
     navigate?.(-1);
   }, [refreshData, navigate]);
 
-  const { ref } = useUpdateRoleLoadingStyler(!initialRole);
+  const { ref } = useUpdateRoleLoadingStyler(!roles);
   return (
-    <div ref={ref} className={"idp-scrolling-iac-dialog"}>
+    <div ref={ref} className={"idp-scrolling-role-base"}>
       <div className={"idp-content-margins"}>
         <UpdateRole
           key={initialRole.id}

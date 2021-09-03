@@ -44,6 +44,10 @@ export type BaseRoleProps = {
     displayNameString?: string;
     /** Role description property. */
     descriptionString?: string;
+    /** Role permissions property. */
+    permissionsString?: string;
+    /** Role unknown permissions list title */
+    unknownPermissionsString?: string;
     /** Confirm button string. */
     confirmButton?: string;
     /** Cancel button string. */
@@ -52,6 +56,8 @@ export type BaseRoleProps = {
     displayNameTooLong?: string;
     /** Error message when description is too long. */
     descriptionTooLong?: string;
+    /** Warning message when unkown roles are present */
+    unknownPermissionsWarning?: string;
   };
   /** If action is loading. */
   isLoading?: boolean;
@@ -88,6 +94,10 @@ export function BaseRolePage(props: BaseRoleProps) {
     cancelButton: "Cancel",
     displayNameTooLong: `The value exceeds allowed ${MAX_LENGTH} characters.`,
     descriptionTooLong: `The value exceeds allowed ${MAX_LENGTH} characters.`,
+    permissionsString: "Permissions",
+    unknownPermissionsString: "Unmanaged permissions",
+    unknownPermissionsWarning:
+      "This role contains permissions that are not managed by this demo portal, update to this role is not available.",
     ...stringsOverrides,
   };
 
@@ -190,7 +200,7 @@ export function BaseRolePage(props: BaseRoleProps) {
               autoComplete="off"
             />
             {permissionsOptions.length > 0 && (
-              <InputGroup label="Permissions">
+              <InputGroup label={updatedStrings.permissionsString}>
                 {permissionsOptions.map((option) => (
                   <Checkbox
                     label={option.permission}
@@ -204,13 +214,7 @@ export function BaseRolePage(props: BaseRoleProps) {
               </InputGroup>
             )}
             {unknownPermissions.length > 0 && (
-              <InputGroup
-                label="Unmanaged permissions"
-                message={
-                  "This role contains permissions that are not managed by this demo portal, update to this role is not available."
-                }
-                status={"warning"}
-              >
+              <InputGroup label={updatedStrings.unknownPermissionsString}>
                 {unknownPermissions.map((permission) => (
                   <Checkbox
                     status={"warning"}
@@ -227,20 +231,29 @@ export function BaseRolePage(props: BaseRoleProps) {
         </div>
       </div>
       <div className="button-bar">
-        <Button
-          styleType="cta"
-          disabled={
-            !isDataChanged() || !isDataValid() || isLoading || uiDisabled
-          }
-          onClick={() =>
-            onActionClick?.({
-              ...role,
-            })
-          }
-        >
-          {updatedStrings.confirmButton}
-        </Button>
-        <Button onClick={onClose}>{updatedStrings.cancelButton}</Button>
+        {uiDisabled && (
+          <LabeledInput
+            inputStyle={{ display: "none" }}
+            message={updatedStrings.unknownPermissionsWarning}
+            status={"warning"}
+          />
+        )}
+        <div>
+          <Button
+            styleType="cta"
+            disabled={
+              !isDataChanged() || !isDataValid() || isLoading || uiDisabled
+            }
+            onClick={() =>
+              onActionClick?.({
+                ...role,
+              })
+            }
+          >
+            {updatedStrings.confirmButton}
+          </Button>
+          <Button onClick={onClose}>{updatedStrings.cancelButton}</Button>
+        </div>
       </div>
       {isLoading && <OverlaySpinner />}
     </div>
