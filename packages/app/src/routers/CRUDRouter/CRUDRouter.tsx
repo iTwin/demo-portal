@@ -9,8 +9,8 @@ import React from "react";
 
 import { IModelCreate } from "./IModelCreate";
 import { IModelEdit } from "./IModelEdit";
-import { ProjectCreate } from "./ProjectCreate";
-import { ProjectEdit } from "./ProjectEdit";
+import { ITwinCreate } from "./ITwinCreate";
+import { ITwinEdit } from "./ITwinEdit";
 
 interface CRUDRouterProps extends RouteComponentProps {
   accessToken: string;
@@ -19,18 +19,15 @@ interface CRUDRouterProps extends RouteComponentProps {
 export const CRUDRouter = ({ accessToken }: CRUDRouterProps) => {
   return (
     <Router className={"full-height-container"}>
-      <ProjectCreate accessToken={accessToken} path="create-project" />
-      <ProjectEdit
-        accessToken={accessToken}
-        path="project/:projectId/edit-project"
-      />
+      <ITwinCreate accessToken={accessToken} path="create-itwin" />
+      <ITwinEdit accessToken={accessToken} path="itwin/:iTwinId/edit-itwin" />
       <IModelCreate
         accessToken={accessToken}
-        path="project/:projectId/create-imodel"
+        path="itwin/:iTwinId/create-imodel"
       />
       <IModelEdit
         accessToken={accessToken}
-        path="project/:projectId/imodel/:iModelId/edit-imodel"
+        path="itwin/:iTwinId/imodel/:iModelId/edit-imodel"
       />
     </Router>
   );

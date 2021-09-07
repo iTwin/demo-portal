@@ -18,7 +18,7 @@ export const useManageVersionsIModelAction = () => {
         icon: <SvgFlag />,
         onClick: (iModel: IModelFull) =>
           void navigate(
-            `/manage-versions/project/${iModel.projectId}/imodel/${iModel.id}`
+            `/manage-versions/itwin/${iModel.projectId}/imodel/${iModel.id}`
           ),
         children: "Manage versions",
       }),

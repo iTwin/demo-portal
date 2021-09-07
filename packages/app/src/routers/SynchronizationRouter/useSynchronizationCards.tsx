@@ -41,7 +41,7 @@ const getProgressStatus = (state = "") =>
  * use as useIndividualState parameter in IModelGrid
  */
 export const useSynchronizationCards: UseIndividualState = (
-  { id: iModelId, projectId, ...iModel },
+  { id: iModelId, projectId: iTwinId, ...iModel },
   { accessToken = "" }
 ) => {
   const [active, setActive] = React.useState(false);
@@ -58,7 +58,7 @@ export const useSynchronizationCards: UseIndividualState = (
   } = useSynchronizeFileUploader({
     accessToken: accessToken ?? "",
     iModelId: iModelId,
-    projectId: projectId ?? "",
+    iTwinId: iTwinId ?? "",
     iModelName: iModel.displayName,
   });
 

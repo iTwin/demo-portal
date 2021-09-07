@@ -38,7 +38,7 @@ const useThemeWatcher = () => {
 };
 export interface ViewProps extends RouteComponentProps {
   accessToken?: string;
-  projectId?: string;
+  iTwinId?: string;
   iModelId?: string;
   versionId?: string;
 }
@@ -60,7 +60,7 @@ const View = (props: ViewProps) => {
   return state || !props.versionId ? (
     <Viewer
       changeSetId={changesetId}
-      contextId={props.projectId ?? ""}
+      contextId={props.iTwinId ?? ""}
       iModelId={props.iModelId ?? ""}
       authConfig={{ oidcClient: AuthClient.client }}
       theme={theme}
@@ -82,9 +82,9 @@ export const ViewRouter = ({ accessToken }: ViewRouterProps) => {
         path="*"
         hideIModelActions={["view"]}
       />
-      <View path="project/:projectId/imodel/:iModelId" />
+      <View path="itwin/:iTwinId/imodel/:iModelId" />
       <View
-        path="project/:projectId/imodel/:iModelId/version/:versionId"
+        path="itwin/:iTwinId/imodel/:iModelId/version/:versionId"
         accessToken={accessToken}
       />
     </Router>

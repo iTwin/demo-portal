@@ -29,6 +29,7 @@ import "./SelectIModel.scss";
 
 type IModelRouteProps = RouteComponentProps<
   IModelGridProps & {
+    iTwinId?: string;
     hideActions?: (
       | "view"
       | "synchronize"
@@ -41,7 +42,7 @@ type IModelRouteProps = RouteComponentProps<
 
 const SelectIModel = ({
   accessToken = "",
-  projectId = "",
+  iTwinId = "",
   navigate,
   hideActions,
   ...rest
@@ -89,7 +90,7 @@ const SelectIModel = ({
   return (
     <div className="idp-scrolling-container select-imodel">
       <div className={"idp-content-margins"}>
-        <SelectIModelTitle accessToken={accessToken} projectId={projectId} />
+        <SelectIModelTitle accessToken={accessToken} iTwinId={iTwinId} />
         <ButtonGroup>{createIconButton}</ButtonGroup>
       </div>
       <div className="idp-scrolling-content">
@@ -97,7 +98,7 @@ const SelectIModel = ({
           useIndividualState={useSynchronizationCards}
           key={refreshKey}
           accessToken={accessToken}
-          projectId={projectId}
+          projectId={iTwinId}
           onThumbnailClick={(imodel) => {
             trackEvent("iModelClicked", { iModel: imodel.id });
             navigate?.(`imodel/${imodel.id}`);

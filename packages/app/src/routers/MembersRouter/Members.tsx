@@ -27,43 +27,43 @@ import "./Members.scss";
 
 interface MembersProps extends RouteComponentProps {
   accessToken: string;
-  projectId?: string;
+  iTwinId?: string;
 }
 type TeamMember = CreateTypeFromInterface<TeamMemberProjectsAPI>;
-export const Members = ({ accessToken, projectId, navigate }: MembersProps) => {
+export const Members = ({ accessToken, iTwinId, navigate }: MembersProps) => {
   const urlPrefix = useApiPrefix();
 
   const [users, setUsers] = React.useState<TeamMember[]>(skeletonRows);
   const [error, setError] = React.useState("");
   const fetchUsers = React.useCallback(async () => {
-    if (!projectId) {
+    if (!iTwinId) {
       return;
     }
     const client = new ProjectsClient(urlPrefix, accessToken);
     try {
-      const { members } = await client.getProjectUsers(projectId);
+      const { members } = await client.getProjectUsers(iTwinId);
       setUsers(members ?? []);
     } catch (error) {
       const errorResponse = error as Response;
       setError(await client.extractAPIErrorMessage(errorResponse));
     }
-  }, [accessToken, projectId, urlPrefix]);
+  }, [accessToken, iTwinId, urlPrefix]);
   React.useEffect(() => void fetchUsers(), [fetchUsers]);
 
   const [roles, setRoles] = React.useState<RoleProjectsAPI[]>(skeletonRows);
   const fetchRoles = React.useCallback(async () => {
-    if (!projectId) {
+    if (!iTwinId) {
       return;
     }
     const client = new ProjectsClient(urlPrefix, accessToken);
     try {
-      const { roles } = await client.getProjectRoles(projectId);
+      const { roles } = await client.getProjectRoles(iTwinId);
       setRoles(roles ?? []);
     } catch (error) {
       const errorResponse = error as Response;
       setError(await client.extractAPIErrorMessage(errorResponse));
     }
-  }, [accessToken, projectId, urlPrefix]);
+  }, [accessToken, iTwinId, urlPrefix]);
   React.useEffect(() => void fetchRoles(), [fetchRoles]);
 
   return (
@@ -74,7 +74,7 @@ export const Members = ({ accessToken, projectId, navigate }: MembersProps) => {
       <div className="idp-content-margins">
         <AddMemberInput
           accessToken={accessToken}
-          projectId={projectId}
+          iTwinId={iTwinId}
           onSuccess={fetchUsers}
         />
       </div>
@@ -121,7 +121,7 @@ export const Members = ({ accessToken, projectId, navigate }: MembersProps) => {
                     Cell: (props) => (
                       <EditMemberRoleCell
                         {...props}
-                        projectId={projectId ?? ""}
+                        iTwinId={iTwinId ?? ""}
                         accessToken={accessToken}
                         onDataUpdated={fetchUsers}
                         roles={roles}
@@ -138,7 +138,7 @@ export const Members = ({ accessToken, projectId, navigate }: MembersProps) => {
                       return (
                         <RemoveMemberCell
                           userId={props.value}
-                          projectId={projectId}
+                          iTwinId={iTwinId}
                           accessToken={accessToken}
                           onSuccess={fetchUsers}
                         />
@@ -148,11 +148,11 @@ export const Members = ({ accessToken, projectId, navigate }: MembersProps) => {
                 ],
               },
             ],
-            [accessToken, fetchUsers, navigate, projectId, roles]
+            [accessToken, fetchUsers, navigate, iTwinId, roles]
           )}
           emptyTableContent={
             error ||
-            "No team member, add one above! (Project Creator is never listed, unless added manually)"
+            "No team member, add one above! (iTwin Creator is never listed, unless added manually)"
           }
         />
       </div>

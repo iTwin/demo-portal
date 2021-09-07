@@ -14,7 +14,7 @@ import { useApiPrefix } from "../../api/useApiPrefix";
 import { useSynchronizeFileConflictResolver } from "./useSynchronizeFileConflictResolver";
 
 interface ConnectionFileUploaderOptions {
-  projectId: string;
+  iTwinId: string;
   iModelId: string;
   accessToken: string;
   iModelName?: string;
@@ -29,7 +29,7 @@ export const getAlertType = (state: string) =>
   ] ?? "informational");
 
 export const useSynchronizeFileUploader = ({
-  projectId,
+  iTwinId,
   iModelId,
   accessToken = "",
   iModelName,
@@ -108,7 +108,7 @@ export const useSynchronizeFileUploader = ({
         setStep(2);
         setStatus("Validating demo portal file share");
         const storage = new StorageClient(urlPrefix, accessToken);
-        const demoFolderId = await storage.getDemoFolderId(projectId, true);
+        const demoFolderId = await storage.getDemoFolderId(iTwinId, true);
         setStatus("Validating iModel file share");
         const iModelFolderId = await storage.getIModelFolderId(
           demoFolderId ?? "",
@@ -188,7 +188,7 @@ export const useSynchronizeFileUploader = ({
         setState("Error");
       }
     },
-    [accessToken, iModelId, openConflictResolutionModal, projectId, urlPrefix]
+    [accessToken, iModelId, openConflictResolutionModal, iTwinId, urlPrefix]
   );
   const resetUploader = () => {
     setStep(0);

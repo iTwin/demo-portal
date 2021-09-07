@@ -17,13 +17,13 @@ import "./IModelHeaderButton.scss";
 interface IModelHeaderButtonProps {
   accessToken?: string;
   iModelId?: string;
-  projectId?: string;
+  iTwinId?: string;
   section?: string;
 }
 export const IModelHeaderButton = ({
   iModelId,
   section,
-  projectId,
+  iTwinId,
   accessToken,
 }: IModelHeaderButtonProps) => {
   const navigate = useNavigate();
@@ -37,9 +37,9 @@ export const IModelHeaderButton = ({
   return (
     <HeaderButton
       key="iModel"
-      name={iModel ? iModel?.displayName : "Fetching iModel"}
+      name={iModel ? iModel?.displayName : "Fetching iModel..."}
       description={iModel?.description}
-      onClick={() => navigate(`/${section}/project/${projectId}`)}
+      onClick={() => navigate(`/${section}/itwin/${iTwinId}`)}
       className={classNames(!iModel && "iui-skeleton")}
       isActive={!!iModel?.displayName && section !== "view"}
       startIcon={

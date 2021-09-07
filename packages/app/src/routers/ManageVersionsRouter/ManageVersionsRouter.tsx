@@ -26,7 +26,7 @@ export const ManageVersionsRouter = ({
       />
       <ManageVersions
         accessToken={accessToken}
-        path="project/:projectId/imodel/:iModelId"
+        path="itwin/:iTwinId/imodel/:iModelId"
       />
     </Router>
   );

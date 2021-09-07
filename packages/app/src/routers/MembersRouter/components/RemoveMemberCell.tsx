@@ -13,27 +13,27 @@ import { useApiPrefix } from "../../../api/useApiPrefix";
 
 interface RemoveMemberCellProps {
   userId: string;
-  projectId: string | undefined;
+  iTwinId: string | undefined;
   accessToken: string;
   onSuccess(): Promise<void>;
 }
 
 export const RemoveMemberCell = ({
   userId,
-  projectId,
+  iTwinId,
   accessToken,
   onSuccess,
 }: RemoveMemberCellProps) => {
   const urlPrefix = useApiPrefix();
   const [working, setWorking] = React.useState(false);
   const removeUser = React.useCallback(async () => {
-    if (!projectId) {
+    if (!iTwinId) {
       return;
     }
     setWorking(true);
     const client = new ProjectsClient(urlPrefix, accessToken);
     try {
-      await client.removeProjectMember(projectId, userId);
+      await client.removeProjectMember(iTwinId, userId);
       await onSuccess();
     } catch (error) {
       toaster.negative(await client.extractAPIErrorMessage(error), {
@@ -41,7 +41,7 @@ export const RemoveMemberCell = ({
       });
     }
     setWorking(false);
-  }, [projectId, urlPrefix, accessToken, onSuccess, userId]);
+  }, [iTwinId, urlPrefix, accessToken, onSuccess, userId]);
   return (
     <IconButton
       styleType="borderless"

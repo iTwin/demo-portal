@@ -21,13 +21,13 @@ interface VersionHeaderButtonProps {
   versionId?: string;
   accessToken?: string;
   iModelId?: string;
-  projectId?: string;
+  iTwinId?: string;
   section?: string;
 }
 export const VersionHeaderButton = ({
   iModelId,
   section,
-  projectId,
+  iTwinId,
   accessToken,
   versionId,
 }: VersionHeaderButtonProps) => {
@@ -46,9 +46,9 @@ export const VersionHeaderButton = ({
   return section === "view" ? (
     <HeaderButton
       key="namedVersion"
-      name={namedVersion ? namedVersion?.displayName : "Fetching version"}
+      name={namedVersion ? namedVersion?.displayName : "Fetching version..."}
       onClick={() =>
-        navigate(`/manage-versions/project/${projectId}/imodel/${iModelId}`)
+        navigate(`/manage-versions/itwin/${iTwinId}/imodel/${iModelId}`)
       }
       className={classNames(!namedVersion && "iui-skeleton")}
       isActive={!!namedVersion?.displayName}

@@ -17,7 +17,6 @@ interface GetIModelResult {
 
 interface EditProps extends RouteComponentProps {
   accessToken: string;
-  projectId?: string;
   iModelId?: string;
 }
 

@@ -16,16 +16,16 @@ interface GetProjectResult {
 
 interface SelectIModelTitleProps {
   accessToken: string;
-  projectId: string;
+  iTwinId: string;
 }
 
 export const SelectIModelTitle = ({
   accessToken,
-  projectId,
+  iTwinId,
 }: SelectIModelTitleProps) => {
   const { results } = useApiData<GetProjectResult>({
     accessToken,
-    url: `https://api.bentley.com/projects/${projectId}`,
+    url: `https://api.bentley.com/projects/${iTwinId}`,
   });
 
   return (

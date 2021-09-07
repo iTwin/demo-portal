@@ -24,7 +24,7 @@ import "./EditMemberRoleCell.scss";
 
 export interface EditMemberRoleCellProps extends SkeletonCellProps {
   roles: RoleProjectsAPI[];
-  projectId: string;
+  iTwinId: string;
   accessToken: string;
   onDataUpdated(): Promise<void>;
   onError(errorString: string): void;
@@ -35,7 +35,7 @@ export const EditMemberRoleCell = (props: EditMemberRoleCellProps) => {
     value,
     row,
     roles,
-    projectId,
+    iTwinId,
     accessToken,
     onError,
     onDataUpdated,
@@ -58,9 +58,9 @@ export const EditMemberRoleCell = (props: EditMemberRoleCellProps) => {
     }
     const currentRoles: { [role: string]: boolean } = {};
     for (const role of propRoles) {
-      const projectRole = roles.find((r) => r.displayName === role);
-      if (projectRole?.id) {
-        currentRoles[projectRole.id] = true;
+      const iTwinRole = roles.find((r) => r.displayName === role);
+      if (iTwinRole?.id) {
+        currentRoles[iTwinRole.id] = true;
       } else {
         currentRoles[role] = true;
       }
@@ -93,7 +93,7 @@ export const EditMemberRoleCell = (props: EditMemberRoleCellProps) => {
   );
   const saveRoles = React.useCallback(
     async (close: () => void) => {
-      if (!projectId) {
+      if (!iTwinId) {
         close();
         return;
       }
@@ -109,7 +109,7 @@ export const EditMemberRoleCell = (props: EditMemberRoleCellProps) => {
             }
           }
         }
-        await client.updateProjectMemberRoles(projectId, userId, roleIds);
+        await client.updateProjectMemberRoles(iTwinId, userId, roleIds);
       } catch (error) {
         const errorResponse = error as Response;
         onError(await client.extractAPIErrorMessage(errorResponse));
@@ -118,15 +118,7 @@ export const EditMemberRoleCell = (props: EditMemberRoleCellProps) => {
       close();
       await onDataUpdated();
     },
-    [
-      accessToken,
-      onDataUpdated,
-      onError,
-      projectId,
-      urlPrefix,
-      userId,
-      userRoles,
-    ]
+    [accessToken, onDataUpdated, onError, iTwinId, urlPrefix, userId, userRoles]
   );
 
   return (
@@ -145,7 +137,6 @@ export const EditMemberRoleCell = (props: EditMemberRoleCellProps) => {
             ...roles.map(buildCheckbox),
             <MenuItem
               key={"saveRoles"}
-              //isSelected={true}
               icon={
                 working ? (
                   <ProgressRadial size={"small"} indeterminate={true} />

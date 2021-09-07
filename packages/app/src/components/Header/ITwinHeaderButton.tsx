@@ -11,45 +11,45 @@ import classNames from "classnames";
 import React from "react";
 
 import { useApiData } from "../../api/useApiData";
-import "./ProjectHeaderButton.scss";
+import "./ITwinHeaderButton.scss";
 
-interface ProjectHeaderButtonProps {
+interface ITwinHeaderButtonProps {
   accessToken?: string;
   isActive?: boolean;
-  projectId?: string;
+  iTwinId?: string;
   section?: string;
 }
-export const ProjectHeaderButton = ({
-  projectId,
+export const ITwinHeaderButton = ({
+  iTwinId,
   isActive,
   section,
   accessToken,
-}: ProjectHeaderButtonProps) => {
+}: ITwinHeaderButtonProps) => {
   const navigate = useNavigate();
   const {
-    results: { project },
+    results: { project: iTwin },
   } = useApiData<{ project: ProjectFull }>({
     accessToken,
-    url: `https://api.bentley.com/projects/${projectId}`,
+    url: `https://api.bentley.com/projects/${iTwinId}`,
   });
   const {
-    results: { projects },
+    results: { projects: iTwins },
   } = useApiData<{ projects: ProjectFull[] }>({
     accessToken,
     url: `https://api.bentley.com/projects/recents?$top=5`,
   });
-  const menuItemsObject = !!project?.displayName
+  const menuItemsObject = !!iTwin?.displayName
     ? {
         menuItems: (close: () => void) => [
-          ...(projects?.map((project) => (
+          ...(iTwins?.map((iTwin) => (
             <MenuItem
-              key={project.id}
+              key={iTwin.id}
               onClick={() => {
                 close();
-                void navigate(`/${section}/project/${project.id}`);
+                void navigate(`/${section}/itwin/${iTwin.id}`);
               }}
             >
-              {project.displayName}
+              {iTwin.displayName}
             </MenuItem>
           )) ?? []),
           <MenuItem
@@ -58,9 +58,9 @@ export const ProjectHeaderButton = ({
               close();
               void navigate(`/${section}`);
             }}
-            className={"select-other-project"}
+            className={"select-other-itwin"}
           >
-            All favorite projects...
+            All favorite iTwins...
           </MenuItem>,
           <MenuItem
             key={"recents"}
@@ -69,27 +69,27 @@ export const ProjectHeaderButton = ({
               void navigate(`/${section}?recents`);
             }}
           >
-            All recent projects...
+            All recent iTwins...
           </MenuItem>,
           <MenuItem
             key={"others"}
             onClick={() => {
               close();
-              void navigate(`/${section}?myprojects`);
+              void navigate(`/${section}?myitwins`);
             }}
           >
-            All my projects...
+            All my iTwins...
           </MenuItem>,
         ],
       }
     : {};
   return (
     <HeaderButton
-      key="project"
-      name={project ? project?.displayName : "Fetching projects"}
-      description={project?.projectNumber}
-      className={classNames(!project && "iui-skeleton")}
-      isActive={!!project?.displayName && isActive}
+      key="itwin"
+      name={iTwin ? iTwin?.displayName : "Fetching iTwins..."}
+      description={iTwin?.projectNumber}
+      className={classNames(!iTwin && "iui-skeleton")}
+      isActive={!!iTwin?.displayName && isActive}
       {...menuItemsObject}
     />
   );

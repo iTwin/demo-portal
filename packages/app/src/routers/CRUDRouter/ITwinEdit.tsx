@@ -12,17 +12,17 @@ import { useApiData } from "../../api/useApiData";
 import { useApiPrefix } from "../../api/useApiPrefix";
 import { UpdateProject } from "./components/update-project/UpdateProject";
 
-interface GetIModelResult {
+interface GetProjectResult {
   project?: ProjectFull;
 }
 
 interface EditProps extends RouteComponentProps {
   accessToken: string;
-  projectId?: string;
+  iTwinId?: string;
 }
 
 // Not safe, but works for now.
-const useUpdateProjectLoadingStyler = (loading: boolean) => {
+const useUpdateITwinLoadingStyler = (loading: boolean) => {
   const ref = React.useRef<HTMLDivElement>(null);
   React.useEffect(() => {
     ref.current
@@ -36,13 +36,13 @@ const useUpdateProjectLoadingStyler = (loading: boolean) => {
   return { ref };
 };
 
-export const ProjectEdit = ({ accessToken, projectId = "" }: EditProps) => {
+export const ITwinEdit = ({ accessToken, iTwinId = "" }: EditProps) => {
   const {
-    results: { project },
+    results: { project: iTwin },
     refreshData,
-  } = useApiData<GetIModelResult>({
+  } = useApiData<GetProjectResult>({
     accessToken,
-    url: `https://api.bentley.com/projects/${projectId}`,
+    url: `https://api.bentley.com/projects/${iTwinId}`,
   });
   const navigate = useNavigate();
   const goBack = () => navigate?.(-1);
@@ -51,22 +51,35 @@ export const ProjectEdit = ({ accessToken, projectId = "" }: EditProps) => {
     navigate?.(-1);
   }, [refreshData, navigate]);
 
-  const { ref } = useUpdateProjectLoadingStyler(!project);
+  const { ref } = useUpdateITwinLoadingStyler(!iTwin);
   const serverEnvironmentPrefix = useApiPrefix();
+  const stringsOverrides = React.useMemo(
+    () => ({
+      titleString: "Edit an iTwin",
+      projectNumberString: "Number",
+      successMessage: "iTwin updated successfully.",
+      errorMessage: "Could not update an iTwin. Please try again later.",
+      errorMessageProjectExists:
+        "iTwin with the same name or number already exists.",
+    }),
+    []
+  );
+
   return (
     <div ref={ref} className={"idp-scrolling-iac-dialog"}>
       <div className={"idp-content-margins"}>
         <UpdateProject
-          key={project?.id}
+          key={iTwin?.id}
           accessToken={accessToken}
-          projectId={projectId}
+          projectId={iTwinId}
           initialProject={{
-            displayName: project?.displayName ?? "",
-            projectNumber: project?.projectNumber ?? "",
+            displayName: iTwin?.displayName ?? "",
+            projectNumber: iTwin?.projectNumber ?? "",
           }}
           onClose={goBack}
           onSuccess={refreshAndGoBack}
           apiOverrides={{ serverEnvironmentPrefix }}
+          stringsOverrides={stringsOverrides}
         />
       </div>
     </div>

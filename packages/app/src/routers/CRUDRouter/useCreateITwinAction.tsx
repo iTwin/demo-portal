@@ -4,31 +4,29 @@
  *
  * This code is for demonstration purposes and should not be considered production ready.
  *--------------------------------------------------------------------------------------------*/
-import { ProjectFull } from "@itwin/imodel-browser-react";
-import { SvgEdit } from "@itwin/itwinui-icons-react";
+import { SvgAdd } from "@itwin/itwinui-icons-react";
+import { Button } from "@itwin/itwinui-react";
 import { NavigateFn } from "@reach/router";
 import React from "react";
 
-type EditProjectActionOptions = {
+export type CreateITwinActionOptions = {
   /**
    * Must be the "relative" navigate function, coming from route props.
    */
   navigate: NavigateFn | undefined;
 };
 
-export const useEditProjectAction = ({
+export const useCreateITwinAction = ({
   navigate,
-}: EditProjectActionOptions) => {
+}: CreateITwinActionOptions) => {
   return {
-    editAction: React.useMemo(
-      () => ({
-        key: "edit",
-        icon: <SvgEdit />,
-        onClick: (project: ProjectFull) =>
-          void navigate?.(`project/${project.id}/edit-project`),
-        children: "Edit project",
-      }),
-      [navigate]
+    createIconButton: (
+      <Button
+        onClick={() => void navigate?.(`create-itwin`)}
+        startIcon={<SvgAdd />}
+      >
+        New iTwin
+      </Button>
     ),
   };
 };

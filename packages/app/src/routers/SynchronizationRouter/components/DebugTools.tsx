@@ -17,11 +17,11 @@ import { useApiPrefix } from "../../../api/useApiPrefix";
 import "./DebugTools.scss";
 
 interface DebugToolsProps {
-  projectId: string;
+  iTwinId: string;
   iModelId: string;
 }
 
-export const DebugTools = ({ iModelId, projectId }: DebugToolsProps) => {
+export const DebugTools = ({ iModelId, iTwinId }: DebugToolsProps) => {
   const urlPrefix = useApiPrefix();
 
   return (
@@ -33,7 +33,7 @@ export const DebugTools = ({ iModelId, projectId }: DebugToolsProps) => {
           window.open(
             `https://${
               urlPrefix ? urlPrefix + "-" : ""
-            }connect-itwinbridgeportal.bentley.com/${projectId}/${iModelId}`,
+            }connect-itwinbridgeportal.bentley.com/${iTwinId}/${iModelId}`,
             "synchronizerportal"
           );
         }}
@@ -52,7 +52,7 @@ export const DebugTools = ({ iModelId, projectId }: DebugToolsProps) => {
           window.open(
             `https://${
               urlPrefix ? urlPrefix + "-" : ""
-            }connect-projectshareweb.bentley.com/${projectId}`,
+            }connect-projectshareweb.bentley.com/${iTwinId}`,
             "shareportal"
           );
         }}

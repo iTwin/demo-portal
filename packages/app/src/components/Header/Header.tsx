@@ -21,7 +21,7 @@ import { spreadIf } from "../../utils";
 import { useCommonPathPattern } from "../MainLayout/useCommonPathPattern";
 import { HeaderUserIcon } from "./HeaderUserIcon";
 import { IModelHeaderButton } from "./IModelHeaderButton";
-import { ProjectHeaderButton } from "./ProjectHeaderButton";
+import { ITwinHeaderButton } from "./ITwinHeaderButton";
 import { VersionHeaderButton } from "./VersionHeaderButton";
 
 interface HeaderProps {
@@ -51,17 +51,17 @@ const RoutedHeader = ({
     localStorage.setItem("THEME", theme);
   }, [theme]);
 
-  const { section, projectId, iModelId } = useCommonPathPattern();
+  const { section, iTwinId, iModelId } = useCommonPathPattern();
   const versionMatch = useMatch(
-    "/:section/project/:projectId/imodel/:iModelId/version/:versionId"
+    "/:section/itwin/:iTwinId/imodel/:iModelId/version/:versionId"
   );
 
   const slimMatch = [
-    !!useMatch("/view/project/:projectId/imodel/:iModelId"),
-    !!useMatch("/view/project/:projectId/imodel/:iModelId/version/:versionId"),
+    !!useMatch("/view/itwin/:iTwinId/imodel/:iModelId"),
+    !!useMatch("/view/itwin/:iTwinId/imodel/:iModelId/version/:versionId"),
   ].includes(true);
 
-  const showProjectButton = isAuthenticated && projectId;
+  const showITwinButton = isAuthenticated && iTwinId;
   const showIModelButton = isAuthenticated && iModelId && section !== "members";
   const showVersionButton = isAuthenticated && iModelId && section === "view";
 
@@ -77,10 +77,10 @@ const RoutedHeader = ({
         <HeaderBreadcrumbs
           items={[
             ...spreadIf(
-              showProjectButton && (
-                <ProjectHeaderButton
-                  key="project"
-                  projectId={projectId}
+              showITwinButton && (
+                <ITwinHeaderButton
+                  key="itwin"
+                  iTwinId={iTwinId}
                   section={section}
                   accessToken={accessToken?.toTokenString()}
                   isActive={!iModelId || section === "members"}
@@ -92,7 +92,7 @@ const RoutedHeader = ({
                 <IModelHeaderButton
                   key="iModel"
                   iModelId={iModelId}
-                  projectId={projectId}
+                  iTwinId={iTwinId}
                   accessToken={accessToken?.toTokenString()}
                   section={section}
                 />
@@ -103,7 +103,7 @@ const RoutedHeader = ({
                 <VersionHeaderButton
                   key="version"
                   iModelId={iModelId}
-                  projectId={projectId}
+                  iTwinId={iTwinId}
                   versionId={versionMatch?.versionId}
                   accessToken={accessToken?.toTokenString()}
                   section={section}
