@@ -7,23 +7,20 @@
 import { RouteComponentProps, Router } from "@reach/router";
 import React from "react";
 
-import { SelectionRouter } from "../SelectionRouter/SelectionRouter";
-import { Members } from "./Members";
-import { RolesRouter } from "./RolesRouter";
+import { RoleCreate } from "./RoleCreate";
+import { RoleEdit } from "./RoleEdit";
+import { Roles } from "./Roles";
 
-interface MembersRouterProps extends RouteComponentProps {
+interface RolesRouterProps extends RouteComponentProps {
   accessToken: string;
 }
 
-export const MembersRouter = ({ accessToken }: MembersRouterProps) => {
+export const RolesRouter = ({ accessToken }: RolesRouterProps) => {
   return (
     <Router className="full-height-container">
-      <SelectionRouter accessToken={accessToken} path="*" />
-      <Members accessToken={accessToken} path="/project/:projectId/*" />
-      <RolesRouter
-        accessToken={accessToken}
-        path="/project/:projectId/roles/*"
-      />
+      <Roles accessToken={accessToken} path="/" />
+      <RoleCreate accessToken={accessToken} path="/create" />
+      <RoleEdit accessToken={accessToken} path="/:roleId" />
     </Router>
   );
 };

@@ -9,7 +9,7 @@ import React, { PropsWithChildren } from "react";
 
 import "./SkeletonCell.scss";
 
-type SkeletonCellProps = PropsWithChildren<{
+export type SkeletonCellProps = PropsWithChildren<{
   value: any;
   row: {
     original: any;

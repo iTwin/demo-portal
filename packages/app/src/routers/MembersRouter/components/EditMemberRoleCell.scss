@@ -1,0 +1,18 @@
+/*---------------------------------------------------------------------------------------------
+ * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
+ * See LICENSE.md in the project root for license terms and full copyright notice.
+ *
+ * This code is for demonstration purposes and should not be considered production ready.
+ *--------------------------------------------------------------------------------------------*/
+.edit-member-role-cell {
+  cursor: pointer;
+  display: flex;
+  gap: 5px;
+  width: 100%;
+
+  > svg {
+    width: 16px;
+    fill: currentcolor;
+    flex-shrink: 0;
+  }
+}

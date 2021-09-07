@@ -12,6 +12,8 @@ import {
   ProjectRolesApi,
   ProjectsApi,
   ProjectUsersApi,
+  RoleCreateProjectsAPI,
+  RoleUpdateProjectsAPI,
   TeamMemberAddByNamesProjectsAPI,
 } from "./generated";
 
@@ -29,6 +31,66 @@ export class ProjectsClient {
     this.rolesApi = new ProjectRolesApi(undefined, baseUrl);
     this.usersApi = new ProjectUsersApi(undefined, baseUrl);
     this.projectsApi = new ProjectsApi(undefined, baseUrl);
+  }
+
+  /**
+   * See {@link ProjectRolesApi.createProjectRole} for details.
+   * @param projectId
+   * @param role
+   * @returns
+   */
+  async createProjectRole(projectId: string, role: RoleCreateProjectsAPI) {
+    return this.rolesApi.createProjectRole(
+      projectId,
+      this.accessToken,
+      role,
+      ACCEPT
+    );
+  }
+
+  /**
+   * See {@link ProjectRolesApi.updateProjectRole} for details.
+   * @param projectId
+   * @param roleId
+   * @param role
+   * @returns
+   */
+  async updateProjectRole(
+    projectId: string,
+    roleId: string,
+    role: RoleUpdateProjectsAPI
+  ) {
+    return this.rolesApi.updateProjectRole(
+      projectId,
+      roleId,
+      this.accessToken,
+      role,
+      ACCEPT
+    );
+  }
+
+  /**
+   * See {@link ProjectRolesApi.getProjectRoles} for details.
+   * @param projectId
+   * @returns
+   */
+  async getProjectRoles(projectId: string) {
+    return this.rolesApi.getProjectRoles(projectId, this.accessToken, ACCEPT);
+  }
+
+  /**
+   * See {@link ProjectRolesApi.deleteProjectRole} for details.
+   * @param projectId
+   * @param roleId
+   * @returns
+   */
+  async deleteProjectRole(projectId: string, roleId: string) {
+    return this.rolesApi.deleteProjectRole(
+      projectId,
+      roleId,
+      this.accessToken,
+      ACCEPT
+    );
   }
 
   /**
@@ -77,6 +139,27 @@ export class ProjectsClient {
       projectId,
       memberId,
       this.accessToken,
+      ACCEPT
+    );
+  }
+
+  /**
+   * See {@link ProjectUsersApi.updateProjectTeamMemberRoles} for details
+   * @param projectId
+   * @param memberId
+   * @param roleIds
+   * @returns
+   */
+  async updateProjectMemberRoles(
+    projectId: string,
+    memberId: string,
+    roleIds: string[]
+  ) {
+    return this.usersApi.updateProjectTeamMemberRoles(
+      projectId,
+      memberId,
+      this.accessToken,
+      { roleIds },
       ACCEPT
     );
   }

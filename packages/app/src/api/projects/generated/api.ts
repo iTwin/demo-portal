@@ -482,7 +482,7 @@ export interface RoleProjectsAPI {
    * @type {string}
    * @memberof RoleProjectsAPI
    */
-  name?: string;
+  displayName?: string;
   /**
    * The description for the role.
    * @type {string}
@@ -495,6 +495,19 @@ export interface RoleProjectsAPI {
    * @memberof RoleProjectsAPI
    */
   permissions?: Array<string>;
+}
+/**
+ *
+ * @export
+ * @interface RoleResponseProjectsAPI
+ */
+export interface RoleResponseProjectsAPI {
+  /**
+   *
+   * @type {RoleProjectsAPI}
+   * @memberof RoleResponseProjectsAPI
+   */
+  role?: RoleProjectsAPI;
 }
 /**
  *
@@ -532,7 +545,13 @@ export interface RolesProjectsAPI {
    * @type {Array<RoleProjectsAPI>}
    * @memberof RolesProjectsAPI
    */
-  value?: Array<RoleProjectsAPI>;
+  roles?: Array<RoleProjectsAPI>;
+  /**
+   *
+   * @type {LinksProjectsAPI}
+   * @memberof RolesProjectsAPI
+   */
+  _links?: LinksProjectsAPI;
 }
 /**
  *
@@ -2018,7 +2037,10 @@ export const ProjectRolesApiFp = function(configuration?: Configuration) {
       body?: RoleCreateProjectsAPI,
       Accept?: string,
       options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<RoleProjectsAPI> {
+    ): (
+      fetch?: FetchAPI,
+      basePath?: string
+    ) => Promise<RoleResponseProjectsAPI> {
       const localVarFetchArgs = ProjectRolesApiFetchParamCreator(
         configuration
       ).createProjectRole(id, Authorization, body, Accept, options);
@@ -2126,7 +2148,10 @@ export const ProjectRolesApiFp = function(configuration?: Configuration) {
       body?: RoleUpdateProjectsAPI,
       Accept?: string,
       options?: any
-    ): (fetch?: FetchAPI, basePath?: string) => Promise<RoleProjectsAPI> {
+    ): (
+      fetch?: FetchAPI,
+      basePath?: string
+    ) => Promise<RoleResponseProjectsAPI> {
       const localVarFetchArgs = ProjectRolesApiFetchParamCreator(
         configuration
       ).updateProjectRole(id, roleId, Authorization, body, Accept, options);

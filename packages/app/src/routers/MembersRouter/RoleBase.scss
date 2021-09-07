@@ -1,0 +1,33 @@
+/*---------------------------------------------------------------------------------------------
+ * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
+ * See LICENSE.md in the project root for license terms and full copyright notice.
+ *
+ * This code is for demonstration purposes and should not be considered production ready.
+ *--------------------------------------------------------------------------------------------*/
+.idp-scrolling-role-base {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  max-height: 100%;
+
+  > div {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+
+    > .idp-role-base {
+      overflow: hidden;
+      padding: 0;
+
+      > div:first-child {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+
+        > div:nth-child(2) {
+          overflow: scroll;
+        }
+      }
+    }
+  }
+}

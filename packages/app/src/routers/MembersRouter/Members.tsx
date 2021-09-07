@@ -4,11 +4,15 @@
  *
  * This code is for demonstration purposes and should not be considered production ready.
  *--------------------------------------------------------------------------------------------*/
-import { Table, Title } from "@itwin/itwinui-react";
+import { SvgEdit } from "@itwin/itwinui-icons-react";
+import { IconButton, Table, Title } from "@itwin/itwinui-react";
 import { RouteComponentProps } from "@reach/router";
 import React from "react";
 
-import { TeamMemberProjectsAPI } from "../../api/projects/generated";
+import {
+  RoleProjectsAPI,
+  TeamMemberProjectsAPI,
+} from "../../api/projects/generated";
 import { ProjectsClient } from "../../api/projects/projectsClient";
 import { useApiPrefix } from "../../api/useApiPrefix";
 import { CreateTypeFromInterface } from "../../utils";
@@ -17,6 +21,7 @@ import {
   skeletonRows,
 } from "../SynchronizationRouter/components/SkeletonCell";
 import { AddMemberInput } from "./components/AddMemberInput";
+import { EditMemberRoleCell } from "./components/EditMemberRoleCell";
 import { RemoveMemberCell } from "./components/RemoveMemberCell";
 import "./Members.scss";
 
@@ -25,7 +30,7 @@ interface MembersProps extends RouteComponentProps {
   projectId?: string;
 }
 type TeamMember = CreateTypeFromInterface<TeamMemberProjectsAPI>;
-export const Members = ({ accessToken, projectId }: MembersProps) => {
+export const Members = ({ accessToken, projectId, navigate }: MembersProps) => {
   const urlPrefix = useApiPrefix();
 
   const [users, setUsers] = React.useState<TeamMember[]>(skeletonRows);
@@ -39,10 +44,27 @@ export const Members = ({ accessToken, projectId }: MembersProps) => {
       const { members } = await client.getProjectUsers(projectId);
       setUsers(members ?? []);
     } catch (error) {
-      setError(await client.extractAPIErrorMessage(error));
+      const errorResponse = error as Response;
+      setError(await client.extractAPIErrorMessage(errorResponse));
     }
   }, [accessToken, projectId, urlPrefix]);
   React.useEffect(() => void fetchUsers(), [fetchUsers]);
+
+  const [roles, setRoles] = React.useState<RoleProjectsAPI[]>(skeletonRows);
+  const fetchRoles = React.useCallback(async () => {
+    if (!projectId) {
+      return;
+    }
+    const client = new ProjectsClient(urlPrefix, accessToken);
+    try {
+      const { roles } = await client.getProjectRoles(projectId);
+      setRoles(roles ?? []);
+    } catch (error) {
+      const errorResponse = error as Response;
+      setError(await client.extractAPIErrorMessage(errorResponse));
+    }
+  }, [accessToken, projectId, urlPrefix]);
+  React.useEffect(() => void fetchRoles(), [fetchRoles]);
 
   return (
     <div className="idp-scrolling-container members-management">
@@ -82,7 +104,31 @@ export const Members = ({ accessToken, projectId }: MembersProps) => {
                     Cell: SkeletonCell,
                     Header: "Organization",
                   },
-                  { accessor: "roles", Cell: SkeletonCell, Header: "Roles" },
+                  {
+                    accessor: "roles",
+                    Header: (
+                      <div>
+                        Roles{" "}
+                        <IconButton
+                          title={"Manage roles"}
+                          styleType={"borderless"}
+                          onClick={() => navigate?.("roles")}
+                        >
+                          <SvgEdit />
+                        </IconButton>
+                      </div>
+                    ),
+                    Cell: (props) => (
+                      <EditMemberRoleCell
+                        {...props}
+                        projectId={projectId ?? ""}
+                        accessToken={accessToken}
+                        onDataUpdated={fetchUsers}
+                        roles={roles}
+                        onError={setError}
+                      />
+                    ),
+                  },
                   {
                     id: "actions",
                     accessor: "userId",
@@ -102,7 +148,7 @@ export const Members = ({ accessToken, projectId }: MembersProps) => {
                 ],
               },
             ],
-            [accessToken, fetchUsers, projectId]
+            [accessToken, fetchUsers, navigate, projectId, roles]
           )}
           emptyTableContent={
             error ||
