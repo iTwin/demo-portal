@@ -20,11 +20,11 @@ export const Sidebar = (props: RouteComponentProps) => {
 };
 
 export const RoutedSidebar = ({ navigate }: RouteComponentProps) => {
-  const { section, projectId, iModelId } = useCommonPathPattern();
+  const { section, iTwinId, iModelId } = useCommonPathPattern();
 
-  const projectPath = projectId ? `/project/${projectId}` : "";
+  const iTwinPath = iTwinId ? `/itwin/${iTwinId}` : "";
   const iModelPath = iModelId ? `/imodel/${iModelId}` : "";
-  const selectionPath = `${projectPath}${iModelPath}`;
+  const selectionPath = `${iTwinPath}${iModelPath}`;
 
   return (
     <SideNavigation

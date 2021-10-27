@@ -9,7 +9,7 @@ import React, { ComponentPropsWithoutRef } from "react";
 
 import { CRUDRouter } from "../CRUDRouter/CRUDRouter";
 import SelectIModel from "./SelectIModel";
-import SelectProject from "./SelectProject";
+import SelectITwin from "./SelectITwin";
 
 interface SelectionRouterProps extends RouteComponentProps {
   accessToken: string;
@@ -24,16 +24,16 @@ export const SelectionRouter = ({
 }: SelectionRouterProps) => {
   return (
     <Router className={"full-height-container"}>
-      <SelectProject accessToken={accessToken} path="/" />
-      <Redirect from={"project"} to={"../"} noThrow={true} />
+      <SelectITwin accessToken={accessToken} path="/" />
+      <Redirect from={"itwin"} to={"../"} noThrow={true} />
       <SelectIModel
         accessToken={accessToken}
-        path="project/:projectId"
+        path="itwin/:iTwinId"
         hideActions={hideIModelActions}
       />
       <Redirect
-        from={"project/:projectId/imodel"}
-        to={"../../../project/:projectId/"}
+        from={"itwin/:iTwinId/imodel"}
+        to={"../../../itwin/:iTwinId/"}
         noThrow={true}
       />
       <CRUDRouter accessToken={accessToken} path="*" />

@@ -21,13 +21,13 @@ export const LastRunContext = React.createContext<
   RunSynchronizationAPI | undefined
 >(undefined);
 export interface SynchronizeProps extends RouteComponentProps {
-  projectId?: string;
+  iTwinId?: string;
   iModelId?: string;
   accessToken: string;
 }
 export const Synchronize = ({
   iModelId = "",
-  projectId = "",
+  iTwinId = "",
   accessToken,
 }: SynchronizeProps) => {
   const {
@@ -59,11 +59,11 @@ export const Synchronize = ({
           }}
         >
           <Title>Synchronize</Title>
-          <DebugTools iModelId={iModelId} projectId={projectId} />
+          <DebugTools iModelId={iModelId} iTwinId={iTwinId} />
         </div>
         <UploadPanel
           iModelId={iModelId}
-          projectId={projectId}
+          iTwinId={iTwinId}
           accessToken={accessToken}
           onSuccess={fetchSources}
         />

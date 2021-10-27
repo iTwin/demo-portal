@@ -17,9 +17,7 @@ export const useViewIModelAction = () => {
         key: "view",
         icon: <Svg3D />,
         onClick: (iModel: IModelFull) =>
-          void navigate(
-            `/view/project/${iModel.projectId}/imodel/${iModel.id}`
-          ),
+          void navigate(`/view/itwin/${iModel.projectId}/imodel/${iModel.id}`),
         children: "View",
       }),
       [navigate]

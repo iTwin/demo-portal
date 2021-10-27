@@ -4,23 +4,21 @@
  *
  * This code is for demonstration purposes and should not be considered production ready.
  *--------------------------------------------------------------------------------------------*/
-import { IModelFull } from "@itwin/create-imodel-react";
-import { SvgSync } from "@itwin/itwinui-icons-react";
+import { ProjectFull } from "@itwin/imodel-browser-react";
+import { SvgUsers } from "@itwin/itwinui-icons-react";
 import { useNavigate } from "@reach/router";
 import React from "react";
 
-export const useSynchronizeIModelAction = () => {
+export const useMembersITwinAction = () => {
   const navigate = useNavigate();
   return {
-    synchronizeAction: React.useMemo(
+    membersAction: React.useMemo(
       () => ({
-        key: "synchronize",
-        icon: <SvgSync />,
-        onClick: (iModel: IModelFull) =>
-          void navigate(
-            `/synchronize/itwin/${iModel.projectId}/imodel/${iModel.id}`
-          ),
-        children: "Synchronize",
+        key: "members",
+        icon: <SvgUsers />,
+        onClick: (iTwin: ProjectFull) =>
+          void navigate(`/members/itwin/${iTwin.id}`),
+        children: "Manage team members",
       }),
       [navigate]
     ),

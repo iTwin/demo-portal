@@ -26,7 +26,7 @@ export const SynchronizationRouter = ({
       />
       <Synchronize
         accessToken={accessToken}
-        path="project/:projectId/imodel/:iModelId"
+        path="itwin/:iTwinId/imodel/:iModelId"
       />
     </Router>
   );

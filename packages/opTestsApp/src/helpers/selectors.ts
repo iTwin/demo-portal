@@ -45,7 +45,7 @@ export interface HomeSelectors {
 
 export const Home: HomeSelectors = {
   icon: "css=.iui-header-logo",
-  Portal: "text='My projects'",
+  Portal: "text='My iTwins'",
   Card: {
     grid: "css=[class*=iac-grid-structure]",
     thumbnail: "css=.iui-thumbnail",

@@ -30,62 +30,63 @@ import React, { useState } from "react";
 import { useApiPrefix } from "../../api/useApiPrefix";
 import { ai, trackEvent } from "../../services/telemetry";
 import { useCreateIModelAction } from "../CRUDRouter/useCreateIModelAction";
-import { useCreateProjectAction } from "../CRUDRouter/useCreateProjectAction";
-import { useDeleteProjectAction } from "../CRUDRouter/useDeleteProjectAction";
-import { useEditProjectAction } from "../CRUDRouter/useEditProjectAction";
-import { useMembersProjectAction } from "../MembersRouter/useMembersProjectAction";
-import "./SelectProject.scss";
+import { useCreateITwinAction } from "../CRUDRouter/useCreateITwinAction";
+import { useDeleteITwinAction } from "../CRUDRouter/useDeleteITwinAction";
+import { useEditITwinAction } from "../CRUDRouter/useEditITwinAction";
+import { useMembersITwinAction } from "../MembersRouter/useMembersITwinAction";
+import "./SelectITwin.scss";
 
-export interface SelectProjectProps
+export interface SelectITwinProps
   extends RouteComponentProps<ProjectGridProps> {
+  iTwinId?: string;
   accessToken: string;
 }
 
-const PROJECT_TYPE_MAP = ["", "?recents", "?myprojects"];
+const ITWIN_TYPE_MAP = ["", "?recents", "?myitwins"];
 
 const tabsWithIcons = [
   <HorizontalTab
     key="favorite"
-    label="Favorite projects"
+    label="Favorite iTwins"
     startIcon={<SvgStarHollow />}
   />,
   <HorizontalTab
     key="recents"
-    label="Recent projects"
+    label="Recent iTwins"
     startIcon={<SvgCalendar />}
   />,
-  <HorizontalTab key="all" label="My projects" startIcon={<SvgList />} />,
+  <HorizontalTab key="all" label="My iTwins" startIcon={<SvgList />} />,
 ];
 
-const SelectProject = ({
+const SelectITwin = ({
   accessToken,
   navigate,
   ...gridProps
-}: SelectProjectProps) => {
+}: SelectITwinProps) => {
   const location = useLocation();
 
-  const [projectType, setProjectType] = useState(() =>
-    PROJECT_TYPE_MAP.includes(location.search)
-      ? PROJECT_TYPE_MAP.indexOf(location.search)
+  const [iTwinType, setITwinType] = useState(() =>
+    ITWIN_TYPE_MAP.includes(location.search)
+      ? ITWIN_TYPE_MAP.indexOf(location.search)
       : 0
   );
   React.useEffect(() => {
-    const search = PROJECT_TYPE_MAP[projectType];
+    const search = ITWIN_TYPE_MAP[iTwinType];
     if (location.search !== search) {
       void navigate?.(`./${search}`, {
         replace: true,
       });
     }
-  }, [location.search, navigate, projectType]);
+  }, [location.search, navigate, iTwinType]);
   const { createAction } = useCreateIModelAction({ navigate });
-  const { createIconButton } = useCreateProjectAction({ navigate });
-  const { editAction } = useEditProjectAction({ navigate });
-  const { deleteDialog, deleteAction, refreshKey } = useDeleteProjectAction({
+  const { createIconButton } = useCreateITwinAction({ navigate });
+  const { editAction } = useEditITwinAction({ navigate });
+  const { deleteDialog, deleteAction, refreshKey } = useDeleteITwinAction({
     accessToken,
   });
-  const { membersAction } = useMembersProjectAction();
+  const { membersAction } = useMembersITwinAction();
 
-  const projectActions = React.useMemo(() => {
+  const iTwinActions = React.useMemo(() => {
     return [createAction, editAction, membersAction, deleteAction];
   }, [createAction, editAction, membersAction, deleteAction]);
 
@@ -100,13 +101,17 @@ const SelectProject = ({
     () => ({ serverEnvironmentPrefix }),
     [serverEnvironmentPrefix]
   );
+  const stringsOverrides = React.useMemo(
+    () => ({ noProjects: "No iTwins found." }),
+    []
+  );
   return (
     <>
-      <div className="idp-scrolling-container select-project">
+      <div className="idp-scrolling-container select-itwin">
         <HorizontalTabs
           labels={tabsWithIcons}
-          onTabSelected={setProjectType}
-          activeIndex={projectType}
+          onTabSelected={setITwinType}
+          activeIndex={iTwinType}
           type={"borderless"}
           contentClassName="grid-holding-tab"
           tabsClassName="grid-holding-tabs"
@@ -144,21 +149,17 @@ const SelectProject = ({
             <ProjectGrid
               accessToken={accessToken}
               requestType={
-                projectType === 0
-                  ? "favorites"
-                  : projectType === 1
-                  ? "recents"
-                  : ""
+                iTwinType === 0 ? "favorites" : iTwinType === 1 ? "recents" : ""
               }
-              onThumbnailClick={(project) => {
-                trackEvent("ProjectClicked", { project: project.id });
-                navigate?.(`project/${project.id}`);
+              onThumbnailClick={(iTwin) => {
+                trackEvent("iTwinClicked", { iTwin: iTwin.id });
+                navigate?.(`itwin/${iTwin.id}`);
               }}
               filterOptions={searchParam}
-              projectActions={projectActions}
+              projectActions={iTwinActions}
               apiOverrides={apiOverrides}
               key={refreshKey}
-              stringsOverrides={{ noIModels: "No projects found" } as any}
+              stringsOverrides={stringsOverrides}
               {...gridProps}
             />
           </div>
@@ -171,7 +172,7 @@ const SelectProject = ({
 
 export default withAITracking(
   ai.reactPlugin,
-  SelectProject,
-  "SelectProject",
+  SelectITwin,
+  "SelectITwin",
   "full-height-container"
 );

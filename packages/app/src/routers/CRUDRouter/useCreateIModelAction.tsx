@@ -25,8 +25,8 @@ export const useCreateIModelAction = ({
       () => ({
         key: "create",
         icon: <SvgImodel />,
-        onClick: (project: ProjectFull) =>
-          void navigate?.(`project/${project.id}/create-imodel`),
+        onClick: (itwin: ProjectFull) =>
+          void navigate?.(`itwin/${itwin.id}/create-imodel`),
         children: "New iModel",
       }),
       [navigate]

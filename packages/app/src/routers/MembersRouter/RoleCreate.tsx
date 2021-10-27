@@ -13,9 +13,9 @@ import { useRoleConfig } from "./useRoleConfig";
 
 interface CreateProps extends RouteComponentProps {
   accessToken: string;
-  projectId?: string;
+  iTwinId?: string;
 }
-export const RoleCreate = ({ accessToken, projectId = "" }: CreateProps) => {
+export const RoleCreate = ({ accessToken, iTwinId = "" }: CreateProps) => {
   const navigate = useNavigate();
   const goBack = () => navigate?.(-1);
   return (
@@ -23,7 +23,7 @@ export const RoleCreate = ({ accessToken, projectId = "" }: CreateProps) => {
       <div className={"idp-content-margins"}>
         <CreateRole
           accessToken={accessToken}
-          projectId={projectId}
+          projectId={iTwinId}
           onClose={goBack}
           onSuccess={goBack}
           {...useRoleConfig()}

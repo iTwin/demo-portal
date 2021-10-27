@@ -5,20 +5,26 @@
  * This code is for demonstration purposes and should not be considered production ready.
  *--------------------------------------------------------------------------------------------*/
 import { ProjectFull } from "@itwin/imodel-browser-react";
-import { SvgUsers } from "@itwin/itwinui-icons-react";
-import { useNavigate } from "@reach/router";
+import { SvgEdit } from "@itwin/itwinui-icons-react";
+import { NavigateFn } from "@reach/router";
 import React from "react";
 
-export const useMembersProjectAction = () => {
-  const navigate = useNavigate();
+type EditITwinActionOptions = {
+  /**
+   * Must be the "relative" navigate function, coming from route props.
+   */
+  navigate: NavigateFn | undefined;
+};
+
+export const useEditITwinAction = ({ navigate }: EditITwinActionOptions) => {
   return {
-    membersAction: React.useMemo(
+    editAction: React.useMemo(
       () => ({
-        key: "members",
-        icon: <SvgUsers />,
-        onClick: (project: ProjectFull) =>
-          void navigate(`/members/project/${project.id}`),
-        children: "Manage team members",
+        key: "edit",
+        icon: <SvgEdit />,
+        onClick: (iTwin: ProjectFull) =>
+          void navigate?.(`itwin/${iTwin.id}/edit-itwin`),
+        children: "Edit iTwin",
       }),
       [navigate]
     ),

@@ -15,7 +15,7 @@ describe("Portal", () => {
     expect(await page.title()).toBe("iTwin Demo Portal");
   });
 
-  it("displays project and imodel cards and renders the viewer when the imodel card is clicked", async () => {
+  it("displays itwin and imodel cards and renders the viewer when the imodel card is clicked", async () => {
     try {
       await page.goto(`${SiteUrl}/view`);
       await page.waitForSelector(Home.Card.grid);

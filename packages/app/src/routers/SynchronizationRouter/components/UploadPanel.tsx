@@ -19,7 +19,7 @@ import "./UploadPanel.scss";
 
 interface UploadPanelProps {
   iModelId: string;
-  projectId: string;
+  iTwinId: string;
   accessToken: string;
   onSuccess?: () => void;
 }
@@ -34,7 +34,7 @@ const getAlertType = (state: string) =>
 
 export const UploadPanel = ({
   iModelId,
-  projectId,
+  iTwinId,
   accessToken,
   onSuccess,
 }: UploadPanelProps) => {
@@ -48,7 +48,7 @@ export const UploadPanel = ({
     conflictResolutionModalNode,
   } = useSynchronizeFileUploader({
     iModelId,
-    projectId,
+    iTwinId: iTwinId,
     accessToken,
   });
 
@@ -79,13 +79,13 @@ export const UploadPanel = ({
               "Validate that we have everything that we need and that a connection for this file name does not already exists for the iModel.",
           },
           {
-            name: "Validating file share",
+            name: "Validating storage",
             description:
-              "Validate that we can upload the file to the share service so it can be processed properly by the synchronization service.",
+              "Validate that we can upload the file to the storage service so it can be processed properly by the synchronization service.",
           },
           {
             name: "Uploading file",
-            description: "Upload the file to the project share service.",
+            description: "Upload the file to the storage service.",
           },
           {
             name: "Creating connection",

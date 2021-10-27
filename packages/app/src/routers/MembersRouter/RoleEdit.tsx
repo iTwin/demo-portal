@@ -15,7 +15,7 @@ import { useRoleConfig } from "./useRoleConfig";
 
 interface EditProps extends RouteComponentProps {
   accessToken: string;
-  projectId?: string;
+  iTwinId?: string;
   roleId?: string;
 }
 
@@ -36,7 +36,7 @@ const useUpdateRoleLoadingStyler = (loading: boolean) => {
 
 export const RoleEdit = ({
   accessToken,
-  projectId = "",
+  iTwinId = "",
   roleId = "",
 }: EditProps) => {
   const {
@@ -44,7 +44,7 @@ export const RoleEdit = ({
     refreshData,
   } = useApiData<RolesProjectsAPI>({
     accessToken,
-    url: `https://api.bentley.com/projects/${projectId}/roles`,
+    url: `https://api.bentley.com/projects/${iTwinId}/roles`,
   });
   const initialRole = React.useMemo(() => {
     const role = roles?.find((role) => role.id === roleId);
@@ -69,7 +69,7 @@ export const RoleEdit = ({
         <UpdateRole
           key={initialRole.id}
           accessToken={accessToken}
-          projectId={projectId}
+          projectId={iTwinId}
           roleId={roleId}
           initialRole={initialRole}
           onClose={goBack}

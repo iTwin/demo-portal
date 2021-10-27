@@ -12,13 +12,13 @@ import { ProjectsClient } from "../../../api/projects/projectsClient";
 import { useApiPrefix } from "../../../api/useApiPrefix";
 
 interface AddMemberInputProps {
-  projectId: string | undefined;
+  iTwinId: string | undefined;
   accessToken: string;
   onSuccess(): Promise<void>;
 }
 
 export const AddMemberInput = ({
-  projectId,
+  iTwinId,
   accessToken,
   onSuccess,
 }: AddMemberInputProps) => {
@@ -30,7 +30,7 @@ export const AddMemberInput = ({
   const [email, setEmail] = React.useState("");
   const addUser = React.useCallback(async () => {
     setAddError("");
-    if (!projectId) {
+    if (!iTwinId) {
       return;
     }
     if (!email) {
@@ -41,7 +41,7 @@ export const AddMemberInput = ({
     const newMember = email;
     const client = new ProjectsClient(urlPrefix, accessToken);
     try {
-      await client.addProjectMember(projectId, newMember);
+      await client.addProjectMember(iTwinId, newMember);
       await onSuccess();
       setEmail("");
     } catch (error) {
@@ -51,7 +51,7 @@ export const AddMemberInput = ({
     }
     setAddWorking(false);
     ref.current?.focus({ preventScroll: true });
-  }, [accessToken, email, onSuccess, projectId, urlPrefix]);
+  }, [accessToken, email, onSuccess, iTwinId, urlPrefix]);
 
   return (
     <div className={"input-with-button"}>

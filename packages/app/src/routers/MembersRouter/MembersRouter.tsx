@@ -19,11 +19,8 @@ export const MembersRouter = ({ accessToken }: MembersRouterProps) => {
   return (
     <Router className="full-height-container">
       <SelectionRouter accessToken={accessToken} path="*" />
-      <Members accessToken={accessToken} path="/project/:projectId/*" />
-      <RolesRouter
-        accessToken={accessToken}
-        path="/project/:projectId/roles/*"
-      />
+      <Members accessToken={accessToken} path="/itwin/:iTwinId/*" />
+      <RolesRouter accessToken={accessToken} path="/itwin/:iTwinId/roles/*" />
     </Router>
   );
 };

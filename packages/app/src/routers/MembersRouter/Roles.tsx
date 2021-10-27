@@ -28,27 +28,27 @@ import "./Members.scss";
 
 interface RolesProps extends RouteComponentProps {
   accessToken: string;
-  projectId?: string;
+  iTwinId?: string;
 }
 type Role = CreateTypeFromInterface<RoleProjectsAPI>;
-export const Roles = ({ accessToken, projectId, navigate }: RolesProps) => {
+export const Roles = ({ accessToken, iTwinId, navigate }: RolesProps) => {
   const urlPrefix = useApiPrefix();
 
   const [roles, setRoles] = React.useState<Role[]>(skeletonRows);
   const [error, setError] = React.useState("");
   const fetchRoles = React.useCallback(async () => {
-    if (!projectId) {
+    if (!iTwinId) {
       return;
     }
     const client = new ProjectsClient(urlPrefix, accessToken);
     try {
-      const { roles } = await client.getProjectRoles(projectId);
+      const { roles } = await client.getProjectRoles(iTwinId);
       setRoles(roles ?? []);
     } catch (error) {
       const errorResponse = error as Response;
       setError(await client.extractAPIErrorMessage(errorResponse));
     }
-  }, [accessToken, projectId, urlPrefix]);
+  }, [accessToken, iTwinId, urlPrefix]);
   React.useEffect(() => void fetchRoles(), [fetchRoles]);
 
   return (
@@ -58,12 +58,12 @@ export const Roles = ({ accessToken, projectId, navigate }: RolesProps) => {
           <IconButton styleType={"borderless"} onClick={() => navigate?.("..")}>
             <SvgChevronLeft />
           </IconButton>
-          Project roles management
+          iTwin roles management
         </Title>
       </div>
       <div className="idp-content-margins">
         <Button startIcon={<SvgAdd />} onClick={() => navigate?.("create")}>
-          Create project role
+          Create iTwin role
         </Button>
       </div>
       <div className="idp-content-margins idp-scrolling-content">
@@ -108,7 +108,7 @@ export const Roles = ({ accessToken, projectId, navigate }: RolesProps) => {
                       const role = React.useMemo(
                         () => ({
                           id: props.row.original?.id ?? "",
-                          projectId: projectId ?? "",
+                          projectId: iTwinId ?? "",
                           displayName: props.row.original.displayName,
                         }),
                         [props.row.original.displayName, props.row.original.id]
@@ -133,9 +133,9 @@ export const Roles = ({ accessToken, projectId, navigate }: RolesProps) => {
                 ],
               },
             ],
-            [accessToken, fetchRoles, navigate, projectId]
+            [accessToken, fetchRoles, navigate, iTwinId]
           )}
-          emptyTableContent={error || "No project role, add one above!"}
+          emptyTableContent={error || "No iTwin role, add one above!"}
         />
       </div>
     </div>

@@ -18,13 +18,13 @@ type ManageVersionsTabs = Required<ManageVersionsProps>["currentTab"];
 
 const CHANGE_TAB_SEARCHSTRING = "?changes";
 export interface VersionsProps extends RouteComponentProps {
-  projectId?: string;
+  iTwinId?: string;
   iModelId?: string;
   accessToken: string;
 }
 export const ManageVersions = ({
   iModelId = "",
-  projectId = "",
+  iTwinId = "",
   accessToken,
   navigate: localNavigate,
 }: VersionsProps) => {
@@ -51,7 +51,7 @@ export const ManageVersions = ({
         apiOverrides={{ serverEnvironmentPrefix }}
         onViewClick={(version) =>
           globalNavigate(
-            `/view/project/${projectId}/imodel/${iModelId}/version/${version.id}`
+            `/view/itwin/${iTwinId}/imodel/${iModelId}/version/${version.id}`
           )
         }
         onTabChange={setTab}

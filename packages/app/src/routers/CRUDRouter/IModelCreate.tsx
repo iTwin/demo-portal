@@ -12,9 +12,9 @@ import { useApiPrefix } from "../../api/useApiPrefix";
 
 interface CreateProps extends RouteComponentProps {
   accessToken: string;
-  projectId?: string;
+  iTwinId?: string;
 }
-export const IModelCreate = ({ accessToken, projectId = "" }: CreateProps) => {
+export const IModelCreate = ({ accessToken, iTwinId = "" }: CreateProps) => {
   const navigate = useNavigate();
   const goBack = () => navigate?.(-1);
   const serverEnvironmentPrefix = useApiPrefix();
@@ -23,7 +23,7 @@ export const IModelCreate = ({ accessToken, projectId = "" }: CreateProps) => {
       <div className={"idp-content-margins"}>
         <CreateIModel
           accessToken={accessToken}
-          projectId={projectId}
+          projectId={iTwinId}
           onClose={goBack}
           onSuccess={goBack}
           apiOverrides={{ serverEnvironmentPrefix }}
