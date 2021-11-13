@@ -8,6 +8,7 @@ import { RouteComponentProps } from "@reach/router";
 import React, {
   createContext,
   PropsWithChildren,
+  useCallback,
   useEffect,
   useState,
 } from "react";
@@ -65,7 +66,7 @@ export const SynchronizationAPIProvider = ({
     }
   }, [client]);
 
-  const login = () => {
+  const login = useCallback(() => {
     if (authUrl) {
       const loginWindow = window.open(authUrl, "_blank", "popup=yes");
       const loginInterval = setInterval(() => {
@@ -89,7 +90,7 @@ export const SynchronizationAPIProvider = ({
         "Could not determine the url for synchronization authorization"
       );
     }
-  };
+  }, [authUrl, client]);
 
   return (
     <SynchronizationContext.Provider value={{ isAuthorized, login }}>
