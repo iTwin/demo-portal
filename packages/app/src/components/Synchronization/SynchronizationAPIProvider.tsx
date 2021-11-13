@@ -21,7 +21,6 @@ type SynchronizationAPIProviderProps = PropsWithChildren<{
 
 export interface SynchronizationConfig {
   isAuthorized: boolean;
-  authUrl?: string;
   login: () => void;
 }
 
@@ -93,7 +92,7 @@ export const SynchronizationAPIProvider = ({
   };
 
   return (
-    <SynchronizationContext.Provider value={{ isAuthorized, login, authUrl }}>
+    <SynchronizationContext.Provider value={{ isAuthorized, login }}>
       {children}
     </SynchronizationContext.Provider>
   );

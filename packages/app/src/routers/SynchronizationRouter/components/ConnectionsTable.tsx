@@ -121,7 +121,7 @@ export const ConnectionsTable = ({
             ],
           },
         ],
-        [accessToken, lastRun, refreshCallback, urlPrefix]
+        [accessToken, lastRun, refreshCallback, urlPrefix, synchContext]
       )}
       emptyTableContent={
         "No file connected, drop file above to create new connections"
