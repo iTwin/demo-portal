@@ -4,13 +4,14 @@
  *
  * This code is for demonstration purposes and should not be considered production ready.
  *--------------------------------------------------------------------------------------------*/
-import { Alert } from "@itwin/itwinui-react";
-import React, { ComponentPropsWithoutRef } from "react";
+import { Alert, toaster } from "@itwin/itwinui-react";
+import React, { ComponentPropsWithoutRef, useContext } from "react";
 
 import { FileUploadStorageAPI } from "../../api/storage/generated";
 import { StorageClient } from "../../api/storage/storageClient";
 import { SynchronizationClient } from "../../api/synchronization/synchronizationClient";
 import { useApiPrefix } from "../../api/useApiPrefix";
+import { SynchronizationContext } from "../../components/Synchronization/SynchronizationAPIProvider";
 import { useSynchronizeFileConflictResolver } from "./useSynchronizeFileConflictResolver";
 
 interface ConnectionFileUploaderOptions {
@@ -44,8 +45,17 @@ export const useSynchronizeFileUploader = ({
     openConflictResolutionModal,
   } = useSynchronizeFileConflictResolver(accessToken, iModelName);
 
+  const synchContext = useContext(SynchronizationContext);
+
   const uploadFiles = React.useCallback(
     async (fileList: FileList, onSuccess?: () => void) => {
+      const authorized = await synchContext.login();
+      if (!authorized) {
+        toaster.negative(
+          "You are not authorized to use the synchronization service. Please try again and complete the authentication process in the pop-up window that follows."
+        );
+        return;
+      }
       if (!fileList || fileList.length === 0) {
         return;
       }
@@ -188,7 +198,14 @@ export const useSynchronizeFileUploader = ({
         setState("Error");
       }
     },
-    [accessToken, iModelId, openConflictResolutionModal, projectId, urlPrefix]
+    [
+      accessToken,
+      iModelId,
+      openConflictResolutionModal,
+      projectId,
+      urlPrefix,
+      synchContext,
+    ]
   );
   const resetUploader = () => {
     setStep(0);

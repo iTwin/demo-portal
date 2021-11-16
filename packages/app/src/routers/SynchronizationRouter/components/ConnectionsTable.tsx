@@ -20,6 +20,7 @@ import {
 } from "../../../api/synchronization/generated";
 import { SynchronizationClient } from "../../../api/synchronization/synchronizationClient";
 import { useApiPrefix } from "../../../api/useApiPrefix";
+import { SynchronizationContext } from "../../../components/Synchronization/SynchronizationAPIProvider";
 import {
   CreateTypeFromInterface,
   pascalCaseToSentenceCase,
@@ -42,6 +43,8 @@ export const ConnectionsTable = ({
 }: ConnectionsTableProps) => {
   const urlPrefix = useApiPrefix();
   const lastRun = React.useContext(LastRunContext);
+  const synchContext = useContext(SynchronizationContext);
+
   return (
     <Table<CreateTypeFromInterface<ConnectionSynchronizationAPI>>
       data={connections}
@@ -85,6 +88,13 @@ export const ConnectionsTable = ({
                     accessToken
                   );
                   const runConnection = async () => {
+                    const authorized = await synchContext.login();
+                    if (!authorized) {
+                      toaster.negative(
+                        "You are not authorized to use the synchronization service. Please try again and complete the authentication process in the pop-up window that follows."
+                      );
+                      return;
+                    }
                     await client.runConnection(props.value ?? "");
                     toaster.positive(
                       `Connection ${props.row.original.displayName} scheduled!`
@@ -114,7 +124,7 @@ export const ConnectionsTable = ({
             ],
           },
         ],
-        [accessToken, lastRun, refreshCallback, urlPrefix]
+        [accessToken, lastRun, refreshCallback, urlPrefix, synchContext]
       )}
       emptyTableContent={
         "No file connected, drop file above to create new connections"
