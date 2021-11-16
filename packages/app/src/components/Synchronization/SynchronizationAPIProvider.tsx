@@ -22,13 +22,13 @@ type SynchronizationAPIProviderProps = PropsWithChildren<{
 
 export interface SynchronizationConfig {
   isAuthorized: boolean;
-  login: () => void;
+  login: () => Promise<boolean>;
 }
 
 export const SynchronizationContext = createContext<SynchronizationConfig>({
   isAuthorized: false,
   login: () => {
-    /** nop */
+    return Promise.resolve(true);
   },
 });
 
@@ -49,7 +49,7 @@ export const SynchronizationAPIProvider = ({
   }, [accessToken, urlPrefix]);
 
   useEffect(() => {
-    if (client) {
+    if (client && !isAuthorized) {
       client
         .getAuthorization(window.location.href)
         .then(({ authorizationInformation }) => {
@@ -64,33 +64,44 @@ export const SynchronizationAPIProvider = ({
         })
         .catch(console.error);
     }
-  }, [client]);
+  }, [client, isAuthorized]);
 
-  const login = useCallback(() => {
-    if (authUrl) {
-      const loginWindow = window.open(authUrl, "_blank", "popup=yes");
-      const loginInterval = setInterval(() => {
-        if (loginWindow?.closed && client) {
-          client
-            .getAuthorization(window.location.href)
-            .then(({ authorizationInformation }) => {
-              if (authorizationInformation?.isUserAuthorized) {
-                setIsAuthorized(true);
-                clearInterval(loginInterval);
-              }
-            })
-            .catch((error) => {
-              console.error(error);
-              clearInterval(loginInterval);
-            });
+  const login = useCallback(
+    () =>
+      new Promise<boolean>((resolve, reject) => {
+        if (isAuthorized) {
+          resolve(true);
         }
-      }, 2000);
-    } else {
-      console.error(
-        "Could not determine the url for synchronization authorization"
-      );
-    }
-  }, [authUrl, client]);
+        if (authUrl) {
+          const loginWindow = window.open(authUrl, "_blank", "popup=yes");
+          const loginInterval = setInterval(() => {
+            if (loginWindow?.closed && client) {
+              client
+                .getAuthorization(window.location.href)
+                .then(({ authorizationInformation }) => {
+                  if (authorizationInformation?.isUserAuthorized) {
+                    setIsAuthorized(true);
+                    resolve(true);
+                  } else {
+                    setIsAuthorized(false);
+                    resolve(false);
+                  }
+                  clearInterval(loginInterval);
+                })
+                .catch((error) => {
+                  clearInterval(loginInterval);
+                  reject(error);
+                });
+            }
+          }, 2000);
+        } else {
+          reject(
+            "Could not determine the url for synchronization authorization"
+          );
+        }
+      }),
+    [authUrl, client, isAuthorized]
+  );
 
   return (
     <SynchronizationContext.Provider value={{ isAuthorized, login }}>

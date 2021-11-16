@@ -88,8 +88,11 @@ export const ConnectionsTable = ({
                     accessToken
                   );
                   const runConnection = async () => {
-                    if (!synchContext.isAuthorized) {
-                      synchContext.login();
+                    const authorized = await synchContext.login();
+                    if (!authorized) {
+                      toaster.negative(
+                        "You are not authorized to use the synchronization service. Please try again and complete the authentication process in the pop-up window that follows."
+                      );
                       return;
                     }
                     await client.runConnection(props.value ?? "");

@@ -4,7 +4,7 @@
  *
  * This code is for demonstration purposes and should not be considered production ready.
  *--------------------------------------------------------------------------------------------*/
-import { Alert } from "@itwin/itwinui-react";
+import { Alert, toaster } from "@itwin/itwinui-react";
 import React, { ComponentPropsWithoutRef, useContext } from "react";
 
 import { FileUploadStorageAPI } from "../../api/storage/generated";
@@ -49,8 +49,11 @@ export const useSynchronizeFileUploader = ({
 
   const uploadFiles = React.useCallback(
     async (fileList: FileList, onSuccess?: () => void) => {
-      if (!synchContext.isAuthorized) {
-        synchContext.login();
+      const authorized = await synchContext.login();
+      if (!authorized) {
+        toaster.negative(
+          "You are not authorized to use the synchronization service. Please try again and complete the authentication process in the pop-up window that follows."
+        );
         return;
       }
       if (!fileList || fileList.length === 0) {
