@@ -10,6 +10,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useConfig } from "../../config/ConfigProvider";
 import AuthClient from "../../services/auth/AuthClient";
 import { ai } from "../../services/telemetry";
+import { ClientIdForm } from "./ClientIdForm";
 
 export interface AuthContextValue {
   isAuthenticated: boolean;
@@ -31,24 +32,36 @@ const AuthContext = React.createContext<AuthContextValue>({
   },
 });
 
+const LOCAL_STORAGE_CLIENT_KEY = "idp-auth-client-id";
+
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [accessToken, setAccessToken] = useState<AccessToken>();
   const [userInfo, setUserInfo] = useState<UserInfo>();
 
   const { auth } = useConfig();
 
+  const [clientId, setClientId] = React.useState(
+    localStorage.getItem(LOCAL_STORAGE_CLIENT_KEY)
+  );
   useEffect(() => {
+    localStorage.setItem(LOCAL_STORAGE_CLIENT_KEY, clientId ?? "");
+  }, [clientId]);
+
+  useEffect(() => {
+    if (!clientId) {
+      return;
+    }
     const initAuth = async () => {
       if (!auth) {
         return;
       }
       if (!AuthClient.client) {
-        if (!auth.clientId) {
+        if (!clientId) {
           throw new Error(
             "Please add a valid client ID in the .env.local file and restart the application"
           );
         }
-        const client = AuthClient.initialize(auth.clientId, auth.authority);
+        const client = AuthClient.initialize(clientId, auth.authority);
         client.onUserStateChanged.addListener((token?: AccessToken) => {
           setAccessToken(token);
           const userInfo = token?.getUserInfo();
@@ -71,7 +84,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     return () => {
       AuthClient.dispose();
     };
-  }, [auth]);
+  }, [auth, clientId]);
 
   const isAuthorized = useMemo(() => {
     if (auth?.whitelistedIds) {
@@ -99,7 +112,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         signOut,
       }}
     >
-      {children}
+      {clientId ? children : <ClientIdForm onSave={setClientId} />}
     </AuthContext.Provider>
   );
 };

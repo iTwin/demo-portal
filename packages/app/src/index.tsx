@@ -19,6 +19,12 @@ if (redirectUrl.pathname === window.location.pathname) {
     redirectUrl.toString()
   ).catch(console.error);
 } else {
+  if (window.location.pathname.toLowerCase() === "/resetid") {
+    localStorage.removeItem("idp-auth-client-id");
+    const root = window.location.href.replace("/resetid", "");
+    window.location.replace(root); // this actually kills the context and reload the page
+    //unreacheable
+  }
   ReactDOM.render(
     <React.StrictMode>
       <App />
