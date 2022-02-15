@@ -10,6 +10,7 @@ import React, { useMemo } from "react";
 
 import { ManageVersionsRouter } from "./ManageVersionsRouter/ManageVersionsRouter";
 import { MembersRouter } from "./MembersRouter/MembersRouter";
+import { SavedviewsRouter } from "./SavedviewsRouter/SavedviewsRouter";
 import { SynchronizationRouter } from "./SynchronizationRouter/SynchronizationRouter";
 import { ViewRouter } from "./ViewRouter/ViewRouter";
 
@@ -29,6 +30,7 @@ export const MainRouter = ({ accessToken }: MainRouterProps) => {
         path="synchronize/*"
         accessToken={accessTokenStr}
       />
+      <SavedviewsRouter path="savedviews/*" accessToken={accessTokenStr} />
       <ManageVersionsRouter
         path="manage-versions/*"
         accessToken={accessTokenStr}

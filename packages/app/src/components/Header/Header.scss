@@ -1,0 +1,22 @@
+/*---------------------------------------------------------------------------------------------
+ * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
+ * See LICENSE.md in the project root for license terms and full copyright notice.
+ *
+ * This code is for demonstration purposes and should not be considered production ready.
+ *--------------------------------------------------------------------------------------------*/
+.view-in-imodel {
+  width: 21px;
+  height: 17px;
+  z-index: 1;
+  position: absolute;
+  top: 26px;
+  left: 39px;
+  background-color: var(--iui-color-background-1);
+}
+
+.iui-page-header
+> .iui-left
+.iui-header-logo[role="button"]:hover
+.view-in-imodel {
+  background-color: var(--iui-color-background-1-overlay);
+}

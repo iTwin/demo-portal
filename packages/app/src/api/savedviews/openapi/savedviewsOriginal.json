@@ -1,0 +1,3590 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Saved Views",
+    "description": "The Saved Views API provides a central place to store view information so it can be retrieved or shared across applications.",
+    "version": "v1"
+  },
+  "servers": [
+    {
+      "url": "https://api.bentley.com/savedviews"
+    }
+  ],
+  "paths": {
+    "/tags/{tagId}": {
+      "patch": {
+        "tags": ["Tags"],
+        "summary": "Update tag",
+        "description": "---\r\n\r\nRenames a tag.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `savedviews:modify`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n---\r\n",
+        "operationId": "update-tag",
+        "parameters": [
+          {
+            "name": "tagId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `savedviews:modify`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TagUpdate"
+              },
+              "example": {
+                "displayName": "Desktop"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated tag.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TagResponse"
+                },
+                "example": {
+                  "tag": {
+                    "id": "ACZbDmWhULVChRcDRkoPdLaNv7DGPQORQpkxmyDyE1ERZS7bsqUkWEmr9ZGmC5TopQ",
+                    "displayName": "Test Name",
+                    "_links": {
+                      "project": {
+                        "href": "https://api.bentley.com/path1/path2/id"
+                      },
+                      "imodel": {
+                        "href": "https://api.bentley.com/path1/path2/id"
+                      },
+                      "creator": {
+                        "href": "https://api.bentley.com/path1/path2/id"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "Unauthorized",
+                    "message": "Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint."
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The user has insufficient permissions for the requested operation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "InsufficientPermissions",
+                    "message": "The user has insufficient permissions for the requested operation."
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested tag is not available.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "TagNotFound",
+                    "message": "Requested tag is not available."
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Cannot update tag.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "InvalidSavedviewsRequest",
+                    "message": "Cannot update tag.",
+                    "details": [
+                      {
+                        "code": "InvalidRequestBody",
+                        "message": "displayName must be a string.",
+                        "target": "displayName"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "TooManyRequests",
+                    "message": "More requests were received than the subscription rate-limit allows."
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Tags"],
+        "summary": "Delete tag",
+        "description": "---\r\n\r\nDeletes a tag, tags must be unassigned from every saved view before they can be deleted.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `savedviews:modify`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n---\r\n",
+        "operationId": "delete-tag",
+        "parameters": [
+          {
+            "name": "tagId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `savedviews:modify`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Tag deleted successfully."
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "Unauthorized",
+                    "message": "Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint."
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The user has insufficient permissions for the requested operation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "InsufficientPermissions",
+                    "message": "The user has insufficient permissions for the requested operation."
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested tag is not available.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "TagNotFound",
+                    "message": "Requested tag is not available."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "TooManyRequests",
+                    "message": "More requests were received than the subscription rate-limit allows."
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Tags"],
+        "summary": "Get tag",
+        "description": "---\r\n\r\nRetrieves information for a single tag.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `savedviews:read`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n---\r\n",
+        "operationId": "get-tag",
+        "parameters": [
+          {
+            "name": "tagId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `savedviews:read`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Specified tag.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TagResponse"
+                },
+                "example": {
+                  "tag": {
+                    "id": "ACZbDmWhULVChRcDRkoPdLaNv7DGPQORQpkxmyDyE1ERZS7bsqUkWEmr9ZGmC5TopQ",
+                    "displayName": "Test Name",
+                    "_links": {
+                      "project": {
+                        "href": "https://api.bentley.com/path1/path2/id"
+                      },
+                      "imodel": {
+                        "href": "https://api.bentley.com/path1/path2/id"
+                      },
+                      "creator": {
+                        "href": "https://api.bentley.com/path1/path2/id"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "Unauthorized",
+                    "message": "Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint."
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested tag is not available.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "TagNotFound",
+                    "message": "Requested tag is not available."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "TooManyRequests",
+                    "message": "More requests were received than the subscription rate-limit allows."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tags": {
+      "post": {
+        "tags": ["Tags"],
+        "summary": "Create tag",
+        "description": "---\r\n\r\nCreates a tag to organize saved views.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `savedviews:modify`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n---\r\n",
+        "operationId": "create-tag",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `savedviews:modify`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TagCreate"
+              },
+              "example": {
+                "projectId": "c6b0bf8d-033d-4291-9931-9b20f2135111",
+                "iModelId": "b2db2e65-24a5-4958-abf5-91a60b94e8a5",
+                "displayName": "Desktop"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created tag.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TagResponse"
+                },
+                "example": {
+                  "tag": {
+                    "id": "ACZbDmWhULVChRcDRkoPdLaNv7DGPQORQpkxmyDyE1ERZS7bsqUkWEmr9ZGmC5TopQ",
+                    "displayName": "Test Name",
+                    "_links": {
+                      "project": {
+                        "href": "https://api.bentley.com/path1/path2/id"
+                      },
+                      "imodel": {
+                        "href": "https://api.bentley.com/path1/path2/id"
+                      },
+                      "creator": {
+                        "href": "https://api.bentley.com/path1/path2/id"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "Unauthorized",
+                    "message": "Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint."
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The user has insufficient permissions for the requested operation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "InsufficientPermissions",
+                    "message": "The user has insufficient permissions for the requested operation."
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested project is not available.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "ProjectNotFound",
+                    "message": "Requested project is not available."
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Cannot create tag.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "InvalidSavedviewsRequest",
+                    "message": "Cannot create tag.",
+                    "details": [
+                      {
+                        "code": "InvalidRequestBody",
+                        "message": "displayName must be a string.",
+                        "target": "displayName"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "TooManyRequests",
+                    "message": "More requests were received than the subscription rate-limit allows."
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Tags"],
+        "summary": "Get all tags",
+        "description": "---\r\n\r\nRetrieves all tags associated to a project or project/iModel combination.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `savedviews:read`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n---\r\n",
+        "operationId": "get-all-tags",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "iModelId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `savedviews:read`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of all available tags for the project and iModel.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TagListResponse"
+                },
+                "example": {
+                  "tags": [
+                    {
+                      "id": "ACZbDmWhULVChRcDRkoPdLaNv7DGPQORQpkxmyDyE1ERZS7bsqUkWEmr9ZGmC5TopQ",
+                      "displayName": "Test Name",
+                      "_links": {
+                        "project": {
+                          "href": "https://api.bentley.com/path1/path2/id"
+                        },
+                        "imodel": {
+                          "href": "https://api.bentley.com/path1/path2/id"
+                        },
+                        "creator": {
+                          "href": "https://api.bentley.com/path1/path2/id"
+                        }
+                      }
+                    }
+                  ],
+                  "_links": {
+                    "self": {
+                      "href": "https://api.bentley.com/path1/path2/id"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "Unauthorized",
+                    "message": "Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint."
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested tag is not available.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "TagNotFound",
+                    "message": "Requested tag is not available."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "TooManyRequests",
+                    "message": "More requests were received than the subscription rate-limit allows."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{savedViewId}": {
+      "get": {
+        "tags": ["Saved Views"],
+        "summary": "Get saved view",
+        "description": "---\r\n\r\nRetrieves a saved view including the complete view data itself.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `savedviews:read`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n---\r\n",
+        "operationId": "get-savedview",
+        "parameters": [
+          {
+            "name": "savedViewId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `savedviews:read`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Specified saved view.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavedViewResponse"
+                },
+                "example": {
+                  "savedView": {
+                    "id": "ACZbDmWhULVChRcDRkoPdLaNv7DGPQORQpkxmyDyE1ERZS7bsqUkWEmr9ZGmC5TopQ",
+                    "displayName": "Test Name",
+                    "shared": false,
+                    "category": "Test category",
+                    "tags": [
+                      {
+                        "displayName": "Tag Test Name",
+                        "id": "ABRBqKCBtXZCl_ax5ZFB9uaNv7DGPQORQpkxmyDyE1ERZS7bsqUkWEmr9ZGmC5TopQ"
+                      }
+                    ],
+                    "_links": {
+                      "project": {
+                        "href": "https://api.bentley.com/path1/path2/id"
+                      },
+                      "imodel": {
+                        "href": "https://api.bentley.com/path1/path2/id"
+                      },
+                      "creator": {
+                        "href": "https://api.bentley.com/path1/path2/id"
+                      },
+                      "group": {
+                        "href": "https://api.bentley.com/path1/path2/id"
+                      },
+                      "image": {
+                        "href": "https://api.bentley.com/path1/path2/id"
+                      },
+                      "thumbnail": {
+                        "href": "https://api.bentley.com/path1/path2/id"
+                      }
+                    },
+                    "savedViewData": {
+                      "itwin3dView": {
+                        "origin": [0, 0, 0],
+                        "extents": [100, 100, 100],
+                        "angles": {
+                          "yaw": 90,
+                          "pitch": 90,
+                          "roll": 90
+                        },
+                        "camera": {
+                          "lens": 90,
+                          "focusDist": 1,
+                          "eye": [0, 0, 0]
+                        },
+                        "categories": {
+                          "enabled": ["0x12", "0x13"],
+                          "disabled": ["0x14", "0x15"]
+                        },
+                        "models": {
+                          "enabled": ["0x12", "0x13"],
+                          "disabled": ["0x14", "0x15"]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "Unauthorized",
+                    "message": "Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint."
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested savedview is not available.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "SavedViewNotFound",
+                    "message": "Requested savedview is not available."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "TooManyRequests",
+                    "message": "More requests were received than the subscription rate-limit allows."
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Saved Views"],
+        "summary": "Updates saved view",
+        "description": "---\r\n\r\nUpdates a saved view.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `savedviews:modify`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n---\r\n",
+        "operationId": "update-savedview",
+        "parameters": [
+          {
+            "name": "savedViewId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `savedviews:modify`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Please use https://www.itwinjs.org/reference/imodeljs-common/views/viewstateprops/ for reference",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SavedViewUpdate"
+              },
+              "example": {
+                "savedViewData": {
+                  "itwin3dView": {
+                    "origin": [0, 0, 0],
+                    "extents": [100, 100, 100],
+                    "angles": {
+                      "yaw": 90,
+                      "pitch": 90,
+                      "roll": 90
+                    },
+                    "camera": {
+                      "lens": 90,
+                      "focusDist": 1,
+                      "eye": [0, 0, 0]
+                    },
+                    "categories": {
+                      "enabled": ["0x12", "0x13"],
+                      "disabled": ["0x14", "0x15"]
+                    },
+                    "models": {
+                      "enabled": ["0x12", "0x13"],
+                      "disabled": ["0x14", "0x15"]
+                    }
+                  }
+                },
+                "groupId": "AKX-Arab1o1NqdQwr7zIr3KNv7DGPQORQpkxmyDyE1ERZS7bsqUkWEmr9ZGmC5TopQ",
+                "displayName": "Saved View Test Name",
+                "shared": false,
+                "tagIds": [
+                  "ABRBqKCBtXZCl_ax5ZFB9uaNv7DGPQORQpkxmyDyE1ERZS7bsqUkWEmr9ZGmC5TopQ"
+                ],
+                "category": "Desktop"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated saved view.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavedViewResponse"
+                },
+                "example": {
+                  "savedView": {
+                    "id": "ACZbDmWhULVChRcDRkoPdLaNv7DGPQORQpkxmyDyE1ERZS7bsqUkWEmr9ZGmC5TopQ",
+                    "displayName": "Test Name",
+                    "shared": false,
+                    "category": "Test category",
+                    "tags": [
+                      {
+                        "displayName": "Tag Test Name",
+                        "id": "ABRBqKCBtXZCl_ax5ZFB9uaNv7DGPQORQpkxmyDyE1ERZS7bsqUkWEmr9ZGmC5TopQ"
+                      }
+                    ],
+                    "_links": {
+                      "project": {
+                        "href": "https://api.bentley.com/path1/path2/id"
+                      },
+                      "imodel": {
+                        "href": "https://api.bentley.com/path1/path2/id"
+                      },
+                      "creator": {
+                        "href": "https://api.bentley.com/path1/path2/id"
+                      },
+                      "group": {
+                        "href": "https://api.bentley.com/path1/path2/id"
+                      },
+                      "image": {
+                        "href": "https://api.bentley.com/path1/path2/id"
+                      },
+                      "thumbnail": {
+                        "href": "https://api.bentley.com/path1/path2/id"
+                      }
+                    },
+                    "savedViewData": {
+                      "itwin3dView": {
+                        "origin": [0, 0, 0],
+                        "extents": [100, 100, 100],
+                        "angles": {
+                          "yaw": 90,
+                          "pitch": 90,
+                          "roll": 90
+                        },
+                        "camera": {
+                          "lens": 90,
+                          "focusDist": 1,
+                          "eye": [0, 0, 0]
+                        },
+                        "categories": {
+                          "enabled": ["0x12", "0x13"],
+                          "disabled": ["0x14", "0x15"]
+                        },
+                        "models": {
+                          "enabled": ["0x12", "0x13"],
+                          "disabled": ["0x14", "0x15"]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "Unauthorized",
+                    "message": "Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint."
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The user has insufficient permissions for the requested operation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "InsufficientPermissions",
+                    "message": "The user has insufficient permissions for the requested operation."
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested savedview is not available.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "SavedViewNotFound",
+                    "message": "Requested savedview is not available."
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Cannot update saved view.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "InvalidSavedviewsRequest",
+                    "message": "Cannot update saved view.",
+                    "details": [
+                      {
+                        "code": "InvalidRequestBody",
+                        "message": "displayName must be a string.",
+                        "target": "displayName"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "TooManyRequests",
+                    "message": "More requests were received than the subscription rate-limit allows."
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Saved Views"],
+        "summary": "Delete saved view",
+        "description": "---\r\n\r\nDeletes a saved view, images assigned to that saved view will be deleted as well.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `savedviews:modify`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n---\r\n",
+        "operationId": "delete-savedview",
+        "parameters": [
+          {
+            "name": "savedViewId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `savedviews:modify`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Saved view deleted successfully."
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "Unauthorized",
+                    "message": "Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint."
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The user has insufficient permissions for the requested operation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "InsufficientPermissions",
+                    "message": "The user has insufficient permissions for the requested operation."
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested savedview is not available.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "SavedViewNotFound",
+                    "message": "Requested savedview is not available."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "TooManyRequests",
+                    "message": "More requests were received than the subscription rate-limit allows."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "tags": ["Saved Views"],
+        "summary": "Get all saved views",
+        "description": "---\r\n\r\nRetrieves all saved view associated to a project, project/iModel combination or group, at least one parameter must be provided.\r\n\r\nThis operation supports pagination and will sort saved views by displayName.\r\n\r\nAs the view data can be quite large, this collection call will not contain the view data themselves. To retrieve the data, make a call to [Get saved view](../get-savedview)\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `savedviews:read`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n---\r\n",
+        "operationId": "get-all-savedviews",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "iModelId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "groupId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `savedviews:read`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of all saved views associated to the query.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavedViewListResponse"
+                },
+                "example": {
+                  "savedViews": [
+                    {
+                      "id": "ACZbDmWhULVChRcDRkoPdLaNv7DGPQORQpkxmyDyE1ERZS7bsqUkWEmr9ZGmC5TopQ",
+                      "displayName": "Test Name",
+                      "shared": false,
+                      "category": "Test category",
+                      "tags": [
+                        {
+                          "displayName": "Tag Test Name",
+                          "id": "ABRBqKCBtXZCl_ax5ZFB9uaNv7DGPQORQpkxmyDyE1ERZS7bsqUkWEmr9ZGmC5TopQ"
+                        }
+                      ],
+                      "_links": {
+                        "project": {
+                          "href": "https://api.bentley.com/path1/path2/id"
+                        },
+                        "imodel": {
+                          "href": "https://api.bentley.com/path1/path2/id"
+                        },
+                        "creator": {
+                          "href": "https://api.bentley.com/path1/path2/id"
+                        },
+                        "group": {
+                          "href": "https://api.bentley.com/path1/path2/id"
+                        },
+                        "image": {
+                          "href": "https://api.bentley.com/path1/path2/id"
+                        },
+                        "thumbnail": {
+                          "href": "https://api.bentley.com/path1/path2/id"
+                        }
+                      }
+                    }
+                  ],
+                  "_links": {
+                    "self": {
+                      "href": "https://api.bentley.com/path1/path2/id"
+                    },
+                    "prev": {
+                      "href": "https://api.bentley.com/path1/path2/id"
+                    },
+                    "next": {
+                      "href": "https://api.bentley.com/path1/path2/id"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "Unauthorized",
+                    "message": "Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint."
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested savedview is not available.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "SavedViewNotFound",
+                    "message": "Requested savedview is not available."
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Cannot retrieve saved view.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "InvalidSavedviewsRequest",
+                    "message": "Cannot retrieve saved view.",
+                    "details": [
+                      {
+                        "code": "InvalidParameter",
+                        "message": "$top must be a number.",
+                        "target": "$top"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "TooManyRequests",
+                    "message": "More requests were received than the subscription rate-limit allows."
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Saved Views"],
+        "summary": "Create saved view",
+        "description": "---\r\n\r\nCreates a saved view. The saved view must include one an only view: 3D, Sheet or Drawing. \r\nAdditional custom information can be stored in the appData field.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `savedviews:modify`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n---\r\n",
+        "operationId": "create-savedview",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `savedviews:modify`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Please use https://www.itwinjs.org/reference/imodeljs-common/views/viewstateprops/ for reference",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SavedViewCreate"
+              },
+              "example": {
+                "projectId": "c6b0bf8d-033d-4291-9931-9b20f2135111",
+                "iModelId": "b2db2e65-24a5-4958-abf5-91a60b94e8a5",
+                "savedViewData": {
+                  "itwin3dView": {
+                    "origin": [0, 0, 0],
+                    "extents": [100, 100, 100],
+                    "angles": {
+                      "yaw": 90,
+                      "pitch": 90,
+                      "roll": 90
+                    },
+                    "camera": {
+                      "lens": 90,
+                      "focusDist": 1,
+                      "eye": [0, 0, 0]
+                    },
+                    "categories": {
+                      "enabled": ["0x12", "0x13"],
+                      "disabled": ["0x14", "0x15"]
+                    },
+                    "models": {
+                      "enabled": ["0x12", "0x13"],
+                      "disabled": ["0x14", "0x15"]
+                    }
+                  }
+                },
+                "groupId": "AKX-Arab1o1NqdQwr7zIr3KNv7DGPQORQpkxmyDyE1ERZS7bsqUkWEmr9ZGmC5TopQ",
+                "displayName": "Saved View Name",
+                "shared": false,
+                "tagIds": [
+                  "ABRBqKCBtXZCl_ax5ZFB9uaNv7DGPQORQpkxmyDyE1ERZS7bsqUkWEmr9ZGmC5TopQ"
+                ],
+                "category": "Desktop"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created saved view.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavedViewResponse"
+                },
+                "example": {
+                  "savedView": {
+                    "id": "ACZbDmWhULVChRcDRkoPdLaNv7DGPQORQpkxmyDyE1ERZS7bsqUkWEmr9ZGmC5TopQ",
+                    "displayName": "Test Name",
+                    "shared": false,
+                    "category": "Test category",
+                    "tags": [
+                      {
+                        "displayName": "Tag Test Name",
+                        "id": "ABRBqKCBtXZCl_ax5ZFB9uaNv7DGPQORQpkxmyDyE1ERZS7bsqUkWEmr9ZGmC5TopQ"
+                      }
+                    ],
+                    "_links": {
+                      "project": {
+                        "href": "https://api.bentley.com/path1/path2/id"
+                      },
+                      "imodel": {
+                        "href": "https://api.bentley.com/path1/path2/id"
+                      },
+                      "creator": {
+                        "href": "https://api.bentley.com/path1/path2/id"
+                      },
+                      "group": {
+                        "href": "https://api.bentley.com/path1/path2/id"
+                      },
+                      "image": {
+                        "href": "https://api.bentley.com/path1/path2/id"
+                      },
+                      "thumbnail": {
+                        "href": "https://api.bentley.com/path1/path2/id"
+                      }
+                    },
+                    "savedViewData": {
+                      "itwin3dView": {
+                        "origin": [0, 0, 0],
+                        "extents": [100, 100, 100],
+                        "angles": {
+                          "yaw": 90,
+                          "pitch": 90,
+                          "roll": 90
+                        },
+                        "camera": {
+                          "lens": 90,
+                          "focusDist": 1,
+                          "eye": [0, 0, 0]
+                        },
+                        "categories": {
+                          "enabled": ["0x12", "0x13"],
+                          "disabled": ["0x14", "0x15"]
+                        },
+                        "models": {
+                          "enabled": ["0x12", "0x13"],
+                          "disabled": ["0x14", "0x15"]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "Unauthorized",
+                    "message": "Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint."
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The user has insufficient permissions for the requested operation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "InsufficientPermissions",
+                    "message": "The user has insufficient permissions for the requested operation."
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested project is not available.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "ProjectNotFound",
+                    "message": "Requested project is not available."
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Cannot create saved view.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "InvalidSavedviewsRequest",
+                    "message": "Cannot create saved view.",
+                    "details": [
+                      {
+                        "code": "InvalidRequestBody",
+                        "message": "displayName must be a string.",
+                        "target": "displayName"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "TooManyRequests",
+                    "message": "More requests were received than the subscription rate-limit allows."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{savedViewId}/image": {
+      "get": {
+        "tags": ["Images"],
+        "summary": "Get image",
+        "description": "---\r\n\r\nGenerates or retrieves an Url for the image or thumbnail associated to a saved view.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `savedviews:read`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n---\r\n",
+        "operationId": "get-image",
+        "parameters": [
+          {
+            "name": "savedViewId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "schema": {
+              "enum": ["full", "thumbnail"],
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `savedviews:read`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Link to specified image.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImageResponse"
+                },
+                "example": {
+                  "href": "https://api.bentley.com/path1/path2/id"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "Unauthorized",
+                    "message": "Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint."
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested image is not available.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "ImageNotFound",
+                    "message": "Requested image is not available."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "TooManyRequests",
+                    "message": "More requests were received than the subscription rate-limit allows."
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Images"],
+        "summary": "Update image",
+        "description": "---\r\n\r\nAllow uploading an image representing the saved view. Image will be available at full size and as a thumbnail size.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `savedviews:modify`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n---\r\n",
+        "operationId": "add-image",
+        "parameters": [
+          {
+            "name": "savedViewId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `savedviews:modify`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImageUpdate"
+              },
+              "example": {
+                "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Image uploaded successfully."
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "Unauthorized",
+                    "message": "Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint."
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The user has insufficient permissions for the requested operation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "InsufficientPermissions",
+                    "message": "The user has insufficient permissions for the requested operation."
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested savedview is not available.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "SavedViewNotFound",
+                    "message": "Requested savedview is not available."
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Cannot update savedview.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "InvalidSavedviewsRequest",
+                    "message": "Cannot update savedview.",
+                    "details": [
+                      {
+                        "code": "InvalidRequestBody",
+                        "message": "image must be a base64Image.",
+                        "target": "image"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "TooManyRequests",
+                    "message": "More requests were received than the subscription rate-limit allows."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/groups": {
+      "get": {
+        "tags": ["Groups"],
+        "summary": "Get all groups",
+        "description": "---\r\n\r\nRetrieves all groups associated to a project or project/iModel combination.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `savedviews:read`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n---\r\n",
+        "operationId": "get-all-groups",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "iModelId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `savedviews:read`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of all available groups for the project and iModel.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GroupListResponse"
+                },
+                "example": {
+                  "groups": [
+                    {
+                      "id": "ACZbDmWhULVChRcDRkoPdLaNv7DGPQORQpkxmyDyE1ERZS7bsqUkWEmr9ZGmC5TopQ",
+                      "displayName": "Test Name",
+                      "shared": false,
+                      "_links": {
+                        "project": {
+                          "href": "https://api.bentley.com/path1/path2/id"
+                        },
+                        "imodel": {
+                          "href": "https://api.bentley.com/path1/path2/id"
+                        },
+                        "creator": {
+                          "href": "https://api.bentley.com/path1/path2/id"
+                        },
+                        "savedViews": {
+                          "href": "https://api.bentley.com/path1/path2/id"
+                        }
+                      }
+                    }
+                  ],
+                  "_links": {
+                    "self": {
+                      "href": "https://api.bentley.com/path1/path2/id"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "Unauthorized",
+                    "message": "Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint."
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested group is not available.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "GroupNotFound",
+                    "message": "Requested group is not available."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "TooManyRequests",
+                    "message": "More requests were received than the subscription rate-limit allows."
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Groups"],
+        "summary": "Create group",
+        "description": "---\r\n\r\nCreates a group to organize saved views.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `savedviews:modify`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n---\r\n",
+        "operationId": "create-group",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `savedviews:modify`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GroupCreate"
+              },
+              "example": {
+                "projectId": "c6b0bf8d-033d-4291-9931-9b20f2135111",
+                "iModelId": "b2db2e65-24a5-4958-abf5-91a60b94e8a5",
+                "displayName": "Desktop",
+                "shared": true
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created group.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GroupResponse"
+                },
+                "example": {
+                  "group": {
+                    "id": "ACZbDmWhULVChRcDRkoPdLaNv7DGPQORQpkxmyDyE1ERZS7bsqUkWEmr9ZGmC5TopQ",
+                    "displayName": "Test Name",
+                    "shared": false,
+                    "_links": {
+                      "project": {
+                        "href": "https://api.bentley.com/path1/path2/id"
+                      },
+                      "imodel": {
+                        "href": "https://api.bentley.com/path1/path2/id"
+                      },
+                      "creator": {
+                        "href": "https://api.bentley.com/path1/path2/id"
+                      },
+                      "savedViews": {
+                        "href": "https://api.bentley.com/path1/path2/id"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "Unauthorized",
+                    "message": "Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint."
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The user has insufficient permissions for the requested operation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "InsufficientPermissions",
+                    "message": "The user has insufficient permissions for the requested operation."
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested project is not available.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "ProjectNotFound",
+                    "message": "Requested project is not available."
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Cannot create group.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "InvalidSavedviewsRequest",
+                    "message": "Cannot create group.",
+                    "details": [
+                      {
+                        "code": "InvalidRequestBody",
+                        "message": "displayName must be a string.",
+                        "target": "displayName"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "TooManyRequests",
+                    "message": "More requests were received than the subscription rate-limit allows."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/groups/{groupId}": {
+      "patch": {
+        "tags": ["Groups"],
+        "summary": "Update group",
+        "description": "---\r\n\r\nUpdates a group.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `savedviews:modify`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n---\r\n",
+        "operationId": "update-group",
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `savedviews:modify`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GroupUpdate"
+              },
+              "example": {
+                "displayName": "Desktop",
+                "shared": true
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated group.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GroupResponse"
+                },
+                "example": {
+                  "group": {
+                    "id": "ACZbDmWhULVChRcDRkoPdLaNv7DGPQORQpkxmyDyE1ERZS7bsqUkWEmr9ZGmC5TopQ",
+                    "displayName": "Test Name",
+                    "shared": false,
+                    "_links": {
+                      "project": {
+                        "href": "https://api.bentley.com/path1/path2/id"
+                      },
+                      "imodel": {
+                        "href": "https://api.bentley.com/path1/path2/id"
+                      },
+                      "creator": {
+                        "href": "https://api.bentley.com/path1/path2/id"
+                      },
+                      "savedViews": {
+                        "href": "https://api.bentley.com/path1/path2/id"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "Unauthorized",
+                    "message": "Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint."
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The user has insufficient permissions for the requested operation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "InsufficientPermissions",
+                    "message": "The user has insufficient permissions for the requested operation."
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested group is not available.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "GroupNotFound",
+                    "message": "Requested group is not available."
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Cannot update group.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "InvalidSavedviewsRequest",
+                    "message": "Cannot update group.",
+                    "details": [
+                      {
+                        "code": "InvalidRequestBody",
+                        "message": "displayName must be a string.",
+                        "target": "displayName"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "TooManyRequests",
+                    "message": "More requests were received than the subscription rate-limit allows."
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Groups"],
+        "summary": "Delete group",
+        "description": "---\r\n\r\nDeletes a group, saved views assigned to that group will not be deleted.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `savedviews:modify`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n---\r\n",
+        "operationId": "delete-group",
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `savedviews:modify`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Group deleted successfully."
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "Unauthorized",
+                    "message": "Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint."
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The user has insufficient permissions for the requested operation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "InsufficientPermissions",
+                    "message": "The user has insufficient permissions for the requested operation."
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested group is not available.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "GroupNotFound",
+                    "message": "Requested group is not available."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "TooManyRequests",
+                    "message": "More requests were received than the subscription rate-limit allows."
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Groups"],
+        "summary": "Get group",
+        "description": "---\r\n\r\nRetrieves information for a single group.\r\n\r\n### Authentication\r\n\r\nRequires `Authorization` header with valid Bearer token for scope `savedviews:read`.\r\n\r\nFor more documentation on authorization and how to get access token visit [OAUTH2 Authorization](https://developer.bentley.com/apis/overview/authorization/) page.\r\n\r\n---\r\n",
+        "operationId": "get-group",
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth access token with scope `savedviews:read`",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Setting to `application/vnd.bentley.itwin-platform.v1+json` is recommended.",
+            "schema": {
+              "enum": ["application/vnd.bentley.itwin-platform.v1+json"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Specified group.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GroupResponse"
+                },
+                "example": {
+                  "group": {
+                    "id": "ACZbDmWhULVChRcDRkoPdLaNv7DGPQORQpkxmyDyE1ERZS7bsqUkWEmr9ZGmC5TopQ",
+                    "displayName": "Test Name",
+                    "shared": false,
+                    "_links": {
+                      "project": {
+                        "href": "https://api.bentley.com/path1/path2/id"
+                      },
+                      "imodel": {
+                        "href": "https://api.bentley.com/path1/path2/id"
+                      },
+                      "creator": {
+                        "href": "https://api.bentley.com/path1/path2/id"
+                      },
+                      "savedViews": {
+                        "href": "https://api.bentley.com/path1/path2/id"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This response indicates that request lacks valid authentication credentials. Access token might not been provided, issued by the wrong issuer, does not have required scopes or request headers were malformed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "Unauthorized",
+                    "message": "Access denied due to invalid access_token. Make sure to provide a valid token for this API endpoint."
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested group is not available.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "GroupNotFound",
+                    "message": "Requested group is not available."
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "This response indicates that the user has sent too many requests in a given amount of time.",
+            "headers": {
+              "retry-after": {
+                "description": "The number of requests exceeds the rate-limit for the client subscription.",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "code": "TooManyRequests",
+                    "message": "More requests were received than the subscription rate-limit allows."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ErrorDetail": {
+        "required": ["code", "message"],
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "One of a server-defined set of error codes."
+          },
+          "message": {
+            "type": "string",
+            "description": "A human-readable representation of the error."
+          },
+          "target": {
+            "type": "string",
+            "description": "Optional target of the error message",
+            "nullable": true
+          }
+        }
+      },
+      "GroupCreate": {
+        "required": ["projectId", "displayName"],
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Connected project ID",
+            "example": "c6b0bf8d-033d-4291-9931-9b20f2135111"
+          },
+          "iModelId": {
+            "type": "string",
+            "description": "IModel ID",
+            "nullable": true,
+            "example": "b2db2e65-24a5-4958-abf5-91a60b94e8a5"
+          },
+          "displayName": {
+            "type": "string",
+            "description": "Group Name",
+            "example": "Desktop"
+          },
+          "shared": {
+            "type": "boolean",
+            "description": "Is Group Shared",
+            "nullable": true,
+            "example": true
+          }
+        }
+      },
+      "Link": {
+        "required": ["href"],
+        "type": "object",
+        "properties": {
+          "href": {
+            "type": "string",
+            "description": "Http reference",
+            "example": "https://api.bentley.com/path1/path2/id"
+          }
+        }
+      },
+      "GroupLinks": {
+        "required": ["project", "creator", "savedViews"],
+        "type": "object",
+        "properties": {
+          "project": {
+            "$ref": "#/components/schemas/Link"
+          },
+          "imodel": {
+            "$ref": "#/components/schemas/Link"
+          },
+          "creator": {
+            "$ref": "#/components/schemas/Link"
+          },
+          "savedViews": {
+            "$ref": "#/components/schemas/Link"
+          }
+        }
+      },
+      "Group": {
+        "required": ["id", "displayName", "shared", "_links"],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier",
+            "example": "ACZbDmWhULVChRcDRkoPdLaNv7DGPQORQpkxmyDyE1ERZS7bsqUkWEmr9ZGmC5TopQ"
+          },
+          "displayName": {
+            "type": "string",
+            "description": "User visible name",
+            "example": "Test Name"
+          },
+          "shared": {
+            "type": "boolean",
+            "description": "Flag for whether or not element is shared",
+            "example": false
+          },
+          "_links": {
+            "$ref": "#/components/schemas/GroupLinks"
+          }
+        }
+      },
+      "GroupResponse": {
+        "required": ["group"],
+        "type": "object",
+        "properties": {
+          "group": {
+            "$ref": "#/components/schemas/Group"
+          }
+        }
+      },
+      "GroupListLinks": {
+        "required": ["self"],
+        "type": "object",
+        "properties": {
+          "self": {
+            "$ref": "#/components/schemas/Link"
+          }
+        }
+      },
+      "GroupListResponse": {
+        "required": ["groups", "_links"],
+        "type": "object",
+        "properties": {
+          "groups": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Group"
+            },
+            "description": "Requested groups"
+          },
+          "_links": {
+            "$ref": "#/components/schemas/GroupListLinks"
+          }
+        }
+      },
+      "GroupUpdate": {
+        "type": "object",
+        "properties": {
+          "displayName": {
+            "type": "string",
+            "description": "Group Name",
+            "nullable": true,
+            "example": "Desktop"
+          },
+          "shared": {
+            "type": "boolean",
+            "description": "Is Group Shared",
+            "nullable": true,
+            "example": true
+          }
+        }
+      },
+      "ImageUpdate": {
+        "required": ["image"],
+        "type": "object",
+        "properties": {
+          "image": {
+            "type": "string",
+            "description": "image/png data URL",
+            "example": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+          }
+        }
+      },
+      "ImageResponse": {
+        "required": ["href"],
+        "type": "object",
+        "properties": {
+          "href": {
+            "type": "string",
+            "description": "Http reference",
+            "example": "https://api.bentley.com/path1/path2/id"
+          }
+        }
+      },
+      "ViewYawPitchRoll": {
+        "type": "object",
+        "properties": {
+          "yaw": {
+            "type": "number",
+            "description": "Yaw (rotation of x towards y) of the orientation, in degrees",
+            "nullable": true,
+            "example": 90
+          },
+          "pitch": {
+            "type": "number",
+            "description": "Pitch (rotation that raises x towards z) of the orientation, in degrees",
+            "nullable": true,
+            "example": 90
+          },
+          "roll": {
+            "type": "number",
+            "description": "Roll (rotation of y towards z) of the orientation, in degrees",
+            "nullable": true,
+            "example": 90
+          }
+        }
+      },
+      "ViewCamera": {
+        "required": ["lens", "focusDist", "eye"],
+        "type": "object",
+        "properties": {
+          "lens": {
+            "type": "number",
+            "description": "Angle of the camera lens, in degrees",
+            "example": 90
+          },
+          "focusDist": {
+            "type": "number",
+            "description": "Focal distance of the lens, in meters",
+            "example": 1
+          },
+          "eye": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "description": "Location of the eye of the camera. (Array of numbers representing x, y and z)",
+            "example": [0, 0, 0]
+          }
+        }
+      },
+      "ViewVisibilityList": {
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of Ids that should be enabled/visible.",
+            "nullable": true,
+            "example": ["0x12", "0x13"]
+          },
+          "disabled": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of Ids that should be disabled/hidden.",
+            "nullable": true,
+            "example": ["0x14", "0x15"]
+          }
+        }
+      },
+      "ViewItwin3d": {
+        "required": ["origin", "extents"],
+        "type": "object",
+        "properties": {
+          "origin": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "description": "The lower left back corner of the view frustum. (Array of numbers representing x, y and z)",
+            "example": [0, 0, 0]
+          },
+          "extents": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "description": "The extent of the view frustum. (Array of numbers representing x, y and z)",
+            "example": [100, 100, 100]
+          },
+          "angles": {
+            "$ref": "#/components/schemas/ViewYawPitchRoll"
+          },
+          "camera": {
+            "$ref": "#/components/schemas/ViewCamera"
+          },
+          "categories": {
+            "$ref": "#/components/schemas/ViewVisibilityList"
+          },
+          "models": {
+            "$ref": "#/components/schemas/ViewVisibilityList"
+          }
+        }
+      },
+      "ViewItwinSheet": {
+        "required": ["baseModelId", "origin", "delta", "angle"],
+        "type": "object",
+        "properties": {
+          "baseModelId": {
+            "type": "string",
+            "description": "Base model Id",
+            "example": "0x12"
+          },
+          "origin": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "description": "Origin. (Array of numbers representing x and y)",
+            "example": [0, 0]
+          },
+          "delta": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "description": "Delta. (Array of numbers representing x and y)",
+            "example": [50, 100]
+          },
+          "angle": {
+            "type": "number",
+            "description": "Angle, in degrees.",
+            "example": 90
+          },
+          "categories": {
+            "$ref": "#/components/schemas/ViewVisibilityList"
+          },
+          "width": {
+            "type": "number",
+            "description": "Width of the sheet, in meters",
+            "nullable": true,
+            "example": 100
+          },
+          "height": {
+            "type": "number",
+            "description": "Height of the sheet, in meters",
+            "nullable": true,
+            "example": 100
+          },
+          "scale": {
+            "type": "number",
+            "description": "Scale of the sheet",
+            "nullable": true,
+            "example": 1
+          },
+          "sheetTemplate": {
+            "type": "string",
+            "description": "Sheet template Id",
+            "nullable": true,
+            "example": "0x12"
+          },
+          "sheetAttachments": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of Ids",
+            "nullable": true,
+            "example": ["0x12", "0x13"]
+          }
+        }
+      },
+      "ViewItwinDrawing": {
+        "required": ["baseModelId", "origin", "delta", "angle", "modelExtents"],
+        "type": "object",
+        "properties": {
+          "baseModelId": {
+            "type": "string",
+            "description": "Base model Id",
+            "example": "0x12"
+          },
+          "origin": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "description": "Origin. (Array of numbers representing x and y)",
+            "example": [0, 0]
+          },
+          "delta": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "description": "Delta. (Array of numbers representing x and y)",
+            "example": [50, 100]
+          },
+          "angle": {
+            "type": "number",
+            "description": "Angle, in degrees.",
+            "example": 90
+          },
+          "categories": {
+            "$ref": "#/components/schemas/ViewVisibilityList"
+          },
+          "spatialView": {
+            "type": "string",
+            "description": "The Id of the spatial view from which the SectionDrawing was generated.",
+            "nullable": true,
+            "externalDocs": {
+              "url": "https://www.itwinjs.org/learning/common/id64/"
+            },
+            "example": "0x12"
+          },
+          "displaySpatialView": {
+            "type": "boolean",
+            "description": "If true, the spatial view should be displayed in the context of the drawing view.",
+            "nullable": true,
+            "example": true
+          },
+          "drawingToSpatialTransform": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            },
+            "description": "Transform from drawing coordinates to spatial coordinates. If undefined, use identity transform. 3 X 4 transformation matrix containing 3 arrays of matrix rows consisting of 4 numbers each: [qx qy qz ax] where the fourth columnn in each row holds the translation.",
+            "nullable": true,
+            "example": [
+              [1, 0, 0, 0],
+              [0, 1, 0, 0],
+              [0, 0, 1, 0]
+            ]
+          },
+          "modelExtents": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            },
+            "description": "The extents of the DrawingModel, used for determining the upper limits of the view's extents.",
+            "example": [
+              [-10, -10, -10],
+              [100, 100, 100]
+            ]
+          }
+        }
+      },
+      "View": {
+        "type": "object",
+        "properties": {
+          "itwin3dView": {
+            "$ref": "#/components/schemas/ViewItwin3d"
+          },
+          "itwinSheetView": {
+            "$ref": "#/components/schemas/ViewItwinSheet"
+          },
+          "itwinDrawingView": {
+            "$ref": "#/components/schemas/ViewItwinDrawing"
+          },
+          "appData": {
+            "type": "object",
+            "description": "Application specific data, not controlled",
+            "nullable": true,
+            "example": {
+              "swaggerDemo": {
+                "highlightedElement": "0x200000000734"
+              }
+            }
+          }
+        }
+      },
+      "SavedViewCreate": {
+        "required": ["projectId", "savedViewData", "displayName"],
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Connected project ID",
+            "example": "c6b0bf8d-033d-4291-9931-9b20f2135111"
+          },
+          "iModelId": {
+            "type": "string",
+            "description": "IModel ID",
+            "nullable": true,
+            "example": "b2db2e65-24a5-4958-abf5-91a60b94e8a5"
+          },
+          "savedViewData": {
+            "$ref": "#/components/schemas/View"
+          },
+          "groupId": {
+            "type": "string",
+            "description": "Group ID",
+            "nullable": true,
+            "example": "AKX-Arab1o1NqdQwr7zIr3KNv7DGPQORQpkxmyDyE1ERZS7bsqUkWEmr9ZGmC5TopQ"
+          },
+          "displayName": {
+            "type": "string",
+            "description": "Saved View Name",
+            "example": "Saved View Name"
+          },
+          "shared": {
+            "type": "boolean",
+            "description": "Flag for whether or not Saved View is shared",
+            "nullable": true,
+            "example": false
+          },
+          "tagIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of tag ids to apply to the saved view",
+            "nullable": true,
+            "example": [
+              "ABRBqKCBtXZCl_ax5ZFB9uaNv7DGPQORQpkxmyDyE1ERZS7bsqUkWEmr9ZGmC5TopQ"
+            ]
+          },
+          "category": {
+            "type": "string",
+            "description": "Saved view category",
+            "nullable": true,
+            "example": "Desktop"
+          }
+        }
+      },
+      "SavedViewTag": {
+        "required": ["id", "displayName"],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Linked Tag identifier",
+            "example": "ABRBqKCBtXZCl_ax5ZFB9uaNv7DGPQORQpkxmyDyE1ERZS7bsqUkWEmr9ZGmC5TopQ"
+          },
+          "displayName": {
+            "type": "string"
+          }
+        }
+      },
+      "SavedViewLinks": {
+        "required": ["project", "creator", "image", "thumbnail"],
+        "type": "object",
+        "properties": {
+          "project": {
+            "$ref": "#/components/schemas/Link"
+          },
+          "imodel": {
+            "$ref": "#/components/schemas/Link"
+          },
+          "creator": {
+            "$ref": "#/components/schemas/Link"
+          },
+          "group": {
+            "$ref": "#/components/schemas/Link"
+          },
+          "image": {
+            "$ref": "#/components/schemas/Link"
+          },
+          "thumbnail": {
+            "$ref": "#/components/schemas/Link"
+          }
+        }
+      },
+      "ViewWithLegacy": {
+        "type": "object",
+        "properties": {
+          "itwin3dView": {
+            "$ref": "#/components/schemas/ViewItwin3d"
+          },
+          "itwinSheetView": {
+            "$ref": "#/components/schemas/ViewItwinSheet"
+          },
+          "itwinDrawingView": {
+            "$ref": "#/components/schemas/ViewItwinDrawing"
+          },
+          "appData": {
+            "type": "object",
+            "description": "Application specific data, not controlled",
+            "nullable": true,
+            "example": {
+              "swaggerDemo": {
+                "highlightedElement": "0x200000000734"
+              }
+            }
+          },
+          "legacyView": {
+            "type": "object",
+            "description": "Legacy data, un-updatable, will soon be deprecated move to new service",
+            "nullable": true,
+            "example": {
+              "viewStateProps": {
+                "categorySelectorProps": {
+                  "classFullName": "BisCore:CategorySelector"
+                }
+              }
+            }
+          }
+        }
+      },
+      "SavedViewWithData": {
+        "required": ["id", "displayName", "shared", "_links", "savedViewData"],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier",
+            "example": "ACZbDmWhULVChRcDRkoPdLaNv7DGPQORQpkxmyDyE1ERZS7bsqUkWEmr9ZGmC5TopQ"
+          },
+          "displayName": {
+            "type": "string",
+            "description": "User visible name",
+            "example": "Test Name"
+          },
+          "shared": {
+            "type": "boolean",
+            "description": "Flag for whether or not element is shared",
+            "example": false
+          },
+          "category": {
+            "type": "string",
+            "description": "Category of Saved View",
+            "nullable": true,
+            "example": "Test category"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SavedViewTag"
+            },
+            "description": "Tags of Saved View",
+            "nullable": true,
+            "example": [
+              {
+                "displayName": "Tag Test Name",
+                "id": "ABRBqKCBtXZCl_ax5ZFB9uaNv7DGPQORQpkxmyDyE1ERZS7bsqUkWEmr9ZGmC5TopQ"
+              }
+            ]
+          },
+          "_links": {
+            "$ref": "#/components/schemas/SavedViewLinks"
+          },
+          "savedViewData": {
+            "$ref": "#/components/schemas/ViewWithLegacy"
+          }
+        }
+      },
+      "SavedViewResponse": {
+        "required": ["savedView"],
+        "type": "object",
+        "properties": {
+          "savedView": {
+            "$ref": "#/components/schemas/SavedViewWithData"
+          }
+        }
+      },
+      "SavedView": {
+        "required": ["id", "displayName", "shared", "_links"],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier",
+            "example": "ACZbDmWhULVChRcDRkoPdLaNv7DGPQORQpkxmyDyE1ERZS7bsqUkWEmr9ZGmC5TopQ"
+          },
+          "displayName": {
+            "type": "string",
+            "description": "User visible name",
+            "example": "Test Name"
+          },
+          "shared": {
+            "type": "boolean",
+            "description": "Flag for whether or not element is shared",
+            "example": false
+          },
+          "category": {
+            "type": "string",
+            "description": "Category of Saved View",
+            "nullable": true,
+            "example": "Test category"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SavedViewTag"
+            },
+            "description": "Tags of Saved View",
+            "nullable": true,
+            "example": [
+              {
+                "displayName": "Tag Test Name",
+                "id": "ABRBqKCBtXZCl_ax5ZFB9uaNv7DGPQORQpkxmyDyE1ERZS7bsqUkWEmr9ZGmC5TopQ"
+              }
+            ]
+          },
+          "_links": {
+            "$ref": "#/components/schemas/SavedViewLinks"
+          }
+        }
+      },
+      "SavedViewListLinks": {
+        "required": ["self"],
+        "type": "object",
+        "properties": {
+          "self": {
+            "$ref": "#/components/schemas/Link"
+          },
+          "prev": {
+            "$ref": "#/components/schemas/Link"
+          },
+          "next": {
+            "$ref": "#/components/schemas/Link"
+          }
+        }
+      },
+      "SavedViewListResponse": {
+        "required": ["savedViews", "_links"],
+        "type": "object",
+        "properties": {
+          "savedViews": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SavedView"
+            },
+            "description": "Requested saved views"
+          },
+          "_links": {
+            "$ref": "#/components/schemas/SavedViewListLinks"
+          }
+        }
+      },
+      "SavedViewUpdate": {
+        "type": "object",
+        "properties": {
+          "savedViewData": {
+            "$ref": "#/components/schemas/View"
+          },
+          "groupId": {
+            "type": "string",
+            "description": "Group ID",
+            "nullable": true,
+            "example": "AKX-Arab1o1NqdQwr7zIr3KNv7DGPQORQpkxmyDyE1ERZS7bsqUkWEmr9ZGmC5TopQ"
+          },
+          "displayName": {
+            "type": "string",
+            "description": "Saved View Name",
+            "nullable": true,
+            "example": "Saved View Test Name"
+          },
+          "shared": {
+            "type": "boolean",
+            "description": "Flag for whether or not Saved View is shared",
+            "nullable": true,
+            "example": false
+          },
+          "tagIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Tags of Saved View",
+            "nullable": true,
+            "example": [
+              "ABRBqKCBtXZCl_ax5ZFB9uaNv7DGPQORQpkxmyDyE1ERZS7bsqUkWEmr9ZGmC5TopQ"
+            ]
+          },
+          "category": {
+            "type": "string",
+            "description": "Saved view category",
+            "nullable": true,
+            "example": "Desktop"
+          }
+        }
+      },
+      "TagCreate": {
+        "required": ["projectId", "displayName"],
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Connected project ID",
+            "example": "c6b0bf8d-033d-4291-9931-9b20f2135111"
+          },
+          "iModelId": {
+            "type": "string",
+            "description": "IModel ID",
+            "nullable": true,
+            "example": "b2db2e65-24a5-4958-abf5-91a60b94e8a5"
+          },
+          "displayName": {
+            "type": "string",
+            "description": "Tag Name",
+            "example": "Desktop"
+          }
+        }
+      },
+      "TagLinks": {
+        "required": ["project", "creator"],
+        "type": "object",
+        "properties": {
+          "project": {
+            "$ref": "#/components/schemas/Link"
+          },
+          "imodel": {
+            "$ref": "#/components/schemas/Link"
+          },
+          "creator": {
+            "$ref": "#/components/schemas/Link"
+          }
+        }
+      },
+      "Tag": {
+        "required": ["id", "displayName", "_links"],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier",
+            "example": "ACZbDmWhULVChRcDRkoPdLaNv7DGPQORQpkxmyDyE1ERZS7bsqUkWEmr9ZGmC5TopQ"
+          },
+          "displayName": {
+            "type": "string",
+            "description": "User visible name",
+            "example": "Test Name"
+          },
+          "_links": {
+            "$ref": "#/components/schemas/TagLinks"
+          }
+        }
+      },
+      "TagResponse": {
+        "required": ["tag"],
+        "type": "object",
+        "properties": {
+          "tag": {
+            "$ref": "#/components/schemas/Tag"
+          }
+        }
+      },
+      "TagUpdate": {
+        "type": "object",
+        "properties": {
+          "displayName": {
+            "type": "string",
+            "description": "Tag Name",
+            "nullable": true,
+            "example": "Desktop"
+          }
+        }
+      },
+      "TagListLinks": {
+        "required": ["self"],
+        "type": "object",
+        "properties": {
+          "self": {
+            "$ref": "#/components/schemas/Link"
+          }
+        }
+      },
+      "TagListResponse": {
+        "required": ["tags", "_links"],
+        "type": "object",
+        "properties": {
+          "tags": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Tag"
+            },
+            "description": "Requested tags"
+          },
+          "_links": {
+            "$ref": "#/components/schemas/TagListLinks"
+          }
+        }
+      },
+      "Error": {
+        "required": ["code", "message"],
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "One of a server-defined set of error codes."
+          },
+          "message": {
+            "type": "string",
+            "description": "A human-readable representation of the error."
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ErrorDetails"
+            },
+            "description": "Optional array of more specific errors."
+          }
+        },
+        "description": "Contains error information and an optional array of more specific errors."
+      },
+      "ErrorDetails": {
+        "title": "Error Details",
+        "required": ["code", "message"],
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "One of a server-defined set of error codes."
+          },
+          "message": {
+            "type": "string",
+            "description": "A human-readable representation of the error."
+          }
+        },
+        "description": "Contains error information."
+      },
+      "ErrorResponse": {
+        "title": "Error Response",
+        "required": ["error"],
+        "type": "object",
+        "properties": {
+          "error": {
+            "$ref": "#/components/schemas/Error"
+          }
+        },
+        "description": "Gives details for an error that occurred while handling the request. Note that clients MUST NOT assume that every failed request will produce an object of this schema, or that all of the properties in the response will be non-null, as the error may have prevented this response from being constructed."
+      }
+    },
+    "securitySchemes": {
+      "apiKeyHeader": {
+        "type": "apiKey",
+        "name": "X-Api-Subscription-Key",
+        "in": "header"
+      },
+      "apiKeyQuery": {
+        "type": "apiKey",
+        "name": "subscription-key",
+        "in": "query"
+      }
+    }
+  },
+  "security": [
+    {
+      "apiKeyHeader": []
+    },
+    {
+      "apiKeyQuery": []
+    }
+  ]
+}

@@ -57,6 +57,17 @@ export const HeaderUserIcon = ({
           </Small>
         </div>,
         <MenuItem
+          key={"token"}
+          onClick={() => {
+            const token = accessTokenObject?.toTokenString() ?? "";
+            navigator.clipboard.writeText(token).catch(() => {
+              //Noop
+            });
+          }}
+        >
+          Copy token
+        </MenuItem>,
+        <MenuItem
           key={"logout"}
           onClick={() => {
             close();
