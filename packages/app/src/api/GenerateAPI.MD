@@ -56,3 +56,9 @@ docker run --rm -v "${PWD}/packages/app/src/api/storage:/local" swaggerapi/swagg
 ```ps
 docker run --rm -v "${PWD}/packages/app/src/api/synchronization:/local" swaggerapi/swagger-codegen-cli-v3 generate -i /local/openapi/synchronizationAdjusted.json -l typescript-fetch -o /local/generated --disable-examples --additional-properties=typescriptThreePlus=true,withoutRuntimeChecks=true,modelPropertyNaming=original --model-name-suffix SynchronizationAPI
 ```
+
+### Savedviews
+
+```ps
+docker run --rm -v "${PWD}/packages/app/src/api/savedviews:/local" swaggerapi/swagger-codegen-cli-v3 generate -i /local/openapi/savedviewsAdjusted.json -l typescript-fetch -o /local/generated --disable-examples --additional-properties=typescriptThreePlus=true,withoutRuntimeChecks=true,modelPropertyNaming=original --model-name-suffix SavedviewsAPI
+```

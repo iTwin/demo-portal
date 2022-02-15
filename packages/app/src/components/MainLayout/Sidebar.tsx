@@ -4,7 +4,13 @@
  *
  * This code is for demonstration purposes and should not be considered production ready.
  *--------------------------------------------------------------------------------------------*/
-import { Svg3D, SvgFlag, SvgSync, SvgUsers } from "@itwin/itwinui-icons-react";
+import {
+  Svg3D,
+  SvgFlag,
+  SvgImageFrame,
+  SvgSync,
+  SvgUsers,
+} from "@itwin/itwinui-icons-react";
 import { SidenavButton, SideNavigation } from "@itwin/itwinui-react";
 import { RouteComponentProps, Router } from "@reach/router";
 import React from "react";
@@ -35,6 +41,14 @@ export const RoutedSidebar = ({ navigate }: RouteComponentProps) => {
           startIcon={<Svg3D />}
           onClick={() => navigate?.(`/view${selectionPath}`)}
           isActive={section === "view"}
+        >
+          View iModel
+        </SidenavButton>,
+        <SidenavButton
+          key="savedviews"
+          startIcon={<SvgImageFrame />}
+          onClick={() => navigate?.(`/savedviews${selectionPath}`)}
+          isActive={section === "savedviews"}
         >
           View iModel
         </SidenavButton>,

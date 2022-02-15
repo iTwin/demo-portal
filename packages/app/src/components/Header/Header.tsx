@@ -5,7 +5,12 @@
  * This code is for demonstration purposes and should not be considered production ready.
  *--------------------------------------------------------------------------------------------*/
 import { AccessToken } from "@bentley/itwin-client";
-import { SvgImodelHollow, SvgMoon, SvgSun } from "@itwin/itwinui-icons-react";
+import {
+  SvgImageFrame,
+  SvgImodelHollow,
+  SvgMoon,
+  SvgSun,
+} from "@itwin/itwinui-icons-react";
 import {
   Header as IuiHeader,
   HeaderBreadcrumbs,
@@ -19,6 +24,7 @@ import React from "react";
 
 import { spreadIf } from "../../utils";
 import { useCommonPathPattern } from "../MainLayout/useCommonPathPattern";
+import "./Header.scss";
 import { HeaderUserIcon } from "./HeaderUserIcon";
 import { IModelHeaderButton } from "./IModelHeaderButton";
 import { ProjectHeaderButton } from "./ProjectHeaderButton";
@@ -68,8 +74,16 @@ const RoutedHeader = ({
   return (
     <IuiHeader
       appLogo={
-        <HeaderLogo logo={<SvgImodelHollow />} onClick={() => navigate?.("/")}>
-          iTwin Demo
+        <HeaderLogo
+          logo={
+            <div>
+              <SvgImodelHollow />
+              <SvgImageFrame className={"view-in-imodel"} />
+            </div>
+          }
+          onClick={() => navigate?.("/")}
+        >
+          iTwin Saved Views Demo
         </HeaderLogo>
       }
       isSlim={!!slimMatch}
