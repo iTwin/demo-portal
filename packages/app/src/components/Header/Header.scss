@@ -4,13 +4,17 @@
  *
  * This code is for demonstration purposes and should not be considered production ready.
  *--------------------------------------------------------------------------------------------*/
+.iui-header-button-icon {
+  position: relative;
+}
+
 .view-in-imodel {
-  width: 21px;
-  height: 17px;
+  height: 71%;
   z-index: 1;
   position: absolute;
-  top: 26px;
-  left: 39px;
+  top: 47%;
+  left: 65%;
+  padding-left: 8%;
   background-color: var(--iui-color-background-1);
 }
 
