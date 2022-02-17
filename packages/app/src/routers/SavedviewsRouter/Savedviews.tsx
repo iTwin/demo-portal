@@ -59,6 +59,14 @@ export const Savedviews = ({
     SavedViewSavedviewsAPI
   >();
 
+  const tableNavigate = React.useCallback(
+    (savedviewId: string) =>
+      navigate?.(
+        `/view/project/${projectId}/imodel/${iModelId}/savedview/${savedviewId}`
+      ),
+    [iModelId, navigate, projectId]
+  );
+
   React.useEffect(() => setActiveSavedview(undefined), [savedviews]);
   React.useEffect(() => void fetchSavedviews(), [fetchSavedviews]);
   React.useEffect(() => void fetchGroups(), [fetchGroups]);
@@ -115,6 +123,7 @@ export const Savedviews = ({
           selected={activeSavedview?.id}
           groups={groups ?? []}
           savedviews={displaySavedviews}
+          navigate={tableNavigate}
           deleteFn={deleteSavedview}
           selectFn={(savedview: SavedViewSavedviewsAPI) => {
             setActiveSavedview((current) => {

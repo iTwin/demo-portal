@@ -1,7 +1,14 @@
-import { YawPitchRollAngles } from "@bentley/geometry-core";
+/*---------------------------------------------------------------------------------------------
+ * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
+ * See LICENSE.md in the project root for license terms and full copyright notice.
+ *
+ * This code is for demonstration purposes and should not be considered production ready.
+ *--------------------------------------------------------------------------------------------*/
+import { Angle, Vector3d, YawPitchRollAngles } from "@bentley/geometry-core";
 import {
   imageBufferToPngDataUrl,
   ScreenViewport,
+  ViewState3d,
 } from "@bentley/imodeljs-frontend";
 import {
   CommonStatusBarItem,
@@ -21,6 +28,7 @@ import React, {
   PropsWithChildren,
   useCallback,
   useContext,
+  useEffect,
   useRef,
 } from "react";
 
@@ -32,17 +40,14 @@ import {
   ViewYawPitchRollSavedviewsAPI,
 } from "../../../api/savedviews/generated";
 import { SavedViewsModal } from "../components/SavedviewsModal";
+import { useSavedviewsInfo } from "../useSavedviewsInfo";
+import { toastErrorWithCode } from "../util";
 
-/*---------------------------------------------------------------------------------------------
- * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
- * See LICENSE.md in the project root for license terms and full copyright notice.
- *
- * This code is for demonstration purposes and should not be considered production ready.
- *--------------------------------------------------------------------------------------------*/
 export interface SavedviewSnapperContextProps {
   projectId: string | undefined;
   iModelId?: string;
   accessToken: string | undefined;
+  savedviewId?: string | undefined;
 }
 
 const SavedviewSnapperContext = React.createContext<
@@ -56,15 +61,50 @@ export const SavedviewSnapperContextProvider = ({
   accessToken,
   iModelId,
   projectId,
+  savedviewId,
   children,
 }: PropsWithChildren<SavedviewSnapperContextProps>) => {
   return (
     <SavedviewSnapperContext.Provider
-      value={{ iModelId, accessToken, projectId }}
+      value={{ iModelId, accessToken, projectId, savedviewId }}
     >
       {children}
     </SavedviewSnapperContext.Provider>
   );
+};
+
+const apply3dView = (vp: ScreenViewport, view: ViewItwin3dSavedviewsAPI) => {
+  const clone = vp.view.clone() as ViewState3d;
+  clone.setOrigin({ x: view.origin[0], y: view.origin[1], z: view.origin[2] });
+  clone.setExtents(new Vector3d(...view.extents));
+  if (view.angles) {
+    clone.setRotation(
+      new YawPitchRollAngles(
+        Angle.createDegrees(view.angles?.yaw ?? 0),
+        Angle.createDegrees(view.angles?.pitch ?? 0),
+        Angle.createDegrees(view.angles?.roll ?? 0)
+      ).toMatrix3d()
+    );
+  }
+  if (view.camera) {
+    clone.camera.setEyePoint({
+      x: view.camera.eye[0],
+      y: view.camera.eye[1],
+      z: view.camera.eye[2],
+    });
+    clone.camera.setFocusDistance(view.camera.focusDist);
+    clone.camera.setLensAngle(Angle.createDegrees(view.camera.lens));
+  }
+  if (view.categories?.enabled && view.categories.enabled.length > 0) {
+    clone.categorySelector.dropCategories(
+      clone.categorySelector.toJSON().categories
+    );
+    clone.categorySelector.addCategories(view.categories.enabled);
+  }
+  vp.changeView(clone, { animationTime: 100 });
+  if (view.models?.enabled && view.models.enabled.length > 0) {
+    vp.changeViewedModels(view.models.enabled);
+  }
 };
 
 const build3dView = (vp: ScreenViewport | undefined) => {
@@ -121,7 +161,7 @@ const buildImage = (vp: ScreenViewport | undefined) => {
 };
 
 const SavedviewStatusBarItem = () => {
-  const { projectId, iModelId, accessToken } = useContext(
+  const { projectId, iModelId, accessToken, savedviewId } = useContext(
     SavedviewSnapperContext
   );
   const target = useRef<HTMLDivElement>(null);
@@ -141,6 +181,30 @@ const SavedviewStatusBarItem = () => {
       });
     }
   }, [activeViewport]);
+
+  const { fetchSavedview } = useSavedviewsInfo(
+    projectId ?? "",
+    iModelId,
+    accessToken ?? ""
+  );
+
+  useEffect(() => {
+    if (savedviewId && activeViewport && activeViewport.view.is3d()) {
+      fetchSavedview(savedviewId)
+        .then((savedview) => {
+          const view = savedview?.savedViewData.itwin3dView;
+          if (!view) {
+            return;
+          }
+          setTimeout(() => {
+            apply3dView(activeViewport, view);
+          }, 100);
+        })
+        .catch((e) => {
+          toastErrorWithCode(e, "Fetch savedview for display failed");
+        });
+    }
+  }, [activeViewport, fetchSavedview, savedviewId]);
 
   return (
     <>

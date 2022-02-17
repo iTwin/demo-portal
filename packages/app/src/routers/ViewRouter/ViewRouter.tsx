@@ -45,6 +45,7 @@ export interface ViewProps extends RouteComponentProps {
   projectId?: string;
   iModelId?: string;
   versionId?: string;
+  savedviewId?: string;
 }
 const View = (props: ViewProps) => {
   (window as any).ITWIN_VIEWER_HOME = window.location.origin;
@@ -66,6 +67,7 @@ const View = (props: ViewProps) => {
       accessToken={props.accessToken}
       projectId={props.projectId}
       iModelId={props.iModelId}
+      savedviewId={props.savedviewId}
     >
       <Viewer
         changeSetId={changesetId}
@@ -93,11 +95,19 @@ export const ViewRouter = ({ accessToken }: ViewRouterProps) => {
         hideIModelActions={["view"]}
       />
       <View
-        path="project/:projectId/imodel/:iModelId"
+        path="project/:projectId/imodel/:iModelId/"
+        accessToken={accessToken}
+      />
+      <View
+        path="project/:projectId/imodel/:iModelId/savedview/:savedviewId"
         accessToken={accessToken}
       />
       <View
         path="project/:projectId/imodel/:iModelId/version/:versionId"
+        accessToken={accessToken}
+      />
+      <View
+        path="project/:projectId/imodel/:iModelId/version/:versionId/savedview/:savedviewId"
         accessToken={accessToken}
       />
     </Router>
