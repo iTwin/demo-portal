@@ -4,7 +4,12 @@
  *
  * This code is for demonstration purposes and should not be considered production ready.
  *--------------------------------------------------------------------------------------------*/
-import { SvgDelete, SvgShare, SvgTag } from "@itwin/itwinui-icons-react";
+import {
+  SvgDelete,
+  SvgImageFrame,
+  SvgShare,
+  SvgTag,
+} from "@itwin/itwinui-icons-react";
 import {
   ButtonGroup,
   IconButton,
@@ -28,6 +33,7 @@ interface SavedviewsTableProps {
   selected: string | undefined;
   groups: GroupSavedviewsAPI[];
   savedviews: Partial<SavedViewSavedviewsAPI>[];
+  navigate: (savedviewId: string) => void;
   selectFn: (savedview: SavedViewSavedviewsAPI) => void;
   deleteFn: (id: string) => Promise<void>;
 }
@@ -36,6 +42,7 @@ export const SavedviewsTable = ({
   selected,
   groups,
   savedviews,
+  navigate,
   selectFn,
   deleteFn,
 }: SavedviewsTableProps) => {
@@ -150,6 +157,16 @@ export const SavedviewsTable = ({
                         >
                           <SvgDelete />
                         </IconButton>
+                        <IconButton
+                          styleType={"borderless"}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(props.value ?? "");
+                          }}
+                          title={"Show saved view"}
+                        >
+                          <SvgImageFrame />
+                        </IconButton>
                       </ButtonGroup>
                     </SkeletonCell>
                   );
@@ -158,7 +175,7 @@ export const SavedviewsTable = ({
             ],
           },
         ],
-        [deleteFn, groups]
+        [deleteFn, groups, navigate]
       )}
       emptyTableContent={
         "No savedview created, use field above to create savedview."
