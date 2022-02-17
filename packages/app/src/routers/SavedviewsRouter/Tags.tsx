@@ -55,7 +55,12 @@ export const Tags = ({
           <Title>Saved views</Title>
           <SubNav path={path} navigate={navigate} />
         </div>
-        <TagPanel createFn={createTag} tag={activeTag} updateFn={updateTag} />
+        <TagPanel
+          createFn={createTag}
+          tag={activeTag}
+          updateFn={updateTag}
+          onCancel={() => setActiveTag(undefined)}
+        />
       </div>
       <div className="idp-scrolling-content idp-content-margins">
         <hr />

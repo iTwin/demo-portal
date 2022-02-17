@@ -11,6 +11,7 @@ import {
   GroupsApi,
   GroupUpdateSavedviewsAPI,
   ImagesApi,
+  ImageUpdateSavedviewsAPI,
   SavedViewCreateSavedviewsAPI,
   SavedViewsApi,
   SavedViewUpdateSavedviewsAPI,
@@ -35,58 +36,78 @@ export class SavedviewsClient {
     this.imageApi = new ImagesApi(undefined, baseUrl);
   }
 
-  async createGroup(group: GroupCreateSavedviewsAPI) {
-    return this.groupsApi.createGroup(this.accessToken, group, ACCEPT);
+  async createGroup(group: GroupCreateSavedviewsAPI, init?: RequestInit) {
+    return this.groupsApi.createGroup(this.accessToken, group, ACCEPT, init);
   }
 
-  async getGroup(groupId: string) {
-    return this.groupsApi.getGroup(groupId, this.accessToken, ACCEPT);
+  async getGroup(groupId: string, init?: RequestInit) {
+    return this.groupsApi.getGroup(groupId, this.accessToken, ACCEPT, init);
   }
 
-  async updateGroup(groupId: string, payload: GroupUpdateSavedviewsAPI) {
+  async updateGroup(
+    groupId: string,
+    payload: GroupUpdateSavedviewsAPI,
+    init?: RequestInit
+  ) {
     return this.groupsApi.updateGroup(
       groupId,
       this.accessToken,
       payload,
-      ACCEPT
+      ACCEPT,
+      init
     );
   }
 
-  async getAllGroups(projectId: string, iModelId?: string) {
+  async getAllGroups(projectId: string, iModelId?: string, init?: RequestInit) {
     return this.groupsApi.getAllGroups(
       projectId,
       this.accessToken,
       iModelId,
-      ACCEPT
+      ACCEPT,
+      init
     );
   }
 
-  async deleteGroup(groupId: string) {
-    return this.groupsApi.deleteGroup(groupId, this.accessToken, ACCEPT);
+  async deleteGroup(groupId: string, init?: RequestInit) {
+    return this.groupsApi.deleteGroup(groupId, this.accessToken, ACCEPT, init);
   }
 
-  async createSavedview(payload: SavedViewCreateSavedviewsAPI) {
+  async createSavedview(
+    payload: SavedViewCreateSavedviewsAPI,
+    init?: RequestInit
+  ) {
     return this.savedviewsApi.createSavedview(
       this.accessToken,
       payload,
-      ACCEPT
+      ACCEPT,
+      init
     );
   }
 
-  async getSavedview(id: string) {
-    return this.savedviewsApi.getSavedview(id, this.accessToken, ACCEPT);
+  async getSavedview(id: string, init?: RequestInit) {
+    return this.savedviewsApi.getSavedview(id, this.accessToken, ACCEPT, init);
   }
 
-  async updateSavedview(id: string, payload: SavedViewUpdateSavedviewsAPI) {
+  async updateSavedview(
+    id: string,
+    payload: SavedViewUpdateSavedviewsAPI,
+    init?: RequestInit
+  ) {
     return this.savedviewsApi.updateSavedview(
       id,
       this.accessToken,
       payload,
-      ACCEPT
+      ACCEPT,
+      init
     );
   }
 
-  async getAllGroupSavedviews(id: string, top = 100, skip = 0) {
+  async getAllGroupSavedviews(
+    id: string,
+    top = 100,
+    skip = 0,
+    init?: RequestInit
+  ) {
     return this.savedviewsApi.getAllSavedviews(
       this.accessToken,
       undefined,
@@ -94,7 +115,8 @@ export class SavedviewsClient {
       id,
       top,
       skip,
-      ACCEPT
+      ACCEPT,
+      init
     );
   }
 
@@ -102,7 +124,8 @@ export class SavedviewsClient {
     projectId: string,
     iModelId?: string,
     top = 100,
-    skip = 0
+    skip = 0,
+    init?: RequestInit
   ) {
     return this.savedviewsApi.getAllSavedviews(
       this.accessToken,
@@ -111,36 +134,75 @@ export class SavedviewsClient {
       undefined,
       top,
       skip,
-      ACCEPT
+      ACCEPT,
+      init
     );
   }
 
-  async deleteSavedview(id: string) {
-    return this.savedviewsApi.deleteSavedview(id, this.accessToken, ACCEPT);
+  async deleteSavedview(id: string, init?: RequestInit) {
+    return this.savedviewsApi.deleteSavedview(
+      id,
+      this.accessToken,
+      ACCEPT,
+      init
+    );
   }
 
-  async createTag(tag: TagCreateSavedviewsAPI) {
-    return this.tagsApi.createTag(this.accessToken, tag, ACCEPT);
+  async createTag(tag: TagCreateSavedviewsAPI, init?: RequestInit) {
+    return this.tagsApi.createTag(this.accessToken, tag, ACCEPT, init);
   }
 
-  async getTag(tagId: string) {
-    return this.tagsApi.getTag(tagId, this.accessToken, ACCEPT);
+  async getTag(tagId: string, init?: RequestInit) {
+    return this.tagsApi.getTag(tagId, this.accessToken, ACCEPT, init);
   }
 
-  async updateTag(tagId: string, payload: TagUpdateSavedviewsAPI) {
-    return this.tagsApi.updateTag(tagId, this.accessToken, payload, ACCEPT);
+  async updateTag(
+    tagId: string,
+    payload: TagUpdateSavedviewsAPI,
+    init?: RequestInit
+  ) {
+    return this.tagsApi.updateTag(
+      tagId,
+      this.accessToken,
+      payload,
+      ACCEPT,
+      init
+    );
   }
 
-  async getAllTags(projectId: string, iModelId?: string) {
+  async getAllTags(projectId: string, iModelId?: string, init?: RequestInit) {
     return this.tagsApi.getAllTags(
       projectId,
       this.accessToken,
       iModelId,
-      ACCEPT
+      ACCEPT,
+      init
     );
   }
 
-  async deleteTag(tagId: string) {
-    return this.tagsApi.deleteTag(tagId, this.accessToken, ACCEPT);
+  async deleteTag(tagId: string, init?: RequestInit) {
+    return this.tagsApi.deleteTag(tagId, this.accessToken, ACCEPT, init);
+  }
+
+  async getImage(id: string, init?: RequestInit) {
+    return this.imageApi.getImage(id, this.accessToken, "full", ACCEPT, init);
+  }
+
+  async getThumbnail(id: string, init?: RequestInit) {
+    return this.imageApi.getImage(
+      id,
+      this.accessToken,
+      undefined,
+      ACCEPT,
+      init
+    );
+  }
+
+  async addImage(
+    id: string,
+    payload: ImageUpdateSavedviewsAPI,
+    init?: RequestInit
+  ) {
+    return this.imageApi.addImage(id, this.accessToken, payload, ACCEPT, init);
   }
 }

@@ -1,12 +1,7 @@
-/*---------------------------------------------------------------------------------------------
- * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
- * See LICENSE.md in the project root for license terms and full copyright notice.
- *
- * This code is for demonstration purposes and should not be considered production ready.
- *--------------------------------------------------------------------------------------------*/
 import React from "react";
 
 import {
+  ImageUpdateSavedviewsAPI,
   SavedViewCreateSavedviewsAPI,
   SavedViewSavedviewsAPI,
   SavedViewUpdateSavedviewsAPI,
@@ -14,9 +9,15 @@ import {
 import { SavedviewsClient } from "../../api/savedviews/savedviewsClient";
 import { useApiPrefix } from "../../api/useApiPrefix";
 
+/*---------------------------------------------------------------------------------------------
+ * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
+ * See LICENSE.md in the project root for license terms and full copyright notice.
+ *
+ * This code is for demonstration purposes and should not be considered production ready.
+ *--------------------------------------------------------------------------------------------*/
 export type CreateSavedViewPayload = Omit<
   SavedViewCreateSavedviewsAPI,
-  "projectId" | "iModelId" | "savedViewData"
+  "projectId" | "iModelId"
 >;
 export const useSavedviewsInfo = (
   projectId: string,
@@ -29,9 +30,55 @@ export const useSavedviewsInfo = (
     SavedViewSavedviewsAPI[]
   >();
 
+  const fetchImage = React.useCallback(
+    async (id: string) => {
+      if (!accessToken || !id) {
+        return;
+      }
+      const client = new SavedviewsClient(urlPrefix, accessToken);
+      try {
+        const { href } = await client.getImage(id);
+        return href;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [accessToken, urlPrefix]
+  );
+
+  const putImage = React.useCallback(
+    async (id: string, payload: ImageUpdateSavedviewsAPI) => {
+      if (!accessToken || !id || !payload) {
+        return;
+      }
+      const client = new SavedviewsClient(urlPrefix, accessToken);
+      try {
+        await client.addImage(id, payload);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [accessToken, urlPrefix]
+  );
+
+  const fetchSavedview = React.useCallback(
+    async (id: string) => {
+      if (!accessToken || !id) {
+        return;
+      }
+      const client = new SavedviewsClient(urlPrefix, accessToken);
+      try {
+        const { savedView } = await client.getSavedview(id);
+        return savedView;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [accessToken, urlPrefix]
+  );
+
   const fetchSavedviews = React.useCallback(async () => {
     if (!accessToken || !projectId) {
-      console.error("Test", accessToken, projectId);
       return;
     }
     const client = new SavedviewsClient(urlPrefix, accessToken);
@@ -47,20 +94,22 @@ export const useSavedviewsInfo = (
   }, [accessToken, iModelId, projectId, urlPrefix]);
 
   const createSavedview = React.useCallback(
-    async (savedview: CreateSavedViewPayload) => {
+    async (
+      savedview: CreateSavedViewPayload,
+      image?: ImageUpdateSavedviewsAPI
+    ) => {
       if (accessToken && projectId && savedview.displayName) {
         const client = new SavedviewsClient(urlPrefix, accessToken);
-        await client.createSavedview({
+        const { savedView: created } = await client.createSavedview({
           projectId,
           iModelId,
-          savedViewData: {
-            itwin3dView: { extents: [0, 0, 0], origin: [0, 0, 0] },
-          },
           ...savedview,
         });
+        if (image) {
+          await client.addImage(created.id, image);
+        }
         return await fetchSavedviews();
       }
-      console.error("Cant created", accessToken, projectId, savedview);
     },
     [accessToken, fetchSavedviews, iModelId, projectId, urlPrefix]
   );
@@ -89,9 +138,12 @@ export const useSavedviewsInfo = (
 
   return {
     savedviews,
+    fetchImage,
+    putImage,
     createSavedview,
     deleteSavedview,
     updateSavedview,
     fetchSavedviews,
+    fetchSavedview,
   };
 };

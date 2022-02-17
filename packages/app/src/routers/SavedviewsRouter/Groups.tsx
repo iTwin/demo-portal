@@ -62,6 +62,7 @@ export const Groups = ({
           group={activeGroup}
           createFn={createGroup}
           updateFn={updateGroup}
+          onCancel={() => setActiveGroup(undefined)}
         />
       </div>
       <div className="idp-scrolling-content idp-content-margins">
