@@ -24,7 +24,6 @@ export const useTagsInfo = (
 
   const fetchTags = React.useCallback(async () => {
     if (!accessToken || !projectId) {
-      console.error("Test", accessToken, projectId);
       return;
     }
     const client = new SavedviewsClient(urlPrefix, accessToken);
@@ -46,7 +45,6 @@ export const useTagsInfo = (
         await client.createTag({ projectId, iModelId, displayName });
         return await fetchTags();
       }
-      console.error("No Token or no tag", accessToken, projectId);
     },
     [accessToken, fetchTags, iModelId, projectId, urlPrefix]
   );

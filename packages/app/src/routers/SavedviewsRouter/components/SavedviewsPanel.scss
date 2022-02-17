@@ -1,0 +1,27 @@
+/*---------------------------------------------------------------------------------------------
+ * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
+ * See LICENSE.md in the project root for license terms and full copyright notice.
+ *
+ * This code is for demonstration purposes and should not be considered production ready.
+ *--------------------------------------------------------------------------------------------*/
+.idp-savedview-panel {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(auto, 450px);
+  gap: 12px;
+  height: 375px;
+  overflow: hidden;
+
+  > :nth-child(1n + 1) > :nth-child(2) {
+    overflow: auto;
+  }
+
+  > * {
+    overflow: hidden;
+  }
+
+  .img-fit {
+    max-width: 100%;
+    max-height: 100%;
+  }
+}

@@ -18,9 +18,15 @@ interface TagCreatePanelProps {
   tag: TagSavedviewsAPI | undefined;
   createFn: (displayName: string) => Promise<void>;
   updateFn: (id: string, payload: TagUpdateSavedviewsAPI) => Promise<void>;
+  onCancel?: () => void;
 }
 
-export const TagPanel = ({ tag, createFn, updateFn }: TagCreatePanelProps) => {
+export const TagPanel = ({
+  tag,
+  createFn,
+  updateFn,
+  onCancel,
+}: TagCreatePanelProps) => {
   const [working, setWorking] = React.useState(false);
   const [displayName, setDisplayName] = React.useState("");
   const [status, setStatus] = React.useState<{
@@ -118,7 +124,13 @@ export const TagPanel = ({ tag, createFn, updateFn }: TagCreatePanelProps) => {
         >
           {tag ? "Update" : "Create"}
         </Button>
-        <Button onClick={() => reset()} disabled={working}>
+        <Button
+          onClick={() => {
+            reset();
+            onCancel?.();
+          }}
+          disabled={working}
+        >
           Cancel
         </Button>
       </ButtonBar>

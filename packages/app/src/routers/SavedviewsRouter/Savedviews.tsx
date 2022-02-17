@@ -8,7 +8,10 @@ import { Title } from "@itwin/itwinui-react";
 import { RouteComponentProps } from "@reach/router";
 import React from "react";
 
-import { SavedViewSavedviewsAPI } from "../../api/savedviews/generated";
+import {
+  SavedViewSavedviewsAPI,
+  ViewWithLegacySavedviewsAPI,
+} from "../../api/savedviews/generated";
 import { SavedviewPanel } from "./components/SavedviewsPanel";
 import { SavedviewsTable } from "./components/SavedviewsTable";
 import { skeletonRows } from "./components/SkeletonCell";
@@ -35,6 +38,8 @@ export const Savedviews = ({
     createSavedview,
     deleteSavedview,
     updateSavedview,
+    fetchSavedview,
+    fetchImage,
   } = useSavedviewsInfo(projectId, iModelId, accessToken);
   const { groups, fetchGroups } = useGroupsInfo(
     projectId,
@@ -42,6 +47,8 @@ export const Savedviews = ({
     accessToken
   );
   const { tags, fetchTags } = useTagsInfo(projectId, iModelId, accessToken);
+  const [viewData, setViewData] = React.useState<ViewWithLegacySavedviewsAPI>();
+  const [image, setImage] = React.useState<string>("None");
 
   const displaySavedviews = React.useMemo(
     () => [...(savedviews ? savedviews : skeletonRows)],
@@ -56,6 +63,27 @@ export const Savedviews = ({
   React.useEffect(() => void fetchSavedviews(), [fetchSavedviews]);
   React.useEffect(() => void fetchGroups(), [fetchGroups]);
   React.useEffect(() => void fetchTags(), [fetchTags]);
+  React.useEffect(() => {
+    if (!activeSavedview?.id) {
+      setViewData(undefined);
+      setImage("None");
+      return;
+    }
+    setImage("Loading");
+    setViewData({});
+    fetchImage(activeSavedview.id)
+      .then((image) => {
+        setImage(image ?? "None");
+      })
+      .catch(() => {
+        setImage("None");
+      });
+    fetchSavedview(activeSavedview.id)
+      .then((savedview) => {
+        setViewData(savedview?.savedViewData);
+      })
+      .catch(() => setViewData(undefined));
+  }, [activeSavedview, fetchImage, fetchSavedview]);
 
   return (
     <div className="idp-scrolling-container">
@@ -76,6 +104,9 @@ export const Savedviews = ({
           savedview={activeSavedview}
           createFn={createSavedview}
           updateFn={updateSavedview}
+          view={viewData}
+          image={image}
+          onCancel={() => setActiveSavedview(undefined)}
         />
       </div>
       <div className="idp-scrolling-content idp-content-margins">

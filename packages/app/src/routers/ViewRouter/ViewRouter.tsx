@@ -11,6 +11,10 @@ import React from "react";
 import { useApiData } from "../../api/useApiData";
 import { useConfig } from "../../config/ConfigProvider";
 import AuthClient from "../../services/auth/AuthClient";
+import {
+  SavedviewSnapper,
+  SavedviewSnapperContextProvider,
+} from "../SavedviewsRouter/UIProviders/SavedviewSnapper";
 import { SelectionRouter } from "../SelectionRouter/SelectionRouter";
 import { SimpleBgMapToggleProvider } from "./UiProviders/BackgroundMap";
 
@@ -58,15 +62,21 @@ const View = (props: ViewProps) => {
   const theme = useThemeWatcher();
   const changesetId = props.versionId ? fetchedVersion?.changesetId : undefined;
   return state || !props.versionId ? (
-    <Viewer
-      changeSetId={changesetId}
-      contextId={props.projectId ?? ""}
-      iModelId={props.iModelId ?? ""}
-      authConfig={{ oidcClient: AuthClient.client }}
-      theme={theme}
-      backend={{ buddiRegion }}
-      uiProviders={[new SimpleBgMapToggleProvider()]}
-    />
+    <SavedviewSnapperContextProvider
+      accessToken={props.accessToken}
+      projectId={props.projectId}
+      iModelId={props.iModelId}
+    >
+      <Viewer
+        changeSetId={changesetId}
+        contextId={props.projectId ?? ""}
+        iModelId={props.iModelId ?? ""}
+        authConfig={{ oidcClient: AuthClient.client }}
+        theme={theme}
+        backend={{ buddiRegion }}
+        uiProviders={[new SimpleBgMapToggleProvider(), new SavedviewSnapper()]}
+      />
+    </SavedviewSnapperContextProvider>
   ) : null;
 };
 
@@ -82,7 +92,10 @@ export const ViewRouter = ({ accessToken }: ViewRouterProps) => {
         path="*"
         hideIModelActions={["view"]}
       />
-      <View path="project/:projectId/imodel/:iModelId" />
+      <View
+        path="project/:projectId/imodel/:iModelId"
+        accessToken={accessToken}
+      />
       <View
         path="project/:projectId/imodel/:iModelId/version/:versionId"
         accessToken={accessToken}

@@ -23,12 +23,14 @@ interface GroupsCreatePanelProps {
   group: GroupSavedviewsAPI | undefined;
   createFn: (displayName: string, shared?: boolean) => Promise<void>;
   updateFn: (id: string, payload: GroupUpdateSavedviewsAPI) => Promise<void>;
+  onCancel?: () => void;
 }
 
 export const GroupCreatePanel = ({
   group,
   createFn,
   updateFn,
+  onCancel,
 }: GroupsCreatePanelProps) => {
   const [working, setWorking] = React.useState(false);
   const [displayName, setDisplayName] = React.useState("");
@@ -141,7 +143,13 @@ export const GroupCreatePanel = ({
         >
           {group ? "Update" : "Create"}
         </Button>
-        <Button onClick={() => reset()} disabled={working}>
+        <Button
+          onClick={() => {
+            reset();
+            onCancel?.();
+          }}
+          disabled={working}
+        >
           Cancel
         </Button>
       </ButtonBar>

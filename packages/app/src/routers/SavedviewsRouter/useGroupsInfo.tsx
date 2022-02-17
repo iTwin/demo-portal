@@ -1,3 +1,9 @@
+/*---------------------------------------------------------------------------------------------
+ * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
+ * See LICENSE.md in the project root for license terms and full copyright notice.
+ *
+ * This code is for demonstration purposes and should not be considered production ready.
+ *--------------------------------------------------------------------------------------------*/
 import React from "react";
 
 import {
@@ -7,12 +13,6 @@ import {
 import { SavedviewsClient } from "../../api/savedviews/savedviewsClient";
 import { useApiPrefix } from "../../api/useApiPrefix";
 
-/*---------------------------------------------------------------------------------------------
- * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
- * See LICENSE.md in the project root for license terms and full copyright notice.
- *
- * This code is for demonstration purposes and should not be considered production ready.
- *--------------------------------------------------------------------------------------------*/
 export const useGroupsInfo = (
   projectId: string,
   iModelId: string | undefined,
@@ -24,7 +24,6 @@ export const useGroupsInfo = (
 
   const fetchGroups = React.useCallback(async () => {
     if (!accessToken || !projectId) {
-      console.error("Test", accessToken, projectId);
       return;
     }
     const client = new SavedviewsClient(urlPrefix, accessToken);
@@ -46,7 +45,6 @@ export const useGroupsInfo = (
         await client.createGroup({ projectId, iModelId, displayName, shared });
         return await fetchGroups();
       }
-      console.error("No Token or no group", accessToken, projectId);
     },
     [accessToken, fetchGroups, iModelId, projectId, urlPrefix]
   );
