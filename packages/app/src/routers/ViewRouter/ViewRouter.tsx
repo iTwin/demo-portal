@@ -15,6 +15,7 @@ import {
   SavedviewSnapper,
   SavedviewSnapperContextProvider,
 } from "../SavedviewsRouter/UIProviders/SavedviewSnapper";
+import { ViewOptionsProvider } from "../SavedviewsRouter/UIProviders/ViewOptions";
 import { SelectionRouter } from "../SelectionRouter/SelectionRouter";
 import { SimpleBgMapToggleProvider } from "./UiProviders/BackgroundMap";
 
@@ -76,7 +77,11 @@ const View = (props: ViewProps) => {
         authConfig={{ oidcClient: AuthClient.client }}
         theme={theme}
         backend={{ buddiRegion }}
-        uiProviders={[new SimpleBgMapToggleProvider(), new SavedviewSnapper()]}
+        uiProviders={[
+          new SimpleBgMapToggleProvider(),
+          new SavedviewSnapper(),
+          new ViewOptionsProvider(),
+        ]}
       />
     </SavedviewSnapperContextProvider>
   ) : null;
