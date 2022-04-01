@@ -5,15 +5,17 @@
  * This code is for demonstration purposes and should not be considered production ready.
  *--------------------------------------------------------------------------------------------*/
 import { RenderMode } from "@bentley/imodeljs-common";
-import { IModelApp } from "@bentley/imodeljs-frontend";
+import { DisplayStyle3dState, IModelApp } from "@bentley/imodeljs-frontend";
 import {
+  Button,
   DropdownButton,
   InputGroup,
   MenuItem,
   Text,
+  Textarea,
   ToggleSwitch,
 } from "@itwin/itwinui-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import "./ViewOptionsComponents.scss";
 
@@ -205,9 +207,69 @@ export function ViewFlagToggles() {
   );
 }
 
+const getDisplayStyleJson = () => {
+  const viewport = IModelApp.viewManager.selectedView;
+  if (viewport) {
+    return JSON.stringify(viewport.view.displayStyle.toJSON(), undefined, 2);
+  }
+
+  return "";
+};
+
+export function DisplayStyleEditor() {
+  const [displayStyleJson, setDisplayStyleJson] = useState(
+    getDisplayStyleJson()
+  );
+
+  const apply = () => {
+    const viewport = IModelApp.viewManager.selectedView;
+    if (viewport) {
+      const displayStyleProps = JSON.parse(displayStyleJson);
+      const displayStyle = new DisplayStyle3dState(
+        displayStyleProps,
+        viewport.iModel
+      );
+      displayStyle
+        .load()
+        .then(() => {
+          viewport.view.setDisplayStyle(displayStyle);
+        })
+        .catch(() => {
+          /* No-op */
+        });
+    }
+  };
+
+  const reset = () => {
+    setDisplayStyleJson(getDisplayStyleJson());
+  };
+
+  useEffect(() => {
+    const viewport = IModelApp.viewManager.selectedView;
+    if (viewport) {
+      viewport.view.onDisplayStyleChanged.addListener(reset);
+      return () => {
+        viewport.view.onDisplayStyleChanged.removeListener(reset);
+      };
+    }
+  }, []);
+
+  return (
+    <InputGroup label="Display Style JSON">
+      <Textarea
+        value={displayStyleJson}
+        onChange={(e) => setDisplayStyleJson(e.target.value)}
+      />
+      <Button onClick={apply}>Apply</Button>
+      <Button onClick={reset}>Reset</Button>
+    </InputGroup>
+  );
+}
+
 export function ViewOptionsPanel() {
   return (
     <div className="idp-view-options">
+      <DisplayStyleEditor />
       <ViewFlagToggles />
     </div>
   );
