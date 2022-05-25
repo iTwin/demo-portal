@@ -12,32 +12,35 @@ import {
 } from "@bentley/ui-abstract";
 import React from "react";
 
-import { ViewOptionsPanel } from "../components/ViewOptionsComponents";
+import { ColorOptionsPanel } from "../components/ColorOptionComponents";
 
-export class ViewOptionsProvider implements UiItemsProvider {
-  public readonly id = "ViewOptionsProvider";
+export class ColorUiProvider implements UiItemsProvider {
+  public readonly id = "ColorUiProviderId";
+  public static toggledOnce = false;
+  public static originalBackground: any;
+  public static backgroundSkyToggleFlag = false;
+  public static backgroundGroundToggleFlag = false;
 
   public provideWidgets(
     stageId: string,
     stageUsage: string,
     location: StagePanelLocation,
-    section?: StagePanelSection | undefined
-    // zoneLocation?: AbstractZoneLocation | undefined
-  ): AbstractWidgetProps[] {
+    section?: StagePanelSection
+  ): ReadonlyArray<AbstractWidgetProps> {
     const widgets: AbstractWidgetProps[] = [];
     if (
-      // stageUsage === StageUsage.General &&
       location === StagePanelLocation.Right &&
       section === StagePanelSection.Start
     ) {
-      widgets.push({
-        id: "viewOptionsWidget",
-        getWidgetContent: () => <ViewOptionsPanel />,
-        icon: "icon-view",
-        label: "View Options",
-      });
+      const ColorWidget: AbstractWidgetProps = {
+        id: "ColorWidget",
+        label: "Color Settings",
+        getWidgetContent() {
+          return <ColorOptionsPanel />;
+        },
+      };
+      widgets.push(ColorWidget);
     }
-
     return widgets;
   }
 }

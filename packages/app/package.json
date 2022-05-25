@@ -16,6 +16,7 @@
     "@bentley/imodeljs-markup": "^2.19.3",
     "@bentley/imodeljs-quantity": "^2.19.3",
     "@bentley/itwin-client": "^2.19.3",
+    "@bentley/map-layers": "^2.19.3",
     "@bentley/orbitgt-core": "^2.19.3",
     "@bentley/presentation-common": "^2.19.3",
     "@bentley/presentation-frontend": "^2.19.3",

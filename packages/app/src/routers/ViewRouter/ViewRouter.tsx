@@ -11,6 +11,8 @@ import React from "react";
 import { useApiData } from "../../api/useApiData";
 import { useConfig } from "../../config/ConfigProvider";
 import AuthClient from "../../services/auth/AuthClient";
+import { ColorUiProvider } from "../SavedviewsRouter/UIProviders/ColorOptions";
+import { ChangeLightsUiProvider } from "../SavedviewsRouter/UIProviders/LightsOptions";
 import {
   SavedviewSnapper,
   SavedviewSnapperContextProvider,
@@ -81,6 +83,8 @@ const View = (props: ViewProps) => {
           new SimpleBgMapToggleProvider(),
           new SavedviewSnapper(),
           new ViewOptionsProvider(),
+          new ColorUiProvider(),
+          new ChangeLightsUiProvider(),
         ]}
       />
     </SavedviewSnapperContextProvider>

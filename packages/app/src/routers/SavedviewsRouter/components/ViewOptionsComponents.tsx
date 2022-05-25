@@ -5,18 +5,18 @@
  * This code is for demonstration purposes and should not be considered production ready.
  *--------------------------------------------------------------------------------------------*/
 import { RenderMode } from "@bentley/imodeljs-common";
-import { DisplayStyle3dState, IModelApp } from "@bentley/imodeljs-frontend";
+import { IModelApp } from "@bentley/imodeljs-frontend";
 import {
-  Button,
   DropdownButton,
+  ExpandableBlock,
   InputGroup,
   MenuItem,
   Text,
-  Textarea,
   ToggleSwitch,
 } from "@itwin/itwinui-react";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
+import "./ComponentInputs.scss";
 import "./ViewOptionsComponents.scss";
 
 const toggleFlag = (name: string) => {
@@ -51,7 +51,7 @@ export function ViewFlagToggle({ flag, label }: ViewFlagToggleProps) {
     <ToggleSwitch
       label={label}
       checked={flagValue}
-      onChange={(_event) => {
+      onChange={() => {
         toggleFlag(flag);
         setFlagValue(getFlagValue(flag));
       }}
@@ -155,7 +155,7 @@ export function RenderModeSelector() {
   // TODO: Proper alignment of the label and dropdown
   return (
     <div className="idp-render-mode">
-      <div className="idp-render-mode-label">
+      <div className="idp-render-mode-label two-object-container-row">
         <Text>Render Mode:</Text>
       </div>
       <div className="idp-render-mode-dropdown">
@@ -169,99 +169,42 @@ export function ViewFlagToggles() {
   return (
     <InputGroup label="View Flags" style={{ gridRow: 1 }}>
       <RenderModeSelector />
-      <ViewFlagToggle flag="dimensions" label="Dimensions" />
-      <ViewFlagToggle flag="patterns" label="Patterns" />
-      <ViewFlagToggle flag="weights" label="Weights" />
-      <ViewFlagToggle flag="styles" label="Styles" />
-      <ViewFlagToggle flag="transparency" label="Transparency" />
-      <ViewFlagToggle flag="fill" label="Fill" />
-      <ViewFlagToggle flag="textures" label="Textures" />
-      <ViewFlagToggle flag="materials" label="Materials" />
-      <ViewFlagToggle flag="acsTriad" label="ACS Triad" />
-      <ViewFlagToggle flag="grid" label="Grid" />
-      <ViewFlagToggle flag="visibleEdges" label="Visible Edges" />
-      <ViewFlagToggle flag="hiddenEdges" label="Hidden Edges" />
-      <ViewFlagToggle flag="sourceLights" label="Source Lights" />
-      <ViewFlagToggle flag="cameraLights" label="Camera Lights" />
-      <ViewFlagToggle flag="solarLight" label="Solar Light" />
-      <ViewFlagToggle flag="shadows" label="Shadows" />
-      <ViewFlagToggle flag="clipVolume" label="Clip Volume" />
-      <ViewFlagToggle flag="constructions" label="Constructions" />
-      <ViewFlagToggle flag="monochrome" label="Monochrome" />
-      <ViewFlagToggle flag="backgroundMap" label="Background Map" />
-      <ViewFlagToggle
-        flag="hLineMaterialColors"
-        label="Hidden Line Material Color"
-      />
-      <ViewFlagToggle flag="ambientOcclusion" label="Ambient Occlusion" />
-      <ViewFlagToggle flag="thematicDisplay" label="Thematic Display" />
-      <ViewFlagToggle
-        flag="forceSurfaceDiscard"
-        label="Force Surface Discard"
-      />
-      <ViewFlagToggle
-        flag="whiteOnWhiteReversal"
-        label="White On White Reversal"
-      />
-    </InputGroup>
-  );
-}
-
-const getDisplayStyleJson = () => {
-  const viewport = IModelApp.viewManager.selectedView;
-  if (viewport) {
-    return JSON.stringify(viewport.view.displayStyle.toJSON(), undefined, 2);
-  }
-
-  return "";
-};
-
-export function DisplayStyleEditor() {
-  const [displayStyleJson, setDisplayStyleJson] = useState(
-    getDisplayStyleJson()
-  );
-
-  const apply = () => {
-    const viewport = IModelApp.viewManager.selectedView;
-    if (viewport) {
-      const displayStyleProps = JSON.parse(displayStyleJson);
-      const displayStyle = new DisplayStyle3dState(
-        displayStyleProps,
-        viewport.iModel
-      );
-      displayStyle
-        .load()
-        .then(() => {
-          viewport.view.setDisplayStyle(displayStyle);
-        })
-        .catch(() => {
-          /* No-op */
-        });
-    }
-  };
-
-  const reset = () => {
-    setDisplayStyleJson(getDisplayStyleJson());
-  };
-
-  useEffect(() => {
-    const viewport = IModelApp.viewManager.selectedView;
-    if (viewport) {
-      viewport.view.onDisplayStyleChanged.addListener(reset);
-      return () => {
-        viewport.view.onDisplayStyleChanged.removeListener(reset);
-      };
-    }
-  }, []);
-
-  return (
-    <InputGroup label="Display Style JSON">
-      <Textarea
-        value={displayStyleJson}
-        onChange={(e) => setDisplayStyleJson(e.target.value)}
-      />
-      <Button onClick={apply}>Apply</Button>
-      <Button onClick={reset}>Reset</Button>
+      <ExpandableBlock title="View Flags Options">
+        <ViewFlagToggle flag="dimensions" label="Dimensions" />
+        <ViewFlagToggle flag="patterns" label="Patterns" />
+        <ViewFlagToggle flag="weights" label="Weights" />
+        <ViewFlagToggle flag="styles" label="Styles" />
+        <ViewFlagToggle flag="transparency" label="Transparency" />
+        <ViewFlagToggle flag="fill" label="Fill" />
+        <ViewFlagToggle flag="textures" label="Textures" />
+        <ViewFlagToggle flag="materials" label="Materials" />
+        <ViewFlagToggle flag="acsTriad" label="ACS Triad" />
+        <ViewFlagToggle flag="grid" label="Grid" />
+        <ViewFlagToggle flag="visibleEdges" label="Visible Edges" />
+        <ViewFlagToggle flag="hiddenEdges" label="Hidden Edges" />
+        <ViewFlagToggle flag="sourceLights" label="Source Lights" />
+        <ViewFlagToggle flag="cameraLights" label="Camera Lights" />
+        <ViewFlagToggle flag="solarLight" label="Solar Light" />
+        <ViewFlagToggle flag="shadows" label="Shadows" />
+        <ViewFlagToggle flag="clipVolume" label="Clip Volume" />
+        <ViewFlagToggle flag="constructions" label="Constructions" />
+        <ViewFlagToggle flag="monochrome" label="Monochrome" />
+        <ViewFlagToggle flag="backgroundMap" label="Background Map" />
+        <ViewFlagToggle
+          flag="hLineMaterialColors"
+          label="Hidden Line Material Color"
+        />
+        <ViewFlagToggle flag="ambientOcclusion" label="Ambient Occlusion" />
+        <ViewFlagToggle flag="thematicDisplay" label="Thematic Display" />
+        <ViewFlagToggle
+          flag="forceSurfaceDiscard"
+          label="Force Surface Discard"
+        />
+        <ViewFlagToggle
+          flag="whiteOnWhiteReversal"
+          label="White On White Reversal"
+        />
+      </ExpandableBlock>
     </InputGroup>
   );
 }
@@ -269,7 +212,6 @@ export function DisplayStyleEditor() {
 export function ViewOptionsPanel() {
   return (
     <div className="idp-view-options">
-      <DisplayStyleEditor />
       <ViewFlagToggles />
     </div>
   );

@@ -12,32 +12,30 @@ import {
 } from "@bentley/ui-abstract";
 import React from "react";
 
-import { ViewOptionsPanel } from "../components/ViewOptionsComponents";
+import { LightsOptionsPanel } from "../components/LightsOptionComponents";
 
-export class ViewOptionsProvider implements UiItemsProvider {
-  public readonly id = "ViewOptionsProvider";
-
+export class ChangeLightsUiProvider implements UiItemsProvider {
+  public readonly id = "ChangeLightsUiProviderId";
   public provideWidgets(
     stageId: string,
     stageUsage: string,
     location: StagePanelLocation,
-    section?: StagePanelSection | undefined
-    // zoneLocation?: AbstractZoneLocation | undefined
-  ): AbstractWidgetProps[] {
+    section?: StagePanelSection
+  ): ReadonlyArray<AbstractWidgetProps> {
     const widgets: AbstractWidgetProps[] = [];
     if (
-      // stageUsage === StageUsage.General &&
       location === StagePanelLocation.Right &&
       section === StagePanelSection.Start
     ) {
-      widgets.push({
-        id: "viewOptionsWidget",
-        getWidgetContent: () => <ViewOptionsPanel />,
-        icon: "icon-view",
-        label: "View Options",
-      });
+      const backgroundColorWidget: AbstractWidgetProps = {
+        id: "LightsWidget",
+        label: "Lights settings",
+        getWidgetContent() {
+          return <LightsOptionsPanel></LightsOptionsPanel>;
+        },
+      };
+      widgets.push(backgroundColorWidget);
     }
-
     return widgets;
   }
 }
