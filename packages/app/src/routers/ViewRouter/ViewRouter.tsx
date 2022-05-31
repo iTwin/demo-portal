@@ -9,6 +9,7 @@ import { RouteComponentProps, Router } from "@reach/router";
 import React from "react";
 
 import { useApiData } from "../../api/useApiData";
+import { useApiPrefix } from "../../api/useApiPrefix";
 import AuthClient from "../../services/auth/AuthClient";
 import { SelectionRouter } from "../SelectionRouter/SelectionRouter";
 
@@ -49,6 +50,8 @@ const View = (props: ViewProps) => {
     accessToken: props.versionId ? props.accessToken : undefined,
     url: `https://api.bentley.com/imodels/${props.iModelId}/namedversions/${props.versionId}`,
   });
+  const urlPrefix = useApiPrefix();
+  (globalThis as any).IMJS_URL_PREFIX = urlPrefix ? `${urlPrefix}-` : "";
   const theme = useThemeWatcher();
   const changesetId = props.versionId ? fetchedVersion?.changesetId : undefined;
   return (state || !props.versionId) && AuthClient.client ? (
@@ -58,7 +61,7 @@ const View = (props: ViewProps) => {
       iModelId={props.iModelId ?? ""}
       authClient={AuthClient.client}
       theme={theme}
-      enablePerformanceMonitors={false}
+      enablePerformanceMonitors={true}
     />
   ) : null;
 };
