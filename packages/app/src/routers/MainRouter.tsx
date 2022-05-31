@@ -4,9 +4,8 @@
  *
  * This code is for demonstration purposes and should not be considered production ready.
  *--------------------------------------------------------------------------------------------*/
-import { AccessToken } from "@bentley/itwin-client";
 import { Redirect, Router } from "@reach/router";
-import React, { useMemo } from "react";
+import React from "react";
 
 import { ManageVersionsRouter } from "./ManageVersionsRouter/ManageVersionsRouter";
 import { MembersRouter } from "./MembersRouter/MembersRouter";
@@ -14,26 +13,19 @@ import { SynchronizationRouter } from "./SynchronizationRouter/SynchronizationRo
 import { ViewRouter } from "./ViewRouter/ViewRouter";
 
 interface MainRouterProps {
-  accessToken?: AccessToken;
+  accessToken: string;
 }
 
 export const MainRouter = ({ accessToken }: MainRouterProps) => {
-  const accessTokenStr = useMemo(() => {
-    return accessToken?.toTokenString() ?? "";
-  }, [accessToken]);
-
   return (
     <Router className={"full-height-container"}>
-      <ViewRouter accessToken={accessTokenStr} path="view/*" />
-      <SynchronizationRouter
-        path="synchronize/*"
-        accessToken={accessTokenStr}
-      />
+      <ViewRouter accessToken={accessToken} path="view/*" />
+      <SynchronizationRouter path="synchronize/*" accessToken={accessToken} />
       <ManageVersionsRouter
         path="manage-versions/*"
-        accessToken={accessTokenStr}
+        accessToken={accessToken}
       />
-      <MembersRouter path="members/*" accessToken={accessTokenStr} />
+      <MembersRouter path="members/*" accessToken={accessToken} />
       <Redirect noThrow={true} from="/" to="view" default={true} />
     </Router>
   );

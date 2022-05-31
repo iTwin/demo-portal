@@ -15,25 +15,14 @@
     justify-content: space-between;
     flex-wrap: wrap-reverse;
 
-    .inline-input-with-button {
-      display: flex;
-      flex-direction: row;
-
-      .iui-input-container.iui-inline > .iui-input:last-child {
-        min-width: 300px;
-        padding-right: 61px;
-      }
-
-      .iui-button {
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
-        margin-left: -50px;
-      }
-    }
-
     .iui-input-container.iui-inline {
       margin: 0;
     }
+  }
+
+  .iui-tile-thumbnail .iui-thumbnail-icon {
+    min-width: 100%;
+    min-height: 100%;
   }
 
   > .iui-tabs-wrapper {

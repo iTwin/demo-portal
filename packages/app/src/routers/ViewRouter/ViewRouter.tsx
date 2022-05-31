@@ -9,10 +9,8 @@ import { RouteComponentProps, Router } from "@reach/router";
 import React from "react";
 
 import { useApiData } from "../../api/useApiData";
-import { useConfig } from "../../config/ConfigProvider";
 import AuthClient from "../../services/auth/AuthClient";
 import { SelectionRouter } from "../SelectionRouter/SelectionRouter";
-import { SimpleBgMapToggleProvider } from "./UiProviders/BackgroundMap";
 
 const useThemeWatcher = () => {
   const [theme, setTheme] = React.useState(() =>
@@ -44,10 +42,6 @@ export interface ViewProps extends RouteComponentProps {
 }
 const View = (props: ViewProps) => {
   (window as any).ITWIN_VIEWER_HOME = window.location.origin;
-  const config = useConfig();
-  const buddiRegion = config.buddi?.region
-    ? parseInt(config.buddi.region)
-    : undefined;
   const {
     results: { namedVersion: fetchedVersion },
     state,
@@ -57,15 +51,14 @@ const View = (props: ViewProps) => {
   });
   const theme = useThemeWatcher();
   const changesetId = props.versionId ? fetchedVersion?.changesetId : undefined;
-  return state || !props.versionId ? (
+  return (state || !props.versionId) && AuthClient.client ? (
     <Viewer
       changeSetId={changesetId}
-      contextId={props.projectId ?? ""}
+      iTwinId={props.projectId ?? ""}
       iModelId={props.iModelId ?? ""}
-      authConfig={{ oidcClient: AuthClient.client }}
+      authClient={AuthClient.client}
       theme={theme}
-      backend={{ buddiRegion }}
-      uiProviders={[new SimpleBgMapToggleProvider()]}
+      enablePerformanceMonitors={false}
     />
   ) : null;
 };

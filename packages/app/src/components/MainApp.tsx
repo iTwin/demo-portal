@@ -4,7 +4,6 @@
  *
  * This code is for demonstration purposes and should not be considered production ready.
  *--------------------------------------------------------------------------------------------*/
-import { IncludePrefix } from "@bentley/itwin-client";
 import { ErrorPage, Text } from "@itwin/itwinui-react";
 import React from "react";
 
@@ -31,10 +30,8 @@ export const MainApp = () => {
     >
       {isAuthenticated ? (
         isAuthorized ? (
-          <SynchronizationAPIProvider
-            accessToken={accessToken?.toTokenString(IncludePrefix.Yes) ?? ""}
-          >
-            <MainRouter accessToken={accessToken} />
+          <SynchronizationAPIProvider accessToken={accessToken ?? ""}>
+            <MainRouter accessToken={accessToken ?? ""} />
           </SynchronizationAPIProvider>
         ) : (
           <ErrorPage errorType="401" />

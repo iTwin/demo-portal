@@ -67,6 +67,8 @@
     "dompurify": "^2.1.0",
     "object-path": "^0.11.5",
     "axios": "0.21.2",
-    "immer": "^9.0.6"
+    "immer": "^9.0.6",
+    "@itwin/itwinui-css": "0.58.0",
+    "@itwin/itwinui-react": "1.38.1"
   }
 }

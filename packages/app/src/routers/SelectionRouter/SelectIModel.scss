@@ -10,14 +10,19 @@
   .tile-with-status.iui-tile {
     position: relative;
 
+    .iui-tile-thumbnail .iui-thumbnail-icon {
+      min-width: 100%;
+      min-height: 100%;
+    }
+
     &.hollow-shell * {
       pointer-events: none;
     }
 
-    > .iui-content {
+    > .iui-tile-content {
       position: unset;
 
-      > .iui-metadata {
+      > .iui-tile-metadata {
         position: absolute;
         bottom: 5px;
         width: calc(100% - (#{$iui-sm} * 2));
