@@ -12,12 +12,7 @@ import { CreateProject } from "./CreateProject";
 
 describe("CreateProject", () => {
   const mockedProject = { project: { id: "dd", displayName: "name" } };
-  const fetchMock = jest.fn(() =>
-    Promise.resolve({
-      ok: true,
-      json: () => Promise.resolve(mockedProject),
-    } as Response)
-  );
+  const fetchMock = jest.fn();
   global.fetch = fetchMock;
 
   beforeEach(() => {
@@ -30,6 +25,12 @@ describe("CreateProject", () => {
 
   it("should create a project", async () => {
     const successMock = jest.fn();
+    fetchMock.mockImplementation(() =>
+      Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve(mockedProject),
+      } as Response)
+    );
     toaster.positive = jest.fn();
 
     const { getByText, container } = render(
@@ -47,7 +48,7 @@ describe("CreateProject", () => {
     fireEvent.change(number, { target: { value: "Some number" } });
 
     const createButton = getByText("Create");
-    await act(async () => createButton.click());
+    await act(async () => createButton.parentElement?.click());
     expect(fetchMock).toHaveBeenCalledWith("https://api.bentley.com/projects", {
       method: "POST",
       headers: { Authorization: "dd", Prefer: "return=representation" },

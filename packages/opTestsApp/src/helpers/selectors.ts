@@ -48,8 +48,8 @@ export const Home: HomeSelectors = {
   Portal: "text='My projects'",
   Card: {
     grid: "css=[class*=iac-grid-structure]",
-    thumbnail: "css=.iui-thumbnail",
-    title: "css=.iui-name-label",
+    thumbnail: "css=.iui-tile-thumbnail",
+    title: "css=.iui-tile-name-label",
   },
 };
 
