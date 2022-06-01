@@ -1368,8 +1368,8 @@
 
 "@bentley/bentleyjs-core@^2.19.3":
   version "2.19.28"
-  resolved "https://pkgs.dev.azure.com/bentleycs/_packaging/Packages/npm/registry/@bentley/bentleyjs-core/-/bentleyjs-core-2.19.28.tgz#ff612fc9499167f20233f2e89836b3891916e7c3"
-  integrity sha1-/2EvyUmRZ/ICM/LomDaziRkW58M=
+  resolved "https://registry.yarnpkg.com/@bentley/bentleyjs-core/-/bentleyjs-core-2.19.28.tgz#ff612fc9499167f20233f2e89836b3891916e7c3"
+  integrity sha512-M040a5xdCAlkTuzgJioZKt6Az0+OvvbIdOM2AgSM75Fr21IcbyYX2zLok/12AbkFcsnA0H0Jq1xXZUpl9fu8SQ==
 
 "@bentley/icons-generic-webfont@^1.0.15", "@bentley/icons-generic-webfont@^1.0.29", "@bentley/icons-generic-webfont@^1.0.34":
   version "1.0.34"
@@ -1378,8 +1378,8 @@
 
 "@bentley/icons-generic@^1.0.15", "@bentley/icons-generic@^1.0.34":
   version "1.0.34"
-  resolved "https://pkgs.dev.azure.com/bentleycs/_packaging/Packages/npm/registry/@bentley/icons-generic/-/icons-generic-1.0.34.tgz#0f988de1fc89c5296572d2f4cd1ae40ee918c9f4"
-  integrity sha1-D5iN4fyJxSllctL0zRrkDukYyfQ=
+  resolved "https://registry.yarnpkg.com/@bentley/icons-generic/-/icons-generic-1.0.34.tgz#0f988de1fc89c5296572d2f4cd1ae40ee918c9f4"
+  integrity sha512-IIs1wDcY2oZ8tJ3EZRw0U51M+0ZL3MvwoDYYmhUXaa9/UZqpFoOyLBGaxjirQteWXqTIMm3mFvmC+Nbn1ok4Iw==
 
 "@bentley/itwin-client@^2.19.3":
   version "2.19.3"
@@ -1396,8 +1396,8 @@
 
 "@bentley/react-scripts@^4.0.7":
   version "4.0.7"
-  resolved "https://pkgs.dev.azure.com/bentleycs/_packaging/Packages/npm/registry/@bentley/react-scripts/-/react-scripts-4.0.7.tgz#f6cba3dbb9ffe8a6d9008feea8a5f1b30a284808"
-  integrity sha1-9suj27n/6KbZAI/uqKXxswooSAg=
+  resolved "https://registry.yarnpkg.com/@bentley/react-scripts/-/react-scripts-4.0.7.tgz#f6cba3dbb9ffe8a6d9008feea8a5f1b30a284808"
+  integrity sha512-xsPjulHQWFNa92aysuVj29RYwvAQRisdrSBnTX6KitvRHRbCtHNAOaLiySqi9QXo1NJ1Xw2bNyr1iO4AsvBk1g==
   dependencies:
     "@babel/core" "7.12.3"
     "@bentley/webpack-tools-core" "^2.16.2"
@@ -1472,8 +1472,8 @@
 
 "@bentley/webpack-tools-core@^2.16.2":
   version "2.19.28"
-  resolved "https://pkgs.dev.azure.com/bentleycs/_packaging/Packages/npm/registry/@bentley/webpack-tools-core/-/webpack-tools-core-2.19.28.tgz#fe334f6fc5a68dfa67e18ef672a9250991e9589c"
-  integrity sha1-/jNPb8Wmjfpn4Y72cqklCZHpWJw=
+  resolved "https://registry.yarnpkg.com/@bentley/webpack-tools-core/-/webpack-tools-core-2.19.28.tgz#fe334f6fc5a68dfa67e18ef672a9250991e9589c"
+  integrity sha512-IDwgScHyEtYYAz3FfLmrJPhqtzFYOx5/DNibdt6sda+FooJDLMSGR0NBrZAYqIKqlGGMPLSVzE5VWUbfkiP5BA==
   dependencies:
     chalk "^3.0.0"
     copy-webpack-plugin "^6.2.1"
