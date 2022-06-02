@@ -23,8 +23,7 @@ export const OIDC: OIDCSelectors = {
     usernameInput: "id=identifierInput",
     nextInput: "id=postButton",
     passwordInput: "id=password",
-    signInButton:
-      "//a[contains(@class,'ping-button') and contains(@title,'Sign In')]",
+    signInButton: "id=sign-in-button",
   },
   v1: {
     usernameInput: "css=[name='EmailAddress']",
