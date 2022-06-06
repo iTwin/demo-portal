@@ -4,7 +4,7 @@
  *
  * This code is for demonstration purposes and should not be considered production ready.
  *--------------------------------------------------------------------------------------------*/
-import { BrowserAuthorizationCallbackHandler } from "@bentley/frontend-authorization-client";
+import { BrowserAuthorizationCallbackHandler } from "@itwin/browser-authorization";
 import React from "react";
 import ReactDOM from "react-dom";
 

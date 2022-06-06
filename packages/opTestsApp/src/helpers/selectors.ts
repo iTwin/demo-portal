@@ -23,8 +23,7 @@ export const OIDC: OIDCSelectors = {
     usernameInput: "id=identifierInput",
     nextInput: "id=postButton",
     passwordInput: "id=password",
-    signInButton:
-      "//a[contains(@class,'ping-button') and contains(@title,'Sign In')]",
+    signInButton: "id=sign-in-button",
   },
   v1: {
     usernameInput: "css=[name='EmailAddress']",
@@ -48,8 +47,8 @@ export const Home: HomeSelectors = {
   Portal: "text='My projects'",
   Card: {
     grid: "css=[class*=iac-grid-structure]",
-    thumbnail: "css=.iui-thumbnail",
-    title: "css=.iui-name-label",
+    thumbnail: "css=.iui-tile-thumbnail",
+    title: "css=.iui-tile-name-label",
   },
 };
 

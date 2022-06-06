@@ -12,6 +12,16 @@
       "webRoot": "${workspaceFolder}"
     },
     {
+      "type": "node",
+      "request": "launch",
+      "name": "Unit Tests",
+      "runtimeExecutable": "${workspaceRoot}/packages/app/node_modules/.bin/react-scripts",
+      "args": ["test", "--runInBand", "--no-cache", "--env=jsdom"],
+      "cwd": "${workspaceRoot}/packages/app",
+      "console": "externalTerminal",
+      "internalConsoleOptions": "neverOpen"
+    },
+    {
       "name": "E2E Tests",
       "type": "pwa-node",
       "request": "launch",

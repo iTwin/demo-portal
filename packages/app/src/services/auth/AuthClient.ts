@@ -4,8 +4,7 @@
  *
  * This code is for demonstration purposes and should not be considered production ready.
  *--------------------------------------------------------------------------------------------*/
-import { BrowserAuthorizationClient } from "@bentley/frontend-authorization-client";
-import { FrontendRequestContext } from "@bentley/imodeljs-frontend";
+import { BrowserAuthorizationClient } from "@itwin/browser-authorization";
 
 class AuthClient {
   private static _client?: BrowserAuthorizationClient;
@@ -36,15 +35,15 @@ class AuthClient {
   }
 
   public static async signIn(): Promise<void> {
-    await this.client?.signIn(new FrontendRequestContext());
+    await this.client?.signIn();
   }
 
   public static async signInSilent(): Promise<void> {
-    await this.client?.signInSilent(new FrontendRequestContext());
+    await this.client?.signInSilent();
   }
 
   public static async signOut(): Promise<void> {
-    await this.client?.signOut(new FrontendRequestContext());
+    await this.client?.signOut();
   }
 
   public static dispose(): void {

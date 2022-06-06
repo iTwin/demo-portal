@@ -12,12 +12,7 @@ import { UpdateProject } from "./UpdateProject";
 
 describe("UpdateProject", () => {
   const mockedProject = { project: { id: "dd", displayName: "name" } };
-  const fetchMock = jest.fn(() =>
-    Promise.resolve({
-      ok: true,
-      json: () => Promise.resolve(mockedProject),
-    } as Response)
-  );
+  const fetchMock = jest.fn();
   global.fetch = fetchMock;
 
   beforeEach(() => {
@@ -30,6 +25,12 @@ describe("UpdateProject", () => {
 
   it("should update a project", async () => {
     const successMock = jest.fn();
+    fetchMock.mockImplementationOnce(() =>
+      Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve(mockedProject),
+      } as Response)
+    );
     toaster.positive = jest.fn();
 
     const { getByText, container } = render(
@@ -50,7 +51,7 @@ describe("UpdateProject", () => {
     fireEvent.change(name, { target: { value: "Some other name" } });
 
     const updateButton = getByText("Update");
-    await act(async () => updateButton.click());
+    await act(async () => updateButton.parentElement?.click());
     expect(fetchMock).toHaveBeenCalledWith(
       "https://api.bentley.com/projects/de47c5ad-5657-42b8-a2bc-f2b8bf84cd4b",
       {

@@ -4,7 +4,6 @@
  *
  * This code is for demonstration purposes and should not be considered production ready.
  *--------------------------------------------------------------------------------------------*/
-import { AccessToken } from "@bentley/itwin-client";
 import {
   Body,
   DropdownMenu,
@@ -17,43 +16,46 @@ import {
 } from "@itwin/itwinui-react";
 import React from "react";
 
+import { getClaimsFromToken } from "../../services/auth/authUtil";
 import "./HeaderUserIcon.scss";
 
 interface HeaderUserIconProps {
-  accessTokenObject?: AccessToken;
+  accessToken?: string;
   handleLogout?: () => void;
 }
 
 export const HeaderUserIcon = ({
-  accessTokenObject,
+  accessToken,
   handleLogout,
 }: HeaderUserIconProps) => {
   const [userIconProps, setUserIconProps] = React.useState<
     Partial<UserIconProps>
   >({});
-  const { email, profile, organization } =
-    accessTokenObject?.getUserInfo() ?? {};
+  const [claims, setClaims] = React.useState<Record<string, string>>({});
 
+  React.useEffect(() => {
+    setClaims(getClaimsFromToken(accessToken ?? "") ?? {});
+  }, [accessToken]);
   React.useEffect(() => {
     setUserIconProps({
       abbreviation:
-        (profile?.firstName.toLocaleUpperCase()?.[0] ?? "") +
-        (profile?.lastName.toLocaleUpperCase()?.[0] ?? ""),
-      backgroundColor: getUserColor(email?.id ?? "Unknown"),
+        (claims?.given_name?.toLocaleUpperCase()?.[0] ?? "") +
+        (claims?.family_name?.toLocaleUpperCase()?.[0] ?? ""),
+      backgroundColor: getUserColor(claims?.email ?? "Unknown"),
     });
-  }, [profile, email]);
+  }, [claims]);
 
   return (
     <DropdownMenu
       menuItems={(close) => [
         <div key={"description"} className={"user-panel"}>
           <Body style={{ marginBottom: 5 }}>
-            {profile?.firstName ?? ""} {profile?.lastName ?? ""}
+            {claims.given_name ?? ""} {claims.family_name ?? ""}
           </Body>
           <Small>
-            {email?.id ?? ""}
-            {organization?.name && <br />}
-            {organization?.name ?? ""}
+            {claims.email ?? ""}
+            {claims.org_name && <br />}
+            {claims.org_name ?? ""}
           </Small>
         </div>,
         <MenuItem

@@ -4,7 +4,6 @@
  *
  * This code is for demonstration purposes and should not be considered production ready.
  *--------------------------------------------------------------------------------------------*/
-@import "@itwin/itwinui-css/scss/inputs/variables";
 @import "@itwin/itwinui-css/scss/variables";
 
 .user-icon-code-order-fix.iui-user-icon.iui-user-icon {
@@ -13,7 +12,7 @@
 }
 
 .user-panel {
-  padding: ($iui-inputs-padding + 1) $iui-sm;
+  padding: $iui-component-padding-vertical-small $iui-sm;
   @include themed {
     border-bottom: 1px solid t(iui-color-background-5);
   }

@@ -113,32 +113,33 @@ const SelectProject = ({
         >
           <div className={"title-section idp-content-margins"}>
             <ButtonGroup>{createIconButton}</ButtonGroup>
-            <div className={"inline-input-with-button"}>
-              <LabeledInput
-                label={"Search"}
-                placeholder={"Will search in name or number"}
-                displayStyle={"inline"}
-                value={searchValue}
-                onChange={(event) => {
-                  const {
-                    target: { value },
-                  } = event;
-                  setSearchValue(value);
-                }}
-                onKeyDown={(event) => {
-                  if (event.key === "Enter") {
-                    startSearch();
-                  }
-                  if (event.key === "Escape") {
-                    setSearchValue("");
-                    setSearchParam("");
-                  }
-                }}
-              />
-              <IconButton onClick={startSearch}>
-                <SvgSearch />
-              </IconButton>
-            </div>
+            <LabeledInput
+              label={"Search"}
+              placeholder={"Will search in name or number"}
+              displayStyle={"inline"}
+              value={searchValue}
+              onChange={(event) => {
+                const {
+                  target: { value },
+                } = event;
+                setSearchValue(value);
+              }}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  startSearch();
+                }
+                if (event.key === "Escape") {
+                  setSearchValue("");
+                  setSearchParam("");
+                }
+              }}
+              svgIcon={
+                <IconButton onClick={startSearch} styleType="borderless">
+                  <SvgSearch />
+                </IconButton>
+              }
+              iconDisplayStyle="inline"
+            />
           </div>
           <div className={"idp-scrolling-content"}>
             <ProjectGrid

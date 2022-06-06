@@ -10,7 +10,7 @@ import React from "react";
 import { DeleteProject } from "./DeleteProject";
 
 describe("DeleteProject", () => {
-  const fetchMock = jest.fn(() => Promise.resolve({ ok: true } as Response));
+  const fetchMock = jest.fn();
   global.fetch = fetchMock;
 
   beforeEach(() => {
@@ -35,6 +35,9 @@ describe("DeleteProject", () => {
 
   it("should delete project", async () => {
     const successMock = jest.fn();
+    fetchMock.mockImplementationOnce(() =>
+      Promise.resolve({ ok: true } as Response)
+    );
 
     const { getByText } = render(
       <DeleteProject

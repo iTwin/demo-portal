@@ -14,7 +14,7 @@ import React from "react";
 
 import SelectIModel from "./SelectIModel";
 
-jest.mock("byte-size", () => jest.fn(() => ""));
+jest.mock("byte-size", () => () => "");
 
 it("should have tiles with 'View' option", () => {
   Object.defineProperty(window, "IntersectionObserver", {
@@ -44,7 +44,7 @@ it("should have tiles with 'View' option", () => {
 
   //Open the more menu for the tile
   const tileMenuButton = container.querySelector(
-    ".iui-more-options"
+    ".iui-tile-more-options"
   ) as HTMLButtonElement;
   expect(tileMenuButton).toBeTruthy();
   tileMenuButton.click();
