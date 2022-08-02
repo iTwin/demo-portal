@@ -4,9 +4,26 @@
  *
  * This code is for demonstration purposes and should not be considered production ready.
  *--------------------------------------------------------------------------------------------*/
-import { Viewer } from "@itwin/web-viewer-react";
+import {
+  MeasureTools,
+  MeasureToolsUiItemsProvider,
+} from "@itwin/measure-tools-react";
+import {
+  PropertyGridManager,
+  PropertyGridUiItemsProvider,
+} from "@itwin/property-grid-react";
+import {
+  TreeWidget,
+  TreeWidgetUiItemsProvider,
+} from "@itwin/tree-widget-react";
+import {
+  Viewer,
+  ViewerContentToolsProvider,
+  ViewerNavigationToolsProvider,
+  ViewerStatusbarItemsProvider,
+} from "@itwin/web-viewer-react";
 import { RouteComponentProps, Router } from "@reach/router";
-import React from "react";
+import React, { useCallback } from "react";
 
 import { useApiData } from "../../api/useApiData";
 import { useApiPrefix } from "../../api/useApiPrefix";
@@ -54,6 +71,11 @@ const View = (props: ViewProps) => {
   (globalThis as any).IMJS_URL_PREFIX = urlPrefix ? `${urlPrefix}-` : "";
   const theme = useThemeWatcher();
   const changesetId = props.versionId ? fetchedVersion?.changesetId : undefined;
+  const onIModelAppInit = useCallback(async () => {
+    await TreeWidget.initialize();
+    await PropertyGridManager.initialize();
+    await MeasureTools.startup();
+  }, []);
   return (state || !props.versionId) && AuthClient.client ? (
     <Viewer
       changeSetId={changesetId}
@@ -62,6 +84,21 @@ const View = (props: ViewProps) => {
       authClient={AuthClient.client}
       theme={theme}
       enablePerformanceMonitors={true}
+      onIModelAppInit={onIModelAppInit}
+      uiProviders={[
+        new ViewerNavigationToolsProvider(),
+        new ViewerContentToolsProvider({
+          vertical: {
+            measureGroup: false,
+          },
+        }),
+        new ViewerStatusbarItemsProvider(),
+        new TreeWidgetUiItemsProvider(),
+        new PropertyGridUiItemsProvider({
+          enableCopyingPropertyText: true,
+        }),
+        new MeasureToolsUiItemsProvider(),
+      ]}
     />
   ) : null;
 };
