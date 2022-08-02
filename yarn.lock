@@ -1743,11 +1743,6 @@
     shortid "~2.2.15"
     ts-key-enum "^2.0.0"
 
-"@itwin/core-bentley@3.2.0":
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/@itwin/core-bentley/-/core-bentley-3.2.0.tgz#5debe9a8ba659390f73f70d583c40b996ef1f4b4"
-  integrity sha512-VnxqQxwXvJuAE5sbKmhqdqpEWVp9N1uWdAD4LopUCY/B0GHdZ7fKigQ7GH/m2b3XxnmIzCH8OwjgaEO/Ppe5Sw==
-
 "@itwin/core-bentley@3.2.7", "@itwin/core-bentley@^3.2.0":
   version "3.2.7"
   resolved "https://registry.yarnpkg.com/@itwin/core-bentley/-/core-bentley-3.2.7.tgz#e36bdc8cd3c9b2d1847660ef1e31ab3b9ed18b62"
@@ -1782,15 +1777,7 @@
     wms-capabilities "0.4.0"
     xml-js "~1.6.11"
 
-"@itwin/core-geometry@^3.0.0":
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/@itwin/core-geometry/-/core-geometry-3.2.0.tgz#9e2bb6b044c9562f2b78ff887902dc76222d6c9d"
-  integrity sha512-CJ01MxXJfmoW0z3iquvCrtnxPvx/N9Hx8Q40RIsU7asWVPT5Lb1JmSBlPkfxSJ15zN8wZZhFM/x7KWemtPng2Q==
-  dependencies:
-    "@itwin/core-bentley" "3.2.0"
-    flatbuffers "~1.12.0"
-
-"@itwin/core-geometry@^3.2.0":
+"@itwin/core-geometry@3.2.7", "@itwin/core-geometry@^3.0.0", "@itwin/core-geometry@^3.2.0":
   version "3.2.7"
   resolved "https://registry.yarnpkg.com/@itwin/core-geometry/-/core-geometry-3.2.7.tgz#226a1141dce2f10db921b84835a04d9fdac63e9e"
   integrity sha512-5Hf+9poOTXro5zVQz1o0U9KfinCjfI1GuasSfA7AYYPyTTXHLzyykeBJUWVFNlqGkXs++eka79wJezWUVA83GQ==
